@@ -1,0 +1,12 @@
+# comments...
+# env is usually part of django_project_dir
+# project_httpd.conf is usually part of django_project_dir -> project_dir -> apache_dir
+# wsgi.py is usually part of django_project_dir -> project_dir -> apache_dir
+
+.DS_Store
+.hg
+.svn
+*.pyc
+env
+project_httpd.conf
+wsgi.py
