@@ -12,9 +12,9 @@ class PidFinder( object ):
         fedora_risearch_url,
         output_json_path ):
         """ CONTROLLER.
-            Returns accession-number dict showing bdr-pid & title.
+            Returns accession-number dict showing bdr-pid & state.
             Example: { acc_num_1: {bdr:123, state:active}, acc_num_2: {bdr:234, state:active}, etc. }
-            Gets collection members from fedora, checks studio-solr for info. """
+            Gets pids from fedora, gets pids from solr, assesses any differences. """
         #Run itql query
         itql_query_output = self._run_itql_query( fedora_risearch_url, bdr_collection_pid )
         #Parse results to fedora-pid list
