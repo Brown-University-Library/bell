@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-import json, pprint
+import json, pprint, time
 import requests
 
 
@@ -21,8 +21,10 @@ class PidFinder( object ):
         fedora_pid_list = self._parse_itql_search_results( itql_query_output )
         #Run studio-solr query for solr-pid list -- [ 'bdr:1', bdr:2' ]
         studio_solr_pid_list = self._run_studio_solr_query( bdr_collection_pid )
+        print u'- studio_solr_pid_list...'; pprint.pprint(studio_solr_pid_list)
         #Make intersection pid-dict -- { bdr123: active, bdr234: active }
         intersection_pid_dict = self._make_intersection_pid_dict( fedora_pid_list, studio_solr_pid_list )
+        # pprint.pprint( intersection_pid_dict )
         #Assign accession-numbers from bdr -- { acc_num_1: {pid:bdr_123, state:active}, acc_num_3: {pid:bdr_234, state:active}, etc. }
         initial_accession_dict = self._assign_bdr_accession_numbers( bdr_collection_pid, intersection_pid_dict )
         #Get _bell_ accession numbers -- [ 'acc_num_1', 'acc_num_2', etc. ]
@@ -58,24 +60,56 @@ class PidFinder( object ):
 
     def _run_studio_solr_query( self, bdr_collection_pid ):
         """ Returns list of pids from _solr_. """
-        collection_api_url = u'https://repository.library.brown.edu/api/pub/collections/%s/' % bdr_collection_pid
-        r = requests.get( collection_api_url )
-        d = json.loads( r.text )
-        assert( sorted(d.keys()) ) == [ u'count', u'id', u'items' ]
-        pid_list = []
-        for entry in d[u'items'][u'docs']:  # entry: { u'pid': u'bdr:1234' }
-            pid_list.append( entry[u'pid'] )
-        sorted_solr_pids = sorted( pid_list )
-        return sorted_solr_pids
+        def _set_params( bdr_collection_pid, new_start ):
+            return {
+                u'q': u'rel_is_member_of_ssim:"%s"' % bdr_collection_pid,
+                u'fl': u'pid',
+                u'rows': 500,
+                u'start': new_start,
+                u'wt': u'json'
+                }
+        def _query_solr( i, bdr_collection_pid ):
+            search_api_url = u'https://repository.library.brown.edu/api/pub/search/'
+            new_start = i * 500  # for solr start=i parameter (cool, eh?)
+            params = _set_params( bdr_collection_pid, new_start )
+            r = requests.get( search_api_url, params=params, verify=False )
+            data_dict = json.loads( r.content.decode(u'utf-8', u'replace') )
+            time.sleep( .1 )
+            return data_dict
+        ## work
+        all_pids = []
+        for i in range( 100 ):  # would handle 50,000 records; loop actually only run 11 times as of Nov-2013
+            data_dict = _query_solr( i, bdr_collection_pid )
+            docs = data_dict[u'response'][u'docs']
+            for doc in docs:
+                all_pids.append( doc[u'pid'] )
+            if not len( docs ) > 0:
+                break
+        sorted_pids = sorted( all_pids )
+        return sorted_pids
 
     def _make_intersection_pid_dict( self, fedora_pid_list, studio_solr_pid_list ):
         """ Returns accession-number dict showing active/inactive status
-            Example: { bdr123: active, bdr234: active } """
-        pass
+            Example: { 'bdr123': 'active', 'bdr234': 'inactive' } """
+        set_fedora_pids, set_solr_pids = set( fedora_pid_list ), set( studio_solr_pid_list )
+        only_in_fedora, only_in_solr = list( set_fedora_pids - set_solr_pids ), list( set_solr_pids - set_fedora_pids )
+        print u'- len(fedora_pid_list)...'; print len(fedora_pid_list)
+        print u'- len(studio_solr_pid_list)...'; print len(studio_solr_pid_list)
+        print u'- only_in_fedora...'; pprint.pprint( only_in_fedora )
+        if len( only_in_solr ) > 0:
+            print u'WARNING: THE FOLLOWING PIDS WERE FOUND IN SOLR THAT ARE NOT IN FEDORA...'; pprint.pprint( sorted(only_in_solr) )
+        intersection_dict = {}
+        for entry in fedora_pid_list:
+            if entry in only_in_fedora:
+                intersection_dict[entry] = u'inactive'
+            else:
+                intersection_dict[entry] = u'active'
+        return intersection_dict
 
     def _assign_bdr_accession_numbers( self, bdr_collection_pid, intersection_pid_dict ):
         """ Queries bdr_solr for all items with bdr_collection_pid; returns initial accession-number dict.
             Example: { acc_num_1: {pid:bdr_123, state:active}, acc_num_3: {pid:bdr_234, state:active}, etc. } """
+        print u'TODO: _assign_bdr_accession_numbers()'
         pass
 
     def _load_bell_accession_numbers( self, bell_dict_json_path ):
@@ -92,6 +126,7 @@ class PidFinder( object ):
     def _make_final_accession_number_dict( self, accession_numbers, fedora_pid_dict ):
         """ Adds accession-numbers with no bdr info; returns final accession-number dict.
             Example: { acc_num_1: {pid:bdr_123, state:active}, acc_num_2: {pid:None, state:None}, etc. } """
+        print u'TODO: _make_final_accession_number_dict()'
         pass
 
 
