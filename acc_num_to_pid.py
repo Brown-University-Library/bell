@@ -15,23 +15,48 @@ class PidFinder( object ):
             Returns accession-number dict showing bdr-pid & state.
             Example: { acc_num_1: {pid:bdr_123, state:active}, acc_num_2: {pid:None, state:None}, etc. }
             Gets pids from fedora, gets pids from solr, assesses any differences. """
-        #Run itql query -- [ {'object': 'info:fedora/bdr:1234'}, {'object': 'info:fedora/bdr:5678'} ]
+        #Run itql query
+        #Purpose: get raw child-pids data from _fedora_
+        #Example returned data: [ {'object': 'info:fedora/bdr:1234'}, {'object': 'info:fedora/bdr:5678'} ]
         itql_query_output = self._run_itql_query( fedora_risearch_url, bdr_collection_pid )
-        #Parse results to fedora-pid list -- [ 'bdr:1234', 'bdr:5678' ]
+        #
+        #Parse fedora-results to fedora-pid list
+        #Purpose: parse raw fedora child-pids data to simple pid-list
+        #Example returned data: [ bdr1234, bdr5678 ]
         fedora_pid_list = self._parse_itql_search_results( itql_query_output )
-        #Run studio-solr query for solr-pid list -- [ 'bdr:1', bdr:2' ]
-        studio_solr_pid_list = self._run_studio_solr_query( bdr_collection_pid )
-        print u'- studio_solr_pid_list...'; pprint.pprint(studio_solr_pid_list)
-        #Make intersection pid-dict -- { bdr123: active, bdr234: active }
+        #
+        #Run studio-solr query
+        #Purpose: get raw child-pids data from _solr_, along with accession-number data
+        #Example returned data: { bdr1: acc_num_123, bdr2: acc_num_234 }
+        solr_query_output = self._run_studio_solr_query( bdr_collection_pid )
+        #
+        #Parse solr-results to solr-pid list
+        #Purpose: parse raw solr child-pids data to simple pid-list
+        #Example returned data: [ bdr1, bdr2 ]
+        studio_solr_pid_list = self._parse_solr_for_pids( solr_query_output )
+        #
+        #Make intersection pid-dict
+        #Purpose: compare child-pids in fedor and solr pid-lists to determine which are 'active'/'inactive'
+        #Example returned data: { bdr123: active, bdr234: inactive, }
         intersection_pid_dict = self._make_intersection_pid_dict( fedora_pid_list, studio_solr_pid_list )
-        # pprint.pprint( intersection_pid_dict )
-        #Assign accession-numbers from bdr -- { acc_num_1: {pid:bdr_123, state:active}, acc_num_3: {pid:bdr_234, state:active}, etc. }
-        initial_accession_dict = self._assign_bdr_accession_numbers( bdr_collection_pid, intersection_pid_dict )
-        #Get _bell_ accession numbers -- [ 'acc_num_1', 'acc_num_2', etc. ]
+        #
+        #Assign accession-numbers from bdr
+        #Purpose: create initial accession-number dict from _bdr_ data
+        #Example returned data: { acc_num_1: {pid:bdr_123, state:active}, acc_num_3: {pid:bdr_234, state:inactive} }
+        bdr_accession_dict = self._assign_bdr_accession_numbers( solr_query_output, intersection_pid_dict )
+        #
+        #Get _bell_ accession numbers
+        #Purpose: create list of bell accession numbers from _bell_ data
+        #Example returned data: [ 'acc_num_1', 'acc_num_2', etc. ]
         accession_numbers = self._load_bell_accession_numbers( bell_dict_json_path )
-        #Make final accession-number dict -- { acc_num_1: {pid:bdr_123, state:active}, acc_num_2: {pid:None, state:None}, etc. }
+        #
+        #Make final accession-number dict
+        #Purpose: go through bell accession-numbers, add any bdr-info, note lack of bdr-info
+        #Example returned data: { acc_num_1: {pid:bdr_123, state:active}, acc_num_2: {pid:None, state:None} }
         final_accesion_dict = self._make_final_accession_number_dict( accession_numbers, initial_accession_dict )
+        #
         #Output json
+        self.output_json( final_accesion_dict )
         print u'done'
 
     def _run_itql_query( self, fedora_risearch_url, bdr_collection_pid ):
@@ -43,6 +68,7 @@ class PidFinder( object ):
           d = json.loads( r.text )
           assert d.keys() == [ u'results' ]
           results_list = d[u'results']
+          print u'- _run_itql_query() done'
           return results_list
         except Exception, e:
           message = u'problem running itql search: %s' % repr(e).decode(u'utf-8', u'replace')
@@ -56,6 +82,7 @@ class PidFinder( object ):
           if entry[u'object'][0:4] == u'info':
             parsed_pids.append( entry[u'object'].split(u'/')[1] )
         sorted_fedora_pids = sorted( parsed_pids )
+        print u'- _parse_itql_search_results() done'
         return sorted_fedora_pids
 
     def _run_studio_solr_query( self, bdr_collection_pid ):
@@ -86,6 +113,7 @@ class PidFinder( object ):
             if not len( docs ) > 0:
                 break
         sorted_pids = sorted( all_pids )
+        print u'- _query_solr() done'
         return sorted_pids
 
     def _make_intersection_pid_dict( self, fedora_pid_list, studio_solr_pid_list ):
@@ -104,12 +132,13 @@ class PidFinder( object ):
                 intersection_dict[entry] = u'inactive'
             else:
                 intersection_dict[entry] = u'active'
+        print u'- _make_intersection_pid_dict() done'
         return intersection_dict
 
     def _assign_bdr_accession_numbers( self, bdr_collection_pid, intersection_pid_dict ):
         """ Queries bdr_solr for all items with bdr_collection_pid; returns initial accession-number dict.
             Example: { acc_num_1: {pid:bdr_123, state:active}, acc_num_3: {pid:bdr_234, state:active}, etc. } """
-        print u'TODO: _assign_bdr_accession_numbers()'
+        print u'- TODO: _assign_bdr_accession_numbers()'
         pass
 
     def _load_bell_accession_numbers( self, bell_dict_json_path ):
@@ -121,12 +150,13 @@ class PidFinder( object ):
         # pprint.pprint( keys )
         if len( keys ) < 5000:
             print u'- NOTE: accession_number_dict.json ONLY CONTAINS %s RECORDS' % len( keys )
+        print u'- _load_bell_accession_numbers() done'
         return keys
 
     def _make_final_accession_number_dict( self, accession_numbers, fedora_pid_dict ):
         """ Adds accession-numbers with no bdr info; returns final accession-number dict.
             Example: { acc_num_1: {pid:bdr_123, state:active}, acc_num_2: {pid:None, state:None}, etc. } """
-        print u'TODO: _make_final_accession_number_dict()'
+        print u'- TODO: _make_final_accession_number_dict()'
         pass
 
 
