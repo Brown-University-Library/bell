@@ -27,7 +27,7 @@ class PidFinder( object ):
         #
         #Run studio-solr query
         #Purpose: get raw child-pids data from _solr_, along with accession-number data
-        #Example returned data: { bdr1: acc_num_123, bdr2: acc_num_234 }
+        #Example returned data: [ {pid:bdr123, identifier:[acc_num_a,other_num_b], mods_id_bell_accession_number_ssim:None_or_acc_num_a}, etc. ]
         solr_query_output = self._run_studio_solr_query( bdr_collection_pid )
         #
         #Parse solr-results to solr-pid list
@@ -86,12 +86,14 @@ class PidFinder( object ):
         return sorted_fedora_pids
 
     def _run_studio_solr_query( self, bdr_collection_pid ):
-        """ Returns list of pids from _solr_. """
+        """ Returns _solr_ doc list.
+            Example: [ {pid:bdr123, identifier:[acc_num_a,other_num_b], mods_id_bell_accession_number_ssim:None_or_acc_num_a}, etc. ]
+            [u'identifier', u'mods_id_bell_accession_number_ssim', u'pid'] """
         def _set_params( bdr_collection_pid, new_start ):
             return {
                 u'q': u'rel_is_member_of_ssim:"%s"' % bdr_collection_pid,
-                u'fl': u'pid',
-                u'rows': 500,
+                u'fl': u'pid,mods_id_bell_accession_number_ssim,identifier',
+                u'rows': 2,
                 u'start': new_start,
                 u'wt': u'json'
                 }
@@ -104,17 +106,49 @@ class PidFinder( object ):
             time.sleep( .1 )
             return data_dict
         ## work
-        all_pids = []
+        doc_list = []
         for i in range( 100 ):  # would handle 50,000 records; loop actually only run 11 times as of Nov-2013
             data_dict = _query_solr( i, bdr_collection_pid )
             docs = data_dict[u'response'][u'docs']
-            for doc in docs:
-                all_pids.append( doc[u'pid'] )
+            doc_list.extend( docs )
             if not len( docs ) > 0:
                 break
-        sorted_pids = sorted( all_pids )
-        print u'- _query_solr() done'
-        return sorted_pids
+        for entry in doc_list:
+            if not u'mods_id_bell_accession_number_ssim' in entry.keys():
+                entry[u'mods_id_bell_accession_number_ssim'] = None
+        print u'- doc_list...'; pprint.pprint( doc_list )
+        return doc_list
+
+    # def _run_studio_solr_query( self, bdr_collection_pid ):
+    #     """ Returns list of pids from _solr_. """
+    #     def _set_params( bdr_collection_pid, new_start ):
+    #         return {
+    #             u'q': u'rel_is_member_of_ssim:"%s"' % bdr_collection_pid,
+    #             u'fl': u'pid',
+    #             u'rows': 500,
+    #             u'start': new_start,
+    #             u'wt': u'json'
+    #             }
+    #     def _query_solr( i, bdr_collection_pid ):
+    #         search_api_url = u'https://repository.library.brown.edu/api/pub/search/'
+    #         new_start = i * 500  # for solr start=i parameter (cool, eh?)
+    #         params = _set_params( bdr_collection_pid, new_start )
+    #         r = requests.get( search_api_url, params=params, verify=False )
+    #         data_dict = json.loads( r.content.decode(u'utf-8', u'replace') )
+    #         time.sleep( .1 )
+    #         return data_dict
+    #     ## work
+    #     all_pids = []
+    #     for i in range( 100 ):  # would handle 50,000 records; loop actually only run 11 times as of Nov-2013
+    #         data_dict = _query_solr( i, bdr_collection_pid )
+    #         docs = data_dict[u'response'][u'docs']
+    #         for doc in docs:
+    #             all_pids.append( doc[u'pid'] )
+    #         if not len( docs ) > 0:
+    #             break
+    #     sorted_pids = sorted( all_pids )
+    #     print u'- _run_studio_solr_query() done'
+    #     return sorted_pids
 
     def _make_intersection_pid_dict( self, fedora_pid_list, studio_solr_pid_list ):
         """ Returns accession-number dict showing active/inactive status

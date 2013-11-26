@@ -13,9 +13,9 @@ class MakeAccessionToPidDict_Test(unittest.TestCase):
   def test___run_studio_solr_query(self):
     """ Tests get-pids-from-solr. """
     bdr_collection_pid = u'bdr:10870'
-    data = self.pid_finder._run_studio_solr_query( bdr_collection_pid )
-    result = data[0][0:4]
-    self.assertEquals( u'bdr:', result )
+    data_list = self.pid_finder._run_studio_solr_query( bdr_collection_pid )
+    entry = data_list[0]
+    self.assertEquals( [u'identifier', u'mods_id_bell_accession_number_ssim', u'pid'], sorted(entry.keys()) )
 
   # def test___make_intersection_pid_dict(self):
   #   """ Tests set intersection and return-dict. """
