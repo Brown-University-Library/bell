@@ -40,6 +40,11 @@ class PidFinder( object ):
         #Example returned data: { bdr123: active, bdr234: inactive, }
         intersection_pid_dict = self._make_intersection_pid_dict( fedora_pid_list, studio_solr_pid_list )
         #
+        #Parse solr-results to pid:accession_number dict
+        #Purpose: check different places in solr record (due to legacy ingests) where accession_number may be located
+        #Example returned data: { bdr_1:acc_num_123, bdr_2:acc_num_456 }
+        self._parse_solr_for_accession_number( solr_query_output )
+        #
         #Assign accession-numbers from bdr
         #Purpose: create initial accession-number dict from _bdr_ data
         #Example returned data: { acc_num_1: {pid:bdr_123, state:active}, acc_num_3: {pid:bdr_234, state:inactive} }
@@ -92,16 +97,24 @@ class PidFinder( object ):
         def _set_params( bdr_collection_pid, new_start ):
             return {
                 u'q': u'rel_is_member_of_ssim:"%s"' % bdr_collection_pid,
-                u'fl': u'pid,mods_id_bell_accession_number_ssim,identifier',
-                u'rows': 2,
+                u'rows': 500,
                 u'start': new_start,
                 u'wt': u'json'
                 }
+        # def _set_params( bdr_collection_pid, new_start ):
+        #     return {
+        #         u'q': u'rel_is_member_of_ssim:"%s"' % bdr_collection_pid,
+        #         u'fl': u'pid,accession_number_original,identifier,mods_id_bell_accession_number_ssim,',
+        #         u'rows': 2,
+        #         u'start': new_start,
+        #         u'wt': u'json'
+        #         }
         def _query_solr( i, bdr_collection_pid ):
             search_api_url = u'https://repository.library.brown.edu/api/pub/search/'
             new_start = i * 500  # for solr start=i parameter (cool, eh?)
             params = _set_params( bdr_collection_pid, new_start )
             r = requests.get( search_api_url, params=params, verify=False )
+            # print u'- r.url: %s' % r.url
             data_dict = json.loads( r.content.decode(u'utf-8', u'replace') )
             time.sleep( .1 )
             return data_dict
@@ -113,10 +126,10 @@ class PidFinder( object ):
             doc_list.extend( docs )
             if not len( docs ) > 0:
                 break
-        for entry in doc_list:
-            if not u'mods_id_bell_accession_number_ssim' in entry.keys():
-                entry[u'mods_id_bell_accession_number_ssim'] = None
-        print u'- doc_list...'; pprint.pprint( doc_list )
+        # for entry in doc_list:
+        #     if not u'mods_id_bell_accession_number_ssim' in entry.keys():
+        #         entry[u'mods_id_bell_accession_number_ssim'] = None
+        # print u'- doc_list...'; pprint.pprint( doc_list )
         return doc_list
 
     # def _run_studio_solr_query( self, bdr_collection_pid ):
@@ -149,6 +162,30 @@ class PidFinder( object ):
     #     sorted_pids = sorted( all_pids )
     #     print u'- _run_studio_solr_query() done'
     #     return sorted_pids
+
+
+
+    def _parse_solr_for_accession_number( self, solr_doc_list ):
+        """ Returns pid:accession_number dict. """
+        target_dict = {}
+        for doc in solr_doc_list:
+            # print u'- doc...'; pprint.pprint( doc )
+            pid = doc[u'pid']
+            # print u'- pid is: %s' % pid
+            if u'mods_id_bell_accession_number_ssim' in doc.keys():
+                accession_number = doc[u'mods_id_bell_accession_number_ssim'][0]
+            elif u'mods_id_accession no._ssim' in doc.keys():
+                accession_number = doc[u'mods_id_accession no._ssim'][0]
+            elif u'identifier' in doc.keys():
+                accession_number = doc[u'identifier'][0]
+            else:
+                accession_number = u'ACCESSION_NUMBER_NOT_FOUND'
+            target_dict[pid] = accession_number
+        print u'- _parse_solr_for_accession_number() done'
+        print u'- target_dict...'; pprint.pprint( target_dict )
+        return target_dict
+
+
 
     def _make_intersection_pid_dict( self, fedora_pid_list, studio_solr_pid_list ):
         """ Returns accession-number dict showing active/inactive status
