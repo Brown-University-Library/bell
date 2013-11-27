@@ -5,6 +5,11 @@ import requests
 
 
 class PidFinder( object ):
+    """ Handles creation of an accession_number-to-pid-info dict, saved as a json file.
+        Purpose: This is one of four essential files that should exist before doing almost any bell processing,
+                 because the source bell data contains no pid info, and it is essential to know whether a bell item
+                 needs to create or update bdr data.
+        if __name__... at bottom indicates how to run this script. """
 
     def make_dict( self,
         bdr_collection_pid,
@@ -12,7 +17,7 @@ class PidFinder( object ):
         fedora_risearch_url,
         output_json_path ):
         """ CONTROLLER.
-            Returns accession-number dict showing bdr-pid & state.
+            Produces accession-number dict showing bdr-pid & state, and saves to a json file.
             Example: { acc_num_1: {pid:bdr_123, state:active}, acc_num_2: {pid:None, state:None}, etc. }
             Gets pids from fedora, gets pids from solr, assesses any differences. """
         #Run itql query
@@ -36,7 +41,7 @@ class PidFinder( object ):
         studio_solr_pid_list = self._parse_solr_for_pids( solr_query_output )
         #
         #Make intersection pid-dict
-        #Purpose: compare child-pids in fedor and solr pid-lists to determine which are 'active'/'inactive'
+        #Purpose: compare child-pids in fedora and solr pid-lists to determine which are 'active'/'inactive'
         #Example returned data: { bdr123: active, bdr234: inactive, }
         intersection_pid_dict = self._make_intersection_pid_dict( fedora_pid_list, studio_solr_pid_list )
         #
@@ -93,20 +98,14 @@ class PidFinder( object ):
     def _run_studio_solr_query( self, bdr_collection_pid ):
         """ Returns _solr_ doc list.
             Example: [ {pid:bdr123, identifier:[acc_num_a,other_num_b], mods_id_bell_accession_number_ssim:None_or_acc_num_a, other:...}, etc. ] """
-        def __set_params( bdr_collection_pid, new_start ):
-            return {
-                u'q': u'rel_is_member_of_ssim:"%s"' % bdr_collection_pid,
-                # u'fl': u'pid,accession_number_original,identifier,mods_id_bell_accession_number_ssim,',
-                u'rows': 500,
-                u'start': new_start,
-                u'wt': u'json'
-                }
         def __query_solr( i, bdr_collection_pid ):
             search_api_url = u'https://repository.library.brown.edu/api/pub/search/'
             new_start = i * 500  # for solr start=i parameter (cool, eh?)
-            params = __set_params( bdr_collection_pid, new_start )
+            params = {
+                u'q': u'rel_is_member_of_ssim:"%s"' % bdr_collection_pid,
+                # u'fl': u'pid,accession_number_original,identifier,mods_id_bell_accession_number_ssim,',
+                u'rows': 500, u'start': new_start, u'wt': u'json' }
             r = requests.get( search_api_url, params=params, verify=False )
-            # print u'- r.url: %s' % r.url
             data_dict = json.loads( r.content.decode(u'utf-8', u'replace') )
             time.sleep( .1 )
             return data_dict
@@ -120,6 +119,34 @@ class PidFinder( object ):
                 break
         print u'- _run_studio_solr_query() done'
         return doc_list
+
+    # def _run_studio_solr_query( self, bdr_collection_pid ):
+    #     """ Returns _solr_ doc list.
+    #         Example: [ {pid:bdr123, identifier:[acc_num_a,other_num_b], mods_id_bell_accession_number_ssim:None_or_acc_num_a, other:...}, etc. ] """
+    #     def __set_params( bdr_collection_pid, new_start ):
+    #         return {
+    #             u'q': u'rel_is_member_of_ssim:"%s"' % bdr_collection_pid,
+    #             # u'fl': u'pid,accession_number_original,identifier,mods_id_bell_accession_number_ssim,',
+    #             u'rows': 500, u'start': new_start, u'wt': u'json' }
+    #     def __query_solr( i, bdr_collection_pid ):
+    #         search_api_url = u'https://repository.library.brown.edu/api/pub/search/'
+    #         new_start = i * 500  # for solr start=i parameter (cool, eh?)
+    #         params = __set_params( bdr_collection_pid, new_start )
+    #         r = requests.get( search_api_url, params=params, verify=False )
+    #         # print u'- r.url: %s' % r.url
+    #         data_dict = json.loads( r.content.decode(u'utf-8', u'replace') )
+    #         time.sleep( .1 )
+    #         return data_dict
+    #     ## work
+    #     doc_list = []
+    #     for i in range( 100 ):  # would handle 50,000 records; loop actually only run 11 times as of Nov-2013
+    #         data_dict = __query_solr( i, bdr_collection_pid )
+    #         docs = data_dict[u'response'][u'docs']
+    #         doc_list.extend( docs )
+    #         if not len( docs ) > 0:
+    #             break
+    #     print u'- _run_studio_solr_query() done'
+    #     return doc_list
 
     def _parse_solr_for_pids( self, solr_query_output ):
         """ Returns pid list. """
@@ -231,11 +258,12 @@ class PidFinder( object ):
 
 
 if __name__ == u'__main__':
-  import bell_ingest_settings as bs
-  pid_finder = PidFinder()
-  pid_finder.make_dict(
-    bdr_collection_pid=bs.COLLECTION_PID,
-    bell_dict_json_path=bs.BELL_DICT_JSON_PATH,  # file of dict of bell-accession-number to metadata
-    fedora_risearch_url=bs.FEDORA_RISEARCH_URL,
-    output_json_path=bs.OUTPUT_JSON_PATH
-    )
+    """ Assumes env is activated. """
+    import bell_ingest_settings as bs
+    pid_finder = PidFinder()
+    pid_finder.make_dict(
+        bdr_collection_pid=bs.COLLECTION_PID,
+        bell_dict_json_path=bs.BELL_DICT_JSON_PATH,  # file of dict of bell-accession-number to metadata
+        fedora_risearch_url=bs.FEDORA_RISEARCH_URL,
+        output_json_path=bs.OUTPUT_JSON_PATH
+        )
