@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-import json, os, pprint
+import datetime, json, os, pprint
 
 import lxml, requests
 from lxml import etree
@@ -12,25 +12,65 @@ class SourceDictMaker( object ):
                  It converts the raw filemaker-pro xml into json data for easy processing and viewing.
         if __name__... at bottom indicates how to run this script. """
 
-    # def __init__( self ):
-    #     self.NAMESPACE = { u'default': u'http://www.filemaker.com/fmpxmlresult' }
+    def __init__( self ):
+        self.NAMESPACE = { u'default': u'http://www.filemaker.com/fmpxmlresult' }
 
     def convert_fmproxml_to_json(
-        self, FMPRO_XML_URL, FMPRO_XML_FILENAME, JSON_OUTPUT_PATH, NAMESPACE ):
+        self, FMPRO_XML_URL, FMPRO_XML_FILENAME, JSON_OUTPUT_PATH ):
         """ CONTROLLER
-          Produces accession-number dict, and saves to a json file.
-          Example: { accnum_1: {author:abc, title:def, etc.}, accnum_2:{etc.} } """
-        unicode_xml_string = self._get_data( FMPRO_XML_URL, FMPRO_XML_FILENAME )   # get data
-        XML_DOC = self._docify_xml( unicode_xml_string)                            # docify xml string
-        dict_keys = self._make_dict_keys( XML_DOC, NAMESPACE )                     # get dict keys
-        xml_doc_rows = self._get_xml_doc_rows( XML_DOC, NAMESPACE )                # get list of doc-items
-        result_list = self._process_rows( xml_doc_rows, NAMESPACE, dict_keys )     # process rows
-        key_type_dict = self._make_key_type_dict( result_list )                    # figures type for each field
-        result_list = self._normalize_value_types( key_type_dict, result_list )    # ensures values are consistently of type list or u-string
-        self._save_json( result_list, JSON_OUTPUT_PATH )                           # save json
+            Produces accession-number dict, and saves to a json file.
+            Example: { accnum_1: {author:abc, title:def, etc.}, accnum_2:{etc.} } """
+        #Get data
+        #Purpose: gets raw filemaker-pro xml unicode-string from gist
+        unicode_xml_string = self._get_data( FMPRO_XML_URL, FMPRO_XML_FILENAME )
+        print u'- data grabbed'
+        #
+        #Docify xml string
+        #Purpose: converts unicode-string to <type 'lxml.etree._Element'>
+        XML_DOC = self._docify_xml( unicode_xml_string)
+        print u'- data doc-ified'
+        #
+        #Make key list
+        #Purpose: creates list of keys that will be used for each item-dict
+        #Example returned data: [ u'object_id', u'object_title', u'object_date', etc. ]
+        dict_keys = self._make_dict_keys( XML_DOC, self.NAMESPACE )
+        print u'- list of keys created'
+        #
+        #Make list of doc-items
+        #Purpose: creates list of xml-doc items
+        xml_doc_rows = self._get_xml_doc_rows( XML_DOC, self.NAMESPACE )
+        print u'- xml_doc_rows grabbed'
+        #
+        #Make initial dict-list
+        #Purpose: creates initial list of dict-items. For a given key, the value-type may vary by item.
+        #Example returned data: [ {u'artist_alias': u'abc', u'artist_birth_country_id': u'123', etc.}, {etc.}, ... ]
+        result_list = self._process_rows( xml_doc_rows, self.NAMESPACE, dict_keys )
+        print u'- initial result_list generated'
+        #
+        #Make key-type dict
+        #Purpose: creats dict of key-name:key-type; all data examined to see which keys should have list vs unicode-string values.
+        #Example returned data: [  {u'ARTISTS::calc_nationality': <type 'list'>, u'ARTISTS::use_alias_flag': <type 'unicode'>, etc.} ]
+        key_type_dict = self._make_key_type_dict( result_list )
+        print u'- key_type_dict created'
+        #
+        #Normalize dict-values
+        #Purpose: creates final list of dict-items. For a given key, the value-type will _not_ vary by item.
+        #Example returned data: [ {u'artist_alias': [u'abc'], u'artist_birth_country_id': [u'123'], etc.}, {etc.}, ... ]
+        result_list = self._normalize_value_types( key_type_dict, result_list )
+        print u'- final result_list generated'
+        #
+        #Dictify item-list
+        #Purpose: creates accession-number to item-data-dict dictionary, adds count & datestamp
+        #Example returned data: { count:5000,
+                              #   items:{ accnum_1:{artist:abc, title:def}, accnum_2:{etc.}, etc. }
+                              # }
+        dictified_data = self._dictify_data( result_list )
+        print u'- final data dictified'
+        #
+        #Output json
+        self._save_json( dictified_data, JSON_OUTPUT_PATH )
+        print u'- json saved; processing done'
         return
-
-    ## helpers
 
     def _get_data( self, FMPRO_XML_URL, FMPRO_XML_FILENAME ):
         ''' Returns original xml from github gist. '''
@@ -82,7 +122,7 @@ class SourceDictMaker( object ):
           columns = row.xpath( xpath, namespaces=(NAMESPACE) )
           assert len(columns) == 36, len(columns);   # was less before spring db revision
           ## get data_elements (variable number per column)
-          item_dict = _makeDataDict( columns, NAMESPACE, dict_keys )
+          item_dict = self._makeDataDict( columns, NAMESPACE, dict_keys )
           result_list.append( item_dict )  # if i > 5: break
         return result_list
 
@@ -100,13 +140,19 @@ class SourceDictMaker( object ):
           if data[0].text == None:
             d_dict[ the_key ] = None
           else:
-            d_dict[ the_key ] = smart_unicode( data[0].text, u'utf-8', u'replace' )
+            if type( data[0].text ) == unicode:
+                d_dict[ the_key ] = data[0].text
+            else:
+                d_dict[ the_key ] = data[0].text.decode( u'utf-8', u'replace' )
           return
         def __handle_multiple_elements( data, the_key ):
           ''' Stores list of values to the key. '''
           d_list = []
           for data_element in data:
-            d_list.append( smart_unicode( data_element.text, u'utf-8', u'replace' ) )
+            if type( data_element.text ) == unicode:
+                d_list.append( data_element.text )
+            else:
+                d_list.append( data_element.text.decode(u'utf-8', u'replace') )
           d_dict[ the_key ] = d_list
           return
         ## work
@@ -147,6 +193,17 @@ class SourceDictMaker( object ):
           updated_result_list.append( entry_dict )
         return updated_result_list
 
+    def _dictify_data( self, source_list ):
+        """ Takes raw bell list of dict_data, returns accession-number dict. """
+        accession_number_dict = {}
+        for entry in source_list:
+            accession_number_dict[ entry[u'calc_accession_id'] ] = entry
+        final_dict = {
+          u'count': len( accession_number_dict.items() ),
+          u'datetime': unicode( datetime.datetime.now() ),
+          u'items': accession_number_dict }
+        return final_dict
+
     def _save_json( self, result_list, JSON_OUTPUT_PATH ):
         ''' Saves the list of item-dicts to .json file. '''
         json_string = json.dumps( result_list, indent=2, sort_keys=True )
@@ -156,12 +213,13 @@ class SourceDictMaker( object ):
         f.close()
         return
 
-
     def _print_settings( self, FMPRO_XML_URL, FMPRO_XML_FILENAME, JSON_OUTPUT_PATH ):
         """ Outputs settings derived from environmental variables for developement. """
+        print u'- settings...'
         print u'- FMPRO_XML_URL: %s' % FMPRO_XML_URL
         print u'- FMPRO_XML_FILENAME: %s' % FMPRO_XML_FILENAME
         print u'- JSON_OUTPUT_PATH: %s' % JSON_OUTPUT_PATH
+        print u'---'
         return
 
   # end class SourceDictMaker()
@@ -172,15 +230,15 @@ class SourceDictMaker( object ):
 if __name__ == u'__main__':
     """ Assumes env is activated.
         ( 'ANTD' used as a namespace prefix for this 'acc_num_to_data.py' file. ) """
-    pprint.pprint( os.environ.__dict__ )
+    # pprint.pprint( os.environ.__dict__ )
     source_dict_maker = SourceDictMaker()
     source_dict_maker._print_settings(
         FMPRO_XML_URL=os.environ.get( u'BELL_ANTD__FMPRO_XML_URL', u'' ),
         FMPRO_XML_FILENAME=os.environ.get( u'BELL_ANTD__FMPRO_XML_FILENAME', u'' ),  # used to pull proper element from gist-api
         JSON_OUTPUT_PATH=os.environ.get( u'BELL_ANTD__JSON_OUTPUT_PATH', u'' ),
         )
-    # source_dict_maker.convert_fmproxml_to_json(
-    #     FMPRO_XML_URL=os.environ.get( u'BELL_ANTD__FMPRO_XML_URL', u'' ),
-    #     FMPRO_XML_FILENAME=os.environ.get( u'BELL_ANTD__FMPRO_XML_FILENAME', u'' ),
-    #     JSON_OUTPUT_PATH=os.environ.get( u'BELL_ANTD__JSON_OUTPUT_PATH', u'' ),
-    #     )
+    source_dict_maker.convert_fmproxml_to_json(
+        FMPRO_XML_URL=os.environ.get( u'BELL_ANTD__FMPRO_XML_URL', u'' ),
+        FMPRO_XML_FILENAME=os.environ.get( u'BELL_ANTD__FMPRO_XML_FILENAME', u'' ),
+        JSON_OUTPUT_PATH=os.environ.get( u'BELL_ANTD__JSON_OUTPUT_PATH', u'' ),
+        )

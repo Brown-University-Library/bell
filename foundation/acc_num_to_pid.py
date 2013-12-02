@@ -68,6 +68,7 @@ class PidFinder( object ):
         #Output json
         self._output_json( final_accesion_dict, output_json_path )
         print u'- all processing done'
+        return
 
     def _run_itql_query( self, fedora_risearch_url, bdr_collection_pid ):
         """ Returns output from fedora itql resource-index search. """
