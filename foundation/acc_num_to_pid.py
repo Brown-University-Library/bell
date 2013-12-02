@@ -6,7 +6,7 @@ import requests
 
 class PidFinder( object ):
     """ Handles creation of an accession_number-to-pid-info dict, saved as a json file.
-        Purpose: This is one of four essential files that should exist before doing almost any bell processing,
+        Purpose: This is one of three essential files that should exist before doing almost any bell processing,
                  because the source bell data contains no pid info, and it is essential to know whether a bell item
                  needs to create or update bdr data.
         if __name__... at bottom indicates how to run this script. """
@@ -231,6 +231,8 @@ class PidFinder( object ):
         print u'- bell_dict_json_path: %s' % bell_dict_json_path
         print u'- fedora_risearch_url: %s' % fedora_risearch_url
         print u'- output_json_path: %s' % output_json_path
+
+    # end class PidFinder()
 
 
 
