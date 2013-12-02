@@ -19,7 +19,10 @@ class SourceDictMaker( object ):
         self, FMPRO_XML_URL, FMPRO_XML_FILENAME, JSON_OUTPUT_PATH ):
         """ CONTROLLER
             Produces accession-number dict, and saves to a json file.
-            Example: { accnum_1: {author:abc, title:def, etc.}, accnum_2:{etc.} } """
+            Example: { count:5000,
+                   #   datetime: 2013...,
+                   #   items:{ accnum_1:{artist:abc, title:def}, accnum_2:{etc.}, etc. }
+                   # } """
         #Get data
         #Purpose: gets raw filemaker-pro xml unicode-string from gist
         unicode_xml_string = self._get_data( FMPRO_XML_URL, FMPRO_XML_FILENAME )
