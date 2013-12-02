@@ -74,11 +74,8 @@ class SourceDictMaker( object ):
 
     def _get_data( self, FMPRO_XML_URL, FMPRO_XML_FILENAME ):
         ''' Returns original xml from github gist. '''
-        # print u'- FMPRO_XML_URL, FMPRO_XML_FILENAME: %s, %s' % ( FMPRO_XML_URL, FMPRO_XML_FILENAME )
-        r = requests.get( FMPRO_XML_URL )
+        r = requests.get( FMPRO_XML_URL )  # url uses safer-for-big-files <https://gist.github.com/HASH.git> syntax
         d = r.json()
-        # print u'- d.keys()...'; pprint.pprint( d.keys() )
-        # print u'- files.keys()...'; pprint.pprint( d[u'files'].keys() )
         unicode_data = d[u'files'][FMPRO_XML_FILENAME][u'content']
         assert type(unicode_data) == unicode
         return unicode_data
@@ -92,7 +89,6 @@ class SourceDictMaker( object ):
 
     def _make_dict_keys( self, XML_DOC, NAMESPACE ):
         ''' Returns list of field names; they'll later become keys in each item-dict. '''
-        # XML_DOC = etree.fromstring( unicode_xml_string.encode(u'utf-8', u'replace') )  # str required because xml contains an encoding declaration
         assert type(XML_DOC) == lxml.etree._Element, type(XML_DOC)
         xpath = u'/default:FMPXMLRESULT/default:METADATA/default:FIELD'
         elements = XML_DOC.xpath( xpath, namespaces=(NAMESPACE) )
@@ -114,7 +110,7 @@ class SourceDictMaker( object ):
 
     def _process_rows( self, xml_doc_rows, NAMESPACE, dict_keys ):
         ''' Returns list of item dictionaries.
-            Calls _make_data_dict helper. '''
+            Calls _make_data_dict() helper. '''
         result_list = []
         for i,row in enumerate(xml_doc_rows):
           ## get columns (fixed number of columns per row)
@@ -128,45 +124,52 @@ class SourceDictMaker( object ):
 
     def _makeDataDict( self, columns, NAMESPACE, keys ):
         ''' Returns info-dict for a single item; eg { u'artist_first_name': u'andy', u'artist_last_name': u'warhol' }
-            Called by: _process_rows() '''
-        ## helpers
-        def __run_asserts():
-          ''' Documents the inputs. '''
-          assert type(columns) == list, type(columns)
-          assert type(columns[0]) == lxml.etree._Element, type(columns[0])
-          assert type(keys) == list, type(keys)
-        def __handle_single_element( data, the_key ):
-          ''' Stores either None or the single unicode value to the key. '''
-          if data[0].text == None:
-            d_dict[ the_key ] = None
-          else:
-            if type( data[0].text ) == unicode:
-                d_dict[ the_key ] = data[0].text
-            else:
-                d_dict[ the_key ] = data[0].text.decode( u'utf-8', u'replace' )
-          return
-        def __handle_multiple_elements( data, the_key ):
-          ''' Stores list of values to the key. '''
-          d_list = []
-          for data_element in data:
-            if type( data_element.text ) == unicode:
-                d_list.append( data_element.text )
-            else:
-                d_list.append( data_element.text.decode(u'utf-8', u'replace') )
-          d_dict[ the_key ] = d_list
-          return
-        ## work
-        __run_asserts()
+            Called by: _process_rows()
+            Calls: self.__run_asserts(), self.__handle_single_element(), self.__handle_multiple_elements() '''
+        self.__run_asserts( columns, keys )
         xpath = u'default:DATA'; d_dict = {}  # setup
         for i,column in enumerate(columns):
-          data = column.xpath( xpath, namespaces=(NAMESPACE) )  # type(data) always a list, but of an empty, a single or multiple elements?
-          if len(data) == 0:  # no 'DATA' element in 'COL' element
-            d_dict[ keys[i] ] = None
-          elif len(data) == 1:
-            __handle_single_element( data, keys[i] )
-          else:
-            __handle_multiple_elements( data, keys[i] )
+            data = column.xpath( xpath, namespaces=(NAMESPACE) )  # type(data) always a list, but of an empty, a single or multiple elements?
+            if len(data) == 0:    # eg <COL(for artist-firstname)></COL>
+                d_dict[ keys[i] ] = None
+            elif len(data) == 1:  # eg <COL(for artist-firstname)><DATA>'artist_firstname'</DATA></COL>
+                d_dict[ keys[i] ] = self.__handle_single_element( data, keys[i] )
+            else:                 # eg <COL(for artist-firstname)><DATA>'artist_a_firstname'</DATA><DATA>'artist_b_firstname'</DATA></COL>
+                d_dict[ keys[i] ] = self.__handle_multiple_elements( data, keys[i] )
         return d_dict
+
+    def __run_asserts( self, columns, keys ):
+        ''' Documents the inputs.
+            Called by _makeDataDict() '''
+        assert type(columns) == list, type(columns)
+        assert type(columns[0]) == lxml.etree._Element, type(columns[0])
+        assert type(keys) == list, type(keys)
+        return
+
+    def __handle_single_element( self, data, the_key ):
+        ''' Stores either None or the single unicode value to the key.
+            Called by _makeDataDict() '''
+        return_val = None
+        if data[0].text:
+            if type( data[0].text ) == unicode:
+                return_val = data[0].text
+            else:
+                return_val = data[0].text.decode( u'utf-8', u'replace' )
+        return return_val
+
+    def __handle_multiple_elements( self, data, the_key ):
+        ''' Stores list of unicode values to the key.
+            Called by _makeDataDict() '''
+        d_list = []
+        for data_element in data:
+            if data_element.text:
+                if type( data_element.text ) == unicode:
+                    d_list.append( data_element.text )
+                else:
+                    d_list.append( data_element.text.decode(u'utf-8', u'replace') )
+            else:
+                d_list.append( None )
+        return d_list
 
     def _make_key_type_dict( self, result_list ):
         ''' Determines. '''
@@ -179,7 +182,6 @@ class SourceDictMaker( object ):
             if type(value) == list and len(value) > 0:
               key_type_dict[key] = list
         return key_type_dict
-        # pprint.pprint( key_type_dict )
 
     def _normalize_value_types( self, key_type_dict, result_list ):
         ''' Determines stable type for each field. '''
