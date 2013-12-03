@@ -236,14 +236,11 @@ if __name__ == u'__main__':
     """ Assumes env is activated.
         ( 'ANTD' used as a namespace prefix for this 'acc_num_to_data.py' file. ) """
     # pprint.pprint( os.environ.__dict__ )
-    source_dict_maker = SourceDictMaker()
-    source_dict_maker._print_settings(
-        FMPRO_XML_URL=os.environ.get( u'BELL_ANTD__FMPRO_XML_URL', u'' ),
-        FMPRO_XML_FILENAME=os.environ.get( u'BELL_ANTD__FMPRO_XML_FILENAME', u'' ),  # used to pull proper element from gist-api
-        JSON_OUTPUT_PATH=os.environ.get( u'BELL_ANTD__JSON_OUTPUT_PATH', u'' ),
-        )
-    source_dict_maker.convert_fmproxml_to_json(
-        FMPRO_XML_URL=os.environ.get( u'BELL_ANTD__FMPRO_XML_URL', u'' ),
-        FMPRO_XML_FILENAME=os.environ.get( u'BELL_ANTD__FMPRO_XML_FILENAME', u'' ),
-        JSON_OUTPUT_PATH=os.environ.get( u'BELL_ANTD__JSON_OUTPUT_PATH', u'' ),
-        )
+    FMPRO_XML_URL=os.environ.get( u'BELL_ANTD__FMPRO_XML_URL', u'' )
+    FMPRO_XML_FILENAME=os.environ.get( u'BELL_ANTD__FMPRO_XML_FILENAME', u'' )  # used to pull proper element from gist-api
+    JSON_OUTPUT_PATH=os.environ.get( u'BELL_ANTD__JSON_OUTPUT_PATH', u'' )
+    maker = SourceDictMaker()
+    maker._print_settings(
+        FMPRO_XML_URL, FMPRO_XML_FILENAME, JSON_OUTPUT_PATH )
+    maker.convert_fmproxml_to_json(
+        FMPRO_XML_URL, FMPRO_XML_FILENAME, JSON_OUTPUT_PATH )

@@ -24,50 +24,59 @@ class PidFinder( object ):
         #Purpose: get raw child-pids data from _fedora_
         #Example returned data: [ {'object': 'info:fedora/bdr:1234'}, {'object': 'info:fedora/bdr:5678'} ]
         itql_query_output = self._run_itql_query( fedora_risearch_url, bdr_collection_pid )
+        print u'- _run_itql_query() done'
         #
         #Parse fedora-results to fedora-pid list
         #Purpose: parse raw fedora child-pids data to simple pid-list
         #Example returned data: [ bdr1234, bdr5678 ]
         fedora_pid_list = self._parse_itql_search_results( itql_query_output )
+        print u'- _parse_itql_search_results() done'
         #
         #Run studio-solr query
         #Purpose: get raw child-pids data from _solr_, along with accession-number data
         #Example returned data: [ {pid:bdr123, identifier:[acc_num_a,other_num_b], mods_id_bell_accession_number_ssim:None_or_acc_num_a}, etc. ]
         solr_query_output = self._run_studio_solr_query( bdr_collection_pid )
+        print u'- _run_studio_solr_query() done'
         #
         #Parse solr-results to solr-pid list
         #Purpose: parse raw solr child-pids data to simple pid-list
         #Example returned data: [ bdr1, bdr2 ]
         studio_solr_pid_list = self._parse_solr_for_pids( solr_query_output )
+        print u'- _parse_solr_for_pids() done'
         #
         #Make intersection pid-dict
         #Purpose: compare child-pids in fedora and solr pid-lists to determine which are 'active'/'inactive'
         #Example returned data: { bdr123: active, bdr234: inactive, }
         intersection_pid_dict = self._make_intersection_pid_dict( fedora_pid_list, studio_solr_pid_list )
+        print u'- _make_intersection_pid_dict() done'
         #
         #Parse solr-results to pid:accession_number dict
         #Purpose: check different places in solr record (due to legacy ingests) where accession_number may be located
         #Example returned data: { bdr_1:acc_num_123, bdr_2:acc_num_456 }
         pid_accession_dict = self._parse_solr_for_accession_number( solr_query_output )
+        print u'- _parse_solr_for_accession_number() done'
         #
         #Assign accession-numbers from bdr
         #Purpose: create initial accession-number dict from _bdr_ data
         #Example returned data: { acc_num_1: {pid:bdr_123, state:active}, acc_num_3: {pid:bdr_234, state:inactive} }
         accession_pid_dict_initial = self._assign_bdr_accession_numbers( pid_accession_dict, intersection_pid_dict )
+        print u'- _assign_bdr_accession_numbers() done'
         #
         #Get _bell_ accession numbers
         #Purpose: create list of bell accession numbers from _bell_ data
         #Example returned data: [ 'acc_num_1', 'acc_num_2', etc. ]
         accession_numbers = self._load_bell_accession_numbers( bell_dict_json_path )
+        print u'- _load_bell_accession_numbers() done'
         #
         #Make final accession-number dict
         #Purpose: go through bell accession-numbers, add any bdr-info, note lack of bdr-info
         #Example returned data: { acc_num_1: {pid:bdr_123, state:active}, acc_num_2: {pid:None, state:None} }
         final_accesion_dict = self._make_final_accession_number_dict( accession_numbers, accession_pid_dict_initial )
+        print u'- _make_final_accession_number_dict() done'
         #
         #Output json
         self._output_json( final_accesion_dict, output_json_path )
-        print u'- all processing done'
+        print u'- _output_json() done; all processing done'
         return
 
     def _run_itql_query( self, fedora_risearch_url, bdr_collection_pid ):
@@ -79,7 +88,6 @@ class PidFinder( object ):
           d = json.loads( r.text )
           assert d.keys() == [ u'results' ]
           results_list = d[u'results']
-          print u'- _run_itql_query() done'
           return results_list
         except Exception, e:
           message = u'problem running itql search: %s' % repr(e).decode(u'utf-8', u'replace')
@@ -93,7 +101,6 @@ class PidFinder( object ):
           if entry[u'object'][0:4] == u'info':
             parsed_pids.append( entry[u'object'].split(u'/')[1] )
         sorted_fedora_pids = sorted( parsed_pids )
-        print u'- _parse_itql_search_results() done'
         return sorted_fedora_pids
 
     def _run_studio_solr_query( self, bdr_collection_pid ):
@@ -118,7 +125,6 @@ class PidFinder( object ):
             doc_list.extend( docs )
             if not len( docs ) > 0:
                 break
-        print u'- _run_studio_solr_query() done'
         return doc_list
 
     def _parse_solr_for_pids( self, solr_query_output ):
@@ -127,7 +133,6 @@ class PidFinder( object ):
         for doc_dict in solr_query_output:
             pid_list.append( doc_dict[u'pid'] )
         sorted_pid_list = sorted( pid_list )
-        print u'- _parse_solr_for_pids() done'
         return sorted_pid_list
 
     def _make_intersection_pid_dict( self, fedora_pid_list, studio_solr_pid_list ):
@@ -147,29 +152,45 @@ class PidFinder( object ):
         intersection_dict = {}
         for entry in fedora_pid_list:
             intersection_dict = __update_intersection_dict( intersection_dict, entry )
-        # print u'- intersection_dict...'; pprint.pprint( intersection_dict )
-        print u'- _make_intersection_pid_dict() done'
         return intersection_dict
 
     def _parse_solr_for_accession_number( self, solr_doc_list ):
         """ Returns pid:accession_number dict. """
         target_dict = {}
-        for doc in solr_doc_list:
-            # print u'- doc...'; pprint.pprint( doc )
-            pid = doc[u'pid']
-            # print u'- pid is: %s' % pid
-            if u'mods_id_bell_accession_number_ssim' in doc.keys():
-                accession_number = doc[u'mods_id_bell_accession_number_ssim'][0]
-            elif u'mods_id_accession no._ssim' in doc.keys():
-                accession_number = doc[u'mods_id_accession no._ssim'][0]
-            elif u'identifier' in doc.keys():
-                accession_number = doc[u'identifier'][0]
-            else:
-                accession_number = u'ACCESSION_NUMBER_NOT_FOUND'
+        for solr_doc in solr_doc_list:
+            pid = solr_doc[u'pid']
+            accession_number = self.__grab_accession_number( solr_doc )
             target_dict[pid] = accession_number
-        print u'- _parse_solr_for_accession_number() done'
-        # print u'- target_dict...'; pprint.pprint( target_dict )
         return target_dict
+
+    def __grab_accession_number( self, solr_doc ):
+        """ Returns accession_number.
+            Called by _parse_solr_for_accession_number() """
+        if u'mods_id_bell_accession_number_ssim' in solr_doc.keys():
+            accession_number = solr_doc[u'mods_id_bell_accession_number_ssim'][0]
+        elif u'mods_id_accession no._ssim' in solr_doc.keys():
+            accession_number = solr_doc[u'mods_id_accession no._ssim'][0]
+        elif u'identifier' in solr_doc.keys():
+            accession_number = solr_doc[u'identifier'][0]
+        else:
+            accession_number = u'ACCESSION_NUMBER_NOT_FOUND'
+        return accession_number
+
+    # def _parse_solr_for_accession_number( self, solr_doc_list ):
+    #     """ Returns pid:accession_number dict. """
+    #     target_dict = {}
+    #     for doc in solr_doc_list:
+    #         pid = doc[u'pid']
+    #         if u'mods_id_bell_accession_number_ssim' in doc.keys():
+    #             accession_number = doc[u'mods_id_bell_accession_number_ssim'][0]
+    #         elif u'mods_id_accession no._ssim' in doc.keys():
+    #             accession_number = doc[u'mods_id_accession no._ssim'][0]
+    #         elif u'identifier' in doc.keys():
+    #             accession_number = doc[u'identifier'][0]
+    #         else:
+    #             accession_number = u'ACCESSION_NUMBER_NOT_FOUND'
+    #         target_dict[pid] = accession_number
+    #     return target_dict
 
     def _assign_bdr_accession_numbers( self, pid_accession_dict, intersection_pid_dict ):
         """ Returns initial accession-number dict.
@@ -178,8 +199,6 @@ class PidFinder( object ):
         for pid,accession_number in pid_accession_dict.items():
             state = intersection_pid_dict[pid]
             accession_pid_dict_initial[accession_number] = { u'pid': pid, u'state': state }
-        # print u'- accession_pid_dict_initial...'; pprint.pprint( accession_pid_dict_initial )
-        print u'- _assign_bdr_accession_numbers() done'
         return accession_pid_dict_initial
 
     def _load_bell_accession_numbers( self, bell_dict_json_path ):
@@ -191,7 +210,6 @@ class PidFinder( object ):
         # pprint.pprint( keys )
         if len( keys ) < 5000:
             print u'- NOTE: accession_number_dict.json ONLY CONTAINS %s RECORDS' % len( keys )
-        print u'- _load_bell_accession_numbers() done'
         return keys
 
     def _make_final_accession_number_dict( self, accession_numbers, initial_accession_pid_dict ):
@@ -203,8 +221,6 @@ class PidFinder( object ):
                 final_accession_pid_dict[accession_number] = initial_accession_pid_dict[accession_number]
             else:
                 final_accession_pid_dict[accession_number] = { u'pid': None, u'state': None }
-        # print u'- final_accession_pid_dict...'; pprint.pprint( final_accession_pid_dict )
-        print u'- _make_final_accession_number_dict() done'
         return final_accession_pid_dict
 
     def _output_json( self, final_accession_pid_dict, output_json_path ):
@@ -223,8 +239,6 @@ class PidFinder( object ):
         jstring = json.dumps( output_dict, sort_keys=True, indent=2 )
         with open( output_json_path, u'w' ) as f:
             f.write( jstring )
-        print u'- output_json_path: %s' % output_json_path
-        print u'- _output_json() done'
         return
 
     def _print_settings( self, bdr_collection_pid, bell_dict_json_path, fedora_risearch_url, output_json_path ):
@@ -232,6 +246,8 @@ class PidFinder( object ):
         print u'- bell_dict_json_path: %s' % bell_dict_json_path
         print u'- fedora_risearch_url: %s' % fedora_risearch_url
         print u'- output_json_path: %s' % output_json_path
+        print u'---'
+        return
 
     # end class PidFinder()
 
@@ -241,16 +257,12 @@ class PidFinder( object ):
 if __name__ == u'__main__':
     """ Assumes env is activated.
         ( 'ANTP' used as a namespace prefix for this 'acc_num_to_pid.py' file. ) """
+    bdr_collection_pid=os.environ.get( u'BELL_ANTP__COLLECTION_PID', u'' )
+    bell_dict_json_path=os.environ.get( u'BELL_ANTP__BELL_DICT_JSON_PATH', u'' )  # file of dict of bell-accession-number to metadata
+    fedora_risearch_url=os.environ.get( u'BELL_ANTP__FEDORA_RISEARCH_URL', u'' )
+    output_json_path=os.environ.get( u'BELL_ANTP__OUTPUT_JSON_PATH', u'' )
     pid_finder = PidFinder()
     pid_finder._print_settings(
-        bdr_collection_pid=os.environ.get( u'BELL_ANTP__COLLECTION_PID', u'' ),
-        bell_dict_json_path=os.environ.get( u'BELL_ANTP__BELL_DICT_JSON_PATH', u'' ),  # file of dict of bell-accession-number to metadata
-        fedora_risearch_url=os.environ.get( u'BELL_ANTP__FEDORA_RISEARCH_URL', u'' ),
-        output_json_path=os.environ.get( u'BELL_ANTP__OUTPUT_JSON_PATH', u'' )
-        )
-    # pid_finder.make_dict(
-    #     bdr_collection_pid=bs.COLLECTION_PID,
-    #     bell_dict_json_path=bs.BELL_DICT_JSON_PATH,  # file of dict of bell-accession-number to metadata
-    #     fedora_risearch_url=bs.FEDORA_RISEARCH_URL,
-    #     output_json_path=bs.OUTPUT_JSON_PATH
-    #     )
+        bdr_collection_pid, bell_dict_json_path, fedora_risearch_url, output_json_path )
+    pid_finder.make_dict(
+        bdr_collection_pid, bell_dict_json_path, fedora_risearch_url, output_json_path )
