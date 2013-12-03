@@ -176,22 +176,6 @@ class PidFinder( object ):
             accession_number = u'ACCESSION_NUMBER_NOT_FOUND'
         return accession_number
 
-    # def _parse_solr_for_accession_number( self, solr_doc_list ):
-    #     """ Returns pid:accession_number dict. """
-    #     target_dict = {}
-    #     for doc in solr_doc_list:
-    #         pid = doc[u'pid']
-    #         if u'mods_id_bell_accession_number_ssim' in doc.keys():
-    #             accession_number = doc[u'mods_id_bell_accession_number_ssim'][0]
-    #         elif u'mods_id_accession no._ssim' in doc.keys():
-    #             accession_number = doc[u'mods_id_accession no._ssim'][0]
-    #         elif u'identifier' in doc.keys():
-    #             accession_number = doc[u'identifier'][0]
-    #         else:
-    #             accession_number = u'ACCESSION_NUMBER_NOT_FOUND'
-    #         target_dict[pid] = accession_number
-    #     return target_dict
-
     def _assign_bdr_accession_numbers( self, pid_accession_dict, intersection_pid_dict ):
         """ Returns initial accession-number dict.
             Example: { acc_num_1: {pid:bdr_123, state:active}, acc_num_3: {pid:bdr_234, state:active}, etc. } """
@@ -206,11 +190,22 @@ class PidFinder( object ):
             Example: [ 'acc_num_1', 'acc_num_2', etc. ] """
         with open( bell_dict_json_path ) as f:
             accession_dict = json.loads( f.read() )
-        keys = sorted( accession_dict.keys() )
+        keys = sorted( accession_dict[u'items'].keys() )
         # pprint.pprint( keys )
         if len( keys ) < 5000:
             print u'- NOTE: accession_number_dict.json ONLY CONTAINS %s RECORDS' % len( keys )
         return keys
+
+    # def _load_bell_accession_numbers( self, bell_dict_json_path ):
+    #     """ Returns sorted accession-number keys list from bell-json-dict.
+    #         Example: [ 'acc_num_1', 'acc_num_2', etc. ] """
+    #     with open( bell_dict_json_path ) as f:
+    #         accession_dict = json.loads( f.read() )
+    #     keys = sorted( accession_dict.keys() )
+    #     # pprint.pprint( keys )
+    #     if len( keys ) < 5000:
+    #         print u'- NOTE: accession_number_dict.json ONLY CONTAINS %s RECORDS' % len( keys )
+    #     return keys
 
     def _make_final_accession_number_dict( self, accession_numbers, initial_accession_pid_dict ):
         """ Adds accession-numbers with no bdr info; returns final accession-number dict.
