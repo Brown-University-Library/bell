@@ -101,6 +101,7 @@ class PidFinder( object ):
           if entry[u'object'][0:4] == u'info':
             parsed_pids.append( entry[u'object'].split(u'/')[1] )
         sorted_fedora_pids = sorted( parsed_pids )
+        # print u'- sorted_fedora_pids...'; print sorted_fedora_pids
         return sorted_fedora_pids
 
     def _run_studio_solr_query( self, bdr_collection_pid ):
@@ -151,7 +152,9 @@ class PidFinder( object ):
             print u'WARNING: THE FOLLOWING PIDS WERE FOUND IN SOLR THAT ARE NOT IN FEDORA...'; pprint.pprint( sorted(only_in_solr) )
         intersection_dict = {}
         for entry in fedora_pid_list:
+            print u'- entry: %s' % entry
             intersection_dict = __update_intersection_dict( intersection_dict, entry )
+        print u'- intersection_dict...'; pprint.pprint( intersection_dict )
         return intersection_dict
 
     def _parse_solr_for_accession_number( self, solr_doc_list ):
@@ -196,17 +199,6 @@ class PidFinder( object ):
             print u'- NOTE: accession_number_dict.json ONLY CONTAINS %s RECORDS' % len( keys )
         return keys
 
-    # def _load_bell_accession_numbers( self, bell_dict_json_path ):
-    #     """ Returns sorted accession-number keys list from bell-json-dict.
-    #         Example: [ 'acc_num_1', 'acc_num_2', etc. ] """
-    #     with open( bell_dict_json_path ) as f:
-    #         accession_dict = json.loads( f.read() )
-    #     keys = sorted( accession_dict.keys() )
-    #     # pprint.pprint( keys )
-    #     if len( keys ) < 5000:
-    #         print u'- NOTE: accession_number_dict.json ONLY CONTAINS %s RECORDS' % len( keys )
-    #     return keys
-
     def _make_final_accession_number_dict( self, accession_numbers, initial_accession_pid_dict ):
         """ Adds accession-numbers with no bdr info; returns final accession-number dict.
             Example: { acc_num_1: {pid:bdr_123, state:active}, acc_num_2: {pid:None, state:None}, etc. } """
@@ -222,19 +214,39 @@ class PidFinder( object ):
         """ Saves to disk. """
         def __run_counts( final_accession_pid_dict ):
             count_items = len( final_accession_pid_dict )
-            count_active = 0; count_inactive = 0
+            count_null = 0; count_active = 0; count_inactive = 0
             for accession_number, dict_data in final_accession_pid_dict.items():
+                if dict_data[u'pid'] == None:
+                    count_null += 1
                 if dict_data[u'state'] == u'active':
                     count_active += 1
                 elif dict_data[u'state'] == u'inactive':
                     count_inactive += 1
-            return { u'count_items': count_items, u'count_active': count_active, u'count_inactive': count_inactive }
+            return { u'count_items': count_items, u'count_active': count_active, u'count_inactive': count_inactive, u'count_null': count_null }
         ## work
         output_dict = { u'count': __run_counts( final_accession_pid_dict ), u'final_accession_pid_dict': final_accession_pid_dict }
         jstring = json.dumps( output_dict, sort_keys=True, indent=2 )
         with open( output_json_path, u'w' ) as f:
             f.write( jstring )
         return
+
+    # def _output_json( self, final_accession_pid_dict, output_json_path ):
+    #     """ Saves to disk. """
+    #     def __run_counts( final_accession_pid_dict ):
+    #         count_items = len( final_accession_pid_dict )
+    #         count_active = 0; count_inactive = 0
+    #         for accession_number, dict_data in final_accession_pid_dict.items():
+    #             if dict_data[u'state'] == u'active':
+    #                 count_active += 1
+    #             elif dict_data[u'state'] == u'inactive':
+    #                 count_inactive += 1
+    #         return { u'count_items': count_items, u'count_active': count_active, u'count_inactive': count_inactive }
+    #     ## work
+    #     output_dict = { u'count': __run_counts( final_accession_pid_dict ), u'final_accession_pid_dict': final_accession_pid_dict }
+    #     jstring = json.dumps( output_dict, sort_keys=True, indent=2 )
+    #     with open( output_json_path, u'w' ) as f:
+    #         f.write( jstring )
+    #     return
 
     def _print_settings( self, bdr_collection_pid, bell_dict_json_path, fedora_risearch_url, output_json_path ):
         print u'- bdr_collection_pid: %s' % bdr_collection_pid
