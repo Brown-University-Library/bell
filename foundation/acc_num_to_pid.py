@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-import json, os, pprint, time
+import datetime, json, os, pprint, time
 import requests
 
 
@@ -46,7 +46,7 @@ class PidFinder( object ):
         #
         #Make intersection pid-dict
         #Purpose: compare child-pids in fedora and solr pid-lists to determine which are 'active'/'inactive'
-        #Example returned data: { bdr123: active, bdr234: inactive, }
+        #Example returned data: { bdr123: active, bdr234: inactive }
         intersection_pid_dict = self._make_intersection_pid_dict( fedora_pid_list, studio_solr_pid_list )
         print u'- _make_intersection_pid_dict() done'
         #
@@ -56,11 +56,17 @@ class PidFinder( object ):
         pid_accession_dict = self._parse_solr_for_accession_number( solr_query_output )
         print u'- _parse_solr_for_accession_number() done'
         #
-        #Assign accession-numbers from bdr
+        #Assign accession-numbers from solr
         #Purpose: create initial accession-number dict from _bdr_ data
-        #Example returned data: { acc_num_1: {pid:bdr_123, state:active}, acc_num_3: {pid:bdr_234, state:inactive} }
-        accession_pid_dict_initial = self._assign_bdr_accession_numbers( pid_accession_dict, intersection_pid_dict )
-        print u'- _assign_bdr_accession_numbers() done'
+        #Example returned data: { acc_num_1: {pid:bdr_123, state:active}, acc_num_3: {pid:bdr_234, state:active} }
+        accession_pid_dict_initial = self._assign_solr_accession_numbers( pid_accession_dict, intersection_pid_dict )
+        print u'- _assign_solr_accession_numbers() done'
+        #
+        #Assign accession-numbers from fedora
+        #Purpose: check fedora for accession numbers for inactive pids in intersection_pid_dict
+        #Example returned data: { acc_num_3: {pid:bdr_234, state:active}, acc_num_4: {pid:bdr_234, state:inactive} }
+        accession_pid_dict_secondary = self._assign_fedora_accession_numbers( accession_pid_dict_initial, intersection_pid_dict )
+        print u'- _assign_fedora_accession_numbers() done'
         #
         #Get _bell_ accession numbers
         #Purpose: create list of bell accession numbers from _bell_ data
@@ -71,7 +77,7 @@ class PidFinder( object ):
         #Make final accession-number dict
         #Purpose: go through bell accession-numbers, add any bdr-info, note lack of bdr-info
         #Example returned data: { acc_num_1: {pid:bdr_123, state:active}, acc_num_2: {pid:None, state:None} }
-        final_accesion_dict = self._make_final_accession_number_dict( accession_numbers, accession_pid_dict_initial )
+        final_accesion_dict = self._make_final_accession_number_dict( accession_numbers, accession_pid_dict_secondary )
         print u'- _make_final_accession_number_dict() done'
         #
         #Output json
@@ -152,9 +158,8 @@ class PidFinder( object ):
             print u'WARNING: THE FOLLOWING PIDS WERE FOUND IN SOLR THAT ARE NOT IN FEDORA...'; pprint.pprint( sorted(only_in_solr) )
         intersection_dict = {}
         for entry in fedora_pid_list:
-            print u'- entry: %s' % entry
             intersection_dict = __update_intersection_dict( intersection_dict, entry )
-        print u'- intersection_dict...'; pprint.pprint( intersection_dict )
+        # print u'- intersection_dict...'; pprint.pprint( intersection_dict )
         return intersection_dict
 
     def _parse_solr_for_accession_number( self, solr_doc_list ):
@@ -179,7 +184,7 @@ class PidFinder( object ):
             accession_number = u'ACCESSION_NUMBER_NOT_FOUND'
         return accession_number
 
-    def _assign_bdr_accession_numbers( self, pid_accession_dict, intersection_pid_dict ):
+    def _assign_solr_accession_numbers( self, pid_accession_dict, intersection_pid_dict ):
         """ Returns initial accession-number dict.
             Example: { acc_num_1: {pid:bdr_123, state:active}, acc_num_3: {pid:bdr_234, state:active}, etc. } """
         accession_pid_dict_initial = {}
@@ -187,6 +192,25 @@ class PidFinder( object ):
             state = intersection_pid_dict[pid]
             accession_pid_dict_initial[accession_number] = { u'pid': pid, u'state': state }
         return accession_pid_dict_initial
+
+    def _assign_fedora_accession_numbers( self, accession_pid_dict_initial, intersection_pid_dict ):
+        """ Returns updated accession-number dict after checking fedora for intersection_pid_dict's 'inactive' pids.
+            Example: { acc_num_1: {pid:bdr_123, state:active}, acc_num_4: {pid:bdr_234, state:inactive}, etc. } """
+        ## inactives being ignored as of december-2013 -- only a warhol item may be regenerated once; that's ok ##
+        accession_pid_dict_secondary = accession_pid_dict_initial.copy()
+        return accession_pid_dict_secondary
+        ## Possible future code flow ##
+        # inactive_pids = []
+        # for pid_as_key, status_as_value in intersection_pid_dict.items():
+        #     if status_as_value == u'inactive':
+        #         inactive_pids.append( pid_as_key )
+        # accession_pid_dict_secondary = accession_pid_dict_initial.copy()
+        # for pid in inactive_pids:
+        #     pass
+        #     #access fedora mods
+        #     #pull out accession_number
+        #     #update accession_pid_dict_secondary
+        # return accession_pid_dict_secondary
 
     def _load_bell_accession_numbers( self, bell_dict_json_path ):
         """ Returns sorted accession-number keys list from bell-json-dict.
@@ -224,29 +248,14 @@ class PidFinder( object ):
                     count_inactive += 1
             return { u'count_items': count_items, u'count_active': count_active, u'count_inactive': count_inactive, u'count_null': count_null }
         ## work
-        output_dict = { u'count': __run_counts( final_accession_pid_dict ), u'final_accession_pid_dict': final_accession_pid_dict }
+        output_dict = {
+            u'count': __run_counts( final_accession_pid_dict ),
+            u'datetime': unicode( datetime.datetime.now() ),
+            u'final_accession_pid_dict': final_accession_pid_dict }
         jstring = json.dumps( output_dict, sort_keys=True, indent=2 )
         with open( output_json_path, u'w' ) as f:
             f.write( jstring )
         return
-
-    # def _output_json( self, final_accession_pid_dict, output_json_path ):
-    #     """ Saves to disk. """
-    #     def __run_counts( final_accession_pid_dict ):
-    #         count_items = len( final_accession_pid_dict )
-    #         count_active = 0; count_inactive = 0
-    #         for accession_number, dict_data in final_accession_pid_dict.items():
-    #             if dict_data[u'state'] == u'active':
-    #                 count_active += 1
-    #             elif dict_data[u'state'] == u'inactive':
-    #                 count_inactive += 1
-    #         return { u'count_items': count_items, u'count_active': count_active, u'count_inactive': count_inactive }
-    #     ## work
-    #     output_dict = { u'count': __run_counts( final_accession_pid_dict ), u'final_accession_pid_dict': final_accession_pid_dict }
-    #     jstring = json.dumps( output_dict, sort_keys=True, indent=2 )
-    #     with open( output_json_path, u'w' ) as f:
-    #         f.write( jstring )
-    #     return
 
     def _print_settings( self, bdr_collection_pid, bell_dict_json_path, fedora_risearch_url, output_json_path ):
         print u'- bdr_collection_pid: %s' % bdr_collection_pid
