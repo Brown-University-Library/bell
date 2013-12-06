@@ -219,7 +219,7 @@ class SourceDictMaker( object ):
         return
 
     def _print_settings( self, FMPRO_XML_URL, FMPRO_XML_FILENAME, JSON_OUTPUT_PATH ):
-        """ Outputs settings derived from environmental variables for developement. """
+        """ Outputs settings derived from environmental variables for development. """
         print u'- settings...'
         print u'- FMPRO_XML_URL: %s' % FMPRO_XML_URL
         print u'- FMPRO_XML_FILENAME: %s' % FMPRO_XML_FILENAME

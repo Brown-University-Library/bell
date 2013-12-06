@@ -1,2 +1,9 @@
+eulfedora==0.21.0
 lxml==3.2.4
 requests==2.0.1
+
+# 2013-12-06, installed bdrcmodels==0.1
+git+git://github.com/Brown-University-Library/bdrcmodels.git
+
+# 2013-12-06, installed bdrxml==0.6-dev
+git+git://github.com/Brown-University-Library/bdrxml.git
