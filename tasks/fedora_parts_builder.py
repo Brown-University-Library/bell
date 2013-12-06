@@ -28,95 +28,95 @@ class ModsBuilder( object ):
         assert unicode(repr(type(mods_object))) == 2, unicode(repr(type(mods_object)))
         return mods_obj
 
-  ## HELPER FUNCTIONS ##
+    ## HELPER FUNCTIONS ##
 
-  def _initialize_mods( self, mods_id ):
-    """ Initialize empty self.mods element; also sets namespace reference. """
-    MODS_NAMESPACE = u'http://www.loc.gov/mods/v3'
-    self.MODS = u'{%s}' % MODS_NAMESPACE
-    NSMAP = { u'mods' : MODS_NAMESPACE }
-    self.mods = etree.Element(
-      self.MODS+u'mods',
-      nsmap=NSMAP,
-      xmlns_xsi=u'http://www.w3.org/2001/XMLSchema-instance',
-      ID=u'TEMP_MODS_ID',
-      xsi_schemaLocation=u'http://www.loc.gov/mods/v3 http://www.loc.gov/standards/mods/futures/mods-3-5.xsd'  # underscore will be replaced with colon
-      )
-    return self.mods
+    def _initialize_mods( self, mods_id ):
+        """ Initialize empty self.mods element; also sets namespace reference. """
+        MODS_NAMESPACE = u'http://www.loc.gov/mods/v3'
+        self.MODS = u'{%s}' % MODS_NAMESPACE
+        NSMAP = { u'mods' : MODS_NAMESPACE }
+        self.mods = etree.Element(
+            self.MODS+u'mods',
+            nsmap=NSMAP,
+            xmlns_xsi=u'http://www.w3.org/2001/XMLSchema-instance',
+            ID=u'TEMP_MODS_ID',
+            xsi_schemaLocation=u'http://www.loc.gov/mods/v3 http://www.loc.gov/standards/mods/futures/mods-3-5.xsd'  # underscore will be replaced with colon
+            )
+        return self.mods
 
-  def _build_mods_element( self, bell_dict_item ):
-    """ Builds out (previously-initialized) self.mods element. """
-    title_info = etree.SubElement( self.mods, self.MODS+u'titleInfo' )
-    title = etree.SubElement( title_info, self.MODS+u'title' )
-    title.text = data_dict[ u'object_title' ]
-    for i,name in enumerate( data_dict[u'ARTISTS::artist_last_name'] ):
-      name = etree.SubElement( self.mods, self.MODS+u'name', type=u'personal' )
-      name_part = etree.SubElement( name, self.MODS+u'namePart' )
-      name_part.text = u'%s, %s' % ( data_dict[u'ARTISTS::artist_last_name'][i], data_dict[u'ARTISTS::artist_first_name'][i] )
-      name_display_form = etree.SubElement( name, self.MODS+u'displayForm' )
-      name_display_form.text = data_dict[ u'ARTISTS::calc_artist_full_name' ][i]
-      name_part_dates = etree.SubElement( name, self.MODS+u'namePart', type=u'date' )
-      name_part_dates.text = data_dict[ u'ARTISTS::artist_lifetime' ][i]
-      name_role = etree.SubElement( name, self.MODS+u'role' )
-      name_role_term = etree.SubElement( name_role, self.MODS+u'roleTerm', type=u'text' )
-      name_role_term.text = u'artist'
-    origin_info = etree.SubElement( self.mods, self.MODS+u'originInfo' )
-    origin_info_dt_created_start = etree.SubElement( origin_info, self.MODS+u'dateCreated', encoding=u'w3cdtf', point=u'start' )
-    origin_info_dt_created_start.text = data_dict[ u'object_year_start' ]
-    origin_info_dt_created_end = etree.SubElement( origin_info, self.MODS+u'dateCreated', encoding=u'w3cdtf', point=u'end' )
-    origin_info_dt_created_end.text = data_dict[ u'object_year_end' ]
-    physical_description = etree.SubElement( self.mods, self.MODS+u'physicalDescription' )
-    physical_description_form_material = etree.SubElement( physical_description, self.MODS+u'form', type=u'material' )
-    physical_description_form_material.text = data_dict[ u'object_medium' ]
-    for entry in data_dict[u'MEDIA_SUB::sub_media_name']:
-      physical_description_form_technique = etree.SubElement( physical_description, self.MODS+u'form', type=u'technique' )
-      physical_description_form_technique.text = entry
-    note = etree.SubElement( self.mods, self.MODS+u'note', type=u'provenance' )
-    note.text = data_dict[ u'credit_line' ]
-    location = etree.SubElement( self.mods, self.MODS+u'location' )
-    location_physical_location = etree.SubElement( location, self.MODS+u'physicalLocation' )
-    location_physical_location.text = u'Bell Art Gallery'
-    location_holdings_simple = etree.SubElement( location, self.MODS+u'holdingSimple' )
-    location_holdings_simple_copy_information = etree.SubElement( location_holdings_simple, self.MODS+u'copyInformation' )
-    location_holdings_simple_copy_information_shelf_locator = etree.SubElement( location_holdings_simple_copy_information, self.MODS+u'shelfLocator' )
-    location_holdings_simple_copy_information_shelf_locator.text = data_dict[ u'MEDIA::object_medium_name' ]
-    identifier = etree.SubElement( self.mods, self.MODS+u'identifier', type=u'bell_accession_number' )
-    identifier.text = data_dict[ u'calc_accession_id' ]
-    self.accession_number = identifier.text  # will be used by _make...
-    identifier2 = etree.SubElement( self.mods, self.MODS+u'identifier', type=u'bell_object_id' )
-    identifier2.text = data_dict[ u'object_id' ]
-    return self.mods
-    # end def _build_mods_element()
+    def _build_mods_element( self, bell_dict_item ):
+        """ Builds out (previously-initialized) self.mods element. """
+        title_info = etree.SubElement( self.mods, self.MODS+u'titleInfo' )
+        title = etree.SubElement( title_info, self.MODS+u'title' )
+        title.text = data_dict[ u'object_title' ]
+        for i,name in enumerate( data_dict[u'ARTISTS::artist_last_name'] ):
+            name = etree.SubElement( self.mods, self.MODS+u'name', type=u'personal' )
+            name_part = etree.SubElement( name, self.MODS+u'namePart' )
+            name_part.text = u'%s, %s' % ( data_dict[u'ARTISTS::artist_last_name'][i], data_dict[u'ARTISTS::artist_first_name'][i] )
+            name_display_form = etree.SubElement( name, self.MODS+u'displayForm' )
+            name_display_form.text = data_dict[ u'ARTISTS::calc_artist_full_name' ][i]
+            name_part_dates = etree.SubElement( name, self.MODS+u'namePart', type=u'date' )
+            name_part_dates.text = data_dict[ u'ARTISTS::artist_lifetime' ][i]
+            name_role = etree.SubElement( name, self.MODS+u'role' )
+            name_role_term = etree.SubElement( name_role, self.MODS+u'roleTerm', type=u'text' )
+            name_role_term.text = u'artist'
+        origin_info = etree.SubElement( self.mods, self.MODS+u'originInfo' )
+        origin_info_dt_created_start = etree.SubElement( origin_info, self.MODS+u'dateCreated', encoding=u'w3cdtf', point=u'start' )
+        origin_info_dt_created_start.text = data_dict[ u'object_year_start' ]
+        origin_info_dt_created_end = etree.SubElement( origin_info, self.MODS+u'dateCreated', encoding=u'w3cdtf', point=u'end' )
+        origin_info_dt_created_end.text = data_dict[ u'object_year_end' ]
+        physical_description = etree.SubElement( self.mods, self.MODS+u'physicalDescription' )
+        physical_description_form_material = etree.SubElement( physical_description, self.MODS+u'form', type=u'material' )
+        physical_description_form_material.text = data_dict[ u'object_medium' ]
+        for entry in data_dict[u'MEDIA_SUB::sub_media_name']:
+            physical_description_form_technique = etree.SubElement( physical_description, self.MODS+u'form', type=u'technique' )
+            physical_description_form_technique.text = entry
+        note = etree.SubElement( self.mods, self.MODS+u'note', type=u'provenance' )
+        note.text = data_dict[ u'credit_line' ]
+        location = etree.SubElement( self.mods, self.MODS+u'location' )
+        location_physical_location = etree.SubElement( location, self.MODS+u'physicalLocation' )
+        location_physical_location.text = u'Bell Art Gallery'
+        location_holdings_simple = etree.SubElement( location, self.MODS+u'holdingSimple' )
+        location_holdings_simple_copy_information = etree.SubElement( location_holdings_simple, self.MODS+u'copyInformation' )
+        location_holdings_simple_copy_information_shelf_locator = etree.SubElement( location_holdings_simple_copy_information, self.MODS+u'shelfLocator' )
+        location_holdings_simple_copy_information_shelf_locator.text = data_dict[ u'MEDIA::object_medium_name' ]
+        identifier = etree.SubElement( self.mods, self.MODS+u'identifier', type=u'bell_accession_number' )
+        identifier.text = data_dict[ u'calc_accession_id' ]
+        self.accession_number = identifier.text  # will be used by _make...
+        identifier2 = etree.SubElement( self.mods, self.MODS+u'identifier', type=u'bell_object_id' )
+        identifier2.text = data_dict[ u'object_id' ]
+        return self.mods
+        # end def _build_mods_element()
 
-  def _make_mods_xml_string( self ):
-    """ Returns unicode xml string to pass to validator. """
-    doc = etree.ElementTree( self.mods )
-    mods_string = etree.tostring( doc, pretty_print=True ).decode( u'utf-8', u'replace' )
-    mods_string = mods_string.replace( u'xmlns_xsi', u'xmlns:xsi')
-    mods_string = mods_string.replace( u'xsi_schemaLocation', u'xsi:schemaLocation' )
-    valid_id = self.accession_number.replace( u' ', u'' )
-    valid_id = valid_id.replace( u',', '' )
-    mods_string = mods_string.replace( u'TEMP_MODS_ID', valid_id )
-    assert type(mods_string) == unicode
-    return mods_string
+    def _make_mods_xml_string( self ):
+        """ Returns unicode xml string to pass to validator. """
+        doc = etree.ElementTree( self.mods )
+        mods_string = etree.tostring( doc, pretty_print=True ).decode( u'utf-8', u'replace' )
+        mods_string = mods_string.replace( u'xmlns_xsi', u'xmlns:xsi')
+        mods_string = mods_string.replace( u'xsi_schemaLocation', u'xsi:schemaLocation' )
+        valid_id = self.accession_number.replace( u' ', u'' )
+        valid_id = valid_id.replace( u',', '' )
+        mods_string = mods_string.replace( u'TEMP_MODS_ID', valid_id )
+        assert type(mods_string) == unicode
+        return mods_string
 
-  def _validate_mods( self, mods_xml, mods_schema_path ):
-    """ Validates mods_xml string. """
-    with open( mods_schema_path, u'r' ) as f:
-      schema_string = f.read()
-    schema_ustring = schema_string.decode( u'utf-8', u'replace' )
-    schema_root = etree.XML( schema_ustring.encode( u'utf-8', u'replace') )  # "Unicode strings with encoding declaration are not supported."
-    try:
-      schema = etree.XMLSchema( schema_root )
-    except Exception as e:
-      self.logger.error( '- in BellModsMaker._validate_mods(); mods_xml is, %s; mods_schema_path is, %s; schema_ustring is, %s; type(schema_root) is, %s; and error is, %s' % (mods_xml, mods_schema_path, schema_ustring, unicode(repr(type(schema_root))), unicode(repr(e)) ) )
-      raise Exception( u'mods_xml validation failed; message: %s' % u'e is: %s' % unicode(repr(e)) )
-    parser = etree.XMLParser( schema=schema )
-    try:
-      doc = etree.fromstring( mods_xml, parser )
-    except XMLSyntaxError as e:
-      raise Exception( u'mods_xml validation failed; message: %s' % u'e is: %s' % unicode(repr(e)) )
-    return
+    def _validate_mods( self, mods_xml, mods_schema_path ):
+        """ Validates mods_xml string. """
+        with open( mods_schema_path, u'r' ) as f:
+            schema_string = f.read()
+        schema_ustring = schema_string.decode( u'utf-8', u'replace' )
+        schema_root = etree.XML( schema_ustring.encode( u'utf-8', u'replace') )  # "Unicode strings with encoding declaration are not supported."
+        try:
+            schema = etree.XMLSchema( schema_root )
+        except Exception as e:
+            self.logger.error( '- in BellModsMaker._validate_mods(); mods_xml is, %s; mods_schema_path is, %s; schema_ustring is, %s; type(schema_root) is, %s; and error is, %s' % (mods_xml, mods_schema_path, schema_ustring, unicode(repr(type(schema_root))), unicode(repr(e)) ) )
+            raise Exception( u'mods_xml validation failed; message: %s' % u'e is: %s' % unicode(repr(e)) )
+        parser = etree.XMLParser( schema=schema )
+        try:
+            doc = etree.fromstring( mods_xml, parser )
+        except XMLSyntaxError as e:
+            raise Exception( u'mods_xml validation failed; message: %s' % u'e is: %s' % unicode(repr(e)) )
+        return
 
     # end class ModsBuilder()
 

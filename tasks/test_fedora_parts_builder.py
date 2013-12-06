@@ -1,8 +1,8 @@
 # -*- coding: utf-8 -*-
 
 import json, pprint, unittest
-from bdr_ingest_settings.tasks_app import BELL201310_settings as bell_settings
-from tasks_app.classes.bell_2013_10.make_mods_from_bell_json import BellModsMaker
+# from bdr_ingest_settings.tasks_app import BELL201310_settings as bell_settings
+from fedora_parts_builder import ModsBuilder
 
 
 class MakeModsFromBellJson_Test(unittest.TestCase):
