@@ -4,6 +4,7 @@ import os, pprint
 
 from bdrcmodels.models import CommonMetadataDO
 from eulfedora.server import Repository
+from fedora_parts_builder import IRBuilder, RightsBuilder
 
 
 class Task( object ):
@@ -19,34 +20,52 @@ class Task( object ):
         """ CONTROLLER """
         print u'starting try...'
         try:
+            #Setup builders
+            right_builder = RightsBuilder()
+            ir_builder = IRBuilder()
+            #
             #Instantiate repo connection
             #Note: doesn't actually try to connect until it has to
-            repo = Repository( root=FEDORA_ADMIN_URL, username=FEDORA_ADMIN_USERNAME, password=FEDORA_ADMIN_PASSWORD )
-            print u'- repo connection instantiated.'
+            # repo = Repository( root=FEDORA_ADMIN_URL, username=FEDORA_ADMIN_USERNAME, password=FEDORA_ADMIN_PASSWORD )
+            print u'- repo connection instantiated. (TURNED_OFF)'
             #
             #Instantiate new-obj
             #Purpose: this will be the object we'll build, then ingest
-            new_obj = repo.get_object( type=CommonMetadataDO )
-            print u'- new_obj instantiated...'
+            # new_obj = repo.get_object( type=CommonMetadataDO )
+            print u'- new_obj instantiated. (TURNED_OFF)'
             #
             #Instantiate collection object
-            coll_obj = repo.get_object( pid=self.COLLECTION_PID )
-            print u'- coll_obj instantiated...'
+            # coll_obj = repo.get_object( pid=self.COLLECTION_PID )
+            print u'- coll_obj instantiated. (TURNED_OFF)'
             #Get/reserve a pid
             #Note: after obtaining pid, new_obj.pid is a value, not a reference
-            new_pid = new_obj.pid()
-            print u'- new_obj.pid obtained: %s' % new_pid
+            # new_pid = new_obj.pid()
+            print u'- new_obj.pid obtained. (TURNED_OFF)'
             #
             #Assign collection object
-            new_obj.owning_collection = coll_obj
-            print u'- collection object assigned'
+            # new_obj.owning_collection = coll_obj
+            print u'- collection object assigned (TURNED_OFF)'
+            #
+            #Build rights object
+            #Note: builds via bdrxml
+            rights_object = right_builder.build_rights_object()
+            print u'- rights object built.'
+            #
+            #Assign rights object
+            # new_obj.rightsMD.content = rights_obj
+            print u'- rights object assigned. (TURNED_OFF)'
+            #
+            #Build ir object
+            #Note: builds via ???
+            ir_object = ir_builder.build_ir_object()
+            print u'- ir object built.'
+            #
+            #Assign ir object
+            # new_obj.irMD.content = ir_object
+            print u'- ir object assigned. (TURNED_OFF)'
             #
             1/0
-            ## assign rights object
-            new_obj.rightsMD.content = rights_obj
-            ## update and assign ir object
-            ir_obj.date = datetime.date.today()
-            new_obj.irMD.content = ir_obj
+
             ## create mods
             new_mods_obj = eulxml.xmlmap.load_xmlobject_from_string( item_dict[u'XBDR_mods_xml'], Mods )
             new_obj.mods.content = new_mods_obj
@@ -71,15 +90,17 @@ class Task( object ):
     #     return repo
 
     def _print_settings( self,
-        BELL_CFMO__FEDORA_ADMIN_URL,
-        BELL_CFMO__FEDORA_ADMIN_USERNAME,
-        BELL_CFMO__FEDORA_ADMIN_PASSWORD
+        BELL_FMOB__FEDORA_ADMIN_URL,
+        BELL_FMOB__FEDORA_ADMIN_USERNAME,
+        BELL_FMOB__FEDORA_ADMIN_PASSWORD,
+        BELL_FMOB__COLLECTION_PID,
         ):
         """ Outputs settings derived from environmental variables for development. """
         print u'- settings...'
-        print u'- BELL_CFMO__FEDORA_ADMIN_URL: %s' % BELL_CFMO__FEDORA_ADMIN_URL
-        print u'- BELL_CFMO__FEDORA_ADMIN_USERNAME: %s' % BELL_CFMO__FEDORA_ADMIN_USERNAME
-        print u'- BELL_CFMO__FEDORA_ADMIN_PASSWORD: %s' % BELL_CFMO__FEDORA_ADMIN_PASSWORD
+        print u'- BELL_FMOB__FEDORA_ADMIN_URL: %s' % BELL_FMOB__FEDORA_ADMIN_URL
+        print u'- BELL_FMOB__FEDORA_ADMIN_USERNAME: %s' % BELL_FMOB__FEDORA_ADMIN_USERNAME
+        print u'- BELL_FMOB__FEDORA_ADMIN_PASSWORD: %s' % BELL_FMOB__FEDORA_ADMIN_PASSWORD
+        print u'- BELL_FMOB__COLLECTION_PID: %s' % BELL_FMOB__COLLECTION_PID
         print u'---'
         return
 
@@ -237,15 +258,18 @@ class Task( object ):
 
 if __name__ == u'__main__':
     """ Assumes env is activated.
-        ( 'CFMO' used as a namespace prefix for this 'create_fedora_metadata_object.py' file. ) """
+        ( 'FMOB' used as a namespace prefix for this 'fedora_metadata_only_builder.py' file. ) """
     # pprint.pprint( os.environ.__dict__ )
-    FEDORA_ADMIN_URL=unicode( os.environ.get(u'BELL_CFMO__FEDORA_ADMIN_URL') )
-    FEDORA_ADMIN_USERNAME=unicode( os.environ.get(u'BELL_CFMO__FEDORA_ADMIN_USERNAME') )
-    FEDORA_ADMIN_PASSWORD=unicode( os.environ.get(u'BELL_CFMO__FEDORA_ADMIN_PASSWORD') )
+    FEDORA_ADMIN_URL=unicode( os.environ.get(u'BELL_FMOB__FEDORA_ADMIN_URL') )
+    FEDORA_ADMIN_USERNAME=unicode( os.environ.get(u'BELL_FMOB__FEDORA_ADMIN_USERNAME') )
+    FEDORA_ADMIN_PASSWORD=unicode( os.environ.get(u'BELL_FMOB__FEDORA_ADMIN_PASSWORD') )
+    COLLECTION_PID=unicode( os.environ.get(u'BELL_FMOB__COLLECTION_PID') )
     task = Task()
     task._print_settings(
         FEDORA_ADMIN_URL, FEDORA_ADMIN_USERNAME, FEDORA_ADMIN_PASSWORD,
+        COLLECTION_PID
         )
     task.create_fedora_metadata_object(
         FEDORA_ADMIN_URL, FEDORA_ADMIN_USERNAME, FEDORA_ADMIN_PASSWORD,
+        COLLECTION_PID
         )
