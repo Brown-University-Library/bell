@@ -5,12 +5,15 @@ import datetime, os, pprint
 from bdrxml import irMetadata, mods, rights
 # from bdrxml.mods import Mods
 
+from lxml import etree
+from lxml.etree import XMLSyntaxError
+
 
 class ModsBuilder( object ):
     """ Handles mods creation.
          """
 
-    def __init__( self, logger ):
+    def __init__( self ):
         """ Simplifies mods-element and MODS-namespace references in multiple functions. """
         self.MODS = None  # namespace holder
         self.mods = None  # etree.Element()
@@ -40,11 +43,11 @@ class ModsBuilder( object ):
             nsmap=NSMAP,
             xmlns_xsi=u'http://www.w3.org/2001/XMLSchema-instance',
             ID=u'TEMP_MODS_ID',
-            xsi_schemaLocation=u'http://www.loc.gov/mods/v3 http://www.loc.gov/standards/mods/futures/mods-3-5.xsd'  # underscore will be replaced with colon
+            xsi_schemaLocation=u'http://www.loc.gov/mods/v3 http://www.loc.gov/standards/mods/futures/mods-3-4.xsd'  # underscore will be replaced with colon
             )
         return self.mods
 
-    def _build_mods_element( self, bell_dict_item ):
+    def _build_mods_element( self, data_dict ):
         """ Builds out (previously-initialized) self.mods element. """
         title_info = etree.SubElement( self.mods, self.MODS+u'titleInfo' )
         title = etree.SubElement( title_info, self.MODS+u'title' )

@@ -1,7 +1,6 @@
 # -*- coding: utf-8 -*-
 
 import json, pprint, unittest
-# from bdr_ingest_settings.tasks_app import BELL201310_settings as bell_settings
 from fedora_parts_builder import ModsBuilder
 
 
@@ -12,20 +11,22 @@ class MakeModsFromBellJson_Test(unittest.TestCase):
   def test__mods_single_artist(self):
     """ Tests bell mods creation. """
     data_dict = json.loads( self.TEST_BELL_JSON_ENTRY_SINGLE_ARTIST )
-    mods_schema_path = bell_settings.MODS_SCHEMA_PATH
+    mods_schema_path = u'../lib/mods-3-4.xsd'
+    # mods_schema_path = bell_settings.MODS_SCHEMA_PATH
     expected = self.TEST_EXPECTED_SINGLE_ARTIST_XML
-    mods_maker = BellModsMaker()
-    result = mods_maker.direct_mods_creation( data_dict, mods_schema_path )
+    mods_maker = ModsBuilder()
+    result = mods_maker.build_mods_object( data_dict, mods_schema_path )
     # print u'- result is...'; print result
     self.assertEquals( expected, result )
 
   def test__mods_multiple_artists(self):
     """ Tests bell mods creation. """
     data_dict = json.loads( self.TEST_BELL_JSON_ENTRY_MULTIPLE_ARTISTS )
-    mods_schema_path = bell_settings.MODS_SCHEMA_PATH
+    mods_schema_path = u'../lib/mods-3-4.xsd'
+    # mods_schema_path = bell_settings.MODS_SCHEMA_PATH
     expected = self.TEST_EXPECTED_MULTIPLE_ARTISTS_XML
-    mods_maker = BellModsMaker()
-    result = mods_maker.direct_mods_creation( data_dict, mods_schema_path )
+    mods_maker = ModsBuilder()
+    result = mods_maker.build_mods_object( data_dict, mods_schema_path )
     # print u'- result is...'; print result
     self.assertEquals( expected, result )
 
