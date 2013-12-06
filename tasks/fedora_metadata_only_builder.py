@@ -15,14 +15,15 @@ class Task( object ):
 
     def create_fedora_metadata_object( self,
         FEDORA_ADMIN_URL, FEDORA_ADMIN_USERNAME, FEDORA_ADMIN_PASSWORD,
-        COLLECTION_PID,
+        COLLECTION_PID, BELL_DICT_ITEM
         ):
         """ CONTROLLER """
         print u'starting try...'
         try:
             #Setup builders
-            right_builder = RightsBuilder()
             ir_builder = IRBuilder()
+            mods_builder = ModsBuilder()
+            rights_builder = RightsBuilder()
             #
             #Instantiate repo connection
             #Note: doesn't actually try to connect until it has to
@@ -48,7 +49,7 @@ class Task( object ):
             #
             #Build rights object
             #Note: builds via bdrxml
-            rights_object = right_builder.build_rights_object()
+            rights_object = rights_builder.build_rights_object()
             print u'- rights object built.'
             #
             #Assign rights object
@@ -63,6 +64,10 @@ class Task( object ):
             #Assign ir object
             # new_obj.irMD.content = ir_object
             print u'- ir object assigned. (TURNED_OFF)'
+            #
+            #Build mods object
+            mods_object = mods_builder.build_mods_object()
+            print u'- mods object built.'
             #
             1/0
 
