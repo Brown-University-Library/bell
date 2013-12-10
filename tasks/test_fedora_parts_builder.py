@@ -1,7 +1,16 @@
 # -*- coding: utf-8 -*-
 
-import json, pprint, unittest
+import json, os, pprint, unittest
 from fedora_parts_builder import ModsBuilder
+# from lxml import etree
+
+""" To run tests:
+    - activate v-env
+    - cd into bell_code dir
+    - All tests:
+      python ./bell_code/tasks/test_fedora_parts_builder.py
+    - Single test:
+      python ./bell_code/tasks/test_fedora_parts_builder.py MakeModsFromBellJson_Test.test__mods_single_artist """
 
 
 class MakeModsFromBellJson_Test(unittest.TestCase):
@@ -11,22 +20,20 @@ class MakeModsFromBellJson_Test(unittest.TestCase):
   def test__mods_single_artist(self):
     """ Tests bell mods creation. """
     data_dict = json.loads( self.TEST_BELL_JSON_ENTRY_SINGLE_ARTIST )
-    mods_schema_path = u'../lib/mods-3-4.xsd'
-    # mods_schema_path = bell_settings.MODS_SCHEMA_PATH
+    mods_schema_path = os.path.abspath( u'./lib/mods-3-4.xsd' )
     expected = self.TEST_EXPECTED_SINGLE_ARTIST_XML
     mods_maker = ModsBuilder()
     result = mods_maker.build_mods_object( data_dict, mods_schema_path )
-    # print u'- result is...'; print result
     self.assertEquals( expected, result )
 
   def test__mods_multiple_artists(self):
     """ Tests bell mods creation. """
     data_dict = json.loads( self.TEST_BELL_JSON_ENTRY_MULTIPLE_ARTISTS )
-    mods_schema_path = u'../lib/mods-3-4.xsd'
-    # mods_schema_path = bell_settings.MODS_SCHEMA_PATH
+    mods_schema_path = os.path.abspath( u'./lib/mods-3-4.xsd' )
     expected = self.TEST_EXPECTED_MULTIPLE_ARTISTS_XML
     mods_maker = ModsBuilder()
     result = mods_maker.build_mods_object( data_dict, mods_schema_path )
+    # print u'- expected is...'; print expected
     # print u'- result is...'; print result
     self.assertEquals( expected, result )
 
@@ -116,7 +123,7 @@ class MakeModsFromBellJson_Test(unittest.TestCase):
     "series_id": null
   }'''
 
-  TEST_EXPECTED_SINGLE_ARTIST_XML = u'''<mods:mods xmlns:mods="http://www.loc.gov/mods/v3" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.loc.gov/mods/v3 http://www.loc.gov/standards/mods/futures/mods-3-5.xsd" ID="B1980.1566">
+  TEST_EXPECTED_SINGLE_ARTIST_XML = u'''<mods:mods xmlns:mods="http://www.loc.gov/mods/v3" ID="B1980.1566" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.loc.gov/mods/v3 http://www.loc.gov/standards/mods/futures/mods-3-4.xsd">
   <mods:titleInfo>
     <mods:title>A Glimpse of Thomas Traherne by Thomas Traherne</mods:title>
   </mods:titleInfo>
@@ -129,8 +136,8 @@ class MakeModsFromBellJson_Test(unittest.TestCase):
     </mods:role>
   </mods:name>
   <mods:originInfo>
-    <mods:dateCreated point="start" encoding="w3cdtf">1978</mods:dateCreated>
-    <mods:dateCreated point="end" encoding="w3cdtf">1978</mods:dateCreated>
+    <mods:dateCreated encoding="w3cdtf" point="start">1978</mods:dateCreated>
+    <mods:dateCreated encoding="w3cdtf" point="end">1978</mods:dateCreated>
   </mods:originInfo>
   <mods:physicalDescription>
     <mods:form type="material">Letterpress and lithography</mods:form>
@@ -248,7 +255,7 @@ class MakeModsFromBellJson_Test(unittest.TestCase):
     "series_id": null
   }'''
 
-  TEST_EXPECTED_MULTIPLE_ARTISTS_XML = u'''<mods:mods xmlns:mods="http://www.loc.gov/mods/v3" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.loc.gov/mods/v3 http://www.loc.gov/standards/mods/futures/mods-3-5.xsd" ID="B1980.1551">
+  TEST_EXPECTED_MULTIPLE_ARTISTS_XML = u'''<mods:mods xmlns:mods="http://www.loc.gov/mods/v3" ID="B1980.1551" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.loc.gov/mods/v3 http://www.loc.gov/standards/mods/futures/mods-3-4.xsd">
   <mods:titleInfo>
     <mods:title>De Morandi</mods:title>
   </mods:titleInfo>
@@ -269,8 +276,8 @@ class MakeModsFromBellJson_Test(unittest.TestCase):
     </mods:role>
   </mods:name>
   <mods:originInfo>
-    <mods:dateCreated point="start" encoding="w3cdtf">1979</mods:dateCreated>
-    <mods:dateCreated point="end" encoding="w3cdtf">1979</mods:dateCreated>
+    <mods:dateCreated encoding="w3cdtf" point="start">1979</mods:dateCreated>
+    <mods:dateCreated encoding="w3cdtf" point="end">1979</mods:dateCreated>
   </mods:originInfo>
   <mods:physicalDescription>
     <mods:form type="material">Letterpress and embossing</mods:form>

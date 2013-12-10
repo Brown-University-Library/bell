@@ -4,7 +4,7 @@ import os, pprint
 
 from bdrcmodels.models import CommonMetadataDO
 from eulfedora.server import Repository
-from fedora_parts_builder import IRBuilder, RightsBuilder
+from fedora_parts_builder import IRBuilder, ModsBuilder, RightsBuilder
 
 
 class Task( object ):
@@ -15,7 +15,7 @@ class Task( object ):
 
     def create_fedora_metadata_object( self,
         FEDORA_ADMIN_URL, FEDORA_ADMIN_USERNAME, FEDORA_ADMIN_PASSWORD,
-        COLLECTION_PID, BELL_DICT_ITEM
+        COLLECTION_PID
         ):
         """ CONTROLLER """
         print u'starting try...'
