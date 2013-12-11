@@ -1,6 +1,12 @@
-eulfedora==0.21.0
+# Note: on osx mavericks, had to install like:
+# $ STATIC_DEPS=true pip install lxml
+# ...instead of referencing this file.
 lxml==3.2.4
+
+eulfedora==0.21.0
+redis==2.8.0
 requests==2.0.1
+rq==0.3.11
 
 # 2013-12-06, installed bdrcmodels==0.1
 git+git://github.com/Brown-University-Library/bdrcmodels.git
