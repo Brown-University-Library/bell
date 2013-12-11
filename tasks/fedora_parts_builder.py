@@ -20,17 +20,19 @@ class ModsBuilder( object ):
         self.mods = None  # etree.Element()
         self.accession_number = None  # populated by _build...; used by _make...
 
-    def build_mods_object( self, bell_dict_item, mods_schema_path ):
+    def build_mods_object( self, bell_dict_item, mods_schema_path, return_type ):
         """ CONTROLLER.
             Returns validated mods_xml. """
         self._initialize_mods( bell_dict_item[u'calc_accession_id'] )
         self._build_mods_element( bell_dict_item )
         mods_xml = self._make_mods_xml_string()
         self._validate_mods( mods_xml, mods_schema_path )
-        return mods_xml
-        # mods_object = eulxml.xmlmap.load_xmlobject_from_string( mods_xml, mods.Mods )  # eulfedora.server.Repository compatible
-        # assert unicode(repr(type(mods_object))) == u"<class 'bdrxml.mods.Mods'>", unicode(repr(type(mods_object)))
-        # return mods_object
+        if return_type == u'return_string':
+            return { u'data': mods_xml, u'accession_number': self.accession_number }
+        else:
+            mods_object = eulxml.xmlmap.load_xmlobject_from_string( mods_xml, mods.Mods )  # eulfedora.server.Repository compatible
+            assert unicode(repr(type(mods_object))) == u"<class 'bdrxml.mods.Mods'>", unicode(repr(type(mods_object)))
+            return { u'data': mods_object, u'accession_number': self.accession_number }
 
     ## HELPER FUNCTIONS ##
 

@@ -1,0 +1,80 @@
+  {
+    "ARTISTS::artist_alias": [
+      null
+    ],
+    "ARTISTS::artist_birth_country_id": [
+      "231"
+    ],
+    "ARTISTS::artist_birth_year": [
+      "1898"
+    ],
+    "ARTISTS::artist_death_year": [
+      "1991"
+    ],
+    "ARTISTS::artist_first_name": [
+      "Berenice"
+    ],
+    "ARTISTS::artist_last_name": [
+      "Abbott"
+    ],
+    "ARTISTS::artist_lifetime": [
+      "1898-1991"
+    ],
+    "ARTISTS::artist_middle_name": [
+      null
+    ],
+    "ARTISTS::artist_nationality_name": [
+      "American"
+    ],
+    "ARTISTS::calc_artist_full_name": [
+      "Berenice Abbott"
+    ],
+    "ARTISTS::calc_nationality": [
+      "American"
+    ],
+    "ARTISTS::use_alias_flag": [
+      null
+    ],
+    "MEDIA::object_medium_name": "Book",
+    "MEDIA_SUB::sub_media_name": [
+      "Letterpress",
+      "Lithograph "
+    ],
+    "OBJECT_ARTISTS::artist_id": [
+      "223"
+    ],
+    "OBJECT_ARTISTS::artist_role": [
+      null
+    ],
+    "OBJECT_ARTISTS::primary_flag": [
+      "yes"
+    ],
+    "OBJECT_MEDIA_SUB::media_sub_id": [
+      "32",
+      "35"
+    ],
+    "SERIES::series_end_year": [
+      null
+    ],
+    "SERIES::series_name": [
+      null
+    ],
+    "SERIES::series_start_year": [
+      null
+    ],
+    "calc_accession_id": "B 1980.1566",
+    "credit_line": "Gift of Saul P. Steinberg",
+    "image_height": null,
+    "image_width": null,
+    "object_date": "1978",
+    "object_depth": null,
+    "object_height": null,
+    "object_id": "176",
+    "object_image_scan_filename": null,
+    "object_medium": "Letterpress and lithography",
+    "object_title": "A Glimpse of Thomas Traherne by Thomas Traherne",
+    "object_width": null,
+    "object_year_end": "1978",
+    "object_year_start": "1978",
+    "series_id": null
+  }

@@ -23,8 +23,8 @@ class MakeModsFromBellJson_Test(unittest.TestCase):
     mods_schema_path = os.path.abspath( u'./lib/mods-3-4.xsd' )
     expected = self.TEST_EXPECTED_SINGLE_ARTIST_XML
     mods_maker = ModsBuilder()
-    result = mods_maker.build_mods_object( data_dict, mods_schema_path )
-    self.assertEquals( expected, result )
+    result = mods_maker.build_mods_object( data_dict, mods_schema_path, u'return_string' )
+    self.assertEquals( expected, result['data'] )
 
   def test__mods_multiple_artists(self):
     """ Tests bell mods creation. """
@@ -32,10 +32,8 @@ class MakeModsFromBellJson_Test(unittest.TestCase):
     mods_schema_path = os.path.abspath( u'./lib/mods-3-4.xsd' )
     expected = self.TEST_EXPECTED_MULTIPLE_ARTISTS_XML
     mods_maker = ModsBuilder()
-    result = mods_maker.build_mods_object( data_dict, mods_schema_path )
-    # print u'- expected is...'; print expected
-    # print u'- result is...'; print result
-    self.assertEquals( expected, result )
+    result = mods_maker.build_mods_object( data_dict, mods_schema_path, u'return_string' )
+    self.assertEquals( expected, result[u'data'] )
 
   ## end of tests ##
 
