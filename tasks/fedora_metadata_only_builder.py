@@ -13,7 +13,6 @@ class Task( object ):
     def __init__( self ):
         self.accession_number = None  # updated after mods is built; used for logging.
 
-
     def create_fedora_metadata_object( self,
         FEDORA_ADMIN_URL, FEDORA_ADMIN_USERNAME, FEDORA_ADMIN_PASSWORD,
         COLLECTION_PID,
@@ -30,25 +29,26 @@ class Task( object ):
             #
             #Instantiate repo connection
             #Note: doesn't actually try to connect until it has to
-            # repo = Repository( root=FEDORA_ADMIN_URL, username=FEDORA_ADMIN_USERNAME, password=FEDORA_ADMIN_PASSWORD )
-            print u'- repo connection instantiated. (TURNED_OFF)'
+            repo = Repository( root=FEDORA_ADMIN_URL, username=FEDORA_ADMIN_USERNAME, password=FEDORA_ADMIN_PASSWORD )
+            print u'- repo connection instantiated.'
             #
             #Instantiate new-obj
             #Purpose: this will be the object we'll build, then ingest
-            # new_obj = repo.get_object( type=CommonMetadataDO )
-            print u'- new_obj instantiated. (TURNED_OFF)'
+            new_obj = repo.get_object( type=CommonMetadataDO )
+            print u'- new_obj instantiated.'
             #
             #Instantiate collection object
-            # coll_obj = repo.get_object( pid=self.COLLECTION_PID )
-            print u'- coll_obj instantiated. (TURNED_OFF)'
+            coll_obj = repo.get_object( pid=self.COLLECTION_PID )
+            print u'- coll_obj instantiated.'
+            #
             #Get/reserve a pid
             #Note: after obtaining pid, new_obj.pid is a value, not a reference
-            # new_pid = new_obj.pid()
-            print u'- new_obj.pid obtained. (TURNED_OFF)'
+            new_pid = new_obj.pid()
+            print u'- new_obj.pid obtained.'
             #
             #Assign collection object
-            # new_obj.owning_collection = coll_obj
-            print u'- collection object assigned (TURNED_OFF)'
+            new_obj.owning_collection = coll_obj
+            print u'- collection object assigned'
             #
             #Build rights object
             #Note: builds via bdrxml
@@ -56,8 +56,8 @@ class Task( object ):
             print u'- rights object built.'
             #
             #Assign rights object
-            # new_obj.rightsMD.content = rights_obj
-            print u'- rights object assigned. (TURNED_OFF)'
+            new_obj.rightsMD.content = rights_obj
+            print u'- rights object assigned.'
             #
             #Build ir object
             #Note: builds via ???
@@ -65,8 +65,8 @@ class Task( object ):
             print u'- ir object built.'
             #
             #Assign ir object
-            # new_obj.irMD.content = ir_object
-            print u'- ir object assigned. (TURNED_OFF)'
+            new_obj.irMD.content = ir_object
+            print u'- ir object assigned.'
             #
             #Build mods object
             #Example returned data: { u'data: mods_object, u'accession_number': accession_number }
@@ -74,20 +74,20 @@ class Task( object ):
             print u'- mods object built.'
             #
             #Assign mods object
-            # new_obj.mods.content = mods_object_dict[u'data']
-            print u'- mods object assigned (TURNED_OFF).'
+            new_obj.mods.content = mods_object_dict[u'data']
+            print u'- mods object assigned.'
             #
             #Store accession number
             self.accession_number = mods_object_dict[u'accession_number']  # for logging
             #
             #Update default admin fields
-            # new_obj.label = mods_object.title
-            # new_obj.owner = u'Bell Gallery'
-            print u'- default admin fields updated. (TURNED_OFF)'
+            new_obj.label = mods_object.title
+            new_obj.owner = u'Bell Gallery'
+            print u'- default admin fields updated.'
             #
             #Save to fedora
-            # self._save_to_fedora( new_obj )
-            print u'- saved to fedora. (TURNED_OFF)'
+            self._save_to_fedora( new_obj )
+            print u'- saved to fedora.'
             return
             #
             #Update logging
@@ -140,16 +140,15 @@ if __name__ == u'__main__':
     """ __main__ used for development, and as caller documentation.
         Assumes env is activated & cwd is './bell_code'.
         ( 'FMOB' used as a namespace prefix for this 'fedora_metadata_only_builder.py' file. ) """
-    # pprint.pprint( os.environ.__dict__ )
+    #prep...
     FEDORA_ADMIN_URL=unicode( os.environ.get(u'BELL_FMOB__FEDORA_ADMIN_URL') )
     FEDORA_ADMIN_USERNAME=unicode( os.environ.get(u'BELL_FMOB__FEDORA_ADMIN_USERNAME') )
     FEDORA_ADMIN_PASSWORD=unicode( os.environ.get(u'BELL_FMOB__FEDORA_ADMIN_PASSWORD') )
     COLLECTION_PID=unicode( os.environ.get(u'BELL_FMOB__COLLECTION_PID') )
     with open( os.path.abspath(u'./tasks/test_data/raw_source_single_artist.json') ) as f:
         item_data_dict = json.loads( f.read() )
-
     mods_schema_path = os.path.abspath( u'./lib/mods-3-4.xsd' )
-
+    #work...
     task = Task()
     task._print_settings(
         FEDORA_ADMIN_URL, FEDORA_ADMIN_USERNAME, FEDORA_ADMIN_PASSWORD,
