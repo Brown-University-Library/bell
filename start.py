@@ -16,7 +16,7 @@ from rq import Queue
 
 q = Queue( u'bell_work', connection=Redis() )
 job = q.enqueue_call (
-  func=u'tasks.check_environment.check_redis_status_dict',
+  func=u'tasks.check_environment.ensure_redis',
   args = (),
   timeout = 30
   )

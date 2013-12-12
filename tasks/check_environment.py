@@ -6,20 +6,20 @@ import redis
 
 from redis import Redis
 from rq import Queue
-from tasks import next_task
+from tasks import task_manager
 
 
 r = redis.StrictRedis( host='localhost', port=6379, db=0 )
 q = Queue( u'bell_work', connection=Redis() )
 
 
-def check_redis_status_dict():
+def ensure_redis():
     """ Checks that redis is running. """
     logger = bell_logger.setup_logger()
     logger.info( u'STARTING_PROCESSING...' )
     try:
         assert len(r.keys()) > -1  # if redis isn't running this will generate an error
-        next = next_task.determine_next_task( sys._getframe().f_code.co_name )  # passes current function name
+        next = task_manager.determine_next_task( sys._getframe().f_code.co_name )  # passes current function name
         job = q.enqueue_call ( func=u'%s' % next, args = (), timeout = 30 )
         return
     except Exception as e:
@@ -38,22 +38,37 @@ def archive_previous_work():
         jstring = json.dumps( d, sort_keys=True, indent=2 )
         with open( archive_file_path, u'w' ) as f:
             f.write( jstring )
-        next = next_task.determine_next_task( sys._getframe().f_code.co_name )
+        next = task_manager.determine_next_task( sys._getframe().f_code.co_name )
         job = q.enqueue_call ( func=u'%s' % next, args = (), timeout = 30 )
         return
     except Exception as e:
         raise Exception( unicode(repr(e)) )
 
 
-def check_main_accession_number_dict():
-    """ Checks that 'accession_number_to_data_dict.json' exists.
-        Possible TODO: load it to ensure it's a dict. """
+def ensure_redis_status_dict():
+    """ Ensures the status dict exists. """
+    logger = bell_logger.setup_logger()
+    try:
+        if not r.exists( u'bell_work_tracker' ):
+            r.hset( u'bell_work_tracker', 'initialized', unicode(datetime.datetime.now()) )
+        next = task_manager.determine_next_task( sys._getframe().f_code.co_name )  # passes current function name
+        job = q.enqueue_call ( func=u'%s' % next, args = (), timeout = 30 )
+        logger.info( u'bell_work_tracker ready' )
+        return
+    except Exception as e:
+        message = u'Redis bell_status not set; exception: %s' % unicode(repr(e))
+        logger.error( message )
+        raise Exception( message )
+
+
+def check_foundation_files():
+    """ Checks that foundation-files exist. """
     logger = bell_logger.setup_logger()
     for filepath in [ os.environ.get(u'BELL_CE__BELL_DICT_JSON_PATH'), os.environ.get(u'BELL_CE__AccToPidDict_JSON_PATH') ]:
         try:
             assert os.path.exists( filepath )
-            logger.info( u'- filepath %s ok' % filepath )
-            logger.info( u'abc' )
+            next = task_manager.determine_next_task( sys._getframe().f_code.co_name )
+            job = q.enqueue_call ( func=u'%s' % next, args = (), timeout = 30 )
         except Exception as e:
             message = u'Problem finding filepath %s; exception: %s' % ( filepath, unicode(repr(e)) )
             logger.error( message )
