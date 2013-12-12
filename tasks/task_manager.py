@@ -1,7 +1,11 @@
 # -*- coding: utf-8 -*-
 
-import json, os
+import json, os, sys
 import bell_logger
+from redis import Redis
+from rq import Queue
+
+q = Queue( u'bell_work', connection=Redis() )
 
 
 def determine_next_task( current_task ):
@@ -15,6 +19,8 @@ def determine_next_task( current_task ):
         next_task = u'tasks.check_environment.check_foundation_files'
     elif current_task == u'check_foundation_files':
         next_task = u'tasks.task_manager.populate_queue'
+    elif current_task == u'populate_queue':
+        next_task = u'tasks.task_manager.determine_situation'
     return next_task
 
 
@@ -22,15 +28,20 @@ def populate_queue():
     """ Puts the bell items on the queue. """
     logger = bell_logger.setup_logger()
     LIMIT = 2
-    main_json_path = os.environ.get( u'BELL_CE__BELL_DICT_JSON_PATH' )
-    with open( main_json_path ) as f:
+    with open( os.environ.get(u'BELL_CE__BELL_DICT_JSON_PATH') ) as f:
         all_items_dict = json.loads( f.read() )
     for i,(accnum_key, item_dict_value) in enumerate( all_items_dict[u'items'].items() ):
-      ## register with redis tracker
-      logger.info( u'accnum_key is: %s' % accnum_key )
-      # next = task_manager.determine_next_task( sys._getframe().f_code.co_name )
-      # job = q.enqueue_call ( func=u'%s' % next, args = (), timeout = 30 )
-      if i > LIMIT:
+      logger.info( u'accnum_key is: %s' % accnum_key )  # TEMP
+      next = determine_next_task( sys._getframe().f_code.co_name )
+      job = q.enqueue_call ( func=u'%s' % next, args = ( item_dict_value, ), timeout = 30 )
+      if i > LIMIT:  # TEMP
         break
     logger.info( u'break occurred' )
+    return
+
+
+def determine_situation( item_dict_value ):
+    """ Examines item dict and updates next task. """
+    logger = bell_logger.setup_logger()
+    logger.info( u'item_dict_value acc_num is: %s' % item_dict_value[u'calc_accession_id'] )  # TEMP
     return

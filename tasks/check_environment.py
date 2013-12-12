@@ -3,7 +3,6 @@
 import datetime, json, os, pprint, sys
 import bell_logger
 import redis
-
 from redis import Redis
 from rq import Queue
 from tasks import task_manager
@@ -67,10 +66,10 @@ def check_foundation_files():
     for filepath in [ os.environ.get(u'BELL_CE__BELL_DICT_JSON_PATH'), os.environ.get(u'BELL_CE__AccToPidDict_JSON_PATH') ]:
         try:
             assert os.path.exists( filepath )
-            next = task_manager.determine_next_task( sys._getframe().f_code.co_name )
-            job = q.enqueue_call ( func=u'%s' % next, args = (), timeout = 30 )
         except Exception as e:
             message = u'Problem finding filepath %s; exception: %s' % ( filepath, unicode(repr(e)) )
             logger.error( message )
             raise Exception( message )
+    next = task_manager.determine_next_task( sys._getframe().f_code.co_name )
+    job = q.enqueue_call ( func=u'%s' % next, args = (), timeout = 30 )
     return
