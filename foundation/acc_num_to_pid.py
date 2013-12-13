@@ -15,6 +15,7 @@ class PidFinder( object ):
         bdr_collection_pid,
         bell_dict_json_path,
         fedora_risearch_url,
+        solr_root_url,
         output_json_path ):
         """ CONTROLLER.
             Produces accession-number dict showing bdr-pid & state, and saves to a json file.
@@ -35,7 +36,7 @@ class PidFinder( object ):
         #Run studio-solr query
         #Purpose: get raw child-pids data from _solr_, along with accession-number data
         #Example returned data: [ {pid:bdr123, identifier:[acc_num_a,other_num_b], mods_id_bell_accession_number_ssim:None_or_acc_num_a}, etc. ]
-        solr_query_output = self._run_studio_solr_query( bdr_collection_pid )
+        solr_query_output = self._run_studio_solr_query( bdr_collection_pid, solr_root_url )
         print u'- _run_studio_solr_query() done'
         #
         #Parse solr-results to solr-pid list
@@ -110,11 +111,11 @@ class PidFinder( object ):
         # print u'- sorted_fedora_pids...'; print sorted_fedora_pids
         return sorted_fedora_pids
 
-    def _run_studio_solr_query( self, bdr_collection_pid ):
+    def _run_studio_solr_query( self, bdr_collection_pid, solr_root_url ):
         """ Returns _solr_ doc list.
             Example: [ {pid:bdr123, identifier:[acc_num_a,other_num_b], mods_id_bell_accession_number_ssim:None_or_acc_num_a, other:...}, etc. ] """
         def __query_solr( i, bdr_collection_pid ):
-            search_api_url = u'https://repository.library.brown.edu/api/pub/search/'
+            search_api_url = solr_root_url
             new_start = i * 500  # for solr start=i parameter (cool, eh?)
             params = {
                 u'q': u'rel_is_member_of_ssim:"%s"' % bdr_collection_pid,
@@ -178,6 +179,8 @@ class PidFinder( object ):
             accession_number = solr_doc[u'mods_id_bell_accession_number_ssim'][0]
         elif u'mods_id_accession no._ssim' in solr_doc.keys():
             accession_number = solr_doc[u'mods_id_accession no._ssim'][0]
+        elif u'mods_id_accession_no_ssim' in solr_doc.keys():
+            accession_number = solr_doc[u'mods_id_accession_no_ssim'][0]
         elif u'identifier' in solr_doc.keys():
             accession_number = solr_doc[u'identifier'][0]
         else:
@@ -257,10 +260,11 @@ class PidFinder( object ):
             f.write( jstring )
         return
 
-    def _print_settings( self, bdr_collection_pid, bell_dict_json_path, fedora_risearch_url, output_json_path ):
+    def _print_settings( self, bdr_collection_pid, bell_dict_json_path, fedora_risearch_url, solr_root_url, output_json_path ):
         print u'- bdr_collection_pid: %s' % bdr_collection_pid
         print u'- bell_dict_json_path: %s' % bell_dict_json_path
         print u'- fedora_risearch_url: %s' % fedora_risearch_url
+        print u'- solr_root_url: %s' % solr_root_url
         print u'- output_json_path: %s' % output_json_path
         print u'---'
         return
@@ -273,12 +277,13 @@ class PidFinder( object ):
 if __name__ == u'__main__':
     """ Assumes env is activated.
         ( 'ANTP' used as a namespace prefix for this 'acc_num_to_pid.py' file. ) """
-    bdr_collection_pid=os.environ.get( u'BELL_ANTP__COLLECTION_PID', u'' )
-    bell_dict_json_path=os.environ.get( u'BELL_ANTP__BELL_DICT_JSON_PATH', u'' )  # file of dict of bell-accession-number to metadata
-    fedora_risearch_url=os.environ.get( u'BELL_ANTP__FEDORA_RISEARCH_URL', u'' )
-    output_json_path=os.environ.get( u'BELL_ANTP__OUTPUT_JSON_PATH', u'' )
+    bdr_collection_pid=os.environ.get( u'BELL_ANTP__COLLECTION_PID' )
+    bell_dict_json_path=os.environ.get( u'BELL_ANTP__BELL_DICT_JSON_PATH' )  # file of dict of bell-accession-number to metadata
+    fedora_risearch_url=os.environ.get( u'BELL_ANTP__FEDORA_RISEARCH_URL' )
+    solr_root_url=os.environ.get( u'BELL_ANTP__SOLR_ROOT' )
+    output_json_path=os.environ.get( u'BELL_ANTP__OUTPUT_JSON_PATH' )
     pid_finder = PidFinder()
     pid_finder._print_settings(
-        bdr_collection_pid, bell_dict_json_path, fedora_risearch_url, output_json_path )
+        bdr_collection_pid, bell_dict_json_path, fedora_risearch_url, solr_root_url, output_json_path )
     pid_finder.make_dict(
-        bdr_collection_pid, bell_dict_json_path, fedora_risearch_url, output_json_path )
+        bdr_collection_pid, bell_dict_json_path, fedora_risearch_url, solr_root_url, output_json_path )
