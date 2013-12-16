@@ -5,7 +5,9 @@ import bell_logger
 from redis import Redis
 from rq import Queue
 
-q = Queue( u'bell_work', connection=Redis() )
+
+queue_name = os.environ.get(u'BELL_QUEUE_NAME')
+q = Queue( queue_name, connection=Redis() )
 
 
 def determine_next_task( current_task ):
