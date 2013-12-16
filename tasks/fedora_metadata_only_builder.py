@@ -71,10 +71,11 @@ class Task( object ):
             #Build mods object
             #Example returned data: { u'data: mods_object, u'accession_number': accession_number }
             mods_object_dict = mods_builder.build_mods_object( item_data_dict, mods_schema_path, u'return_object' )  # or u'return_string'
+            mods_object = mods_object_dict[u'data']
             print u'- mods object built.'
             #
             #Assign mods object
-            new_obj.mods.content = mods_object_dict[u'data']
+            new_obj.mods.content = mods_object
             print u'- mods object assigned.'
             #
             #Store accession number
