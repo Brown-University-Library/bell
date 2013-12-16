@@ -56,7 +56,7 @@ class Task( object ):
             print u'- rights object built.'
             #
             #Assign rights object
-            new_obj.rightsMD.content = rights_obj
+            new_obj.rightsMD.content = rights_object
             print u'- rights object assigned.'
             #
             #Build ir object
