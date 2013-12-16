@@ -92,8 +92,7 @@ class Task( object ):
             return
             #
             #Update logging
-            self._update_task_log()
-            print u'- task log updated.'
+            print u'- done.'
         except Exception as e:
             error_message = u'- in Task.create_fedora_metadata_object(); exception: %s' % unicode(repr(e))
             raise Exception( error_message )
@@ -104,16 +103,15 @@ class Task( object ):
           new_obj.save()
           # pass
           ## update task-log
-          task_log[accession_number] = { now: u'ingestion successful' }
-          task_log[accession_number][u'previously_ingested'] = new_obj.pid
+          self._update_task_log( message=u'ingestion_successful' )
         # except DigitalObjectSaveFailure as f:
         except Exception as f:
-          error_message = u'error on ingestion: %s' % repr(f).decode(u'utf-8', u'replace')
+          error_message = u'error on ingestion: %s' % unicode(repr(f))
           print u'ERROR: %s' % error_message
-          task_log[u'error_%s' % unicode(now)] = error_message
+          self._update_task_log( message=error_message )
         return
 
-    def _update_task_log( self ):
+    def _update_task_log( self, message ):
         """ Will update redis 'bell:tracker' entry. """
         pass
 
