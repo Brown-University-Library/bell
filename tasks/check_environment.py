@@ -48,12 +48,13 @@ def archive_previous_work():
 def ensure_redis_status_dict():
     """ Ensures the status dict exists. """
     logger = bell_logger.setup_logger()
+    tracker_key = u'bell:tracker'
     try:
-        if not r.exists( u'bell_work_tracker' ):
-            r.hset( u'bell_work_tracker', 'initialized', unicode(datetime.datetime.now()) )
+        if not r.exists( tracker_key ):
+            r.hset( tracker_key, 'initialized', unicode(datetime.datetime.now()) )
         next = task_manager.determine_next_task( sys._getframe().f_code.co_name )  # passes current function name
         job = q.enqueue_call ( func=u'%s' % next, args = (), timeout = 30 )
-        logger.info( u'bell_work_tracker ready' )
+        logger.info( u'%s ready' % tracker_key )
         return
     except Exception as e:
         message = u'Redis bell_status not set; exception: %s' % unicode(repr(e))

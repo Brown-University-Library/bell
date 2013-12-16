@@ -8,4 +8,5 @@ echo "worker name: " $WORKER_NAME
 echo "log filename: " $LOG_FILENAME
 echo "queue name: " $BELL_QUEUE_NAME
 
-rqworker --name $WORKER_NAME $QUEUE_NAME >> $LOG_FILENAME 2>&1 &
+# rqworker --name $WORKER_NAME $QUEUE_NAME >> $LOG_FILENAME 2>&1 &
+rqworker --name $WORKER_NAME $BELL_QUEUE_NAME

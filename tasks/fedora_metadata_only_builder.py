@@ -38,7 +38,7 @@ class Task( object ):
             print u'- new_obj instantiated.'
             #
             #Instantiate collection object
-            coll_obj = repo.get_object( pid=self.COLLECTION_PID )
+            coll_obj = repo.get_object( pid=COLLECTION_PID )
             print u'- coll_obj instantiated.'
             #
             #Get/reserve a pid
@@ -113,7 +113,7 @@ class Task( object ):
         return
 
     def _update_task_log( self ):
-        """ Will update redit task-tracker entry. """
+        """ Will update redis 'bell:tracker' entry. """
         pass
 
     def _print_settings( self,
@@ -132,6 +132,24 @@ class Task( object ):
         return
 
     # end class Task()
+
+
+def run__create_fedora_metadata_object( item_dict ):
+    """ Instantiates Task() instance & calls create_fedora_metadata_object(). """
+    print u'- in fedora_metadata_only_builder.run__create_fedora_metadata_object(); acc_num is: %s' % item_dict[u'calc_accession_id']
+    FEDORA_ADMIN_URL=unicode( os.environ.get(u'BELL_FMOB__FEDORA_ADMIN_URL') )
+    FEDORA_ADMIN_USERNAME=unicode( os.environ.get(u'BELL_FMOB__FEDORA_ADMIN_USERNAME') )
+    FEDORA_ADMIN_PASSWORD=unicode( os.environ.get(u'BELL_FMOB__FEDORA_ADMIN_PASSWORD') )
+    COLLECTION_PID=unicode( os.environ.get(u'BELL_FMOB__COLLECTION_PID') )
+    mods_schema_path = os.path.abspath( u'./lib/mods-3-4.xsd' )
+    task = Task()
+    task.create_fedora_metadata_object(
+        FEDORA_ADMIN_URL, FEDORA_ADMIN_USERNAME, FEDORA_ADMIN_PASSWORD,
+        COLLECTION_PID,
+        item_dict, mods_schema_path
+        )
+    print u'- in fedora_metadata_only_builder.run__create_fedora_metadata_object(); acc_num is: %s; item ingested' % item_dict[u'calc_accession_id']
+    return
 
 
 
