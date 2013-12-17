@@ -41,7 +41,7 @@ def populate_queue():
         logger.info( u'accnum_key is: %s' % accnum_key )  # TEMP
         next = determine_next_task( sys._getframe().f_code.co_name )
         job = q.enqueue_call ( func=u'%s' % next, args = (item_dict_value,), timeout = 30 )
-        if i > os.environ.get(u'BELL_TM__POPULATE_QUEUE_LIMIT'):
+        if i > int( os.environ.get(u'BELL_TM__POPULATE_QUEUE_LIMIT') ):
             break
     update_tracker( key=u'GENERAL', message=u'queue populated' )
     logger.info( u'break occurred' ); return
@@ -52,6 +52,8 @@ def determine_situation( item_dict ):
     logger = bell_logger.setup_logger(); logger.info( u'item_dict acc_num is: %s' % item_dict[u'calc_accession_id'] )  # TEMP
     acc_num = item_dict[u'calc_accession_id']
     situation = u'init'
+    if _check_recently_processed:
+        pass
     with open( os.environ.get(u'BELL_ANTP__BELL_DICT_JSON_PATH') ) as f:  # check for pid
         accnum_to_pid_dict = json.loads( f.read() )
     if not acc_num in accnum_to_pid_dict.keys():
@@ -60,6 +62,17 @@ def determine_situation( item_dict ):
         next = determine_next_task( sys._getframe().f_code.co_name, data={u'situation': situation} )
         job = q.enqueue_call ( func=u'%s' % next, args = (item_dict,), timeout = 30 )
     return
+
+
+def _check_recently_processed( accession_number_key ):
+    """ Checks redis bell:tracker to see if item has recently been successfully ingested.
+        Called by determine_situation() """
+    return_val = False
+    if r.hexists( tracker_name, accession_number_key ):
+        key_value_list = json.loads( r.hget(tracker_name, accession_number_key) )
+        if u'ingestion_successful' in key_value_list:
+            return_val = True
+    return return_val
 
 
 def update_tracker( key, message ):
@@ -71,6 +84,6 @@ def update_tracker( key, message ):
         if not message in key_value:  # prevents duplicated setup entries when re-running
             key_value.append( message )
     else:
-        key_value = message
+        key_value = [ message ]
     r.hset( tracker_name, key, json.dumps(key_value) )
     return

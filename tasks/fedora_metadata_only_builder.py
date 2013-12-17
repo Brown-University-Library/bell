@@ -22,6 +22,9 @@ class Task( object ):
             Note: item_data_dict is a json entry from foundation/acc_num_to_data.py json """
         print u'starting try...'
         try:
+            #Store accession number
+            self.accession_number = item_data_dict[u'calc_accession_id']  # for logging
+            #
             #Setup builders
             ir_builder = IRBuilder()
             mods_builder = ModsBuilder()
@@ -78,9 +81,6 @@ class Task( object ):
             new_obj.mods.content = mods_object
             print u'- mods object assigned.'
             #
-            #Store accession number
-            self.accession_number = mods_object_dict[u'accession_number']  # for logging
-            #
             #Update default admin fields
             new_obj.label = mods_object.title
             new_obj.owner = u'Bell Gallery'
@@ -93,8 +93,10 @@ class Task( object ):
             #
             #Update logging
             print u'- done.'
+            self._update_task_tracker( message=u'ingestion_successful' )
         except Exception as e:
             error_message = u'- in Task.create_fedora_metadata_object(); exception: %s' % unicode(repr(e))
+            # self._update_task_tracker( message=error_message )
             raise Exception( error_message )
 
     def _save_to_fedora( self, new_obj ):
@@ -103,17 +105,22 @@ class Task( object ):
           new_obj.save()
           # pass
           ## update task-log
-          self._update_task_log( message=u'ingestion_successful' )
+          self._update_task_tracker( message=u'save_successful' )
         # except DigitalObjectSaveFailure as f:
         except Exception as f:
-          error_message = u'error on ingestion: %s' % unicode(repr(f))
+          error_message = u'error on save: %s' % unicode(repr(f))
           print u'ERROR: %s' % error_message
-          self._update_task_log( message=error_message )
+          self._update_task_tracker( message=error_message )
         return
 
-    def _update_task_log( self, message ):
+    def _update_task_tracker( self, message ):
         """ Will update redis 'bell:tracker' entry. """
-        pass
+        try:
+            from tasks import task_manager
+            task_manager.update_tracker( key=self.accession_number, message=message )
+        except Exception as e:
+            print u'- in fedora_metadata_only_builder.Task._update_task_tracker(); exception: %s' % unicode(repr(e))
+            pass
 
     def _print_settings( self,
         BELL_FMOB__FEDORA_ADMIN_URL,

@@ -12,6 +12,7 @@ import redis
 
 rds = redis.Redis( u'localhost' )
 FAILED_QUEUE_NAME = u'rq:queue:failed'
+# FAILED_QUEUE_NAME = u'rq:queue:bell:job_queue'
 TARGET_QUEUE = os.environ.get( u'BELL_QUEUE_NAME' )  # only removing failed-queue jobs for target project
 # TARGET_QUEUE = u'bell_work'  # only removing failed-queue jobs for target project
 

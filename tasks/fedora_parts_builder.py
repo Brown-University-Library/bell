@@ -1,13 +1,13 @@
 # -*- coding: utf-8 -*-
 
 import datetime, os, pprint
-
-from bdrxml import irMetadata, mods, rights
 import eulxml
-# from bdrxml.mods import Mods
-
+from bdrxml import irMetadata, mods, rights
 from lxml import etree
 from lxml.etree import XMLSyntaxError
+
+""" Contains IRBuilder(), ModsBuilder(), and RightsBuilder() classes.
+    Currently called by fedora_metadata_only_builder.py; likely others in future. """
 
 
 class ModsBuilder( object ):
