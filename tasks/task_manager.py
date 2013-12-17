@@ -49,15 +49,15 @@ def populate_queue():
 
 def determine_situation( item_dict ):
     """ Examines item dict and updates next task. """
-    logger = bell_logger.setup_logger()
+    logger = bell_logger.setup_logger(); logger.info( u'item_dict acc_num is: %s' % item_dict[u'calc_accession_id'] )  # TEMP
     acc_num = item_dict[u'calc_accession_id']
-    logger.info( u'item_dict acc_num is: %s' % acc_num )  # TEMP
     situation = u'init'
-    ## check for pid
-    with open( os.environ.get(u'BELL_ANTP__BELL_DICT_JSON_PATH') ) as f:
+    with open( os.environ.get(u'BELL_ANTP__BELL_DICT_JSON_PATH') ) as f:  # check for pid
         accnum_to_pid_dict = json.loads( f.read() )
     if not acc_num in accnum_to_pid_dict.keys():
-        next = determine_next_task( sys._getframe().f_code.co_name, data={u'situation': u'create_metadata_only_object'} )
+        situation = u'create_metadata_only_object'
+        update_tracker( key=acc_num, message=u'situation: %s' % situation )
+        next = determine_next_task( sys._getframe().f_code.co_name, data={u'situation': situation} )
         job = q.enqueue_call ( func=u'%s' % next, args = (item_dict,), timeout = 30 )
     return
 
@@ -65,8 +65,12 @@ def determine_situation( item_dict ):
 def update_tracker( key, message ):
     """ Updates redis bell:tracker hash.
         Note: the value for each key is a json-serializable list; makes it easy to add info. """
-    key_value = json.loads( r.hget(u'bell:tracker', key) )
-    if not message in key_value:  # prevents duplicated setup entries when re-running
-        key_value.append( message )
-    r.hset( u'bell:tracker', key, json.dumps(key_value) )
+    tracker_name = u'bell:tracker'
+    if r.hexists( tracker_name, key ):
+        key_value = json.loads( r.hget(tracker_name, key) )
+        if not message in key_value:  # prevents duplicated setup entries when re-running
+            key_value.append( message )
+    else:
+        key_value = message
+    r.hset( tracker_name, key, json.dumps(key_value) )
     return
