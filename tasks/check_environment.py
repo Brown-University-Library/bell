@@ -19,6 +19,7 @@ def ensure_redis():
     logger.info( u'STARTING_PROCESSING...' )
     try:
         assert len(r.keys()) > -1  # if redis isn't running this will generate an error
+        logger.info( u'redis-check ok' )
         next = task_manager.determine_next_task( sys._getframe().f_code.co_name )  # passes current function name
         job = q.enqueue_call ( func=u'%s' % next, args = (), timeout = 30 )
         return
@@ -34,7 +35,7 @@ def archive_previous_work():
         bell_dir = unicode( os.environ.get(u'BELL_LOG_DIR') )
         now_string = unicode( datetime.datetime.now() ).replace( u' ', u'_' )
         archive_file_path = u'%s/%s.archive' % ( bell_dir, now_string )
-        d = r.hgetall( u'bell_work_tracker' )
+        d = r.hgetall( u'bell:tracker' )
         jstring = json.dumps( d, sort_keys=True, indent=2 )
         with open( archive_file_path, u'w' ) as f:
             f.write( jstring )
@@ -46,17 +47,21 @@ def archive_previous_work():
 
 
 def ensure_redis_status_dict():
-    """ Ensures the status dict exists. """
-    logger = bell_logger.setup_logger()
-    tracker_key = u'bell:tracker'
+    """ Ensures the status dict exists. Resets it if required.
+        Each key's value is a json-serializable list. """
     try:
+        tracker_key = u'bell:tracker'
+        overwrite = unicode( os.environ.get(u'BELL_TRACKER_OVERWRITE') )
+        if overwrite == u'TRUE':
+            r.delete( tracker_key )
         if not r.exists( tracker_key ):
-            r.hset( tracker_key, 'initialized', unicode(datetime.datetime.now()) )
+            message = u'%s initialized %s' % ( tracker_key, unicode(datetime.datetime.now()) )
+            r.hset( tracker_key, u'GENERAL', json.dumps([message]) )
         next = task_manager.determine_next_task( sys._getframe().f_code.co_name )  # passes current function name
         job = q.enqueue_call ( func=u'%s' % next, args = (), timeout = 30 )
-        logger.info( u'%s ready' % tracker_key )
         return
     except Exception as e:
+        logger = bell_logger.setup_logger()
         message = u'Redis bell_status not set; exception: %s' % unicode(repr(e))
         logger.error( message )
         raise Exception( message )
@@ -70,8 +75,8 @@ def check_foundation_files():
             assert os.path.exists( filepath )
         except Exception as e:
             message = u'Problem finding filepath %s; exception: %s' % ( filepath, unicode(repr(e)) )
-            logger.error( message )
-            raise Exception( message )
+            logger.error( message ); raise Exception( message )
+    task_manager.update_tracker( key=u'GENERAL', message=u'foundation files ok' )
     next = task_manager.determine_next_task( sys._getframe().f_code.co_name )
     job = q.enqueue_call ( func=u'%s' % next, args = (), timeout = 30 )
     return
