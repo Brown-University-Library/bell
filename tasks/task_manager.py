@@ -32,6 +32,7 @@ def determine_next_task( current_task, data=None, logger=None ):
     else:
         message = u'in task_manager.determine_next_task(); no next task selected for current_task, %s; data, %s' % (current_task, data)
         logger.info( message )
+        next_task = None
     return next_task
 
 
@@ -75,17 +76,48 @@ def determine_situation( item_dict ):
             logger.info( u'in task_manager.determine_situation(); acc_num, %s; found-pid, %s' % (acc_num, pid) )
             if pid == None:
                 situation = u'create_metadata_only_object'
-                update_tracker( key=acc_num, message=u'situation: %s' % situation )
-                next = determine_next_task( sys._getframe().f_code.co_name, data={u'situation': situation}, logger=logger )
-                job = q.enqueue_call ( func=u'%s' % next, args = (item_dict,), timeout = 30 )
             else:
                 situation = u'skip__pid_exists'
+        #
+        update_tracker( key=acc_num, message=u'situation: %s' % situation )
+        next = determine_next_task( sys._getframe().f_code.co_name, data={u'situation': situation}, logger=logger )
+        if next:
+            job = q.enqueue_call ( func=u'%s' % next, args = (item_dict,), timeout = 30 )
+        #
         logger.info( u'in task_manager.determine_situation(); done; acc_num, %s; situation, %s' % (acc_num, situation) )
         return
     except Exception as e:
         message = u'Problem in determine_situation(); exception is: %s' % unicode(repr(e))
         logger.error( message )
         raise Exception( message )
+
+# def determine_situation( item_dict ):
+#     """ Examines item dict and updates next task. """
+#     logger = bell_logger.setup_logger();
+#     try:
+#         acc_num = item_dict[u'calc_accession_id']
+#         situation = u'init'
+#         if _check_recently_processed( acc_num, logger ):
+#             situation = u'skip__already_processed'
+#         else:
+#             with open( os.environ.get(u'BELL_TM__PID_DICT_JSON_PATH') ) as f:  # check for pid
+#                 full_pid_data_dict = json.loads( f.read() )
+#             print u'in task_manager.determine_situation(); acc_num, %s; full_pid_data_dict-pid.keys(), %s' % (acc_num, full_pid_data_dict.keys())
+#             pid = full_pid_data_dict[u'final_accession_pid_dict'][acc_num][u'pid']
+#             logger.info( u'in task_manager.determine_situation(); acc_num, %s; found-pid, %s' % (acc_num, pid) )
+#             if pid == None:
+#                 situation = u'create_metadata_only_object'
+#                 update_tracker( key=acc_num, message=u'situation: %s' % situation )
+#                 next = determine_next_task( sys._getframe().f_code.co_name, data={u'situation': situation}, logger=logger )
+#                 job = q.enqueue_call ( func=u'%s' % next, args = (item_dict,), timeout = 30 )
+#             else:
+#                 situation = u'skip__pid_exists'
+#         logger.info( u'in task_manager.determine_situation(); done; acc_num, %s; situation, %s' % (acc_num, situation) )
+#         return
+#     except Exception as e:
+#         message = u'Problem in determine_situation(); exception is: %s' % unicode(repr(e))
+#         logger.error( message )
+#         raise Exception( message )
 
 
 def _check_recently_processed( accession_number_key, logger=None ):
