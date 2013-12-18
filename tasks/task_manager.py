@@ -98,7 +98,7 @@ def _check_recently_processed( accession_number_key, logger=None ):
     tracker_name = u'bell:tracker'
     if r.hexists( tracker_name, accession_number_key ):
         key_value_list = json.loads( r.hget(tracker_name, accession_number_key) )
-        if u'ingestion_successful' in key_value_list:
+        if u'save_successful' in key_value_list:
             return_val = True
     logger.info( u'in task_manager._check_recently_processed(); acc_num, %s; return_val, %s' % (accession_number_key, return_val) )
     return return_val
