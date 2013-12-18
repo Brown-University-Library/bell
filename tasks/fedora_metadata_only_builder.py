@@ -90,11 +90,10 @@ class Task( object ):
             #Save to fedora
             self._save_to_fedora( new_obj )
             print u'- saved to fedora.'
-            return
             #
             #Update logging
             print u'- done.'
-            self._update_task_tracker( message=u'ingestion_successful' )
+            self._update_task_tracker( message=u'new_pid:%s' % self.accession_number )
         except Exception as e:
             error_message = u'- in Task.create_fedora_metadata_object(); exception: %s' % unicode(repr(e))
             # self._update_task_tracker( message=error_message )
