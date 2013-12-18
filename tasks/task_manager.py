@@ -38,7 +38,7 @@ def populate_queue():
     with open( os.environ.get(u'BELL_CE__BELL_DICT_JSON_PATH') ) as f:
         all_items_dict = json.loads( f.read() )
     for i,(accnum_key, item_dict_value) in enumerate( sorted(all_items_dict[u'items'].items()) ):
-        logger.info( u'accnum_key is: %s' % accnum_key )  # TEMP
+        logger.info( u'in task_manager.populate_queue(); accnum_key is: %s' % accnum_key )  # TEMP
         next = determine_next_task( sys._getframe().f_code.co_name )
         job = q.enqueue_call ( func=u'%s' % next, args = (item_dict_value,), timeout = 30 )
         if i > int( os.environ.get(u'BELL_TM__POPULATE_QUEUE_LIMIT') ):
@@ -49,29 +49,58 @@ def populate_queue():
 
 def determine_situation( item_dict ):
     """ Examines item dict and updates next task. """
-    logger = bell_logger.setup_logger(); logger.info( u'item_dict acc_num is: %s' % item_dict[u'calc_accession_id'] )  # TEMP
+    logger = bell_logger.setup_logger();
     acc_num = item_dict[u'calc_accession_id']
     situation = u'init'
-    if _check_recently_processed:
-        pass
-    with open( os.environ.get(u'BELL_ANTP__BELL_DICT_JSON_PATH') ) as f:  # check for pid
-        accnum_to_pid_dict = json.loads( f.read() )
-    if not acc_num in accnum_to_pid_dict.keys():
-        situation = u'create_metadata_only_object'
-        update_tracker( key=acc_num, message=u'situation: %s' % situation )
-        next = determine_next_task( sys._getframe().f_code.co_name, data={u'situation': situation} )
-        job = q.enqueue_call ( func=u'%s' % next, args = (item_dict,), timeout = 30 )
+    if _check_recently_processed( acc_num, logger ):
+        situation = u'skip__already_processed'
+    else:
+        with open( os.environ.get(u'BELL_TM__PID_DICT_JSON_PATH') ) as f:  # check for pid
+            full_pid_data_dict = json.loads( f.read() )
+        print u'in task_manager.determine_situation(); acc_num, %s; full_pid_data_dict-pid.keys(), %s' % (acc_num, full_pid_data_dict.keys())
+        pid = full_pid_data_dict[u'final_accession_pid_dict'][acc_num][u'pid']
+        logger.info( u'in task_manager.determine_situation(); acc_num, %s; found-pid, %s' % (acc_num, pid) )
+        if pid == None:
+            situation = u'create_metadata_only_object'
+            update_tracker( key=acc_num, message=u'situation: %s' % situation )
+            next = determine_next_task( sys._getframe().f_code.co_name, data={u'situation': situation} )
+            job = q.enqueue_call ( func=u'%s' % next, args = (item_dict,), timeout = 30 )
+        else:
+            situation = u'skip__pid_exists'
+    logger.info( u'in task_manager.determine_situation(); acc_num, %s; situation, %s' % (acc_num, situation) )
     return
 
+# def determine_situation( item_dict ):
+#     """ Examines item dict and updates next task. """
+#     logger = bell_logger.setup_logger();
+#     acc_num = item_dict[u'calc_accession_id']
+#     situation = u'init'
+#     if _check_recently_processed( acc_num, logger ):
+#         situation = u'skip__already_processed'
+#     else:
+#         with open( os.environ.get(u'BELL_ANTP__BELL_DICT_JSON_PATH') ) as f:  # check for pid
+#             accnum_to_pid_dict = json.loads( f.read() )
+#         if not acc_num in accnum_to_pid_dict.keys():
+#             situation = u'create_metadata_only_object'
+#             update_tracker( key=acc_num, message=u'situation: %s' % situation )
+#             next = determine_next_task( sys._getframe().f_code.co_name, data={u'situation': situation} )
+#             job = q.enqueue_call ( func=u'%s' % next, args = (item_dict,), timeout = 30 )
+#         else:
+#             situation = u'skip__pid_exists'
+#     logger.info( u'in task_manager.determine_situation(); acc_num, %s; situation, %s' % (acc_num, situation) )
+#     return
 
-def _check_recently_processed( accession_number_key ):
+
+def _check_recently_processed( accession_number_key, logger=None ):
     """ Checks redis bell:tracker to see if item has recently been successfully ingested.
         Called by determine_situation() """
     return_val = False
+    tracker_name = u'bell:tracker'
     if r.hexists( tracker_name, accession_number_key ):
         key_value_list = json.loads( r.hget(tracker_name, accession_number_key) )
         if u'ingestion_successful' in key_value_list:
             return_val = True
+    logger.info( u'in task_manager._check_recently_processed(); acc_num, %s; return_val, %s' % (accession_number_key, return_val) )
     return return_val
 
 

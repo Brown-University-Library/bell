@@ -24,6 +24,7 @@ class Task( object ):
         try:
             #Store accession number
             self.accession_number = item_data_dict[u'calc_accession_id']  # for logging
+            # print u'- in fedora_metadata_only_builder.Task.create_fedora_metadata_object(); accession_number, %s' % self.accession_number
             #
             #Setup builders
             ir_builder = IRBuilder()

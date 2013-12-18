@@ -2,7 +2,6 @@
 
 import json, os, pprint, unittest
 from fedora_parts_builder import ModsBuilder
-# from lxml import etree
 
 """ To run tests:
     - activate v-env
