@@ -77,7 +77,7 @@ def determine_situation( item_dict ):
             if pid == None:
                 situation = u'create_metadata_only_object'
             else:
-                situation = u'skip__pid_exists'
+                situation = u'skip__pid_"%s"_exists' % pid
         #
         update_tracker( key=acc_num, message=u'situation: %s' % situation )
         next = determine_next_task( sys._getframe().f_code.co_name, data={u'situation': situation}, logger=logger )
@@ -107,11 +107,14 @@ def determine_situation( item_dict ):
 #             logger.info( u'in task_manager.determine_situation(); acc_num, %s; found-pid, %s' % (acc_num, pid) )
 #             if pid == None:
 #                 situation = u'create_metadata_only_object'
-#                 update_tracker( key=acc_num, message=u'situation: %s' % situation )
-#                 next = determine_next_task( sys._getframe().f_code.co_name, data={u'situation': situation}, logger=logger )
-#                 job = q.enqueue_call ( func=u'%s' % next, args = (item_dict,), timeout = 30 )
 #             else:
 #                 situation = u'skip__pid_exists'
+#         #
+#         update_tracker( key=acc_num, message=u'situation: %s' % situation )
+#         next = determine_next_task( sys._getframe().f_code.co_name, data={u'situation': situation}, logger=logger )
+#         if next:
+#             job = q.enqueue_call ( func=u'%s' % next, args = (item_dict,), timeout = 30 )
+#         #
 #         logger.info( u'in task_manager.determine_situation(); done; acc_num, %s; situation, %s' % (acc_num, situation) )
 #         return
 #     except Exception as e:
