@@ -51,7 +51,7 @@ def populate_queue():
                 logger.debug( u'in task_manager.populate_queue(); breaking after %s' % accnum_key )
                 break
         update_tracker( key=u'GENERAL', message=u'queue populated' )
-        logger.info( u'ensure_redis_status_dict ok' )
+        logger.info( u'populate_queue ok' )
         return
     except Exception as e:
         message = u'Problem in populate_queue(); exception is: %s' % unicode(repr(e))
