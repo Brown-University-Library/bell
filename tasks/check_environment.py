@@ -19,9 +19,9 @@ def ensure_redis():
     logger.info( u'STARTING_PROCESSING...' )
     try:
         assert len(r.keys()) > -1  # if redis isn't running this will generate an error
-        logger.info( u'redis-check ok' )
-        next = task_manager.determine_next_task( sys._getframe().f_code.co_name )  # passes current function name
+        next = task_manager.determine_next_task( sys._getframe().f_code.co_name, logger=logger )  # passes current function name
         job = q.enqueue_call ( func=u'%s' % next, args = (), timeout = 30 )
+        logger.info( u'redis-check ok' )
         return
     except Exception as e:
         message = u'Redis does not appear to be running; exception: %s' % unicode(repr(e))
@@ -31,6 +31,7 @@ def ensure_redis():
 
 def archive_previous_work():
     """ Archives previous redis data. """
+    logger = bell_logger.setup_logger()
     try:
         bell_dir = unicode( os.environ.get(u'BELL_LOG_DIR') )
         now_string = unicode( datetime.datetime.now() ).replace( u' ', u'_' )
@@ -39,16 +40,20 @@ def archive_previous_work():
         jstring = json.dumps( d, sort_keys=True, indent=2 )
         with open( archive_file_path, u'w' ) as f:
             f.write( jstring )
-        next = task_manager.determine_next_task( sys._getframe().f_code.co_name )
+        next = task_manager.determine_next_task( sys._getframe().f_code.co_name, logger=logger )
         job = q.enqueue_call ( func=u'%s' % next, args = (), timeout = 30 )
+        logger.info( u'archive_previous_work ok' )
         return
     except Exception as e:
-        raise Exception( unicode(repr(e)) )
+        message = u'Problem archiving previous work; exception: %s' % unicode(repr(e))
+        logger.error( message )
+        raise Exception( message )
 
 
 def ensure_redis_status_dict():
     """ Ensures the status dict exists. Resets it if required.
         Each key's value is a json-serializable list. """
+    logger = bell_logger.setup_logger()
     try:
         tracker_key = u'bell:tracker'
         overwrite = unicode( os.environ.get(u'BELL_TRACKER_OVERWRITE') )
@@ -57,11 +62,11 @@ def ensure_redis_status_dict():
         if not r.exists( tracker_key ):
             message = u'%s initialized %s' % ( tracker_key, unicode(datetime.datetime.now()) )
             r.hset( tracker_key, u'GENERAL', json.dumps([message]) )
-        next = task_manager.determine_next_task( sys._getframe().f_code.co_name )  # passes current function name
+        next = task_manager.determine_next_task( sys._getframe().f_code.co_name, logger=logger )
         job = q.enqueue_call ( func=u'%s' % next, args = (), timeout = 30 )
+        logger.info( u'ensure_redis_status_dict ok' )
         return
     except Exception as e:
-        logger = bell_logger.setup_logger()
         message = u'Redis bell_status not set; exception: %s' % unicode(repr(e))
         logger.error( message )
         raise Exception( message )
@@ -70,13 +75,19 @@ def ensure_redis_status_dict():
 def check_foundation_files():
     """ Checks that foundation-files exist. """
     logger = bell_logger.setup_logger()
-    for filepath in [ os.environ.get(u'BELL_CE__BELL_DICT_JSON_PATH'), os.environ.get(u'BELL_CE__AccToPidDict_JSON_PATH') ]:
-        try:
-            assert os.path.exists( filepath )
-        except Exception as e:
-            message = u'Problem finding filepath %s; exception: %s' % ( filepath, unicode(repr(e)) )
-            logger.error( message ); raise Exception( message )
-    task_manager.update_tracker( key=u'GENERAL', message=u'foundation files ok' )
-    next = task_manager.determine_next_task( sys._getframe().f_code.co_name )
-    job = q.enqueue_call ( func=u'%s' % next, args = (), timeout = 30 )
-    return
+    try:
+        for filepath in [ os.environ.get(u'BELL_CE__BELL_DICT_JSON_PATH'), os.environ.get(u'BELL_CE__AccToPidDict_JSON_PATH') ]:
+            try:
+                assert os.path.exists( filepath )
+            except Exception as e:
+                message = u'Problem finding filepath %s; exception: %s' % ( filepath, unicode(repr(e)) )
+                logger.error( message ); raise Exception( message )
+        task_manager.update_tracker( key=u'GENERAL', message=u'foundation files ok' )
+        next = task_manager.determine_next_task( sys._getframe().f_code.co_name, logger=logger )
+        job = q.enqueue_call ( func=u'%s' % next, args = (), timeout = 30 )
+        logger.info( u'check_foundation_files ok' )
+        return
+    except Exception as e:
+        message = u'Problem checking foundation files; exception: %s' % unicode(repr(e))
+        logger.error( message )
+        raise Exception( message )
