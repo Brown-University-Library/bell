@@ -29,6 +29,8 @@ def determine_next_task( current_task, data=None, logger=None ):
         next_task = u'tasks.task_manager.determine_situation'
     elif current_task == u'determine_situation' and data[u'situation'] == u'create_metadata_only_object':
         next_task = u'tasks.fedora_metadata_only_builder.run__create_fedora_metadata_object'
+    elif current_task == u'create_fedora_metadata_object':
+        next_task = u'tasks.indexer.index_metadata_only'
     else:
         if logger:
             message = u'in task_manager.determine_next_task(); no next task selected for current_task, %s; data, %s' % (current_task, data)
@@ -45,7 +47,7 @@ def populate_queue():
             all_items_dict = json.loads( f.read() )
         for i,(accnum_key, item_dict_value) in enumerate( sorted(all_items_dict[u'items'].items()) ):
             next = determine_next_task( sys._getframe().f_code.co_name, logger=logger )
-            job = q.enqueue_call ( func=u'%s' % next, args = (item_dict_value,), timeout = 30 )
+            job = q.enqueue_call ( func=u'%s' % next, args = (item_dict_value,), timeout=30 )
             logger.info( u'in task_manager.populate_queue(); added accnum %s to queue' % accnum_key )
             if i > int( os.environ.get(u'BELL_TM__POPULATE_QUEUE_LIMIT') ):  # for development
                 logger.debug( u'in task_manager.populate_queue(); breaking after %s' % accnum_key ); break
@@ -70,7 +72,7 @@ def determine_situation( item_dict ):
             situation = u'skip__pid_"%s"_exists' % pid if(pid) else u'create_metadata_only_object'
         update_tracker( key=acc_num, message=u'situation: %s' % situation )
         next = determine_next_task( sys._getframe().f_code.co_name, data={u'situation': situation}, logger=logger )
-        if next: job = q.enqueue_call ( func=u'%s' % next, args = (item_dict,), timeout = 30 )
+        if next: job = q.enqueue_call ( func=u'%s' % next, args = (item_dict,), timeout=30 )
         logger.info( u'in task_manager.determine_situation(); done; acc_num, %s; situation, %s' % (acc_num, situation) )
         return
     except Exception as e:

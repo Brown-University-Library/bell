@@ -5,6 +5,7 @@ import json, os, pprint
 from bdrcmodels.models import CommonMetadataDO
 from eulfedora.server import Repository
 from fedora_parts_builder import IRBuilder, ModsBuilder, RightsBuilder
+from tasks import task_manager
 
 
 class Task( object ):
@@ -93,6 +94,12 @@ class Task( object ):
             #Update logging
             print u'- done.'
             self._update_task_tracker( message=u'new_pid:%s' % new_pid )
+            #
+            #Set next task
+            next = task_manager.determine_next_task( sys._getframe().f_code.co_name, logger=logger )
+            if next:
+                job = q.enqueue_call ( func=u'%s' % next, args = (item_dict, new_pid), timeout=30 )
+            print u'- next task set.'
         except Exception as e:
             error_message = u'- in Task.create_fedora_metadata_object(); exception: %s' % unicode(repr(e))
             # self._update_task_tracker( message=error_message )

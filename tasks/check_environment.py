@@ -20,7 +20,7 @@ def ensure_redis():
     try:
         assert len(r.keys()) > -1  # if redis isn't running this will generate an error
         next = task_manager.determine_next_task( sys._getframe().f_code.co_name, logger=logger )  # passes current function name
-        job = q.enqueue_call ( func=u'%s' % next, args = (), timeout = 30 )
+        job = q.enqueue_call ( func=u'%s' % next, args=(), timeout=30 )
         logger.info( u'redis-check ok' )
         return
     except Exception as e:
@@ -41,7 +41,7 @@ def archive_previous_work():
         with open( archive_file_path, u'w' ) as f:
             f.write( jstring )
         next = task_manager.determine_next_task( sys._getframe().f_code.co_name, logger=logger )
-        job = q.enqueue_call ( func=u'%s' % next, args = (), timeout = 30 )
+        job = q.enqueue_call ( func=u'%s' % next, args=(), timeout=30 )
         logger.info( u'archive_previous_work ok' )
         return
     except Exception as e:
@@ -63,7 +63,7 @@ def ensure_redis_status_dict():
             message = u'%s initialized %s' % ( tracker_key, unicode(datetime.datetime.now()) )
             r.hset( tracker_key, u'GENERAL', json.dumps([message]) )
         next = task_manager.determine_next_task( sys._getframe().f_code.co_name, logger=logger )
-        job = q.enqueue_call ( func=u'%s' % next, args = (), timeout = 30 )
+        job = q.enqueue_call ( func=u'%s' % next, args=(), timeout=30 )
         logger.info( u'ensure_redis_status_dict ok' )
         return
     except Exception as e:
@@ -84,7 +84,7 @@ def check_foundation_files():
                 logger.error( message ); raise Exception( message )
         task_manager.update_tracker( key=u'GENERAL', message=u'foundation files ok' )
         next = task_manager.determine_next_task( sys._getframe().f_code.co_name, logger=logger )
-        job = q.enqueue_call ( func=u'%s' % next, args = (), timeout = 30 )
+        job = q.enqueue_call ( func=u'%s' % next, args=(), timeout=30 )
         logger.info( u'check_foundation_files ok' )
         return
     except Exception as e:
