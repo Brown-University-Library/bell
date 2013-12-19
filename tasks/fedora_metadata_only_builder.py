@@ -103,24 +103,22 @@ class Task( object ):
         """ Saves object to fedora. """
         try:
           new_obj.save()
-          # pass
-          ## update task-log
           self._update_task_tracker( message=u'save_successful' )
-        # except DigitalObjectSaveFailure as f:
-        except Exception as f:
+        except Exception as f:  # except DigitalObjectSaveFailure as f
           error_message = u'error on save: %s' % unicode(repr(f))
           print u'ERROR: %s' % error_message
           self._update_task_tracker( message=error_message )
         return
 
     def _update_task_tracker( self, message ):
-        """ Will update redis 'bell:tracker' entry. """
+        """ Updates redis 'bell:tracker' accession number entry. """
         try:
             from tasks import task_manager
             task_manager.update_tracker( key=self.accession_number, message=message )
         except Exception as e:
             print u'- in fedora_metadata_only_builder.Task._update_task_tracker(); exception: %s' % unicode(repr(e))
             pass
+        return
 
     def _print_settings( self,
         BELL_FMOB__FEDORA_ADMIN_URL,
