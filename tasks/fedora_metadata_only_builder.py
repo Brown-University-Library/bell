@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 import json, os, pprint, sys
-
+import bell_logger
 from bdrcmodels.models import CommonMetadataDO
 from eulfedora.server import Repository
 from fedora_parts_builder import IRBuilder, ModsBuilder, RightsBuilder
@@ -96,9 +96,9 @@ class Task( object ):
             self._update_task_tracker( message=u'new_pid:%s' % new_pid )
             #
             #Set next task
-            next = task_manager.determine_next_task( sys._getframe().f_code.co_name, logger=logger )
-            if next:
-                job = q.enqueue_call ( func=u'%s' % next, args = (item_dict, new_pid), timeout=30 )
+            # next = task_manager.determine_next_task( sys._getframe().f_code.co_name, logger=logger )
+            # if next:
+            #     job = q.enqueue_call ( func=u'%s' % next, args = (item_dict, new_pid), timeout=30 )
             print u'- next task set.'
         except Exception as e:
             error_message = u'- in Task.create_fedora_metadata_object(); exception: %s' % unicode(repr(e))
@@ -146,6 +146,8 @@ class Task( object ):
 
 def run__create_fedora_metadata_object( item_dict ):
     """ Instantiates Task() instance & calls create_fedora_metadata_object(). """
+    logger = bell_logger.setup_logger()
+    logger.info( u'in fedora_metadata_only_builder.run__create_fedora_metadata_object(); starting.' )
     print u'- in fedora_metadata_only_builder.run__create_fedora_metadata_object(); acc_num is: %s' % item_dict[u'calc_accession_id']
     FEDORA_ADMIN_URL=unicode( os.environ.get(u'BELL_FMOB__FEDORA_ADMIN_URL') )
     FEDORA_ADMIN_USERNAME=unicode( os.environ.get(u'BELL_FMOB__FEDORA_ADMIN_USERNAME') )
