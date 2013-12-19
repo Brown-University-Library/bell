@@ -106,10 +106,10 @@ class Task( object ):
             q = Queue( queue_name, connection=Redis() )
             next = task_manager.determine_next_task( sys._getframe().f_code.co_name, logger=logger )
             if next:
-                job = q.enqueue_call ( func=u'%s' % next, args = (item_dict, new_pid), timeout=30 )
+                job = q.enqueue_call ( func=u'%s' % next, args = (item_data_dict, new_pid), timeout=30 )
             print u'- next task set.'
         except Exception as e:
-            error_message = u'- in Task.create_fedora_metadata_object(); exception: %s' % unicode(repr(e))
+            error_message = u'in Task.create_fedora_metadata_object(); exception: %s' % unicode(repr(e))
             self.logger.info( error_message )
             raise Exception( error_message )
 
