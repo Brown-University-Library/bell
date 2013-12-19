@@ -5,6 +5,8 @@ import bell_logger
 from bdrcmodels.models import CommonMetadataDO
 from eulfedora.server import Repository
 from fedora_parts_builder import IRBuilder, ModsBuilder, RightsBuilder
+from redis import Redis
+from rq import Queue
 from tasks import task_manager
 
 
@@ -100,11 +102,12 @@ class Task( object ):
             self._update_task_tracker( message=u'new_pid:%s' % new_pid )
             #
             #Set next task
-            # next = task_manager.determine_next_task( sys._getframe().f_code.co_name, logger=logger )
-            # if next:
-            #     job = q.enqueue_call ( func=u'%s' % next, args = (item_dict, new_pid), timeout=30 )
+            queue_name = os.environ.get(u'BELL_QUEUE_NAME')
+            q = Queue( queue_name, connection=Redis() )
+            next = task_manager.determine_next_task( sys._getframe().f_code.co_name, logger=logger )
+            if next:
+                job = q.enqueue_call ( func=u'%s' % next, args = (item_dict, new_pid), timeout=30 )
             print u'- next task set.'
-            1/0
         except Exception as e:
             error_message = u'- in Task.create_fedora_metadata_object(); exception: %s' % unicode(repr(e))
             self.logger.info( error_message )
