@@ -59,30 +59,19 @@ def populate_queue():
 
 
 def determine_situation( item_dict ):
-    """ Examines item dict and updates next task.
+    """ Examines item dict after populate_queue() and updates next task.
         TODO: Only update tracker if 'save_successful' doesn't exist. """
     logger = bell_logger.setup_logger();
     try:
         acc_num = item_dict[u'calc_accession_id']
-        situation = u'init'
-        if _check_recently_processed( acc_num, logger ):
-            situation = u'skip__already_processed'
-        else:
-            with open( os.environ.get(u'BELL_TM__PID_DICT_JSON_PATH') ) as f:  # check for pid
-                full_pid_data_dict = json.loads( f.read() )
-            print u'in task_manager.determine_situation(); acc_num, %s; full_pid_data_dict-pid.keys(), %s' % (acc_num, full_pid_data_dict.keys())
-            pid = full_pid_data_dict[u'final_accession_pid_dict'][acc_num][u'pid']
-            logger.info( u'in task_manager.determine_situation(); acc_num, %s; found-pid, %s' % (acc_num, pid) )
-            if pid == None:
-                situation = u'create_metadata_only_object'
-            else:
-                situation = u'skip__pid_"%s"_exists' % pid
-        #
+        situation = None
+        if _check_recently_processed( acc_num, logger ): situation = u'skip__already_processed'
+        if not situation:
+            pid = _check_pid( acc_num, logger )
+            situation = u'skip__pid_"%s"_exists' % pid if(pid) else u'create_metadata_only_object'
         update_tracker( key=acc_num, message=u'situation: %s' % situation )
         next = determine_next_task( sys._getframe().f_code.co_name, data={u'situation': situation}, logger=logger )
-        if next:
-            job = q.enqueue_call ( func=u'%s' % next, args = (item_dict,), timeout = 30 )
-        #
+        if next: job = q.enqueue_call ( func=u'%s' % next, args = (item_dict,), timeout = 30 )
         logger.info( u'in task_manager.determine_situation(); done; acc_num, %s; situation, %s' % (acc_num, situation) )
         return
     except Exception as e:
@@ -102,6 +91,16 @@ def _check_recently_processed( accession_number_key, logger=None ):
             return_val = True
     logger.info( u'in task_manager._check_recently_processed(); acc_num, %s; return_val, %s' % (accession_number_key, return_val) )
     return return_val
+
+
+def _check_pid( acc_num, logger=None ):
+    """ Checks if accession number has a pid and returns it if so.
+        Called by determine_situation() """
+    with open( os.environ.get(u'BELL_TM__PID_DICT_JSON_PATH') ) as f:
+        full_pid_data_dict = json.loads( f.read() )
+    pid = full_pid_data_dict[u'final_accession_pid_dict'][acc_num][u'pid']
+    logger.info( u'in task_manager._check_pid(); pid, %s' % pid )
+    return pid
 
 
 def update_tracker( key, message ):
