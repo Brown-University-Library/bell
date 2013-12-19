@@ -11,7 +11,7 @@ class Task( object ):
     """ Handles creation of a fedora metadata-only object. """
 
     def __init__( self ):
-        self.accession_number = None  # updated after mods is built; used for logging.
+        self.accession_number = None
 
     def create_fedora_metadata_object( self,
         FEDORA_ADMIN_URL, FEDORA_ADMIN_USERNAME, FEDORA_ADMIN_PASSWORD,
@@ -64,7 +64,6 @@ class Task( object ):
             print u'- rights object assigned.'
             #
             #Build ir object
-            #Note: builds via ???
             ir_object = ir_builder.build_ir_object()
             print u'- ir object built.'
             #

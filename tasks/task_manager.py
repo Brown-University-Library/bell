@@ -59,8 +59,7 @@ def populate_queue():
 
 
 def determine_situation( item_dict ):
-    """ Examines item dict after populate_queue() and updates next task.
-        TODO: Only update tracker if 'save_successful' doesn't exist. """
+    """ Examines item dict after populate_queue() and updates next task. """
     logger = bell_logger.setup_logger();
     try:
         acc_num = item_dict[u'calc_accession_id']
