@@ -13,16 +13,20 @@ class Task( object ):
 
     def __init__( self ):
         self.accession_number = None
+        self.logger = None
 
     def create_fedora_metadata_object( self,
         FEDORA_ADMIN_URL, FEDORA_ADMIN_USERNAME, FEDORA_ADMIN_PASSWORD,
         COLLECTION_PID,
-        item_data_dict, mods_schema_path
+        item_data_dict, mods_schema_path, logger=None
         ):
         """ CONTROLLER
             Note: item_data_dict is a json entry from foundation/acc_num_to_data.py json """
         print u'starting try...'
         try:
+            #Store logger if exists
+            if logger:
+                self.logger = logger
             #Store accession number
             self.accession_number = item_data_dict[u'calc_accession_id']  # for logging
             # print u'- in fedora_metadata_only_builder.Task.create_fedora_metadata_object(); accession_number, %s' % self.accession_number
@@ -100,9 +104,10 @@ class Task( object ):
             # if next:
             #     job = q.enqueue_call ( func=u'%s' % next, args = (item_dict, new_pid), timeout=30 )
             print u'- next task set.'
+            1/0
         except Exception as e:
             error_message = u'- in Task.create_fedora_metadata_object(); exception: %s' % unicode(repr(e))
-            # self._update_task_tracker( message=error_message )
+            self.logger.info( error_message )
             raise Exception( error_message )
 
     def _save_to_fedora( self, new_obj ):
@@ -158,7 +163,7 @@ def run__create_fedora_metadata_object( item_dict ):
     task.create_fedora_metadata_object(
         FEDORA_ADMIN_URL, FEDORA_ADMIN_USERNAME, FEDORA_ADMIN_PASSWORD,
         COLLECTION_PID,
-        item_dict, mods_schema_path
+        item_dict, mods_schema_path, logger
         )
     print u'- in fedora_metadata_only_builder.run__create_fedora_metadata_object(); acc_num is: %s; item ingested' % item_dict[u'calc_accession_id']
     return
