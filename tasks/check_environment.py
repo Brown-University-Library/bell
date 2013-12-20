@@ -36,8 +36,7 @@ def archive_previous_work():
         bell_dir = unicode( os.environ.get(u'BELL_LOG_DIR') )
         now_string = unicode( datetime.datetime.now() ).replace( u' ', u'_' )
         archive_file_path = u'%s/%s.archive' % ( bell_dir, now_string )
-        d = r.hgetall( u'bell:tracker' )
-        jstring = json.dumps( d, sort_keys=True, indent=2 )
+        jstring = _convert_tracker_to_dict()
         with open( archive_file_path, u'w' ) as f:
             f.write( jstring )
         next = task_manager.determine_next_task( sys._getframe().f_code.co_name, logger=logger )
@@ -48,6 +47,17 @@ def archive_previous_work():
         message = u'Problem archiving previous work; exception: %s' % unicode(repr(e))
         logger.error( message )
         raise Exception( message )
+
+
+def _convert_tracker_to_dict():
+    """ Returns json from bell:tracker. """
+    dct = r.hgetall( u'bell:tracker' )
+    dct2 = {}
+    for key, value in dct.items():
+        value_data = json.loads( value )
+        dct2[key] = value_data
+    jstring = json.dumps( dct2, sort_keys=True, indent=2 )
+    return jstring
 
 
 def ensure_redis_status_dict():
