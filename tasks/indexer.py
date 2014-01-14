@@ -5,7 +5,7 @@ import bell_logger
 """ Handles custom solr indexing after ingestion. """
 
 
-REQUIRED_KEYS = [  # used by _validate_json()
+REQUIRED_KEYS = [  # used by _validate_solr_dict()
     u'accession_number_original',
     u'author_birth_date',
     u'author_date',
@@ -42,30 +42,24 @@ def build_metadata_only_solr_dict( data ):
         Called after fedora_metadata_only_builder.run__create_fedora_metadata_object() task. """
     assert sorted( data.keys() ) == [ u'item_data', u'pid' ], Exception( u'- in indexer.build_metadata_only_solr_dict(); unexpected data.keys(): %s' % sorted(data.keys()) )
     logger = bell_logger.setup_logger()
-    logger.info( u'in indexer.index_metadata_only(); acc_num , %s; pid, %s; processing will go here.' % (
-        data[u'item_data'][u'calc_accession_id'], data[u'pid') )
-    original_dict = data[u'item_dict']
+    original_dict = data[u'item_data']
     solr_dict = {}
     solr_dict = _set_accession_number_original( original_dict, solr_dict )
     solr_dict = _set_author_dates( original_dict, solr_dict )
     solr_dict = _set_author_description( original_dict, solr_dict )
     solr_dict = _set_author_names( original_dict, solr_dict )
     solr_dict = _set_height_width_depth( original_dict, solr_dict )
-    solr_dict = _set_image_urls( original_dict, solr_dict, flag=u'metadata_only' )
+    solr_dict = _set_image_urls( solr_dict, flag=u'metadata_only' )
     solr_dict = _set_locations( original_dict, solr_dict )
     solr_dict = _set_note_provenance( original_dict, solr_dict )
     solr_dict = _set_object_dates( original_dict, solr_dict )
     solr_dict = _set_physical_extent( original_dict, solr_dict )
     solr_dict = _set_physical_descriptions( original_dict, solr_dict )
     solr_dict = _set_title( original_dict, solr_dict )
-
     all_good_flag = _validate_solr_dict( solr_dict )
-    logger.info( u'in indexer.build_metadata_only_solr_dict(); all_good_flag is %s; solr_dict is %s' % (
-        (all_good_flag, solr_dict) )
-
-    ## get next task ( 'index' or 'update_tracker_with_failure' )
-
-    return
+    logger.info( u'in indexer.build_metadata_only_solr_dict(); all_good_flag is %s; solr_dict is %s' % (all_good_flag, solr_dict) )
+    ## get next task ( 'index' or 'update_tracker_with_failure' ) and enqueue with solr_dict data
+    return solr_dict
 
 
 def _set_accession_number_original( original_dict, solr_dict ):
@@ -119,9 +113,9 @@ def _set_image_urls( solr_dict, pid=None, flag=u'metadata_only' ):
     if flag == u'metadata_only':
         pass
     else:
-        assert pid not None
+        assert pid != None
         item_api_dict = _set_image_urls__get_item_api_data( pid )
-        if item_api_dict not None:
+        if item_api_dict != None:
             solr_dict[u'jp2_image_url'] = _set_image_urls__get_jp2_url( item_api_dict )
             solr_dict[u'master_image_url'] = _set_image_urls__get_master_image_url( item_api_dict )
     return solr_dict
@@ -168,7 +162,7 @@ def _set_locations( original_dict, solr_dict ):
     """ Returns location_physical_location & location_shelf_locator. """
     solr_dict[u'location_physical_location'] = u'Bell Art Gallery'
     solr_dict[u'location_shelf_locator'] = u''
-    if original_dict[u'MEDIA::object_medium_name'] not None:
+    if original_dict[u'MEDIA::object_medium_name'] != None:
       solr_dict[u'location_shelf_locator'] = original_dict[u'MEDIA::object_medium_name']
     return solr_dict
 
@@ -176,7 +170,7 @@ def _set_locations( original_dict, solr_dict ):
 def _set_note_provenance( original_dict, solr_dict ):
     """ Updates note_provenance. """
     solr_dict[u'note_provenance'] = u''
-    if original_dict[u'credit_line'] not None:
+    if original_dict[u'credit_line'] != None:
       solr_dict[u'note_provenance'] = original_dict[u'credit_line']
     return solr_dict
 
@@ -186,11 +180,11 @@ def _set_object_dates( original_dict, solr_dict ):
     solr_dict[u'object_date'] = u''
     solr_dict[u'origin_datecreated_start'] = u''
     solr_dict[u'origin_datecreated_end'] = u''
-    if original_dict[u'object_date'] not None:
+    if original_dict[u'object_date'] != None:
         solr_dict[u'object_date'] = original_dict[u'object_date']
-    if original_dict[u'object_year_start'] not None:
+    if original_dict[u'object_year_start'] != None:
         solr_dict[u'origin_datecreated_start'] = original_dict[u'object_year_start']
-    if original_dict[u'object_year_end'] not None:
+    if original_dict[u'object_year_end'] != None:
         solr_dict[u'origin_datecreated_end'] = original_dict[u'object_year_end']
     return solr_dict
 
@@ -224,13 +218,13 @@ def _set_physical_descriptions( original_dict, solr_dict ):
     """ Updates physical_description_material, physical_description_technique. """
     solr_dict[u'physical_description_material'] = [ u'' ]
     solr_dict[u'physical_description_technique'] = [ u'' ]
-    if original_dict[u'object_medium'] not None:
+    if original_dict[u'object_medium'] != None:
         solr_dict[u'physical_description_material'] = [ original_dict[u'object_medium'] ]
-    if original_dict[u'MEDIA_SUB::sub_media_name'] not None:
+    if original_dict[u'MEDIA_SUB::sub_media_name'] != None:
         if type( original_dict[u'MEDIA_SUB::sub_media_name'] ) == unicode:
             solr_dict[u'physical_description_technique'] = [ original_dict[u'MEDIA_SUB::sub_media_name'] ]
         elif type( original_dict[u'MEDIA_SUB::sub_media_name'] ) == list:
-            cleaned_list = _ensure_list_unicode_values__handle_type_list( original_dict[u'MEDIA_SUB::sub_media_name'] ):
+            cleaned_list = _ensure_list_unicode_values__handle_type_list( original_dict[u'MEDIA_SUB::sub_media_name'] )
             solr_dict[u'physical_description_technique'] = cleaned_list
     return solr_dict
 
@@ -238,8 +232,8 @@ def _set_physical_descriptions( original_dict, solr_dict ):
 def _set_title( original_dict, solr_dict ):
     """ Updates title. """
     solr_dict[u'object_title'] = u''
-    if original_dict[u'title'] not None:
-        solr_dict[u'object_title'] = original_dict[u'title']
+    if original_dict[u'object_title'] != None:
+        solr_dict[u'object_title'] = original_dict[u'object_title']
     return solr_dict
 
 

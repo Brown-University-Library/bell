@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-import logging, os
+import logging, logging.handlers, os
 
 def setup_logger():
     """ Configures a logger to write to console & <filename>. """
