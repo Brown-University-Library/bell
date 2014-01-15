@@ -102,13 +102,11 @@ class Task( object ):
             self._update_task_tracker( message=u'new_pid:%s' % new_pid )
             #
             #Set next task
-            queue_name = os.environ.get(u'BELL_QUEUE_NAME')
-            q = Queue( queue_name, connection=Redis() )
-            next = task_manager.determine_next_task( sys._getframe().f_code.co_name, logger=logger )
-            if next:
-                # job = q.enqueue_call ( func=u'%s' % next, args = (item_data_dict, new_pid), timeout=30 )
-                data = { u'item_data': item_data_dict, u'pid': new_pid  }
-                job = q.enqueue_call ( func=u'%s' % next, args = (data), timeout=30 )
+            task_manager.determine_next_task(
+                unicode(sys._getframe().f_code.co_name),
+                data={ u'item_data': item_data_dict, u'pid': new_pid },
+                logger=logger
+                )
             print u'- next task set.'
         except Exception as e:
             error_message = u'in Task.create_fedora_metadata_object(); exception: %s' % unicode(repr(e))

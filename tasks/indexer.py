@@ -1,8 +1,10 @@
 # -*- coding: utf-8 -*-
 
 import bell_logger
+from mysolr import Solr
 
-""" Handles custom solr indexing after ingestion. """
+""" Handles custom solr indexing.
+    Typically auto-called after ingestion. """
 
 
 REQUIRED_KEYS = [  # used by _validate_solr_dict()
@@ -56,20 +58,46 @@ def build_metadata_only_solr_dict( data ):
     solr_dict = _set_physical_extent( original_dict, solr_dict )
     solr_dict = _set_physical_descriptions( original_dict, solr_dict )
     solr_dict = _set_title( original_dict, solr_dict )
-    all_good_flag = _validate_solr_dict( solr_dict )
+    all_good = _validate_solr_dict( solr_dict )
     logger.info( u'in indexer.build_metadata_only_solr_dict(); all_good_flag is %s; solr_dict is %s' % (all_good_flag, solr_dict) )
-    ## get next task ( 'index' or 'update_tracker_with_failure' ) and enqueue with solr_dict data
-    return solr_dict
+    if all_good:
+        task_manager.determine_next_task(
+            unicode(sys._getframe().f_code.co_name),
+            data={ u'solr_dict': solr_dict },
+            logger=logger
+            )
+    else:
+        raise Exception( u'problem preparing solr_dict, check logs' )  # should move job to failed queue
+    return solr_dict  # returned value only for testing
+
+
+def post_to_solr( data ):
+    """ Posts solr_dict to solr. """
+    try:
+        assert data.keys() == u'solr_dict'
+        logger = bell_logger.setup_logger()
+        solr_dict = data[u'solr_dict']
+        solr_root_url = os.environ.get( u'BELL_I_SOLR_ROOT' )
+        solr = Solr( solr_root_url )
+        response = solr.update( [solr_dict], u'xml', commit=True )  # 'xml' param converts json to xml for post; required for our old version of solr
+        status_message = u'ok_post_ok' if (response.status == 200) else u'post_problem'
+        logger.info( u'in tasks.indexer.post_to_solr(); accession_number, %s; status_message, %s' % (solr_dict[u'accession_number_original'], status_message) )
+        # task_manager.determine_next_task( current_task=unicode( sys._getframe().f_code.co_name ), data={ u'solr_dict': solr_dict }, logger=logger )
+    except Exception as e:
+        logger.error( u'in tasks.indexer.post_to_solr(); exception: %s' % unicode(repr(e)) )
+        raise Exception( u'in tasks.indexer.post_to_solr(); error on post logged' )
 
 
 def _set_accession_number_original( original_dict, solr_dict ):
-    """ Sets accession_number. """
+    """ Sets accession_number.
+        Called by build_metadata_only_solr_dict() """
     solr_dict[u'accession_number_original'] = original_dict[u'calc_accession_id']
     return solr_dict
 
 
 def _set_author_dates( original_dict, solr_dict ):
-    """ Sets author dates. """
+    """ Sets author dates.
+        Called by build_metadata_only_solr_dict() """
     solr_dict[u'author_birth_date'] = original_dict[u'ARTISTS::artist_birth_year']
     solr_dict[u'author_death_date'] = original_dict[u'ARTISTS::artist_death_year']
     solr_dict[u'author_date'] = original_dict[u'ARTISTS::artist_lifetime']
@@ -78,14 +106,16 @@ def _set_author_dates( original_dict, solr_dict ):
 
 
 def _set_author_description( original_dict, solr_dict ):
-    """ Sets author descriptions. """
+    """ Sets author descriptions.
+        Called by build_metadata_only_solr_dict() """
     solr_dict[u'author_description'] = original_dict[u'ARTISTS::calc_nationality']
     solr_dict = _ensure_list_unicode_values( solr_dict, [u'author_description'] )
     return solr_dict
 
 
 def _set_author_names( original_dict, solr_dict ):
-    """ Sets author names. """
+    """ Sets author names.
+        Called by build_metadata_only_solr_dict() """
     solr_dict[u'author_names_first'] = original_dict[u'ARTISTS::artist_first_name']
     solr_dict[u'author_names_middle'] = original_dict[u'ARTISTS::artist_middle_name']
     solr_dict[u'author_names_last'] = original_dict[u'ARTISTS::artist_last_name']
@@ -96,7 +126,8 @@ def _set_author_names( original_dict, solr_dict ):
 
 
 def _set_height_width_depth( original_dict, solr_dict ):
-    """ Sets item dimensions. """
+    """ Sets item dimensions.
+        Called by build_metadata_only_solr_dict() """
     target_keys = [ u'image_width', u'image_height', u'object_width', u'object_height', u'object_depth' ]
     for entry in target_keys:
         if original_dict[entry] == None:
@@ -107,7 +138,8 @@ def _set_height_width_depth( original_dict, solr_dict ):
 
 
 def _set_image_urls( solr_dict, pid=None, flag=u'metadata_only' ):
-    """  Sets jp2 and master image-url info. """
+    """  Sets jp2 and master image-url info.
+        Called by build_metadata_only_solr_dict() """
     solr_dict[u'jp2_image_url'] = u''
     solr_dict[u'master_image_url'] = u''
     if flag == u'metadata_only':
@@ -159,7 +191,8 @@ def _set_image_urls__get_master_image_url( item_api_dict ):
 
 
 def _set_locations( original_dict, solr_dict ):
-    """ Returns location_physical_location & location_shelf_locator. """
+    """ Returns location_physical_location & location_shelf_locator.
+        Called by build_metadata_only_solr_dict() """
     solr_dict[u'location_physical_location'] = u'Bell Art Gallery'
     solr_dict[u'location_shelf_locator'] = u''
     if original_dict[u'MEDIA::object_medium_name'] != None:
@@ -168,7 +201,8 @@ def _set_locations( original_dict, solr_dict ):
 
 
 def _set_note_provenance( original_dict, solr_dict ):
-    """ Updates note_provenance. """
+    """ Updates note_provenance.
+        Called by build_metadata_only_solr_dict() """
     solr_dict[u'note_provenance'] = u''
     if original_dict[u'credit_line'] != None:
       solr_dict[u'note_provenance'] = original_dict[u'credit_line']
@@ -176,7 +210,8 @@ def _set_note_provenance( original_dict, solr_dict ):
 
 
 def _set_object_dates( original_dict, solr_dict ):
-    """ Updates object_date, origin_datecreated_start, origin_datecreated_end. """
+    """ Updates object_date, origin_datecreated_start, origin_datecreated_end.
+        Called by build_metadata_only_solr_dict() """
     solr_dict[u'object_date'] = u''
     solr_dict[u'origin_datecreated_start'] = u''
     solr_dict[u'origin_datecreated_end'] = u''
@@ -190,7 +225,8 @@ def _set_object_dates( original_dict, solr_dict ):
 
 
 def _set_physical_extent( original_dict, solr_dict ):
-    """ Updates physical_description_extent, which is a display field based on the five dimension fields. """
+    """ Updates physical_description_extent, which is a display field based on the five dimension fields.
+        Called by build_metadata_only_solr_dict() """
     ( height, width, depth ) = _set_physical_extent_prep( original_dict )
     solr_dict[u'physical_description_extent'] = [ u'' ]
     if height and width and depth:
@@ -215,7 +251,8 @@ def  _set_physical_extent_prep( original_dict ):
 
 
 def _set_physical_descriptions( original_dict, solr_dict ):
-    """ Updates physical_description_material, physical_description_technique. """
+    """ Updates physical_description_material, physical_description_technique.
+        Called by build_metadata_only_solr_dict() """
     solr_dict[u'physical_description_material'] = [ u'' ]
     solr_dict[u'physical_description_technique'] = [ u'' ]
     if original_dict[u'object_medium'] != None:
@@ -230,7 +267,8 @@ def _set_physical_descriptions( original_dict, solr_dict ):
 
 
 def _set_title( original_dict, solr_dict ):
-    """ Updates title. """
+    """ Updates title.
+        Called by build_metadata_only_solr_dict() """
     solr_dict[u'object_title'] = u''
     if original_dict[u'object_title'] != None:
         solr_dict[u'object_title'] = original_dict[u'object_title']
@@ -242,7 +280,8 @@ def _validate_solr_dict( solr_dict ):
         Checks that required keys are present.
         Checks that there are no None values.
         Checks that any list values are not empty.
-        Checks that no members of a list value are of NoneType. """
+        Checks that no members of a list value are of NoneType.
+        Called by build_metadata_only_solr_dict() """
     try:
         for required_key in REQUIRED_KEYS:
             assert required_key in solr_dict.keys(), Exception( u'ERROR; missing required key: %s' % required_key )
@@ -262,7 +301,8 @@ def _validate_solr_dict( solr_dict ):
 
 def _ensure_list_unicode_values( solr_dict, fields_to_check ):
     """ Returns solr_dict updated to ensure the values for the specified dictionary-fields_to_check
-        are _always_ lists of unicode values. """
+        are _always_ lists of unicode values.
+        Called by _set_author_dates(), _set_author_description(), _set_author_names() """
     solr_dict_copy = solr_dict.copy()
     for key in fields_to_check:
         value = solr_dict[key]

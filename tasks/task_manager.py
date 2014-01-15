@@ -14,7 +14,9 @@ r = redis.StrictRedis( host='localhost', port=6379, db=0 )
 
 
 def determine_next_task( current_task, data=None, logger=None ):
-    """ Returns next task. """
+    """ Returns next task. TODO: 'Calls' next task.
+        Intended to handle full flow of normal bell processing. """
+    logger.info( u'in task_manager.determine_next_task(); current_task: %s' % current_task )
     next_task = None
     if current_task == u'ensure_redis':
         next_task = u'tasks.check_environment.archive_previous_work'
@@ -29,18 +31,31 @@ def determine_next_task( current_task, data=None, logger=None ):
         next_task = u'tasks.task_manager.determine_situation'
     elif current_task == u'determine_situation' and data[u'situation'] == u'create_metadata_only_object':
         next_task = u'tasks.fedora_metadata_only_builder.run__create_fedora_metadata_object'
+
     elif current_task == u'create_fedora_metadata_object':
-        next_task = u'tasks.indexer.index_metadata_only'
+        assert sorted( data.keys() ) == [ u'item_data', u'pid' ]
+        next_task = u'tasks.indexer.build_metadata_only_solr_dict'
+
+    elif current_task == u'build_metadata_only_solr_dict':
+        assert sorted( data.keys() ) == [ u'solr_dict' ]
+        next_task = u'tasks.indexer.post_to_solr'
+
     else:
-        if logger:
-            message = u'in task_manager.determine_next_task(); no next task selected for current_task, %s; data, %s' % (current_task, data)
-            logger.info( message )
+        message = u'in task_manager.determine_next_task(); no next task selected for current_task, %s; data, %s' % (current_task, data)
+        logger.info( message )
         next_task = None
+
+    ## TODO: have this make _all_ enqueue calls!
+    logger.info( u'in task_manager.determine_next_task(); next_task: %s' % next_task )
+    if next_task:
+        if current_task in [ u'create_fedora_metadata_object', u'build_metadata_only_solr_dict' ]:
+            job = q.enqueue_call ( func=u'%s' % next_task, args = (data,), timeout=30 )
+
     return next_task
 
 
 def populate_queue():
-    """ Puts the bell items on the queue. """
+    """ Puts individual bell items on the queue. """
     logger = bell_logger.setup_logger()
     try:
         with open( os.environ.get(u'BELL_CE__BELL_DICT_JSON_PATH') ) as f:

@@ -9,7 +9,7 @@ from tasks import task_manager
 
 
 r = redis.StrictRedis( host='localhost', port=6379, db=0 )
-queue_name = os.environ.get(u'BELL_QUEUE_NAME')
+queue_name = os.environ.get( u'BELL_QUEUE_NAME' )
 q = Queue( queue_name, connection=Redis() )
 
 
