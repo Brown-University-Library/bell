@@ -16,9 +16,9 @@ FULL_QUEUE_NAME = u'rq:queue:%s' % TARGET_QUEUE
 print u'- full-queue-name is: %s' % FULL_QUEUE_NAME; print u'--'
 
 
-# check that failed-queue exists
-if rds.type( FULL_QUEUE_NAME ) == u'none':  # interesting: failed-queue will disappear if all it's members are deleted
-  print u'- queue `%s` appears to be empty' % FULL_QUEUE_NAME; print u'--'
+# check whether queue exists
+if rds.type( FULL_QUEUE_NAME ) == u'none':
+  print u'- queue `%s` does not exist' % FULL_QUEUE_NAME; print u'--'
   sys.exit()
 
 # get members
@@ -36,12 +36,15 @@ for entry in members:
 
   # ensure target-queue-job really exists
   if rds.type( job_id ) == u'none':  # job was already deleted (i.e. interactive redis-cli experimentation), so remove it from target-queue-list
-    print u'- job_id  was not found, so entry was removed from queue'
-    rds.lrem( FULL_QUEUE_NAME, entry, num=0 )  # note count and value-name are reversed from redis-cli syntax... (redis-cli) > lrem "rq:queue:NAME" 0 "06d0a46e-21ec-4fd3-92f8-f941f32101c4"
+    print u'- job_id  was not found; entry still removed from queue'
+  else:
+    # remove the job
+    rds.delete( job_id )
+    print u'- job id removed'
 
-  # remove the job
-  rds.delete( job_id )
-  print u'- job id removed'
+  # remove the queue's reference
+  rds.lrem( FULL_QUEUE_NAME, entry, num=0 )  # note count and value-name are reversed from redis-cli syntax... (redis-cli) > lrem "rq:queue:NAME" 0 "06d0a46e-21ec-4fd3-92f8-f941f32101c4"
+  print u'- job reference removed from queue'
 
   print u'- length of target-queue is now: %s' % rds.llen( FULL_QUEUE_NAME ); print u'--'
 

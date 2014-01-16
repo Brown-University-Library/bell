@@ -152,7 +152,7 @@ class Task( object ):
     # end class Task()
 
 
-def run__create_fedora_metadata_object( item_dict ):
+def run__create_fedora_metadata_object( data ):
     """ Instantiates Task() instance & calls create_fedora_metadata_object(). """
     logger = bell_logger.setup_logger()
     logger.info( u'in fedora_metadata_only_builder.run__create_fedora_metadata_object(); starting.' )
@@ -166,7 +166,7 @@ def run__create_fedora_metadata_object( item_dict ):
     task.create_fedora_metadata_object(
         FEDORA_ADMIN_URL, FEDORA_ADMIN_USERNAME, FEDORA_ADMIN_PASSWORD,
         COLLECTION_PID,
-        item_dict, mods_schema_path, logger
+        data[u'item_dict'], mods_schema_path, logger
         )
     print u'- in fedora_metadata_only_builder.run__create_fedora_metadata_object(); acc_num is: %s; item ingested' % item_dict[u'calc_accession_id']
     return

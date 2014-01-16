@@ -16,20 +16,28 @@ r = redis.StrictRedis( host='localhost', port=6379, db=0 )
 def determine_next_task( current_task, data=None, logger=None ):
     """ Returns next task. TODO: 'Calls' next task.
         Intended to handle full flow of normal bell processing. """
+
     logger.info( u'in task_manager.determine_next_task(); current_task: %s' % current_task )
     next_task = None
+
     if current_task == u'ensure_redis':
         next_task = u'tasks.check_environment.archive_previous_work'
+
     elif current_task == u'archive_previous_work':
         next_task = u'tasks.check_environment.ensure_redis_status_dict'
+
     elif current_task == u'ensure_redis_status_dict':
         next_task = u'tasks.check_environment.check_foundation_files'
+
     elif current_task == u'check_foundation_files':
         next_task = u'tasks.task_manager.populate_queue'
+
     ## concurrent-processing starts here ##
     elif current_task == u'populate_queue':
         next_task = u'tasks.task_manager.determine_situation'
+
     elif current_task == u'determine_situation' and data[u'situation'] == u'create_metadata_only_object':
+        assert data.keys() == [u'item_dict']
         next_task = u'tasks.fedora_metadata_only_builder.run__create_fedora_metadata_object'
 
     elif current_task == u'create_fedora_metadata_object':
@@ -37,7 +45,7 @@ def determine_next_task( current_task, data=None, logger=None ):
         next_task = u'tasks.indexer.build_metadata_only_solr_dict'
 
     elif current_task == u'build_metadata_only_solr_dict':
-        assert sorted( data.keys() ) == [ u'solr_dict' ]
+        assert data.keys() == [ u'solr_dict' ]
         next_task = u'tasks.indexer.post_to_solr'
 
     else:
@@ -48,8 +56,7 @@ def determine_next_task( current_task, data=None, logger=None ):
     ## TODO: have this make _all_ enqueue calls!
     logger.info( u'in task_manager.determine_next_task(); next_task: %s' % next_task )
     if next_task:
-        if current_task in [ u'create_fedora_metadata_object', u'build_metadata_only_solr_dict' ]:
-            job = q.enqueue_call ( func=u'%s' % next_task, args=(data,), timeout=30 )
+        job = q.enqueue_call( func=u'%s' % next_task, args=(data,), timeout=30 )
 
     return next_task
 
@@ -86,14 +93,33 @@ def determine_situation( item_dict ):
             pid = _check_pid( acc_num, logger )
             situation = u'skip__pid_"%s"_exists' % pid if(pid) else u'create_metadata_only_object'
         update_tracker( key=acc_num, message=u'situation: %s' % situation )
-        next = determine_next_task( sys._getframe().f_code.co_name, data={u'situation': situation}, logger=logger )
-        if next: job = q.enqueue_call ( func=u'%s' % next, args = (item_dict,), timeout=30 )
+        determine_next_task( sys._getframe().f_code.co_name, data={u'item_dict': item_dict, u'situation': situation}, logger=logger )
         logger.info( u'in task_manager.determine_situation(); done; acc_num, %s; situation, %s' % (acc_num, situation) )
         return
     except Exception as e:
         message = u'Problem in determine_situation(); exception is: %s' % unicode(repr(e))
         logger.error( message )
         raise Exception( message )
+
+# def determine_situation( item_dict ):
+#     """ Examines item dict after populate_queue() and updates next task. """
+#     logger = bell_logger.setup_logger();
+#     try:
+#         acc_num = item_dict[u'calc_accession_id']
+#         situation = None
+#         if _check_recently_processed( acc_num, logger ): situation = u'skip__already_processed'
+#         if not situation:
+#             pid = _check_pid( acc_num, logger )
+#             situation = u'skip__pid_"%s"_exists' % pid if(pid) else u'create_metadata_only_object'
+#         update_tracker( key=acc_num, message=u'situation: %s' % situation )
+#         next = determine_next_task( sys._getframe().f_code.co_name, data={u'situation': situation}, logger=logger )
+#         if next: job = q.enqueue_call ( func=u'%s' % next, args = (item_dict,), timeout=30 )
+#         logger.info( u'in task_manager.determine_situation(); done; acc_num, %s; situation, %s' % (acc_num, situation) )
+#         return
+#     except Exception as e:
+#         message = u'Problem in determine_situation(); exception is: %s' % unicode(repr(e))
+#         logger.error( message )
+#         raise Exception( message )
 
 
 def _check_recently_processed( accession_number_key, logger=None ):
