@@ -49,7 +49,7 @@ def determine_next_task( current_task, data=None, logger=None ):
     logger.info( u'in task_manager.determine_next_task(); next_task: %s' % next_task )
     if next_task:
         if current_task in [ u'create_fedora_metadata_object', u'build_metadata_only_solr_dict' ]:
-            job = q.enqueue_call ( func=u'%s' % next_task, args = (data,), timeout=30 )
+            job = q.enqueue_call ( func=u'%s' % next_task, args=(data,), timeout=30 )
 
     return next_task
 

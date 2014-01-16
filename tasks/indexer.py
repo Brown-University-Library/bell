@@ -1,7 +1,9 @@
 # -*- coding: utf-8 -*-
 
+import os, sys
 import bell_logger
 from mysolr import Solr
+from tasks import task_manager
 
 """ Handles custom solr indexing.
     Typically auto-called after ingestion. """
@@ -23,7 +25,7 @@ REQUIRED_KEYS = [  # used by _validate_solr_dict()
     u'location_physical_location',
     u'location_shelf_locator',
     u'master_image_url',
-    u'mods',
+    # u'mods',  # no longer needed
     u'note_provenance',
     u'object_date',
     u'object_depth',
@@ -46,7 +48,9 @@ def build_metadata_only_solr_dict( data ):
     logger = bell_logger.setup_logger()
     original_dict = data[u'item_data']
     solr_dict = {}
-    solr_dict = _set_accession_number_original( original_dict, solr_dict )
+    # solr_dict = _set_accession_number_original( original_dict, solr_dict )
+    solr_dict[u'accession_number_original'] = original_dict[u'calc_accession_id']
+    solr_dict[u'pid'] = data[u'pid']
     solr_dict = _set_author_dates( original_dict, solr_dict )
     solr_dict = _set_author_description( original_dict, solr_dict )
     solr_dict = _set_author_names( original_dict, solr_dict )
@@ -58,8 +62,8 @@ def build_metadata_only_solr_dict( data ):
     solr_dict = _set_physical_extent( original_dict, solr_dict )
     solr_dict = _set_physical_descriptions( original_dict, solr_dict )
     solr_dict = _set_title( original_dict, solr_dict )
-    all_good = _validate_solr_dict( solr_dict )
-    logger.info( u'in indexer.build_metadata_only_solr_dict(); all_good_flag is %s; solr_dict is %s' % (all_good_flag, solr_dict) )
+    all_good = _validate_solr_dict( solr_dict, logger )
+    logger.info( u'in indexer.build_metadata_only_solr_dict(); all_good_flag is %s; solr_dict is %s' % (all_good, solr_dict) )
     if all_good:
         task_manager.determine_next_task(
             unicode(sys._getframe().f_code.co_name),
@@ -73,9 +77,9 @@ def build_metadata_only_solr_dict( data ):
 
 def post_to_solr( data ):
     """ Posts solr_dict to solr. """
+    logger = bell_logger.setup_logger()
     try:
-        assert data.keys() == u'solr_dict'
-        logger = bell_logger.setup_logger()
+        assert data.keys() == [ u'solr_dict' ]
         solr_dict = data[u'solr_dict']
         solr_root_url = os.environ.get( u'BELL_I_SOLR_ROOT' )
         solr = Solr( solr_root_url )
@@ -88,11 +92,11 @@ def post_to_solr( data ):
         raise Exception( u'in tasks.indexer.post_to_solr(); error on post logged' )
 
 
-def _set_accession_number_original( original_dict, solr_dict ):
-    """ Sets accession_number.
-        Called by build_metadata_only_solr_dict() """
-    solr_dict[u'accession_number_original'] = original_dict[u'calc_accession_id']
-    return solr_dict
+# def _set_accession_number_original( original_dict, solr_dict ):
+#     """ Sets accession_number.
+#         Called by build_metadata_only_solr_dict() """
+#     solr_dict[u'accession_number_original'] = original_dict[u'calc_accession_id']
+#     return solr_dict
 
 
 def _set_author_dates( original_dict, solr_dict ):
@@ -271,11 +275,11 @@ def _set_title( original_dict, solr_dict ):
         Called by build_metadata_only_solr_dict() """
     solr_dict[u'object_title'] = u''
     if original_dict[u'object_title'] != None:
-        solr_dict[u'object_title'] = original_dict[u'object_title']
+        solr_dict[u'title'] = original_dict[u'object_title']
     return solr_dict
 
 
-def _validate_solr_dict( solr_dict ):
+def _validate_solr_dict( solr_dict, logger ):
     """ Returns True if checks pass; False otherwise.
         Checks that required keys are present.
         Checks that there are no None values.
@@ -284,15 +288,17 @@ def _validate_solr_dict( solr_dict ):
         Called by build_metadata_only_solr_dict() """
     try:
         for required_key in REQUIRED_KEYS:
+            logger.debug( u'in tasks.indexer._validate_solr_dict(); required_key: %s' % required_key )
             assert required_key in solr_dict.keys(), Exception( u'ERROR; missing required key: %s' % required_key )
         for key,value in solr_dict.items():
           assert value != None, Exception( u'ERROR; value is none for key: %s' % key )
           if type(value) == list:
-            assert len(value) > 0, Exception( u'key "%s" has a value of "%s", which is type-list, which is empty.' % ( key, value ) )
+            assert len(value) > 0, Exception( u'ERROR: key "%s" has a value of "%s", which is type-list, which is empty.' % ( key, value ) )
             for element in value:
-              assert element != None, Exception( u'key "%s" has a value "%s", which is type-list, which contains a None element' % ( key, value ) )
+              assert element != None, Exception( u'ERROR: key "%s" has a value "%s", which is type-list, which contains a None element' % ( key, value ) )
         return True
-    except:
+    except Exception as e:
+        logger.error( u'in tasks.indexer._validate_solr_dict(); exception is: %e' )
         return False
 
 

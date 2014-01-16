@@ -12,6 +12,20 @@ import indexer
       python ./tasks/test_indexer.py Indexer_Test.test__build_metadata_only_solr_dict """
 
 
+# def dummy_solr_task():
+#     """ Checks that redis is running. """
+#     logger = bell_logger.setup_logger()
+#     logger.info( u'[[ running dummy_solr_task ]]' )
+#     try:
+#         task_manager.determine_next_task( current_task=sys._getframe().f_code.co_name, data=data, logger=logger )
+#         logger.info( u'[[ end dummy_solr_task ]]' )
+#         return
+#     except Exception as e:
+#         message = u'Redis does not appear to be running; exception: %s' % unicode(repr(e))
+#         logger.error( message )
+#         raise Exception( message )
+
+
 class Indexer_Test(unittest.TestCase):
     """ Tests indexer.py code. """
 
