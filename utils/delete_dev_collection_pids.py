@@ -15,50 +15,45 @@ from redis import Redis
 from rq import Queue
 
 
-def delete_item( data ):
-    """ Deletes pid from dev-bdr. """
+def delete_item_from_fedora( data ):
+    """ Deletes pid from dev-bdr.
+        Task called via queue. """
     logger = bell_logger.setup_logger()
     logger.info( u'in delete_dev_collection_pids.delete_item(); pid `%s`; starting' % data[u'pid'] )
-    ( pid, url, auth_id, auth_key ) = ( data[u'pid'], data[u'deletion_url'],
-                                        unicode(os.environ.get(u'BELL_UTILS__DELETION_API_AUTHID')), unicode(os.environ.get(u'BELL_UTILS__DELETION_API_AUTHKEY')) )
-    check_list = [ pid, url, auth_id, auth_key ]
+    ( pid, fedora_url, fedora_username, fedora_password ) = (
+        data[u'pid'],
+        data[u'fedora_url'],
+        unicode(os.environ.get(u'BELL_UTILS__FEDORA_ADMIN_USERNAME')),
+        unicode(os.environ.get(u'BELL_UTILS__FEDORA_ADMIN_PASSWORD'))
+        )
+    check_list = [ pid, fedora_url, fedora_username, fedora_password ]
     for var in check_list:
         position = check_list.index(var)
         assert type( var ) == unicode, Exception( u'var at position `%s` is `%s`, not unicode' % (position, var) )
-    payload = {
-      u'identity': auth_id, u'authorization_code': auth_key, u'pid': pid }
-    r = requests.delete( url, data=payload, verify=False )
-    print r.status_code
-    print r.content
-    jdict = json.loads( r.content.decode(u'utf-8', u'replace') )
-    print u'- jdict'; pprint.pprint( jdict )
-    assert sorted(jdict.keys()) == [u'info', u'request', u'response'], Exception( u'unexpected jdict.keys(); they are: %s' % sorted(jdict.keys()) )
-    assert jdict[u'response'].keys() == [ u'status' ]
-    logger.info( u'in delete_dev_collection_pids.delete_item(); about to delete pid: %s' % pid)
-    return { u'status': jdict[u'response'][u'status'] }
+    fedora_deletion_url = u'%s/%s?state=I' % ( fedora_url, pid )
+    try:
+        response = requests.put( fedora_deletion_url, auth=(fedora_username, fedora_password), verify=False )
+        d = { u'pid': pid, u'response_status_code': response.status_code, u'response_reason': response.reason, u'response.content': response.content.decode(u'utf-8', u'replace') }
+        logger.info( u'in delete_dev_collection_pids.delete_item_from_fedora(); result: %s' % unicode(repr(d)) )
+    except Exception as e:
+        logger.error( u'in delete_dev_collection_pids.delete_item_from_fedora(); ERROR: %s' % unicode(repr(e)) )
+        raise Exception( u'ERROR deleting pid `%s` from fedora; logged' )
+    return
 
-
-# def deleteItem( pid, identifier ):
-#   try:
-#     var_list = [ pid, identifier, settings.ITEM_API_URL, settings.ITEM_API_IDENTITY, settings.ITEM_API_KEY ]
-#     for v in var_list:
-#       assert type(v) == unicode, u'- type %s is %s' % (v, type(v))
-#     url = settings.ITEM_API_URL
-#     payload = {
-#       u'identity': settings.ITEM_API_IDENTITY,
-#       u'authorization_code': settings.ITEM_API_KEY,
-#       u'pid': pid }
-#     r = requests.delete( url, data=payload, verify=False )  # to work around devbox's bad certificate
-#     jdict = json.loads( r.content.decode(u'utf-8', u'replace') )
-#     # print u'- jdict'; pprint.pprint( jdict )
-#     assert sorted(jdict.keys()) == [u'info', u'request', u'response'], sorted(jdict.keys())
-#     assert jdict[u'response'].keys() == [ u'status' ]
-#     return { u'status': jdict[u'response'][u'status']}
-#   except:
-#     error_dict = makeErrorDict()
-#     print u'in deleteItem(); exception is:'; pprint.pprint( error_dict )
-#     updateLog( message=u'- in uc.deleteItem(); exception detail is: %s' % error_dict, message_importance='high', identifier=identifier )
-#     return { u'status': u'FAILURE', u'data': error_dict }
+# def delete_item_from_fedora( pid, fedora_url, fedora_username, fedora_password ):
+#   """ Deletes item from fedora. """
+#   def confirm_item_exists():
+#     item_url = u'%s/%s/' % ( item_api_url, pid )
+#     r = requests.get( item_url, verify=False )
+#     d = { u'response_status_code': r.status_code, u'response_reason': r.reason }; print u'confirmation...'; pprint.pprint( d )
+#     return r.ok
+#   assert confirm_item_exists() == True
+#   fedora_deletion_url = '%s/%s?state=I' % ( fedora_url, pid )
+#   response = requests.put( fedora_deletion_url, auth=(fedora_username, fedora_password), verify=False )
+#   d = { u'response_status_code': response.status_code, u'response_reason': response.reason }; print u'worker...'; pprint.pprint( d )
+#   time.sleep( 3 )  # so delete can propogate to solr
+#   assert confirm_item_exists() == False
+#   return
 
 
 
@@ -73,7 +68,7 @@ if __name__ == u'__main__':
     ## settings
     COLLECTION_PID = unicode( os.environ.get(u'BELL_UTILS__COLLECTION_PID') )
     MEMBERSHIP_URL = unicode( os.environ.get(u'BELL_UTILS__FEDORA_RISEARCH_URL') )
-    DELETION_URL = unicode( os.environ.get(u'BELL_UTILS__DELETION_API_URL') )
+    DELETION_URL = unicode( os.environ.get(u'BELL_UTILS__FEDORA_ADMIN_URL') )
 
     ## protection-checks
     try:
@@ -105,8 +100,8 @@ if __name__ == u'__main__':
     queue_name = os.environ.get(u'BELL_QUEUE_NAME')
     q = Queue( queue_name, connection=Redis() )
     for pid in fedora_pid_list:
-        data = { u'pid': pid, u'deletion_url': DELETION_URL }
-        q.enqueue_call ( func=u'utils.delete_dev_collection_pids.delete_item', args =(data,), timeout=30 )
+        data = { u'pid': pid, u'fedora_url': DELETION_URL }
+        q.enqueue_call ( func=u'utils.delete_dev_collection_pids.delete_item_from_fedora', args =(data,), timeout=30 )
         break
     logger.info( u'in delete_dev_collection_pids(); all deletion jobs put on queue.' )
 
