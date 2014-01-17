@@ -97,52 +97,7 @@ def _setup_delete_vars( data ):
     return ( pid, fedora_url, fedora_username, fedora_password, logger )
 
 
+
 if __name__ == u'__main__':
-
-
-
-    ## set up logger
-    logger = bell_logger.setup_logger()
-    logger.info( u'in delete_dev_collection_pids(); starting' )
-
-    ## settings
-    COLLECTION_PID = unicode( os.environ.get(u'BELL_UTILS__COLLECTION_PID') )
-    MEMBERSHIP_URL = unicode( os.environ.get(u'BELL_UTILS__FEDORA_RISEARCH_URL') )
-    DELETION_URL = unicode( os.environ.get(u'BELL_UTILS__FEDORA_ADMIN_URL') )
-
-    ## protection-checks
-    try:
-        assert u'test' in COLLECTION_PID, Exception( u'in delete_dev_collection_pids(); ERROR: problem validating collection-pid' )
-        assert u'dev' in MEMBERSHIP_URL, Exception( u'in delete_dev_collection_pids(); ERROR: problem validating membership-url' )
-        assert u'dev' in DELETION_URL, Exception( u'in delete_dev_collection_pids(); ERROR: problem validating deletion-url' )
-        logger.info( u'in delete_dev_collection_pids(); protection-checks passed' )
-    except Exception as e:
-        logger.error( u'in delete_dev_collection_pids(); ERROR: %s' % unicode(repr(e)) )
-        raise Exception( u'ERROR in protection-checks logged' )
-    def validate_pid( pid ):
-        """ Checks each pid before it's deleted. """
-        assert u'test:' in pid, Exception( u'in delete_dev_collection_pids(); ERROR: problem validating pid %s' % pid )
-        return
-
-    ## get list of collection pids
-    pid_finder = PidFinder()
-    itql_query_output = pid_finder._run_itql_query( fedora_risearch_url=MEMBERSHIP_URL, bdr_collection_pid=COLLECTION_PID )
-    assert type( itql_query_output ) == list
-    logger.info( u'in delete_dev_collection_pids(); len(itql_query_output): %s' % len(itql_query_output) )
-    fedora_pid_list = pid_finder._parse_itql_search_results( itql_query_output )
-    logger.info( u'in delete_dev_collection_pids(); len(fedora_pid_list): %s' % len(fedora_pid_list) )
-
-    ## validate each pid
-    for pid in fedora_pid_list:
-        validate_pid( pid )
-
-    ## delete each pid
-    queue_name = os.environ.get(u'BELL_QUEUE_NAME')
-    q = Queue( queue_name, connection=Redis() )
-    for i, pid in enumerate( fedora_pid_list ):
-        data = { u'pid': pid, u'fedora_url': DELETION_URL }
-        q.enqueue_call ( func=u'utils.delete_dev_collection_pids.task__delete_item_from_fedora', args =(data,), timeout=30 )
-        break
-    logger.info( u'in delete_dev_collection_pids(); all deletion jobs put on queue.' )
-
+    get_collection_pids()  # will put deletion jobs on queue
     ## end ##
