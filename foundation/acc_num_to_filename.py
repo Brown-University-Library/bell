@@ -7,7 +7,7 @@ import gspread  # <https://github.com/burnash/gspread>
 class FilenameLinker( object ):
     """ Handles creation of an accession_number-to-filename dict, saved as a json file.
         Purpose: This is one of three essential files that should exist before doing almost any bell processing.
-                 It converts google-doc data into json data for easy processing and viewing.
+                 It converts google-doc filename spreadsheet data into json data for easy processing and viewing.
         if __name__... at bottom indicates how to run this script. """
 
     def __init__( self ):
@@ -28,14 +28,14 @@ class FilenameLinker( object ):
     def _get_worksheet( self, G_EMAIL, G_PASSWORD ):
         """ Returns worksheet. """
         gc = gspread.login( G_EMAIL, G_PASSWORD )  # gc == 'gspread_client'
-        sp_sheet = gc.open("bell_tracker")
-        wk_sheet = sp_sheet.worksheet("overview")
+        sp_sheet = gc.open( u'bell_tracker' )
+        wk_sheet = sp_sheet.worksheet( u'overview' )
         return wk_sheet
 
     def _get_columns( self, wk_sheet ):
         """ Returns columns without header row. """
-        tmp_col_1 = wk_sheet.col_values(1)
-        tmp_col_2 = wk_sheet.col_values(2)
+        tmp_col_1 = wk_sheet.col_values( 1 )  # not zero-indexed -- this is column A
+        tmp_col_2 = wk_sheet.col_values( 2 )
         assert len(tmp_col_1) == len(tmp_col_2), Exception( u'column-length mismatch' )
         col_1 = tmp_col_1[ 1: ]  # ignore header row
         col_2 = tmp_col_2[ 1: ]
