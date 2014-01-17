@@ -40,22 +40,6 @@ def delete_item_from_fedora( data ):
         raise Exception( u'ERROR deleting pid `%s` from fedora; logged' )
     return
 
-# def delete_item_from_fedora( pid, fedora_url, fedora_username, fedora_password ):
-#   """ Deletes item from fedora. """
-#   def confirm_item_exists():
-#     item_url = u'%s/%s/' % ( item_api_url, pid )
-#     r = requests.get( item_url, verify=False )
-#     d = { u'response_status_code': r.status_code, u'response_reason': r.reason }; print u'confirmation...'; pprint.pprint( d )
-#     return r.ok
-#   assert confirm_item_exists() == True
-#   fedora_deletion_url = '%s/%s?state=I' % ( fedora_url, pid )
-#   response = requests.put( fedora_deletion_url, auth=(fedora_username, fedora_password), verify=False )
-#   d = { u'response_status_code': response.status_code, u'response_reason': response.reason }; print u'worker...'; pprint.pprint( d )
-#   time.sleep( 3 )  # so delete can propogate to solr
-#   assert confirm_item_exists() == False
-#   return
-
-
 
 if __name__ == u'__main__':
 
@@ -99,7 +83,7 @@ if __name__ == u'__main__':
     ## delete each pid
     queue_name = os.environ.get(u'BELL_QUEUE_NAME')
     q = Queue( queue_name, connection=Redis() )
-    for pid in fedora_pid_list:
+    for i, pid in enumerate( fedora_pid_list ):
         data = { u'pid': pid, u'fedora_url': DELETION_URL }
         q.enqueue_call ( func=u'utils.delete_dev_collection_pids.delete_item_from_fedora', args =(data,), timeout=30 )
         break

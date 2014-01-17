@@ -1,7 +1,6 @@
 # -*- coding: utf-8 -*-
 
 import datetime, json, os, pprint
-
 import lxml, requests
 from lxml import etree
 
