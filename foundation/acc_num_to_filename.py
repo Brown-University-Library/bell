@@ -18,7 +18,7 @@ class FilenameLinker( object ):
         ( col_1, col_2 ) = self._get_columns( wk_sheet )
         dic = {}
         for i in range( len(col_1) ):
-            ( key, value ) = self._get_key_value( col_1[i], col_2[i] )
+            ( key, value ) = self._get_cell_data( cell_1=col_1[i], cell_2=col_2[i] )
             dic[ key ] = value
         jstring = json.dumps( dic, sort_keys=True, indent=2 )
         with open( JSON_OUTPUT_PATH, u'w' ) as f:
@@ -41,10 +41,10 @@ class FilenameLinker( object ):
         col_2 = tmp_col_2[ 1: ]
         return ( col_1, col_2 )
 
-    def _get_key_value( self, col_1_data, col_2_data ):
+    def _get_cell_data( self, cell_1, cell_2 ):
         """ Returns cleaned key/value. """
-        key = col_1_data.strip().decode( u'utf-8', u'replace' )
-        value = col_2_data
+        key = cell_1.strip().decode( u'utf-8', u'replace' )
+        value = cell_2
         if type(value) == str:
             value = value.strip().decode( u'utf-8', u'replace' )
         return ( key, value )
