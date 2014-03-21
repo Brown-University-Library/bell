@@ -7,6 +7,7 @@ Performing most common bell tasks requires 3 data files:
 - an accession-number to data dict json file
 
 - an accession-number to pid dict json file
+    Reason: to determine whether an item is a new ingestion or an update.
 
 - an accession-number to image-filename dict json file
 

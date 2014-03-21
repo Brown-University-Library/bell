@@ -53,7 +53,8 @@ class FilenameLinker( object ):
         """ Outputs settings derived from environmental variables for development. """
         print u'- settings...'
         print u'- G_EMAIL: %s' % G_EMAIL
-        print u'- G_PASSWORD: %s' % G_PASSWORD
+        print u'- G_PASSWORD: %s' % u'---------'
+        # print u'- G_PASSWORD: %s' % G_PASSWORD
         print u'- JSON_OUTPUT_PATH: %s' % JSON_OUTPUT_PATH
         print u'---'
         return

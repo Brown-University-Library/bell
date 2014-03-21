@@ -1,23 +1,23 @@
 # -*- coding: utf-8 -*-
 
-import json, os, sys
+import json, pprint, os, sys
 import bell_logger
-import redis
-from redis import Redis
-from rq import Queue
-# from tasks import fedora_metadata_only_builder
+import redis, rq
+# import redis
+# from redis import Redis
+# from rq import Queue
 
 
 queue_name = os.environ.get(u'BELL_QUEUE_NAME')
-q = Queue( queue_name, connection=Redis() )
+q = rq.Queue( queue_name, connection=redis.Redis() )
 r = redis.StrictRedis( host='localhost', port=6379, db=0 )
 
 
 def determine_next_task( current_task, data=None, logger=None ):
-    """ Returns next task. TODO: 'Calls' next task.
-        Intended to handle full flow of normal bell processing. """
+    """ Calls next task.
+        Intended to eventually handle full flow of normal bell processing. """
 
-    logger.info( u'in task_manager.determine_next_task(); current_task: %s' % current_task )
+    logger.info( u'in task_manager.determine_next_task(); %s' % pprint.pformat({u'current_task': current_task, u'data': data}) )
     next_task = None
 
     if current_task == u'ensure_redis':
@@ -37,7 +37,7 @@ def determine_next_task( current_task, data=None, logger=None ):
         next_task = u'tasks.task_manager.determine_situation'
 
     elif current_task == u'determine_situation' and data[u'situation'] == u'create_metadata_only_object':
-        assert data.keys() == [u'item_dict']
+        assert sorted(data.keys()) == [u'item_dict', u'situation']
         next_task = u'tasks.fedora_metadata_only_builder.run__create_fedora_metadata_object'
 
     elif current_task == u'create_fedora_metadata_object':
@@ -54,10 +54,12 @@ def determine_next_task( current_task, data=None, logger=None ):
         next_task = None
 
     ## TODO: have this make _all_ enqueue calls!
-    logger.info( u'in task_manager.determine_next_task(); next_task: %s' % next_task )
+    logger.info( u'in task_manager.determine_next_task(); %s' % pprint.pformat({u'next_task': next_task, u'data': data}) )
     if next_task:
-        job = q.enqueue_call( func=u'%s' % next_task, args=(data,), timeout=30 )
-
+        if data:
+            job = q.enqueue_call( func=u'%s' % next_task, args=(data,), timeout=30 )
+        else:
+            job = q.enqueue_call( func=u'%s' % next_task, args=(), timeout=30 )
     return next_task
 
 
@@ -68,18 +70,37 @@ def populate_queue():
         with open( os.environ.get(u'BELL_CE__BELL_DICT_JSON_PATH') ) as f:
             all_items_dict = json.loads( f.read() )
         for i,(accnum_key, item_dict_value) in enumerate( sorted(all_items_dict[u'items'].items()) ):
-            next = determine_next_task( sys._getframe().f_code.co_name, logger=logger )
-            job = q.enqueue_call ( func=u'%s' % next, args = (item_dict_value,), timeout=30 )
-            logger.info( u'in task_manager.populate_queue(); added accnum %s to queue' % accnum_key )
+            determine_next_task( current_task=sys._getframe().f_code.co_name, data=item_dict_value, logger=logger )
             if i > int( os.environ.get(u'BELL_TM__POPULATE_QUEUE_LIMIT') ):  # for development
                 logger.debug( u'in task_manager.populate_queue(); breaking after %s' % accnum_key ); break
         update_tracker( key=u'GENERAL', message=u'queue populated' )
-        logger.info( u'populate_queue ok' )
+        logger.info( u'in task_manager.populate_queue(); populate_queue ok' )
         return
     except Exception as e:
-        message = u'Problem in populate_queue(); exception is: %s' % unicode(repr(e))
+        message = u'in task_manager.populate_queue(); problem in populate_queue(); exception is: %s' % unicode(repr(e))
         logger.error( message )
         raise Exception( message )
+
+
+# def populate_queue():
+#     """ Puts individual bell items on the queue. """
+#     logger = bell_logger.setup_logger()
+#     try:
+#         with open( os.environ.get(u'BELL_CE__BELL_DICT_JSON_PATH') ) as f:
+#             all_items_dict = json.loads( f.read() )
+#         for i,(accnum_key, item_dict_value) in enumerate( sorted(all_items_dict[u'items'].items()) ):
+#             next = determine_next_task( sys._getframe().f_code.co_name, logger=logger )
+#             job = q.enqueue_call ( func=u'%s' % next, args=(item_dict_value,), timeout=30 )
+#             logger.info( u'in task_manager.populate_queue(); added accnum %s to queue' % accnum_key )
+#             if i > int( os.environ.get(u'BELL_TM__POPULATE_QUEUE_LIMIT') ):  # for development
+#                 logger.debug( u'in task_manager.populate_queue(); breaking after %s' % accnum_key ); break
+#         update_tracker( key=u'GENERAL', message=u'queue populated' )
+#         logger.info( u'in task_manager.populate_queue(); populate_queue ok' )
+#         return
+#     except Exception as e:
+#         message = u'in task_manager.populate_queue(); problem in populate_queue(); exception is: %s' % unicode(repr(e))
+#         logger.error( message )
+#         raise Exception( message )
 
 
 def determine_situation( item_dict ):
