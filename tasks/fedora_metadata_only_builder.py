@@ -168,7 +168,7 @@ def run__create_fedora_metadata_object( data ):
         COLLECTION_PID,
         data[u'item_dict'], mods_schema_path, logger
         )
-    print u'- in fedora_metadata_only_builder.run__create_fedora_metadata_object(); acc_num is: %s; item ingested' % item_dict[u'calc_accession_id']
+    print u'- in fedora_metadata_only_builder.run__create_fedora_metadata_object(); acc_num is: %s; item ingested' % data[u'item_dict'][u'calc_accession_id']
     return
 
 
