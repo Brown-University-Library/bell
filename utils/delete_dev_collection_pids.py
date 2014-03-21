@@ -58,7 +58,6 @@ def _populate_queue( fedora_pid_list, QUEUE_NAME, logger ):
     for i, pid in enumerate( fedora_pid_list ):
         data = { u'pid': pid }
         q.enqueue_call ( func=u'utils.delete_dev_collection_pids.task__delete_item_from_fedora', args =(data,), timeout=30 )
-        break
     logger.info( u'in delete_dev_collection_pids._populate_queue(); all deletion jobs put on queue.' )
     return
 
