@@ -80,7 +80,7 @@ def post_to_solr( data ):
     (SOLR_ROOT_URL, solr_dict, logger) = ( os.environ.get(u'BELL_I_SOLR_ROOT'), data[u'solr_dict'], bell_logger.setup_logger() )  # setup
     solr = Solr( SOLR_ROOT_URL )
     response = solr.update( [solr_dict], u'xml', commit=True )  # 'xml' param converts json to xml for post; required for our old version of solr
-    response_status == response.status
+    response_status = response.status
     logger.info( u'in indexer.post_to_solr() [for custom-solr]; accession_number, %s; response_status, %s' % (solr_dict[u'accession_number_original'], response_status) )
     if not response_status == 200:
         raise Exception( u'custom-solr post problem logged' )
