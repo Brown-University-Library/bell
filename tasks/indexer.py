@@ -81,13 +81,9 @@ def post_to_solr( data ):
     solr = Solr( SOLR_ROOT_URL )
     response = solr.update( [solr_dict], u'xml', commit=True )  # 'xml' param converts json to xml for post; required for our old version of solr
     response_status == response.status
-    if response_status == 200:
-        status_message = u'ok_post_ok'
-    else:
-        status_message = u'post_problem'
+    logger.info( u'in indexer.post_to_solr() [for custom-solr]; accession_number, %s; response_status, %s' % (solr_dict[u'accession_number_original'], response_status) )
+    if not response_status == 200:
         raise Exception( u'custom-solr post problem logged' )
-    finally:
-        logger.info( u'in indexer.post_to_solr(); accession_number, %s; response_status, %s; status_message, %s' % (solr_dict[u'accession_number_original'], response_status, status_message) )
 
 
 # def post_to_solr( data ):
