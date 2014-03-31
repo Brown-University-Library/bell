@@ -71,7 +71,7 @@ def populate_queue():
             all_items_dict = json.loads( f.read() )
         for i,(accnum_key, item_dict_value) in enumerate( sorted(all_items_dict[u'items'].items()) ):
             determine_next_task( current_task=sys._getframe().f_code.co_name, data=item_dict_value, logger=logger )
-            if i > int( os.environ.get(u'BELL_TM__POPULATE_QUEUE_LIMIT') ):  # for development
+            if i+2 > int( os.environ.get(u'BELL_TM__POPULATE_QUEUE_LIMIT') ):  # for development
                 logger.debug( u'in task_manager.populate_queue(); breaking after %s' % accnum_key ); break
         update_tracker( key=u'GENERAL', message=u'queue populated' )
         logger.info( u'in task_manager.populate_queue(); populate_queue ok' )
@@ -85,21 +85,16 @@ def populate_queue():
 def determine_situation( item_dict ):
     """ Examines item dict after populate_queue() and updates next task. """
     logger = bell_logger.setup_logger();
-    try:
-        acc_num = item_dict[u'calc_accession_id']
-        situation = None
-        if _check_recently_processed( acc_num, logger ): situation = u'skip__already_processed'
-        if not situation:
-            pid = _check_pid( acc_num, logger )
-            situation = u'skip__pid_"%s"_exists' % pid if(pid) else u'create_metadata_only_object'
-        update_tracker( key=acc_num, message=u'situation: %s' % situation )
-        determine_next_task( sys._getframe().f_code.co_name, data={u'item_dict': item_dict, u'situation': situation}, logger=logger )
-        logger.info( u'in task_manager.determine_situation(); done; acc_num, %s; situation, %s' % (acc_num, situation) )
-        return
-    except Exception as e:
-        message = u'Problem in determine_situation(); exception is: %s' % unicode(repr(e))
-        logger.error( message )
-        raise Exception( message )
+    acc_num = item_dict[u'calc_accession_id']
+    situation = None
+    if _check_recently_processed( acc_num, logger ): situation = u'skip__already_processed'
+    if situation == None:
+        pid = _check_pid( acc_num, logger )
+        situation = u'skip__pid_"%s"_exists' % pid if(pid) else u'create_metadata_only_object'
+    update_tracker( key=acc_num, message=u'situation: %s' % situation )
+    determine_next_task( sys._getframe().f_code.co_name, data={u'item_dict': item_dict, u'situation': situation}, logger=logger )
+    logger.info( u'in task_manager.determine_situation(); done; acc_num, %s; situation, %s' % (acc_num, situation) )
+    return
 
 
 def _check_recently_processed( accession_number_key, logger=None ):
@@ -118,10 +113,12 @@ def _check_recently_processed( accession_number_key, logger=None ):
 def _check_pid( acc_num, logger=None ):
     """ Checks if accession number has a pid and returns it if so.
         Called by determine_situation() """
-    with open( os.environ.get(u'BELL_TM__PID_DICT_JSON_PATH') ) as f:
+    FILE_PATH = os.environ.get(u'BELL_TM__PID_DICT_JSON_PATH')
+    with open( FILE_PATH ) as f:
         full_pid_data_dict = json.loads( f.read() )
-    pid = full_pid_data_dict[u'final_accession_pid_dict'][acc_num][u'pid']
-    logger.info( u'in task_manager._check_pid(); pid, %s' % pid )
+        # logger.info( u'in task_manager._check_pid(); full_pid_data_dict, %s' % pprint.pformat(full_pid_data_dict) )
+    pid = full_pid_data_dict[u'final_accession_pid_dict'][acc_num]
+    # logger.info( u'in task_manager._check_pid(); pid, %s' % pid )
     return pid
 
 
