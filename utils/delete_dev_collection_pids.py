@@ -58,6 +58,7 @@ def _populate_queue( fedora_pid_list, QUEUE_NAME, logger ):
     for i, pid in enumerate( fedora_pid_list ):
         data = { u'pid': pid }
         q.enqueue_call ( func=u'utils.delete_dev_collection_pids.task__delete_item_from_fedora', args =(data,), timeout=30 )
+        break
     logger.info( u'in delete_dev_collection_pids._populate_queue(); all deletion jobs put on queue.' )
     return
 
@@ -71,6 +72,7 @@ def task__delete_item_from_fedora( data ):
     ( pid, fedora_url, fedora_username, fedora_password, logger ) = _setup_delete_vars( data )
     logger.info( u'in delete_dev_collection_pids.delete_item(); pid `%s`; starting' % data[u'pid'] )
     fedora_deletion_url = u'%s/%s?state=D' % ( fedora_url, pid )
+    logger.info( u'in delete_dev_collection_pids.delete_item_from_fedora(); fedora_deletion_url: %s' % fedora_deletion_url )
     try:
         response = requests.put( fedora_deletion_url, auth=(fedora_username, fedora_password), verify=False )
         d = { u'pid': pid, u'response_status_code': response.status_code, u'response_reason': response.reason, u'response.content': response.content.decode(u'utf-8', u'replace') }

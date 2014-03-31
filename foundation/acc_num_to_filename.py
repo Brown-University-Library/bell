@@ -5,7 +5,9 @@ import gspread  # <https://github.com/burnash/gspread>
 
 
 class FilenameLinker( object ):
-    """ Handles creation of an accession_number-to-filename dict, saved as a json file.
+    """ Note: as of March 2014, no longer needed for new ingestions -- the new metadata contains the filenames.
+        ---
+        Handles creation of an accession_number-to-filename dict, saved as a json file.
         Purpose: This is one of three essential files that should exist before doing almost any bell processing.
                  It converts google-doc filename spreadsheet data into json data for easy processing and viewing.
         if __name__... at bottom indicates how to run this script. """
