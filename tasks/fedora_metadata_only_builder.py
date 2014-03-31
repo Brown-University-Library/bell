@@ -55,6 +55,7 @@ class Task( object ):
             #Get/reserve a pid
             #Note: after obtaining pid, new_obj.pid is a value, not a reference
             new_pid = new_obj.pid()
+            new_obj.pid = new_pid
             print u'- new_obj.pid obtained.'
             #
             #Assign collection object
