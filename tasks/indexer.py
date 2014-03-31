@@ -77,26 +77,34 @@ def build_metadata_only_solr_dict( data ):
 
 def post_to_solr( data ):
     """ Posts solr_dict to solr. """
-    logger = bell_logger.setup_logger()
-    try:
-        assert data.keys() == [ u'solr_dict' ]
-        solr_dict = data[u'solr_dict']
-        solr_root_url = os.environ.get( u'BELL_I_SOLR_ROOT' )
-        solr = Solr( solr_root_url )
-        response = solr.update( [solr_dict], u'xml', commit=True )  # 'xml' param converts json to xml for post; required for our old version of solr
-        status_message = u'ok_post_ok' if (response.status == 200) else u'post_problem'
-        logger.info( u'in tasks.indexer.post_to_solr(); accession_number, %s; status_message, %s' % (solr_dict[u'accession_number_original'], status_message) )
-        # task_manager.determine_next_task( current_task=unicode( sys._getframe().f_code.co_name ), data={ u'solr_dict': solr_dict }, logger=logger )
-    except Exception as e:
-        logger.error( u'in tasks.indexer.post_to_solr(); exception: %s' % unicode(repr(e)) )
-        raise Exception( u'in tasks.indexer.post_to_solr(); error on post logged' )
+    (SOLR_ROOT_URL, solr_dict, logger) = ( os.environ.get(u'BELL_I_SOLR_ROOT'), data[u'solr_dict'], bell_logger.setup_logger() )  # setup
+    solr = Solr( SOLR_ROOT_URL )
+    response = solr.update( [solr_dict], u'xml', commit=True )  # 'xml' param converts json to xml for post; required for our old version of solr
+    response_status == response.status
+    if response_status == 200:
+        status_message = u'ok_post_ok'
+    else:
+        status_message = u'post_problem'
+        raise Exception( u'custom-solr post problem logged' )
+    finally:
+        logger.info( u'in indexer.post_to_solr(); accession_number, %s; response_status, %s; status_message, %s' % (solr_dict[u'accession_number_original'], response_status, status_message) )
 
 
-# def _set_accession_number_original( original_dict, solr_dict ):
-#     """ Sets accession_number.
-#         Called by build_metadata_only_solr_dict() """
-#     solr_dict[u'accession_number_original'] = original_dict[u'calc_accession_id']
-#     return solr_dict
+# def post_to_solr( data ):
+#     """ Posts solr_dict to solr. """
+#     logger = bell_logger.setup_logger()
+#     try:
+#         assert data.keys() == [ u'solr_dict' ]
+#         solr_dict = data[u'solr_dict']
+#         solr_root_url = os.environ.get( u'BELL_I_SOLR_ROOT' )
+#         solr = Solr( solr_root_url )
+#         response = solr.update( [solr_dict], u'xml', commit=True )  # 'xml' param converts json to xml for post; required for our old version of solr
+#         status_message = u'ok_post_ok' if (response.status == 200) else u'post_problem'
+#         logger.info( u'in tasks.indexer.post_to_solr(); accession_number, %s; status_message, %s' % (solr_dict[u'accession_number_original'], status_message) )
+#         # task_manager.determine_next_task( current_task=unicode( sys._getframe().f_code.co_name ), data={ u'solr_dict': solr_dict }, logger=logger )
+#     except Exception as e:
+#         logger.error( u'in tasks.indexer.post_to_solr(); exception: %s' % unicode(repr(e)) )
+#         raise Exception( u'in tasks.indexer.post_to_solr(); error on post logged' )
 
 
 def _set_author_dates( original_dict, solr_dict ):
@@ -273,7 +281,7 @@ def _set_physical_descriptions( original_dict, solr_dict ):
 def _set_title( original_dict, solr_dict ):
     """ Updates title.
         Called by build_metadata_only_solr_dict() """
-    solr_dict[u'object_title'] = u''
+    solr_dict[u'title'] = u''
     if original_dict[u'object_title'] != None:
         solr_dict[u'title'] = original_dict[u'object_title']
     return solr_dict
