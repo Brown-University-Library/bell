@@ -65,9 +65,9 @@ def ensure_redis_status_dict():
         Each key's value is a json-serializable list. """
     logger = bell_logger.setup_logger()
     try:
+        OVERWRITE = unicode( os.environ.get(u'BELL_TRACKER_OVERWRITE') )
         tracker_key = u'bell:tracker'
-        overwrite = unicode( os.environ.get(u'BELL_TRACKER_OVERWRITE') )
-        if overwrite == u'TRUE':
+        if OVERWRITE == u'TRUE':
             r.delete( tracker_key )
         if not r.exists( tracker_key ):
             message = u'%s initialized %s' % ( tracker_key, unicode(datetime.datetime.now()) )

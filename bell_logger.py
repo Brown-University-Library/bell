@@ -4,7 +4,7 @@ import logging, logging.handlers, os
 
 def setup_logger():
     """ Configures a logger to write to console & <filename>. """
-    formatter = logging.Formatter(u'%(asctime)s - %(levelname)s - %(message)s')
+    formatter = logging.Formatter( u'[%(asctime)s] %(levelname)s [%(name)s:%(lineno)s] %(message)s' )
     logger = logging.getLogger(u'bell_logger')
     logger.setLevel(logging.DEBUG)
     filename = u'%s/bell.log' % os.environ.get(u'BELL_LOG_DIR')
