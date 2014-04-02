@@ -5,8 +5,6 @@ import bell_logger
 from bdrcmodels.models import CommonMetadataDO
 from eulfedora.server import Repository
 from fedora_parts_builder import IRBuilder, ModsBuilder, RightsBuilder
-# from redis import Redis
-# from rq import Queue
 from tasks import task_manager
 
 
@@ -154,7 +152,8 @@ class Task( object ):
 
 
 def run__create_fedora_metadata_object( data ):
-    """ Instantiates Task() instance & calls create_fedora_metadata_object(). """
+    """ Instantiates Task() instance & calls create_fedora_metadata_object().
+        Called by task_manager.determine_next_task(). """
     logger = bell_logger.setup_logger()
     logger.info( u'in fedora_metadata_only_builder.run__create_fedora_metadata_object(); starting.' )
     print u'- in fedora_metadata_only_builder.run__create_fedora_metadata_object(); acc_num is: %s' % data[u'item_dict'][u'calc_accession_id']
