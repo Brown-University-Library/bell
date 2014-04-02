@@ -34,11 +34,18 @@ def determine_next_task( current_task, data=None, logger=None ):
 
     ## concurrent-processing starts here ##
     elif current_task == u'populate_queue':
-        next_task = u'tasks.task_manager.determine_situation'
+        next_task = u'tasks.task_manager.determine_handler'
 
-    elif current_task == u'determine_situation' and data[u'situation'] == u'create_metadata_only_object':
-        assert sorted(data.keys()) == [u'item_dict', u'situation']
-        next_task = u'tasks.fedora_metadata_only_builder.run__create_fedora_metadata_object'
+    elif current_task == u'determine_handler':
+        assert sorted(data.keys()) == [u'handler', u'item_dict']
+        if data[u'handler'] == u'add_new_metadata_only_item':
+            next_task = u'tasks.fedora_metadata_only_builder.run__create_fedora_metadata_object'
+        elif data[u'handler'] == u'add_new_item_with_image':
+            next_task = u'tasks.fedora_metadata_and_image_builder.run__add_metadata_and_image'
+        elif data[u'handler'] == u'update_existing_metadata':
+            next_task = u'tasks.fedora_metadata_only_builder.run__update_existing_metadata'
+        elif data[u'handler'] == u'update_existing_metadata_and_create_or_update_image':
+            next_task = u'tasks.fedora_metadata_and_image_builder.run__update_existing_metadata_and_create_or_update_image'
 
     elif current_task == u'create_fedora_metadata_object':
         assert sorted( data.keys() ) == [ u'item_data', u'pid' ]
@@ -53,7 +60,6 @@ def determine_next_task( current_task, data=None, logger=None ):
         logger.info( message )
         next_task = None
 
-    ## TODO: have this make _all_ enqueue calls!
     logger.info( u'in task_manager.determine_next_task(); %s' % pprint.pformat({u'next_task': next_task, u'data': data}) )
     if next_task:
         if data:
@@ -61,6 +67,8 @@ def determine_next_task( current_task, data=None, logger=None ):
         else:
             job = q.enqueue_call( func=u'%s' % next_task, args=(), timeout=30 )
     return next_task
+
+    # end def determine_next_task()
 
 
 def populate_queue():
@@ -82,19 +90,66 @@ def populate_queue():
         raise Exception( message )
 
 
-def determine_situation( item_dict ):
-    """ Examines item dict after populate_queue() and updates next task. """
-    logger = bell_logger.setup_logger();
+def determine_handler( item_dict ):
+    """ Examines item dict after populate_queue() and updates next task.
+        Situations:
+        - accession_number has no pid, & has no image_filename
+            handler == ‘add_new_metadata_only_item’
+        - accession_number has no pid, & has image_filename, & image_file _not_ in image_dir
+            handler == ‘add_new_metadata_only_item’
+        - accession_number has no pid, & has image_filename, & image_file _found_ in image_dir
+            handler == ‘add_new_item_with_image’
+        - accession_number has pid, & has no image_filename
+            handler == ‘update_existing_metadata’
+        - accession_number has pid, & has image_filename, & image_file _not_ in image_dir
+            handler == ‘update_existing_metadata’
+        - accession_number has pid, & has image_filename, & image_file _found_ in image_dir
+            handler == ‘update_existing_metadata_and_create_or_update_image’ """
+    IMAGE_DIR = os.environ.get(u'BELL_TM__IMAGES_DIR_PATH')
+    logger = bell_logger.setup_logger()
+    handler = None
     acc_num = item_dict[u'calc_accession_id']
-    situation = None
-    if _check_recently_processed( acc_num, logger ): situation = u'skip__already_processed'
-    if situation == None:
-        pid = _check_pid( acc_num, logger )
-        situation = u'skip__pid_"%s"_exists' % pid if(pid) else u'create_metadata_only_object'
-    update_tracker( key=acc_num, message=u'situation: %s' % situation )
-    determine_next_task( sys._getframe().f_code.co_name, data={u'item_dict': item_dict, u'situation': situation}, logger=logger )
-    logger.info( u'in task_manager.determine_situation(); done; acc_num, %s; situation, %s' % (acc_num, situation) )
+    filename = item_dict[u'object_image_scan_filename']
+    filepath = _check_filepath( filename, IMAGE_DIR, logger )
+    pid = _check_pid( acc_num, logger )
+    if _check_recently_processed( acc_num, logger ):
+        handler = u'skip__already_processed'
+        update_tracker( key=acc_num, message=u'handler: %s' % handler )
+        return
+    if not pid and not filename:
+        handler = u'add_new_metadata_only_item'
+    elif not pid and filename and not filepath:
+        handler = u'add_new_metadata_only_item'
+    elif not pid and filename and filepath:
+        handler = u'add_new_item_with_image'
+    elif pid and not filepath:
+        handler = u'update_existing_metadata'
+    elif pid and filename and not filepath:
+        handler = u'update_existing_metadata'
+    elif pid and filename and filepath:
+        handler = u'update_existing_metadata_and_create_or_update_image'
+    else:
+        raise Exception( u'in task_manager.determine_handler(); unhandled case' )
+    update_tracker( key=acc_num, message=u'handler: %s' % handler )
+    determine_next_task( sys._getframe().f_code.co_name, data={u'item_dict': item_dict, u'handler': handler}, logger=logger )
+    logger.info( u'in task_manager.determine_handler(); done; acc_num, %s; filepath, %s; pid, %s; handler, %s' % (acc_num, filepath, pid, handler) )
     return
+
+    # end def determine_handler()
+
+
+def _check_filepath( filename, IMAGE_DIR, logger ):
+    """ Checks to see if file exists.
+        Returns filepath string or None.
+        Called by determine_handler(). """
+    filepath = None
+    temp_filepath = None
+    if filename:
+        temp_filepath = u'%s/%s' % ( IMAGE_DIR, filename )
+        if os.path.isfile( temp_filepath ):
+            filepath = temp_filepath
+    logger.info( u'in task_manager._check_filepath(); temp_filepath, %s; filepath, %s' % (temp_filepath, filepath) )
+    return filepath
 
 
 def _check_recently_processed( accession_number_key, logger=None ):

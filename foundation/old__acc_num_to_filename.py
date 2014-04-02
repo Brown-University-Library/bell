@@ -4,8 +4,8 @@ import json, os, pprint
 import gspread  # <https://github.com/burnash/gspread>
 
 
-class FilenameLinker( object ):
-    """ Note: as of March 2014, no longer needed for new ingestions -- the new metadata contains the filenames.
+class GoogleSpreadsheetFilenameLinker( object ):
+    """ Note: as of March 2014, NO LONGER NEEDED for new ingestions -- the new metadata contains the filenames.
         ---
         Handles creation of an accession_number-to-filename dict, saved as a json file.
         Purpose: This is one of three essential files that should exist before doing almost any bell processing.
@@ -61,7 +61,7 @@ class FilenameLinker( object ):
         print u'---'
         return
 
-    # end class FilenameLinker()
+    # end class GoogleSpreadsheetFilenameLinker()
 
 
 
