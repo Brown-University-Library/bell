@@ -2,12 +2,45 @@
 
 import datetime, os, pprint
 import eulxml
-from bdrxml import irMetadata, mods, rights
+from bdrxml import irMetadata, mods, rels, rights
 from lxml import etree
 from lxml.etree import XMLSyntaxError
 
-""" Contains IRBuilder(), ModsBuilder(), and RightsBuilder() classes.
-    Currently called by fedora_metadata_only_builder.py; likely others in future. """
+""" Contains ImageBuilder(), IRBuilder(), ModsBuilder(), and RightsBuilder() classes.
+    Currently called by fedora_metadata_only_builder.py and fedora_metadata_and_image_builder.py; likely others in future. """
+
+
+class ImageBuilder( object ):
+    """ Handles rels.Description() """
+
+    def build_master_rels_description_vars( self, filename, image_dir_url ):
+        """ Builds pieces necessary for assigning the master rels datastream. """
+        file_url = u'%s/%s' % ( image_dir_url, filename )
+        download_filename = filename.replace( u' ', u'_' )
+        dsID = u'MASTER'
+        mime_type = u'image/tiff'
+        if download_filename.split( u'.' )[-1] == u'jpg':
+            mime_type = u'image/jpeg'
+        return ( file_url, download_filename, mime_type, dsID )
+
+    def build_master_rels_description_object( self, repo_obj, dsID, file_url, mime_type, download_filename ):
+        """ z """
+        ## set repo-object's ds
+        python_dsID = dsID.lower()
+        ds = getattr( repo_obj, python_dsID )
+        ds.ds_location = file_url
+        ds.mimetype = mime_type
+        ## set repo-object's rels-description
+        downloadDescription = rels.Description()
+        downloadDescription.about = u"%s/%s" % ( repo_obj.uriref, dsID )
+        downloadDescription.download_filename = download_filename
+        repo_obj.rels_int.content.descriptions.append( downloadDescription )
+        ## return
+        return repo_obj
+
+
+
+    # end class ImageBuilder()
 
 
 class ModsBuilder( object ):
@@ -183,7 +216,6 @@ class IRBuilder( object ):
 
     def build_ir_object( self ):
         ''' Creates basic bell ir object.
-            Called by bell_2013_05.ingest_new_metadata_objects()
             'ir_obj.date' and if necessary, 'ir_obj.filename', will be set dynamically '''
         obj = irMetadata.make_ir()
         obj.depositor_name = u'Bell Gallery'
