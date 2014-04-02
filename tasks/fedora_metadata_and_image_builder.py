@@ -9,7 +9,7 @@ import bell_logger
 import bell_logger
 from bdrcmodels.models import JP2Image
 from eulfedora.server import Repository
-from fedora_parts_builder import IRBuilder, ModsBuilder, RightsBuilder
+from fedora_parts_builder import ImageBuilder, IRBuilder, ModsBuilder, RightsBuilder
 from tasks import task_manager
 
 
@@ -22,7 +22,7 @@ class Task( object ):
 
     def add_metadata_and_image( self,
         FEDORA_ADMIN_URL, FEDORA_ADMIN_USERNAME, FEDORA_ADMIN_PASSWORD,
-        COLLECTION_PID,
+        COLLECTION_PID, MASTER_IMAGES_DIR_PATH, MASTER_IMAGES_DIR_URL, JP2_IMAGES_DIR_PATH, JP2_IMAGES_DIR_URL,
         item_data_dict, mods_schema_path, logger=None
         ):
         """ CONTROLLER
@@ -38,6 +38,7 @@ class Task( object ):
         # print u'- in fedora_metadata_only_builder.Task.create_fedora_metadata_object(); accession_number, %s' % self.accession_number
         #
         #Setup builders
+        image_builder = ImageBuilder()
         ir_builder = IRBuilder()
         mods_builder = ModsBuilder()
         rights_builder = RightsBuilder()
@@ -100,20 +101,37 @@ class Task( object ):
         #
         #
         #
-        #Master image
-        self._prep_master_image_info()
+        #Update master datastream and rels-int
+        master_filename = data[u'item_dict'][u'object_image_scan_filename']
+        ( file_url, dsID, mime_type ) = image_builder.build_master_datastream_vars(
+            filename=master_filename, image_dir_url=MASTER_IMAGES_DIR_URL )
+        new_obj = image_builder.update_object_datastream( new_obj, dsID, file_url, mime_type )
+        new_obj = image_builder.update_newobj_relsint(
+            new_obj=new_obj, filename=master_filename, dsID=dsID )
         #
         #
         #
-        #JP2 image
-        self._make_jp2
-        self._prep_jp2_image_info()
+        #Create jp2
+        source_filepath = u'%s/%s' % ( MASTER_IMAGES_DIR_PATH, master_filename )
+        temp_filename = master_filename.replace( u' ', u'_' )
+        jp2_filename = temp_filename[0:-4] + u'.jp2'
+        destination_filepath = u'%s/%s' % ( JP2_IMAGES_DIR_PATH, jp2_filename )
+        image_builder.create_jp2( source_filepath, destination_filepath )
+        #
+        #
+        #
+        #Update jp2 datastream and rels-int
+        ( file_url, dsID, mime_type ) = image_builder.build_jp2_datastream_vars(
+            filename=jp2_filename, image_dir_url=JP2_IMAGES_DIR_URL )
+        new_obj = image_builder.update_object_datastream( new_obj, dsID, file_url, mime_type )
+        new_obj = image_builder.update_newobj_relsint(
+            new_obj=new_obj, filename=jp2_filename, dsID=dsID )
         #
         #
         #
         #Save to fedora
-        # self._save_to_fedora( new_obj )
-        # print u'- saved to fedora.'
+        self._save_to_fedora( new_obj )
+        print u'- saved to fedora.'
         #
         #Update logging
         print u'- done.'
@@ -154,7 +172,8 @@ class Task( object ):
         return
 
     def _print_settings( self,
-        FEDORA_ADMIN_URL, FEDORA_ADMIN_USERNAME, FEDORA_ADMIN_PASSWORD, COLLECTION_PID
+        FEDORA_ADMIN_URL, FEDORA_ADMIN_USERNAME, FEDORA_ADMIN_PASSWORD,
+        COLLECTION_PID, MASTER_IMAGES_DIR_PATH, MASTER_IMAGES_DIR_URL, JP2_IMAGES_DIR_PATH, JP2_IMAGES_DIR_URL
         ):
         """ Outputs settings derived from environmental variables for development. """
         print u'- settings...'
@@ -162,6 +181,10 @@ class Task( object ):
         print u'- FEDORA_ADMIN_USERNAME: %s' % FEDORA_ADMIN_USERNAME
         print u'- FEDORA_ADMIN_PASSWORD: %s' % FEDORA_ADMIN_PASSWORD
         print u'- COLLECTION_PID: %s' % COLLECTION_PID
+        print u'- MASTER_IMAGES_DIR_PATH: %s' % MASTER_IMAGES_DIR_PATH
+        print u'- MASTER_IMAGES_DIR_URL: %s' % MASTER_IMAGES_DIR_URL
+        print u'- JP2_IMAGES_DIR_PATH: %s' % JP2_IMAGES_DIR_PATH
+        print u'- JP2_IMAGES_DIR_URL: %s' % JP2_IMAGES_DIR_URL
         print u'---'
         return
 
@@ -177,17 +200,23 @@ def run__add_metadata_and_image( data ):
     logger = bell_logger.setup_logger()
     logger.info( u'in fedora_metadata_and_image_builder.run__add_metadata_and_image(); starting.' )
     print u'- in fedora_metadata_and_image_builder.run__add_metadata_and_image(); acc_num is: %s' % data[u'item_dict'][u'calc_accession_id']
-    FEDORA_ADMIN_URL=unicode( os.environ.get(u'BELL_FMAIB__FEDORA_ADMIN_URL') )
-    FEDORA_ADMIN_USERNAME=unicode( os.environ.get(u'BELL_FMAIB__FEDORA_ADMIN_USERNAME') )
-    FEDORA_ADMIN_PASSWORD=unicode( os.environ.get(u'BELL_FMAIB__FEDORA_ADMIN_PASSWORD') )
-    COLLECTION_PID=unicode( os.environ.get(u'BELL_FMAIB__COLLECTION_PID') )
+    FEDORA_ADMIN_URL = unicode( os.environ.get(u'BELL_FMAIB__FEDORA_ADMIN_URL') )
+    FEDORA_ADMIN_USERNAME = unicode( os.environ.get(u'BELL_FMAIB__FEDORA_ADMIN_USERNAME') )
+    FEDORA_ADMIN_PASSWORD = unicode( os.environ.get(u'BELL_FMAIB__FEDORA_ADMIN_PASSWORD') )
+    COLLECTION_PID = unicode( os.environ.get(u'BELL_FMAIB__COLLECTION_PID') )
+    MASTER_IMAGES_DIR_PATH = unicode( os.environ.get(u'BELL_FMAIB__MASTER_IMAGES_DIR_PATH') )
+    MASTER_IMAGES_DIR_URL = unicode( os.environ.get(u'BELL_FMAIB__MASTER_IMAGES_DIR_URL'))
+    JP2_IMAGES_DIR_PATH = unicode( os.environ.get(u'BELL_FMAIB__JP2_IMAGES_DIR_PATH') )
+    JP2_IMAGES_DIR_URL = unicode( os.environ.get(u'BELL_FMAIB__JP2_IMAGES_DIR_URL') )
     mods_schema_path = os.path.abspath( u'./lib/mods-3-4.xsd' )
     task = Task()
     task._print_settings(
-        FEDORA_ADMIN_URL, FEDORA_ADMIN_USERNAME, FEDORA_ADMIN_PASSWORD, COLLECTION_PID
+        FEDORA_ADMIN_URL, FEDORA_ADMIN_USERNAME, FEDORA_ADMIN_PASSWORD,
+        COLLECTION_PID, MASTER_IMAGES_DIR_PATH, MASTER_IMAGES_DIR_URL, JP2_IMAGES_DIR_PATH, JP2_IMAGES_DIR_URL
         )
     task.add_metadata_and_image(
-        FEDORA_ADMIN_URL, FEDORA_ADMIN_USERNAME, FEDORA_ADMIN_PASSWORD, COLLECTION_PID,
+        FEDORA_ADMIN_URL, FEDORA_ADMIN_USERNAME, FEDORA_ADMIN_PASSWORD,
+        COLLECTION_PID, MASTER_IMAGES_DIR_PATH, MASTER_IMAGES_DIR_URL, JP2_IMAGES_DIR_PATH, JP2_IMAGES_DIR_URL,
         data[u'item_dict'], mods_schema_path, logger
         )
     print u'- in fedora_metadata_and_image_builder.run__add_metadata_and_image(); acc_num is: %s; item ingested' % data[u'item_dict'][u'calc_accession_id']

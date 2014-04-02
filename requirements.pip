@@ -3,6 +3,7 @@
 # ...instead of referencing this file.
 lxml==3.2.4
 
+envoy==0.0.2
 eulfedora==0.21.0
 gspread==0.1.0
 mysolr==0.8

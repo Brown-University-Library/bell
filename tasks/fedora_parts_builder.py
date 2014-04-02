@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 import datetime, os, pprint
-import eulxml
+import envoy, eulxml
 from bdrxml import irMetadata, mods, rels, rights
 from lxml import etree
 from lxml.etree import XMLSyntaxError
@@ -11,34 +11,89 @@ from lxml.etree import XMLSyntaxError
 
 
 class ImageBuilder( object ):
-    """ Handles rels.Description() """
+    """ Handles repo new-object datastream assignment.
+        Handles repo new-object rels-int assignment.
+        Creates jp2. """
 
-    def build_master_rels_description_vars( self, filename, image_dir_url ):
-        """ Builds pieces necessary for assigning the master rels datastream. """
+    ## create jp2 ##
+
+    def create_jp2( self, source_filepath, destination_filepath ):
+        """ Creates jp2.
+            Called by fedora_metadata_and_image_builder.add_metadata_and_image().
+            TODO: consider making this a separate queue job. """
+        KAKADU_COMMAND_PATH = unicode( os.environ.get(u'BELL_FPB__KAKADU_COMMAND_PATH') )
+        CONVERT_COMMAND_PATH = unicode( os.environ.get(u'BELL_FPB__CONVERT_COMMAND_PATH') )
+        if source_filepath.split( u'.' )[-1] == u'tif':
+            self._create_jp2_from_tif( KAKADU_COMMAND_PATH, source_filepath, destination_filepath )
+        elif source_filepath.split( u'.' )[-1] == u'jpg':
+            self._create_jp2_from_jpg( CONVERT_COMMAND_PATH, KAKADU_COMMAND_PATH, source_filepath, destination_filepath )
+        return
+
+    def _create_jp2_from_tif( self, KAKADU_COMMAND_PATH, source_filepath, destination_filepath ):
+        """ Creates jp2 directly. """
+        cmd = u'%s -i "%s" -o "%s" Creversible=yes -rate -,1,0.5,0.25 Clevels=12' % (
+            KAKADU_COMMAND_PATH, source_filepath, destination_filepath )
+        r = envoy.run( cmd.encode(u'utf-8', u'replace') )  # envoy requires a non-unicode string
+        return
+
+    def _create_jp2_from_jpg( self, CONVERT_COMMAND_PATH, KAKADU_COMMAND_PATH, source_filepath, destination_filepath ):
+        """ Creates jp2 after first converting jpg to tif (due to server limitation). """
+        tif_destination_filepath = source_filepath[0:-4] + u'.tif'
+        cmd = u'%s "%s" "%s"' % (
+            CONVERT_COMMAND_PATH, source_filepath, tif_destination_filepath )
+        r = envoy.run( cmd.encode(u'utf-8', u'replace') )
+        source_filepath = tif_destination_filepath
+        cmd = u'%s -i "%s" -o "%s" Creversible=yes -rate -,1,0.5,0.25 Clevels=12' % (
+            KAKADU_COMMAND_PATH, source_filepath, destination_filepath )
+        r = envoy.run( cmd.encode(u'utf-8', u'replace') )
+        os.remove( tif_destination_filepath )
+        return
+
+    ## datastream work ##
+
+    def build_master_datastream_vars( self, filename, image_dir_url ):
+        """ Builds pieces necessary for assigning the master datastream.
+            Called by fedora_metadata_and_image_builder.add_metadata_and_image(). """
         file_url = u'%s/%s' % ( image_dir_url, filename )
-        download_filename = filename.replace( u' ', u'_' )
         dsID = u'MASTER'
         mime_type = u'image/tiff'
-        if download_filename.split( u'.' )[-1] == u'jpg':
+        if filename.split( u'.' )[-1] == u'jpg':
             mime_type = u'image/jpeg'
-        return ( file_url, download_filename, mime_type, dsID )
+        return ( file_url, dsID, mime_type )
 
-    def build_master_rels_description_object( self, repo_obj, dsID, file_url, mime_type, download_filename ):
-        """ z """
-        ## set repo-object's ds
+    def build_jp2_datastream_vars( self, filename, image_dir_url ):
+        """ Builds pieces necessary for assigning the jp2 datastream.
+            Called by fedora_metadata_and_image_builder.add_metadata_and_image(). """
+        file_url = u'%s/%s' % ( image_dir_url, filename )
+        dsID = u'JP2'
+        mime_type = u'image/jp2'
+        return ( file_url, dsID, mime_type )
+
+    def update_object_datastream( self, new_obj, dsID, file_url, mime_type ):
+        """ Updates the new-object's datastream property.
+            Returns the updated new-object.
+            Called by fedora_metadata_and_image_builder.add_metadata_and_image().
+            TODO: try passing this a 'data-stream' object (instead of the whole new_obj, update it, and send it back.
+                  then in the calling code, say new_obj.master = ds_object and new_obj.jp2 = ds_object. """
         python_dsID = dsID.lower()
-        ds = getattr( repo_obj, python_dsID )
+        ds = getattr( new_obj, python_dsID )
         ds.ds_location = file_url
         ds.mimetype = mime_type
-        ## set repo-object's rels-description
-        downloadDescription = rels.Description()
-        downloadDescription.about = u"%s/%s" % ( repo_obj.uriref, dsID )
-        downloadDescription.download_filename = download_filename
-        repo_obj.rels_int.content.descriptions.append( downloadDescription )
-        ## return
-        return repo_obj
+        return new_obj
 
+    ## rels-int work ##
 
+    def update_newobj_relsint( self, filename, new_obj, dsID ):
+        """ Takes the repo new-obj and a dsID of 'MASTER' or 'JP2'.
+            Updates the new-object's rels-int.
+            Returns the updated new-object.
+            Called by fedora_metadata_and_image_builder.add_metadata_and_image(). """
+        download_filename = filename.replace( u' ', u'_' )
+        download_description = rels.Description()
+        download_description.about = u"%s/%s" % ( new_obj.uriref, dsID )
+        download_description.download_filename = download_filename
+        new_obj.rels_int.content.descriptions.append( download_description )
+        return new_obj
 
     # end class ImageBuilder()
 
