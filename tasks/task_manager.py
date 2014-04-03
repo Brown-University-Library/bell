@@ -63,9 +63,9 @@ def determine_next_task( current_task, data=None, logger=None ):
     logger.info( u'in task_manager.determine_next_task(); %s' % pprint.pformat({u'next_task': next_task, u'data': data}) )
     if next_task:
         if data:
-            job = q.enqueue_call( func=u'%s' % next_task, args=(data,), timeout=30 )
+            job = q.enqueue_call( func=u'%s' % next_task, args=(data,), timeout=120 )
         else:
-            job = q.enqueue_call( func=u'%s' % next_task, args=(), timeout=30 )
+            job = q.enqueue_call( func=u'%s' % next_task, args=(), timeout=120 )
     return next_task
 
     # end def determine_next_task()
