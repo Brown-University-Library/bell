@@ -102,7 +102,7 @@ class Task( object ):
         #
         #
         #Update master datastream and rels-int
-        master_filename = data[u'item_dict'][u'object_image_scan_filename']
+        master_filename = item_data_dict[u'object_image_scan_filename']
         ( file_url, dsID, mime_type ) = image_builder.build_master_datastream_vars(
             filename=master_filename, image_dir_url=MASTER_IMAGES_DIR_URL )
         new_obj = image_builder.update_object_datastream( new_obj, dsID, file_url, mime_type )
