@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-import datetime, os, pprint
+import datetime, os, pprint, urllib
 import envoy, eulxml
 from bdrxml import irMetadata, mods, rels, rights
 from lxml import etree
@@ -49,27 +49,42 @@ class ImageBuilder( object ):
         tif_destination_filepath = destination_filepath[0:-4] + u'.tif'
         cmd = u'%s -compress None "%s" %s' % (
             CONVERT_COMMAND_PATH, cleaned_source_filepath, tif_destination_filepath )  # source-filepath quotes needed for filename containing spaces
-        self.logger.info( u'in fedora_parts_builder._create_jp2_from_jpg(); make-tiff-cmd, %s' % cmd )
         r = envoy.run( cmd.encode(u'utf-8', u'replace') )
-        self.logger.info( u'in fedora_parts_builder._create_jp2_from_jpg(); r.std_out, %s' % r.std_out )
-        self.logger.info( u'in fedora_parts_builder._create_jp2_from_jpg(); r.std_err, %s' % r.std_err )
         source_filepath = tif_destination_filepath
         cmd = u'%s -i "%s" -o "%s" Creversible=yes -rate -,1,0.5,0.25 Clevels=12' % (
             KAKADU_COMMAND_PATH, source_filepath, destination_filepath )
-        self.logger.info( u'in fedora_parts_builder._create_jp2_from_jpg(); make-jp2-cmd, %s' % cmd )
         r = envoy.run( cmd.encode(u'utf-8', u'replace') )
-        self.logger.info( u'in fedora_parts_builder._create_jp2_from_jpg(); r.std_out, %s' % r.std_out )
-        self.logger.info( u'in fedora_parts_builder._create_jp2_from_jpg(); r.std_err, %s' % r.std_err )
-        self.logger.info( u'in fedora_parts_builder._create_jp2_from_jpg(); tif_destination_filepath, %s' % tif_destination_filepath )
-        # os.remove( tif_destination_filepath )
+        os.remove( tif_destination_filepath )
         return
+
+    # def _create_jp2_from_jpg( self, CONVERT_COMMAND_PATH, KAKADU_COMMAND_PATH, source_filepath, destination_filepath ):
+    #     """ Creates jp2 after first converting jpg to tif (due to server limitation). """
+    #     cleaned_source_filepath = source_filepath.replace( u' ', u'\ ' )
+    #     tif_destination_filepath = destination_filepath[0:-4] + u'.tif'
+    #     cmd = u'%s -compress None "%s" %s' % (
+    #         CONVERT_COMMAND_PATH, cleaned_source_filepath, tif_destination_filepath )  # source-filepath quotes needed for filename containing spaces
+    #     self.logger.info( u'in fedora_parts_builder._create_jp2_from_jpg(); make-tiff-cmd, %s' % cmd )
+    #     r = envoy.run( cmd.encode(u'utf-8', u'replace') )
+    #     self.logger.info( u'in fedora_parts_builder._create_jp2_from_jpg(); r.std_out, %s' % r.std_out )
+    #     self.logger.info( u'in fedora_parts_builder._create_jp2_from_jpg(); r.std_err, %s' % r.std_err )
+    #     source_filepath = tif_destination_filepath
+    #     cmd = u'%s -i "%s" -o "%s" Creversible=yes -rate -,1,0.5,0.25 Clevels=12' % (
+    #         KAKADU_COMMAND_PATH, source_filepath, destination_filepath )
+    #     self.logger.info( u'in fedora_parts_builder._create_jp2_from_jpg(); make-jp2-cmd, %s' % cmd )
+    #     r = envoy.run( cmd.encode(u'utf-8', u'replace') )
+    #     self.logger.info( u'in fedora_parts_builder._create_jp2_from_jpg(); r.std_out, %s' % r.std_out )
+    #     self.logger.info( u'in fedora_parts_builder._create_jp2_from_jpg(); r.std_err, %s' % r.std_err )
+    #     self.logger.info( u'in fedora_parts_builder._create_jp2_from_jpg(); tif_destination_filepath, %s' % tif_destination_filepath )
+    #     os.remove( tif_destination_filepath )
+    #     return
 
     ## datastream work ##
 
     def build_master_datastream_vars( self, filename, image_dir_url ):
         """ Builds pieces necessary for assigning the master datastream.
             Called by fedora_metadata_and_image_builder.add_metadata_and_image(). """
-        file_url = u'%s/%s' % ( image_dir_url, filename )
+        encoded_filename = urllib.quote( filename ).decode( u'utf-8' )
+        file_url = u'%s/%s' % ( image_dir_url, encoded_filename )
         dsID = u'MASTER'
         mime_type = u'image/tiff'
         if filename.split( u'.' )[-1] == u'jpg':
@@ -79,7 +94,8 @@ class ImageBuilder( object ):
     def build_jp2_datastream_vars( self, filename, image_dir_url ):
         """ Builds pieces necessary for assigning the jp2 datastream.
             Called by fedora_metadata_and_image_builder.add_metadata_and_image(). """
-        file_url = u'%s/%s' % ( image_dir_url, filename )
+        encoded_filename = urllib.quote( filename ).decode( u'utf-8' )
+        file_url = u'%s/%s' % ( image_dir_url, encoded_filename )
         dsID = u'JP2'
         mime_type = u'image/jp2'
         return ( file_url, dsID, mime_type )
@@ -88,7 +104,7 @@ class ImageBuilder( object ):
         """ Updates the new-object's datastream property.
             Returns the updated new-object.
             Called by fedora_metadata_and_image_builder.add_metadata_and_image().
-            TODO: try passing this a 'data-stream' object (instead of the whole new_obj, update it, and send it back.
+            Possible TODO: try passing this a 'data-stream' object (instead of the whole new_obj, update it, and send it back.
                   then in the calling code, say new_obj.master = ds_object and new_obj.jp2 = ds_object. """
         python_dsID = dsID.lower()
         ds = getattr( new_obj, python_dsID )
