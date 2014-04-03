@@ -108,6 +108,7 @@ class Task( object ):
         new_obj = image_builder.update_object_datastream( new_obj, dsID, file_url, mime_type )
         new_obj = image_builder.update_newobj_relsint(
             new_obj=new_obj, filename=master_filename, dsID=dsID )
+        print u'- master datastream and rels-int fields updated.'
         #
         #
         #
@@ -119,6 +120,7 @@ class Task( object ):
         destination_filepath = u'%s/%s' % ( JP2_IMAGES_DIR_PATH, jp2_filename )
         self.logger.info( u'in fedora_metadata_and_image_builder.add_metadata_and_image(); destination_filepath, %s' % destination_filepath )
         image_builder.create_jp2( source_filepath, destination_filepath )
+        print u'- jp2 created.'
         #
         #
         #
@@ -128,6 +130,7 @@ class Task( object ):
         new_obj = image_builder.update_object_datastream( new_obj, dsID, file_url, mime_type )
         new_obj = image_builder.update_newobj_relsint(
             new_obj=new_obj, filename=jp2_filename, dsID=dsID )
+        print u'- jp2 datastream and rels-int fields updated.'
         #
         #
         #
@@ -146,11 +149,7 @@ class Task( object ):
             logger=logger
             )
         print u'- next task set.'
-
-        # except Exception as e:
-        #     error_message = u'in Task.create_fedora_metadata_object(); exception: %s' % unicode(repr(e))
-        #     self.logger.info( error_message )
-        #     raise Exception( error_message )
+        return
 
     def _save_to_fedora( self, new_obj ):
         """ Saves object to fedora. """
@@ -261,7 +260,8 @@ if __name__ == u'__main__':
             u'object_depth': None,
             u'object_height': None,
             u'object_id': u'182',
-            u'object_image_scan_filename': u'Frink B_1968.1562.tif',
+            # u'object_image_scan_filename': u'Frink B_1968.1562.tif',
+            u'object_image_scan_filename': u'Foglia PH_2008.1.jpg',
             u'object_medium': u'Letterpress and lithography',
             u'object_title': u"Aesop's Fables",
             u'object_width': None,
