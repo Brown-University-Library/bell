@@ -15,6 +15,9 @@ class ImageBuilder( object ):
         Handles repo new-object rels-int assignment.
         Creates jp2. """
 
+    def __init__( self, logger ):
+        self.logger = logger
+
     ## create jp2 ##
 
     def create_jp2( self, source_filepath, destination_filepath ):
@@ -31,21 +34,41 @@ class ImageBuilder( object ):
 
     def _create_jp2_from_tif( self, KAKADU_COMMAND_PATH, source_filepath, destination_filepath ):
         """ Creates jp2 directly. """
+        cleaned_source_filepath = source_filepath.replace( u' ', u'\ ' )
         cmd = u'%s -i "%s" -o "%s" Creversible=yes -rate -,1,0.5,0.25 Clevels=12' % (
-            KAKADU_COMMAND_PATH, source_filepath, destination_filepath )
+            KAKADU_COMMAND_PATH, cleaned_source_filepath, destination_filepath )
+        self.logger.info( u'in fedora_parts_builder._create_jp2_from_tif(); cmd, %s' % cmd )
         r = envoy.run( cmd.encode(u'utf-8', u'replace') )  # envoy requires a non-unicode string
+        self.logger.info( u'in fedora_parts_builder._create_jp2_from_tif(); r.std_out, %s' % r.std_out )
+        self.logger.info( u'in fedora_parts_builder._create_jp2_from_tif(); r.std_err, %s' % r.std_err )
         return
+
+    # def _create_jp2_from_tif( self, KAKADU_COMMAND_PATH, source_filepath, destination_filepath ):
+    #     """ Creates jp2 directly. """
+    #     cmd = u'%s -i "%s" -o "%s" Creversible=yes -rate -,1,0.5,0.25 Clevels=12' % (
+    #         KAKADU_COMMAND_PATH, source_filepath, destination_filepath )
+    #     self.logger.info( u'in fedora_parts_builder._create_jp2_from_tif(); cmd, %s' % cmd )
+    #     r = envoy.run( cmd.encode(u'utf-8', u'replace') )  # envoy requires a non-unicode string
+    #     self.logger.info( u'in fedora_parts_builder._create_jp2_from_tif(); r.std_out, %s' % r.std_out )
+    #     self.logger.info( u'in fedora_parts_builder._create_jp2_from_tif(); r.std_err, %s' % r.std_err )
+    #     return
 
     def _create_jp2_from_jpg( self, CONVERT_COMMAND_PATH, KAKADU_COMMAND_PATH, source_filepath, destination_filepath ):
         """ Creates jp2 after first converting jpg to tif (due to server limitation). """
         tif_destination_filepath = source_filepath[0:-4] + u'.tif'
         cmd = u'%s "%s" "%s"' % (
             CONVERT_COMMAND_PATH, source_filepath, tif_destination_filepath )
+        self.logger.info( u'in fedora_parts_builder._create_jp2_from_jpg(); make-tiff-cmd, %s' % cmd )
         r = envoy.run( cmd.encode(u'utf-8', u'replace') )
+        self.logger.info( u'in fedora_parts_builder._create_jp2_from_jpg(); r.std_out, %s' % r.std_out )
+        self.logger.info( u'in fedora_parts_builder._create_jp2_from_jpg(); r.std_err, %s' % r.std_err )
         source_filepath = tif_destination_filepath
         cmd = u'%s -i "%s" -o "%s" Creversible=yes -rate -,1,0.5,0.25 Clevels=12' % (
             KAKADU_COMMAND_PATH, source_filepath, destination_filepath )
+        self.logger.info( u'in fedora_parts_builder._create_jp2_from_jpg(); make-jp2-cmd, %s' % cmd )
         r = envoy.run( cmd.encode(u'utf-8', u'replace') )
+        self.logger.info( u'in fedora_parts_builder._create_jp2_from_jpg(); r.std_out, %s' % r.std_out )
+        self.logger.info( u'in fedora_parts_builder._create_jp2_from_jpg(); r.std_err, %s' % r.std_err )
         os.remove( tif_destination_filepath )
         return
 

@@ -38,7 +38,7 @@ class Task( object ):
         # print u'- in fedora_metadata_only_builder.Task.create_fedora_metadata_object(); accession_number, %s' % self.accession_number
         #
         #Setup builders
-        image_builder = ImageBuilder()
+        image_builder = ImageBuilder( logger )
         ir_builder = IRBuilder()
         mods_builder = ModsBuilder()
         rights_builder = RightsBuilder()
@@ -113,9 +113,11 @@ class Task( object ):
         #
         #Create jp2
         source_filepath = u'%s/%s' % ( MASTER_IMAGES_DIR_PATH, master_filename )
+        self.logger.info( u'in fedora_metadata_and_image_builder.add_metadata_and_image(); source_filepath, %s' % source_filepath )
         temp_filename = master_filename.replace( u' ', u'_' )
         jp2_filename = temp_filename[0:-4] + u'.jp2'
         destination_filepath = u'%s/%s' % ( JP2_IMAGES_DIR_PATH, jp2_filename )
+        self.logger.info( u'in fedora_metadata_and_image_builder.add_metadata_and_image(); destination_filepath, %s' % destination_filepath )
         image_builder.create_jp2( source_filepath, destination_filepath )
         #
         #
