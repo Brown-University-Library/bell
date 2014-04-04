@@ -43,7 +43,7 @@ def determine_next_task( current_task, data=None, logger=None ):
         elif data[u'handler'] == u'add_new_item_with_image':
             next_task = u'tasks.fedora_metadata_and_image_builder.run__add_metadata_and_image'
         elif data[u'handler'] == u'update_existing_metadata':
-            next_task = u'tasks.fedora_metadata_only_builder.run__update_existing_metadata'
+            next_task = u'tasks.fedora_metadata_only_updater.run__update_existing_metadata_object'
         elif data[u'handler'] == u'update_existing_metadata_and_create_or_update_image':
             next_task = u'tasks.fedora_metadata_and_image_builder.run__update_existing_metadata_and_create_or_update_image'
 
@@ -131,7 +131,7 @@ def determine_handler( item_dict ):
     else:
         raise Exception( u'in task_manager.determine_handler(); unhandled case' )
     update_tracker( key=acc_num, message=u'handler: %s' % handler )
-    determine_next_task( sys._getframe().f_code.co_name, data={u'item_dict': item_dict, u'handler': handler}, logger=logger )
+    # determine_next_task( sys._getframe().f_code.co_name, data={u'item_dict': item_dict, u'handler': handler}, logger=logger )
     logger.info( u'in task_manager.determine_handler(); done; acc_num, %s; filepath, %s; pid, %s; handler, %s' % (acc_num, filepath, pid, handler) )
     return
 
