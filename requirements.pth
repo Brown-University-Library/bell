@@ -3,5 +3,5 @@
 # local settings directory
 /path/to/project_settings
 
-# project enclosing directory -- allows references like "from project_directory import..."
+# project enclosing directory -- allows references like "from bell_code import..."
 /path/to/enclosing_project_directory

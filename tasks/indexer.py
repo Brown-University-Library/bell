@@ -1,9 +1,9 @@
 # -*- coding: utf-8 -*-
 
 import os, sys
-import bell_logger
+from bell_code import bell_logger
 from mysolr import Solr
-from tasks import task_manager
+from bell_code.tasks import task_manager
 
 """ Handles custom solr indexing.
     Typically auto-called after ingestion. """
@@ -55,7 +55,7 @@ def build_metadata_only_solr_dict( data ):
     solr_dict = _set_author_description( original_dict, solr_dict )
     solr_dict = _set_author_names( original_dict, solr_dict )
     solr_dict = _set_height_width_depth( original_dict, solr_dict )
-    solr_dict = _set_image_urls( solr_dict, flag=u'metadata_only' )
+    solr_dict = _set_image_urls( solr_dict, pid=None, flag=u'metadata_only' )
     solr_dict = _set_locations( original_dict, solr_dict )
     solr_dict = _set_note_provenance( original_dict, solr_dict )
     solr_dict = _set_object_dates( original_dict, solr_dict )
@@ -73,6 +73,42 @@ def build_metadata_only_solr_dict( data ):
     else:
         raise Exception( u'problem preparing solr_dict, check logs' )  # should move job to failed queue
     return solr_dict  # returned value only for testing
+
+
+def build_metadata_and_image_solr_dict( data ):
+    """ Builds dict-to-index using basic item-dict data and pid.
+        Called after fedora_metadata_only_builder.run__create_fedora_metadata_object() task. """
+    assert sorted( data.keys() ) == [ u'item_data', u'pid' ], Exception( u'- in indexer.build_metadata_only_solr_dict(); unexpected data.keys(): %s' % sorted(data.keys()) )
+    logger = bell_logger.setup_logger()
+    original_dict = data[u'item_data']
+    solr_dict = {}
+    # solr_dict = _set_accession_number_original( original_dict, solr_dict )
+    solr_dict[u'accession_number_original'] = original_dict[u'calc_accession_id']
+    solr_dict[u'pid'] = data[u'pid']
+    solr_dict = _set_author_dates( original_dict, solr_dict )
+    solr_dict = _set_author_description( original_dict, solr_dict )
+    solr_dict = _set_author_names( original_dict, solr_dict )
+    solr_dict = _set_height_width_depth( original_dict, solr_dict )
+    solr_dict = _set_image_urls( solr_dict, pid=data[u'pid'], flag=None )
+    solr_dict = _set_locations( original_dict, solr_dict )
+    solr_dict = _set_note_provenance( original_dict, solr_dict )
+    solr_dict = _set_object_dates( original_dict, solr_dict )
+    solr_dict = _set_physical_extent( original_dict, solr_dict )
+    solr_dict = _set_physical_descriptions( original_dict, solr_dict )
+    solr_dict = _set_title( original_dict, solr_dict )
+    all_good = _validate_solr_dict( solr_dict, logger )
+    logger.info( u'in indexer.build_metadata_and_image_solr_dict(); all_good_flag is %s; solr_dict is %s' % (all_good, solr_dict) )
+    if all_good:
+        task_manager.determine_next_task(
+            unicode(sys._getframe().f_code.co_name),
+            data={ u'solr_dict': solr_dict },
+            logger=logger
+            )
+    else:
+        raise Exception( u'problem preparing solr_dict, check logs' )  # should move job to failed queue
+    return solr_dict  # returned value only for testing
+
+
 
 
 def post_to_solr( data ):
@@ -145,7 +181,7 @@ def _set_height_width_depth( original_dict, solr_dict ):
     return solr_dict
 
 
-def _set_image_urls( solr_dict, pid=None, flag=u'metadata_only' ):
+def _set_image_urls( solr_dict, pid=None, flag=None ):
     """  Sets jp2 and master image-url info.
         Called by build_metadata_only_solr_dict() """
     solr_dict[u'jp2_image_url'] = u''
@@ -189,13 +225,24 @@ def _set_image_urls__get_master_image_url( item_api_dict ):
     """ Returns master image url or u''.
         Called by _set_image_urls() """
     try:
-        image_url = item_api_dict[u'links'][u'content_datastreams'][u'TIFF']
+        temp_image_url = item_api_dict[u'links'][u'content_datastreams'][u'JP2']
+        image_url = temp_image_url.replace( u'/JP2/', u'/MASTER/' )
     except:
-        try:
-            image_url = item_api_dict[u'links'][u'content_datastreams'][u'JPG']
-        except:
-            image_url = u''
+        image_url = u''
     return image_url
+
+
+# def _set_image_urls__get_master_image_url( item_api_dict ):
+#     """ Returns master image url or u''.
+#         Called by _set_image_urls() """
+#     try:
+#         image_url = item_api_dict[u'links'][u'content_datastreams'][u'TIFF']
+#     except:
+#         try:
+#             image_url = item_api_dict[u'links'][u'content_datastreams'][u'JPG']
+#         except:
+#             image_url = u''
+#     return image_url
 
 
 def _set_locations( original_dict, solr_dict ):
