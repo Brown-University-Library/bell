@@ -2,7 +2,7 @@
 
 import json, pprint, os, sys
 import bell_logger
-import redis, rq
+import redis, requests, rq
 # import redis
 # from redis import Redis
 # from rq import Queue
@@ -39,13 +39,15 @@ def determine_next_task( current_task, data=None, logger=None ):
     elif current_task == u'determine_handler':
         assert sorted(data.keys()) == [u'handler', u'item_dict']
         if data[u'handler'] == u'add_new_metadata_only_item':
-            next_task = u'tasks.fedora_metadata_only_builder.run__create_fedora_metadata_object'
+            next_task = u'tasks.fedora_metadata_only_builder.run__create_fedora_metadata_object'  # built
         elif data[u'handler'] == u'add_new_item_with_image':
-            next_task = u'tasks.fedora_metadata_and_image_builder.run__add_metadata_and_image'
+            next_task = u'tasks.fedora_metadata_and_image_builder.run__add_metadata_and_image'  # built
         elif data[u'handler'] == u'update_existing_metadata':
-            next_task = u'tasks.fedora_metadata_only_updater.run__update_existing_metadata_object'
-        elif data[u'handler'] == u'update_existing_metadata_and_create_or_update_image':
-            next_task = u'tasks.fedora_metadata_and_image_builder.run__update_existing_metadata_and_create_or_update_image'
+            next_task = u'tasks.fedora_metadata_only_updater.run__update_existing_metadata_object'  # TODO
+        elif data[u'handler'] == u'update_existing_metadata_and_create_image':
+            next_task = u'tasks.fedora_metadata_updater_and_image_builder.run__update_existing_metadata_and_create_image'  # TODO NEXT
+        elif data[u'handler'] == u'update_existing_metadata_and_update_image':
+            next_task = u'tasks.fedora_metadata_updater_and_image_updater.run__update_existing_metadata_and_update_image'  # TODO
 
     elif current_task == u'create_fedora_metadata_object':
         assert sorted( data.keys() ) == [ u'item_data', u'pid' ]
@@ -104,7 +106,8 @@ def determine_handler( item_dict ):
         - accession_number has pid, & has image_filename, & image_file _not_ in image_dir
             handler == ‘update_existing_metadata’
         - accession_number has pid, & has image_filename, & image_file _found_ in image_dir
-            handler == ‘update_existing_metadata_and_create_or_update_image’ """
+            handler == 'update_existing_metadata_and_create_image' _or_ 'update_existing_metadata_and_update_image'
+            """
     IMAGE_DIR = os.environ.get(u'BELL_TM__IMAGES_DIR_PATH')
     logger = bell_logger.setup_logger()
     handler = None
@@ -127,7 +130,10 @@ def determine_handler( item_dict ):
     elif pid and filename and not filepath:
         handler = u'update_existing_metadata'
     elif pid and filename and filepath:
-        handler = u'update_existing_metadata_and_create_or_update_image'
+        if _image_already_ingested( pid ):
+            handler = u'update_existing_metadata_and_update_image'
+        else:
+            handler = u'update_existing_metadata_and_create_image'
     else:
         raise Exception( u'in task_manager.determine_handler(); unhandled case' )
     update_tracker( key=acc_num, message=u'handler: %s' % handler )
@@ -150,6 +156,22 @@ def _check_filepath( filename, IMAGE_DIR, logger ):
             filepath = temp_filepath
     logger.info( u'in task_manager._check_filepath(); temp_filepath, %s; filepath, %s' % (temp_filepath, filepath) )
     return filepath
+
+
+def _image_already_ingested( pid ):
+    """ Checks repo api to see if an image has previously been ingested.
+        Returns boolean.
+        Called by determine_handler() """
+    ITEM_API_ROOT = os.environ.get(u'BELL_TM__ITEM_API_ROOT')
+    image_already_ingested = True
+    item_api_url = u'%s/%s/' % ( ITEM_API_ROOT, pid )
+    r = requests.get( item_api_url )
+    d = r.json()
+    if u'JP2' in d[u'links'][u'content_datastreams'].keys()  or  u'jp2' in d[u'rel_content_models_ssim']:
+        pass
+    else:
+        image_already_ingested = False
+    return image_already_ingested
 
 
 def _check_recently_processed( accession_number_key, logger=None ):

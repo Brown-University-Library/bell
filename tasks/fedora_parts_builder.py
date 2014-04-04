@@ -304,8 +304,10 @@ class IRBuilder( object ):
         ''' Creates basic bell ir object.
             'ir_obj.date' and if necessary, 'ir_obj.filename', will be set dynamically '''
         obj = irMetadata.make_ir()
-        obj.depositor_name = u'Bell Gallery'
         assert unicode(repr(type(obj))) == u"<class 'bdrxml.irMetadata.IR'>", unicode(repr(type(obj)))
+        obj.depositor_name = u'Bell Gallery'
+        obj.date = datetime.datetime.today()  # ir.date = '%s' % now.strftime('%Y-%m-%d')
+        obj.date = u'%s' % datetime.datetime.now().strftime( u'%Y-%m-%d' )
         return obj
 
     # end class IRBuilder()
