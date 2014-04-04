@@ -1,11 +1,8 @@
 # -*- coding: utf-8 -*-
 
 import json, pprint, os, sys
-import bell_logger
 import redis, requests, rq
-# import redis
-# from redis import Redis
-# from rq import Queue
+from bell_code import bell_logger
 
 
 queue_name = os.environ.get(u'BELL_QUEUE_NAME')
@@ -53,7 +50,11 @@ def determine_next_task( current_task, data=None, logger=None ):
         assert sorted( data.keys() ) == [ u'item_data', u'pid' ]
         next_task = u'tasks.indexer.build_metadata_only_solr_dict'
 
-    elif current_task == u'build_metadata_only_solr_dict':
+    elif current_task == u'add_metadata_and_image':
+        assert sorted( data.keys() ) == [ u'item_data', u'pid' ]
+        next_task = u'tasks.indexer.build_metadata_and_image_solr_dict'
+
+    elif current_task == u'build_metadata_only_solr_dict' or current_task == u'add_metadata_and_image':
         assert data.keys() == [ u'solr_dict' ]
         next_task = u'tasks.indexer.post_to_solr'
 
@@ -130,7 +131,7 @@ def determine_handler( item_dict ):
     elif pid and filename and not filepath:
         handler = u'update_existing_metadata'
     elif pid and filename and filepath:
-        if _image_already_ingested( pid ):
+        if _image_already_ingested( pid, logger ):
             handler = u'update_existing_metadata_and_update_image'
         else:
             handler = u'update_existing_metadata_and_create_image'
@@ -156,27 +157,21 @@ def _check_filepath( filename, IMAGE_DIR, logger ):
             filepath = temp_filepath
     logger.info( u'in task_manager._check_filepath(); temp_filepath, %s; filepath, %s' % (temp_filepath, filepath) )
     return filepath
-
-
-def _image_already_ingested( pid ):
-    """ Checks repo api to see if an image has previously been ingested.
-        Returns boolean.
+    #
+def _check_pid( acc_num, logger=None ):
+    """ Checks if accession number has a pid and returns it if so.
         Called by determine_handler() """
-    ITEM_API_ROOT = os.environ.get(u'BELL_TM__ITEM_API_ROOT')
-    image_already_ingested = True
-    item_api_url = u'%s/%s/' % ( ITEM_API_ROOT, pid )
-    r = requests.get( item_api_url )
-    d = r.json()
-    if u'JP2' in d[u'links'][u'content_datastreams'].keys()  or  u'jp2' in d[u'rel_content_models_ssim']:
-        pass
-    else:
-        image_already_ingested = False
-    return image_already_ingested
-
-
+    FILE_PATH = os.environ.get(u'BELL_TM__PID_DICT_JSON_PATH')
+    with open( FILE_PATH ) as f:
+        full_pid_data_dict = json.loads( f.read() )
+        # logger.info( u'in task_manager._check_pid(); full_pid_data_dict, %s' % pprint.pformat(full_pid_data_dict) )
+    pid = full_pid_data_dict[u'final_accession_pid_dict'][acc_num]
+    logger.info( u'in task_manager._check_pid(); pid, %s' % pid )
+    return pid
+    #
 def _check_recently_processed( accession_number_key, logger=None ):
     """ Checks redis bell:tracker to see if item has recently been successfully ingested.
-        Called by determine_situation() """
+        Called by determine_handler() """
     return_val = False
     tracker_name = u'bell:tracker'
     if r.hexists( tracker_name, accession_number_key ):
@@ -185,18 +180,22 @@ def _check_recently_processed( accession_number_key, logger=None ):
             return_val = True
     logger.info( u'in task_manager._check_recently_processed(); acc_num, %s; return_val, %s' % (accession_number_key, return_val) )
     return return_val
-
-
-def _check_pid( acc_num, logger=None ):
-    """ Checks if accession number has a pid and returns it if so.
-        Called by determine_situation() """
-    FILE_PATH = os.environ.get(u'BELL_TM__PID_DICT_JSON_PATH')
-    with open( FILE_PATH ) as f:
-        full_pid_data_dict = json.loads( f.read() )
-        # logger.info( u'in task_manager._check_pid(); full_pid_data_dict, %s' % pprint.pformat(full_pid_data_dict) )
-    pid = full_pid_data_dict[u'final_accession_pid_dict'][acc_num]
-    # logger.info( u'in task_manager._check_pid(); pid, %s' % pid )
-    return pid
+    #
+def _image_already_ingested( pid, logger ):
+    """ Checks repo api to see if an image has previously been ingested.
+        Returns boolean.
+        Called by determine_handler() """
+    ITEM_API_ROOT = os.environ.get(u'BELL_TM__ITEM_API_ROOT')
+    image_already_ingested = True
+    item_api_url = u'%s/%s/' % ( ITEM_API_ROOT, pid )
+    logger.debug( u'in task_manager._image_already_ingested(); item_api_url, %s' % item_api_url )
+    r = requests.get( item_api_url )
+    d = r.json()
+    if u'JP2' in d[u'links'][u'content_datastreams'].keys()  or  u'jp2' in d[u'rel_content_models_ssim']:
+        pass
+    else:
+        image_already_ingested = False
+    return image_already_ingested
 
 
 def update_tracker( key, message ):

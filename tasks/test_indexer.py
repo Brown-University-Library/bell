@@ -12,20 +12,6 @@ import indexer
       python ./tasks/test_indexer.py Indexer_Test.test__build_metadata_only_solr_dict """
 
 
-# def dummy_solr_task():
-#     """ Checks that redis is running. """
-#     logger = bell_logger.setup_logger()
-#     logger.info( u'[[ running dummy_solr_task ]]' )
-#     try:
-#         task_manager.determine_next_task( current_task=sys._getframe().f_code.co_name, data=data, logger=logger )
-#         logger.info( u'[[ end dummy_solr_task ]]' )
-#         return
-#     except Exception as e:
-#         message = u'Redis does not appear to be running; exception: %s' % unicode(repr(e))
-#         logger.error( message )
-#         raise Exception( message )
-
-
 class Indexer_Test(unittest.TestCase):
     """ Tests indexer.py code. """
 
@@ -91,19 +77,21 @@ class Indexer_Test(unittest.TestCase):
         u'object_date': u'1977',
         u'object_depth': u'',
         u'object_height': u'',
-        u'object_title': u'Suite of Daze',
         u'object_width': u'',
         u'origin_datecreated_end': u'1977',
         u'origin_datecreated_start': u'1977',
         u'physical_description_extent': [u''],
         u'physical_description_material': [u'Letterpress and etching'],
-        u'physical_description_technique': [u'Etching ', u'Letterpress']
+        u'physical_description_technique': [u'Etching ', u'Letterpress'],
+        u'pid': u'test_123',
+        u'title': u'Suite of Daze'
         }
 
     def test__build_metadata_only_solr_dict(self):
         """ Tests solr_dict creation. """
         expected = self.test_expected_metadata_only_result
         result = indexer.build_metadata_only_solr_dict( self.test_original_data )
+        # pprint.pprint( result )
         self.assertEquals( expected, result )
 
     # end class Indexer_Test()
