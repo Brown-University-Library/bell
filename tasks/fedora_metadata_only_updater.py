@@ -11,7 +11,7 @@ from tasks import task_manager
 
 
 class Task( object ):
-    """ Handles creation of a fedora metadata-only object. """
+    """ Updates fedora metadata-only object. """
 
     def __init__( self ):
         self.accession_number = None
@@ -157,6 +157,7 @@ class Task( object ):
 def run__update_existing_metadata_object( data ):
     """ Instantiates Task() instance & calls create_fedora_metadata_object().
         Called by task_manager.determine_next_task(). """
+    1/0
     logger = bell_logger.setup_logger()
     logger.info( u'in fedora_metadata_only_builder.run__create_fedora_metadata_object(); starting.' )
     print u'- in fedora_metadata_only_builder.run__create_fedora_metadata_object(); acc_num is: %s' % data[u'item_dict'][u'calc_accession_id']
