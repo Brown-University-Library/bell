@@ -54,7 +54,7 @@ def determine_next_task( current_task, data=None, logger=None ):
         assert sorted( data.keys() ) == [ u'item_data', u'pid' ]
         next_task = u'tasks.indexer.build_metadata_and_image_solr_dict'
 
-    elif current_task == u'build_metadata_only_solr_dict' or current_task == u'add_metadata_and_image':
+    elif current_task == u'build_metadata_only_solr_dict' or current_task == u'build_metadata_and_image_solr_dict':
         assert data.keys() == [ u'solr_dict' ]
         next_task = u'tasks.indexer.post_to_solr'
 
