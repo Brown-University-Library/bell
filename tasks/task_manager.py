@@ -138,7 +138,7 @@ def determine_handler( item_dict ):
     else:
         raise Exception( u'in task_manager.determine_handler(); unhandled case' )
     update_tracker( key=acc_num, message=u'handler: %s' % handler )
-    # determine_next_task( sys._getframe().f_code.co_name, data={u'item_dict': item_dict, u'handler': handler}, logger=logger )
+    determine_next_task( sys._getframe().f_code.co_name, data={u'item_dict': item_dict, u'handler': handler}, logger=logger )
     logger.info( u'in task_manager.determine_handler(); done; acc_num, %s; filepath, %s; pid, %s; handler, %s' % (acc_num, filepath, pid, handler) )
     return
 
