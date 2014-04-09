@@ -2,6 +2,7 @@
 
 import os
 from bell_code import bell_logger
+from bell_code.tasks import task_manager
 
 
 def delete_jp2( data ):
