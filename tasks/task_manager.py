@@ -51,6 +51,14 @@ def determine_next_task( current_task, data=None, logger=None ):
         next_task = u'tasks.indexer.build_metadata_only_solr_dict'
 
     elif current_task == u'add_metadata_and_image' or current_task == 'update_existing_metadata_and_create_image':
+        assert sorted( data.keys() ) == [ u'item_data', u'jp2_path', u'pid' ]
+        next_task = u'tasks.cleanup.delete_jp2'
+
+    # elif current_task == u'add_metadata_and_image' or current_task == 'update_existing_metadata_and_create_image':
+    #     assert sorted( data.keys() ) == [ u'item_data', u'pid' ]
+    #     next_task = u'tasks.indexer.build_metadata_and_image_solr_dict'
+
+    elif current_task == u'delete_jp2':
         assert sorted( data.keys() ) == [ u'item_data', u'pid' ]
         next_task = u'tasks.indexer.build_metadata_and_image_solr_dict'
 
