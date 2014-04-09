@@ -81,6 +81,7 @@ def build_metadata_and_image_solr_dict( data ):
         Called after fedora_metadata_updater_and_image_builder.run__update_existing_metadata_and_create_image() task. """
     assert sorted( data.keys() ) == [ u'item_data', u'pid' ], Exception( u'- in indexer.build_metadata_only_solr_dict(); unexpected data.keys(): %s' % sorted(data.keys()) )
     logger = bell_logger.setup_logger()
+    time.sleep( 10 )  # gives solr index time to be updated so image url can be grabbed
     original_dict = data[u'item_data']
     solr_dict = {}
     # solr_dict = _set_accession_number_original( original_dict, solr_dict )
