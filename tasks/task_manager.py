@@ -34,7 +34,7 @@ def determine_next_task( current_task, data=None, logger=None ):
         next_task = u'tasks.task_manager.determine_handler'
 
     elif current_task == u'determine_handler':
-        assert sorted(data.keys()) == [u'handler', u'item_dict']
+        assert sorted(data.keys()) == [ u'handler', u'item_dict', u'pid' ]  # pid could be None
         if data[u'handler'] == u'add_new_metadata_only_item':
             next_task = u'tasks.fedora_metadata_only_builder.run__create_fedora_metadata_object'  # built
         elif data[u'handler'] == u'add_new_item_with_image':
@@ -42,7 +42,7 @@ def determine_next_task( current_task, data=None, logger=None ):
         elif data[u'handler'] == u'update_existing_metadata':
             next_task = u'tasks.fedora_metadata_only_updater.run__update_existing_metadata_object'  # TODO
         elif data[u'handler'] == u'update_existing_metadata_and_create_image':
-            next_task = u'tasks.fedora_metadata_updater_and_image_builder.run__update_existing_metadata_and_create_image'  # TODO NEXT
+            next_task = u'tasks.fedora_metadata_updater_and_image_builder.run__update_existing_metadata_and_create_image'  # built
         elif data[u'handler'] == u'update_existing_metadata_and_update_image':
             next_task = u'tasks.fedora_metadata_updater_and_image_updater.run__update_existing_metadata_and_update_image'  # TODO
 
@@ -138,7 +138,10 @@ def determine_handler( item_dict ):
     else:
         raise Exception( u'in task_manager.determine_handler(); unhandled case' )
     update_tracker( key=acc_num, message=u'handler: %s' % handler )
-    determine_next_task( sys._getframe().f_code.co_name, data={u'item_dict': item_dict, u'handler': handler}, logger=logger )
+    determine_next_task(
+        current_task=sys._getframe().f_code.co_name,
+        data={ u'item_dict': item_dict, u'handler': handler, u'pid': pid },
+        logger=logger )
     logger.info( u'in task_manager.determine_handler(); done; acc_num, %s; filepath, %s; pid, %s; handler, %s' % (acc_num, filepath, pid, handler) )
     return
 
