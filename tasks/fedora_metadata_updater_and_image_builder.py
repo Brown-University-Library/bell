@@ -69,7 +69,7 @@ class Task( object ):
         #Set next task
         task_manager.determine_next_task(
             unicode(sys._getframe().f_code.co_name),
-            data={ u'item_data': item_data_dict, u'pid': pid },
+            data={ u'item_data': item_data_dict, u'jp2_path': destination_filepath, u'pid': pid },
             logger=logger
             )
         print u'- next task set.'
