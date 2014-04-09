@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 
 import os, pprint, sys, time
+import requests
 from bell_code import bell_logger
 from mysolr import Solr
 from bell_code.tasks import task_manager
@@ -162,7 +163,7 @@ def _set_height_width_depth( original_dict, solr_dict ):
     return solr_dict
 
 
-def _set_image_urls( solr_dict, pid=None, flag=None, logger=logger ):
+def _set_image_urls( solr_dict, pid=None, flag=None, logger=None ):
     """  Sets jp2 and master image-url info.
         Called by build_metadata_only_solr_dict() """
     solr_dict[u'jp2_image_url'] = u''
@@ -173,7 +174,7 @@ def _set_image_urls( solr_dict, pid=None, flag=None, logger=logger ):
         logger.debug( u'in indexer._set_image_urls() [for custom-solr]; pid, %s; starting...' % pid )
         assert pid != None
         item_api_dict = _set_image_urls__get_item_api_data( pid, logger )
-        logger.debug( u'in indexer._set_image_urls() [for custom-solr]; pid, %s; item_api_dict, %s' % pprint.pformat(item_api_dict) )
+        logger.debug( u'in indexer._set_image_urls() [for custom-solr]; pid, %s; item_api_dict, %s' % (pid, pprint.pformat(item_api_dict)) )
         if item_api_dict != None:
             solr_dict[u'jp2_image_url'] = _set_image_urls__get_jp2_url( item_api_dict )
             solr_dict[u'master_image_url'] = _set_image_urls__get_master_image_url( item_api_dict )
@@ -187,9 +188,11 @@ def _set_image_urls__get_item_api_data( pid, logger ):
       try:
         url = u'https://repository.library.brown.edu/api/pub/items/%s/' % pid
         r = requests.get( url, verify=False )
+        logger.debug( u'in indexer._set_image_urls__get_item_api_data(); r.text, %s' % r.text )
         jdict = r.json()
         return jdict
-      except:
+      except Exception as e:
+        logger.error( u'in indexer._set_image_urls__get_item_api_data(); exception, %s' % unicode(repr(e)) )
         time.sleep( 2 )
     return None
 

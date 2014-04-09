@@ -13,10 +13,11 @@ import indexer
 
 
 class Indexer_Test(unittest.TestCase):
-    """ Tests indexer.py code. """
+    """ Tests indexer.py code.
+        Note, test_original_data is a mishmash of real data; it's just for testing. """
 
     test_original_data = {
-        u'pid': u'test_123',
+        u'pid': u'bdr:10975',
         u'item_data': {
             u'ARTISTS::artist_alias': [None],
             u'ARTISTS::artist_birth_country_id': [u'231'],
@@ -83,7 +84,37 @@ class Indexer_Test(unittest.TestCase):
         u'physical_description_extent': [u''],
         u'physical_description_material': [u'Letterpress and etching'],
         u'physical_description_technique': [u'Etching ', u'Letterpress'],
-        u'pid': u'test_123',
+        u'pid': u'bdr:10975',
+        u'title': u'Suite of Daze'
+        }
+
+    test_expected_metadata_and_image_result = {
+        u'accession_number_original': u'B 1979.1204',
+        u'author_birth_date': [u'1937'],
+        u'author_date': [u'1937'],
+        u'author_death_date': [u''],
+        u'author_description': [u'American'],
+        u'author_display': [u'William T. Wiley'],
+        u'author_names_first': [u'William'],
+        u'author_names_last': [u'Wiley'],
+        u'author_names_middle': [u'T.'],
+        u'image_height': u'',
+        u'image_width': u'',
+        u'jp2_image_url': u'https://repository.library.brown.edu/fedora/objects/bdr:10975/datastreams/JP2/content',
+        u'location_physical_location': u'Bell Art Gallery',
+        u'location_shelf_locator': u'Book',
+        u'master_image_url': u'https://repository.library.brown.edu/fedora/objects/bdr:10975/datastreams/MASTER/content',
+        u'note_provenance': u"Gift of Richard M. Rieser, Jr. '65",
+        u'object_date': u'1977',
+        u'object_depth': u'',
+        u'object_height': u'',
+        u'object_width': u'',
+        u'origin_datecreated_end': u'1977',
+        u'origin_datecreated_start': u'1977',
+        u'physical_description_extent': [u''],
+        u'physical_description_material': [u'Letterpress and etching'],
+        u'physical_description_technique': [u'Etching ', u'Letterpress'],
+        u'pid': u'bdr:10975',
         u'title': u'Suite of Daze'
         }
 
@@ -91,6 +122,13 @@ class Indexer_Test(unittest.TestCase):
         """ Tests solr_dict creation. """
         expected = self.test_expected_metadata_only_result
         result = indexer.build_metadata_only_solr_dict( self.test_original_data )
+        # pprint.pprint( result )
+        self.assertEquals( expected, result )
+
+    def test__build_metadata_and_image_solr_dict(self):
+        """ Tests solr_dict creation. """
+        expected = self.test_expected_metadata_and_image_result
+        result = indexer.build_metadata_and_image_solr_dict( self.test_original_data )
         # pprint.pprint( result )
         self.assertEquals( expected, result )
 
