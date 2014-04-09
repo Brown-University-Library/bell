@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 
-import os, sys, time
+import os, pprint, sys, time
+import requests
 from bell_code import bell_logger
 from mysolr import Solr
 from bell_code.tasks import task_manager
@@ -77,7 +78,7 @@ def build_metadata_only_solr_dict( data ):
 
 def build_metadata_and_image_solr_dict( data ):
     """ Builds dict-to-index using basic item-dict data and pid.
-        Called after fedora_metadata_only_builder.run__create_fedora_metadata_object() task. """
+        Called after fedora_metadata_updater_and_image_builder.run__update_existing_metadata_and_create_image() task. """
     assert sorted( data.keys() ) == [ u'item_data', u'pid' ], Exception( u'- in indexer.build_metadata_only_solr_dict(); unexpected data.keys(): %s' % sorted(data.keys()) )
     logger = bell_logger.setup_logger()
     original_dict = data[u'item_data']
@@ -89,7 +90,7 @@ def build_metadata_and_image_solr_dict( data ):
     solr_dict = _set_author_description( original_dict, solr_dict )
     solr_dict = _set_author_names( original_dict, solr_dict )
     solr_dict = _set_height_width_depth( original_dict, solr_dict )
-    solr_dict = _set_image_urls( solr_dict, pid=data[u'pid'], flag=None )
+    solr_dict = _set_image_urls( solr_dict, pid=data[u'pid'], flag=None, logger=logger )
     solr_dict = _set_locations( original_dict, solr_dict )
     solr_dict = _set_note_provenance( original_dict, solr_dict )
     solr_dict = _set_object_dates( original_dict, solr_dict )
@@ -109,8 +110,6 @@ def build_metadata_and_image_solr_dict( data ):
     return solr_dict  # returned value only for testing
 
 
-
-
 def post_to_solr( data ):
     """ Posts solr_dict to solr. """
     (SOLR_ROOT_URL, solr_dict, logger) = ( os.environ.get(u'BELL_I_SOLR_ROOT'), data[u'solr_dict'], bell_logger.setup_logger() )  # setup
@@ -120,23 +119,6 @@ def post_to_solr( data ):
     logger.info( u'in indexer.post_to_solr() [for custom-solr]; accession_number, %s; response_status, %s' % (solr_dict[u'accession_number_original'], response_status) )
     if not response_status == 200:
         raise Exception( u'custom-solr post problem logged' )
-
-
-# def post_to_solr( data ):
-#     """ Posts solr_dict to solr. """
-#     logger = bell_logger.setup_logger()
-#     try:
-#         assert data.keys() == [ u'solr_dict' ]
-#         solr_dict = data[u'solr_dict']
-#         solr_root_url = os.environ.get( u'BELL_I_SOLR_ROOT' )
-#         solr = Solr( solr_root_url )
-#         response = solr.update( [solr_dict], u'xml', commit=True )  # 'xml' param converts json to xml for post; required for our old version of solr
-#         status_message = u'ok_post_ok' if (response.status == 200) else u'post_problem'
-#         logger.info( u'in tasks.indexer.post_to_solr(); accession_number, %s; status_message, %s' % (solr_dict[u'accession_number_original'], status_message) )
-#         # task_manager.determine_next_task( current_task=unicode( sys._getframe().f_code.co_name ), data={ u'solr_dict': solr_dict }, logger=logger )
-#     except Exception as e:
-#         logger.error( u'in tasks.indexer.post_to_solr(); exception: %s' % unicode(repr(e)) )
-#         raise Exception( u'in tasks.indexer.post_to_solr(); error on post logged' )
 
 
 def _set_author_dates( original_dict, solr_dict ):
@@ -181,7 +163,7 @@ def _set_height_width_depth( original_dict, solr_dict ):
     return solr_dict
 
 
-def _set_image_urls( solr_dict, pid=None, flag=None ):
+def _set_image_urls( solr_dict, pid=None, flag=None, logger=None ):
     """  Sets jp2 and master image-url info.
         Called by build_metadata_only_solr_dict() """
     solr_dict[u'jp2_image_url'] = u''
@@ -189,24 +171,28 @@ def _set_image_urls( solr_dict, pid=None, flag=None ):
     if flag == u'metadata_only':
         pass
     else:
+        logger.debug( u'in indexer._set_image_urls() [for custom-solr]; pid, %s; starting...' % pid )
         assert pid != None
-        item_api_dict = _set_image_urls__get_item_api_data( pid )
+        item_api_dict = _set_image_urls__get_item_api_data( pid, logger )
+        logger.debug( u'in indexer._set_image_urls() [for custom-solr]; pid, %s; item_api_dict, %s' % (pid, pprint.pformat(item_api_dict)) )
         if item_api_dict != None:
             solr_dict[u'jp2_image_url'] = _set_image_urls__get_jp2_url( item_api_dict )
             solr_dict[u'master_image_url'] = _set_image_urls__get_master_image_url( item_api_dict )
     return solr_dict
 
 
-def _set_image_urls__get_item_api_data( pid ):
+def _set_image_urls__get_item_api_data( pid, logger ):
     """ Returns repo public item-api json, or None.
         Called by _set_image_urls() """
     for i in range( 5 ):
       try:
         url = u'https://repository.library.brown.edu/api/pub/items/%s/' % pid
         r = requests.get( url, verify=False )
+        logger.debug( u'in indexer._set_image_urls__get_item_api_data(); r.text, %s' % r.text )
         jdict = r.json()
         return jdict
-      except:
+      except Exception as e:
+        logger.error( u'in indexer._set_image_urls__get_item_api_data(); exception, %s' % unicode(repr(e)) )
         time.sleep( 2 )
     return None
 
@@ -230,19 +216,6 @@ def _set_image_urls__get_master_image_url( item_api_dict ):
     except:
         image_url = u''
     return image_url
-
-
-# def _set_image_urls__get_master_image_url( item_api_dict ):
-#     """ Returns master image url or u''.
-#         Called by _set_image_urls() """
-#     try:
-#         image_url = item_api_dict[u'links'][u'content_datastreams'][u'TIFF']
-#     except:
-#         try:
-#             image_url = item_api_dict[u'links'][u'content_datastreams'][u'JPG']
-#         except:
-#             image_url = u''
-#     return image_url
 
 
 def _set_locations( original_dict, solr_dict ):
