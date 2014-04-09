@@ -18,10 +18,10 @@ for job in failed_queue.jobs:
         action_val = raw_input( u'Action (use first letter from the following, default is nothing): [Nothing/Requeue/Delete] ' )
         if action_val.lower() == u'r':
             print('requeuing job...')
-            # failed_queue.requeue( job.id )
+            failed_queue.requeue( job.id )
         elif action_val.lower() == 'd':
             print('deleting job...')
-            # failed_queue.remove( job.id )
+            failed_queue.remove( job.id )
         else:
             print('skipping job...')
             pass
