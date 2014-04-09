@@ -203,7 +203,7 @@ def _set_image_urls__get_item_api_data( pid ):
     for i in range( 5 ):
       try:
         url = u'https://repository.library.brown.edu/api/pub/items/%s/' % pid
-        r = requests.get( url )
+        r = requests.get( url, verify=False )
         jdict = r.json()
         return jdict
       except:

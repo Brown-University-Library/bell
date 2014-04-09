@@ -189,7 +189,7 @@ def _image_already_ingested( pid, logger ):
     image_already_ingested = True
     item_api_url = u'%s/%s/' % ( ITEM_API_ROOT, pid )
     logger.debug( u'in task_manager._image_already_ingested(); item_api_url, %s' % item_api_url )
-    r = requests.get( item_api_url )
+    r = requests.get( item_api_url, verify=False )
     d = r.json()
     if u'JP2' in d[u'links'][u'content_datastreams'].keys()  or  u'jp2' in d[u'rel_content_models_ssim']:
         pass
