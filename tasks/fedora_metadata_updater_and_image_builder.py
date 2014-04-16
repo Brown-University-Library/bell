@@ -56,6 +56,8 @@ class Task( object ):
         #Make api call
         r = requests.put( API_URL, data=params, verify=False )
         print u'http put executed'
+        self.logger.debug( u'in fedora_metadata_updater_and_image_builder.update_existing_metadata_and_create_image(); r.status_code, %s' % r.status_code )
+        self.logger.debug( u'in fedora_metadata_updater_and_image_builder.update_existing_metadata_and_create_image(); r.content, %s' % r.content.decode(u'utf-8') )
         #
         #Read response
         resp = r.json()

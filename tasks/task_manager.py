@@ -204,6 +204,9 @@ def _image_already_ingested( pid, logger ):
     d = r.json()
     if u'JP2' in d[u'links'][u'content_datastreams'].keys()  or  u'jp2' in d[u'rel_content_models_ssim']:
         pass
+    elif u'image/tiff' in d[u'datastreams_ss']:  # problem, means there's a tiff and no jp2
+        logger.debug( u'in task_manager._image_already_ingested(); whoa, tiff without jp2 detected; raising exception' )
+        raise Exception( u'PROBLEM: tiff with no jp2' )
     else:
         image_already_ingested = False
     return image_already_ingested
