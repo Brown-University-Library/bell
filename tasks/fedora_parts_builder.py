@@ -24,11 +24,15 @@ class ImageBuilder( object ):
         """ Creates jp2.
             Called by fedora_metadata_and_image_builder.add_metadata_and_image().
             TODO: consider making this a separate queue job. """
+        self.logger.debug( u'in fedora_parts_builder._create_jp2(); source_filepath, %s' % source_filepath )
+        self.logger.debug( u'in fedora_parts_builder._create_jp2(); destination_filepath, %s' % destination_filepath )
         KAKADU_COMMAND_PATH = unicode( os.environ.get(u'BELL_FPB__KAKADU_COMMAND_PATH') )
         CONVERT_COMMAND_PATH = unicode( os.environ.get(u'BELL_FPB__CONVERT_COMMAND_PATH') )
         if source_filepath.split( u'.' )[-1] == u'tif':
+            self.logger.debug( u'in fedora_parts_builder._create_jp2(); in `tif` handling' )
             self._create_jp2_from_tif( KAKADU_COMMAND_PATH, source_filepath, destination_filepath )
         elif source_filepath.split( u'.' )[-1] == u'jpg':
+            self.logger.debug( u'in fedora_parts_builder._create_jp2(); in `jpg` handling' )
             self._create_jp2_from_jpg( CONVERT_COMMAND_PATH, KAKADU_COMMAND_PATH, source_filepath, destination_filepath )
         return
 
@@ -46,10 +50,17 @@ class ImageBuilder( object ):
     def _create_jp2_from_jpg( self, CONVERT_COMMAND_PATH, KAKADU_COMMAND_PATH, source_filepath, destination_filepath ):
         """ Creates jp2 after first converting jpg to tif (due to server limitation). """
         cleaned_source_filepath = source_filepath.replace( u' ', u'\ ' )
+        self.logger.debug( u'in fedora_parts_builder._create_jp2_from_jpg(); cleaned_source_filepath, %s' % cleaned_source_filepath )
         tif_destination_filepath = destination_filepath[0:-4] + u'.tif'
+        self.logger.debug( u'in fedora_parts_builder._create_jp2_from_jpg(); tif_destination_filepath, %s' % tif_destination_filepath )
         cmd = u'%s -compress None "%s" %s' % (
             CONVERT_COMMAND_PATH, cleaned_source_filepath, tif_destination_filepath )  # source-filepath quotes needed for filename containing spaces
+        self.logger.debug( u'in fedora_parts_builder._create_jp2_from_jpg(); cmd, %s' % cmd )
         r = envoy.run( cmd.encode(u'utf-8', u'replace') )
+        self.logger.info( u'in fedora_parts_builder._create_jp2_from_jpg(); r.std_out, %s; type(r.std_out), %s' % (r.std_out, type(r.std_out)) )
+        self.logger.info( u'in fedora_parts_builder._create_jp2_from_jpg(); r.std_err, %s; type(r.std_err), %s' % (r.std_err, type(r.std_err)) )
+        if len( r.std_err ) > 0:
+            raise Exception( u'Problem making intermediate .tif from .jpg' )
         source_filepath = tif_destination_filepath
         cmd = u'%s -i "%s" -o "%s" Creversible=yes -rate -,1,0.5,0.25 Clevels=12' % (
             KAKADU_COMMAND_PATH, source_filepath, destination_filepath )
