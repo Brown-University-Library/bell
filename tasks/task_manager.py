@@ -41,10 +41,12 @@ def determine_next_task( current_task, data=None, logger=None ):
             next_task = u'tasks.fedora_metadata_and_image_builder.run__add_metadata_and_image'  # built
         elif data[u'handler'] == u'update_existing_metadata':
             next_task = u'tasks.fedora_metadata_only_updater.run__update_existing_metadata_object'  # TODO
+            next_task = None
         elif data[u'handler'] == u'update_existing_metadata_and_create_image':
             next_task = u'tasks.fedora_metadata_updater_and_image_builder.run__update_existing_metadata_and_create_image'  # built
         elif data[u'handler'] == u'update_existing_metadata_and_update_image':
             next_task = u'tasks.fedora_metadata_updater_and_image_updater.run__update_existing_metadata_and_update_image'  # TODO
+            next_task = None
 
     elif current_task == u'create_fedora_metadata_object':
         assert sorted( data.keys() ) == [ u'item_data', u'pid' ]
