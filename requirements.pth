@@ -1,7 +1,7 @@
 """ Add to project's env site-packages if needed. """
 
 # local settings directory
-/path/to/project_settings
+# /path/to/project_settings  # not needed; all settings come from environmental variables
 
 # project enclosing directory -- allows references like "from bell_code import..."
 /path/to/enclosing_project_directory
