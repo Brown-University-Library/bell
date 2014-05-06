@@ -1,7 +1,12 @@
 # Note: on osx mavericks, had to install lxml like:
 # $ STATIC_DEPS=true pip install lxml
 # ...instead of referencing this file.
-lxml==3.2.4
+
+# uh, on Mavericks 10.9.2 the static_deps doesn't work; possible solutions: <http://stackoverflow.com/questions/19548011/cannot-install-lxml-on-mac-os-x-10-9>
+# lxml==3.2.4
+
+# Note #2: over time, the need for some things like bdrcmodels and bdrxml will vanish, as I begin using the new apis
+
 
 envoy==0.0.2
 eulfedora==0.21.0
