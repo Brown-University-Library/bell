@@ -2,10 +2,7 @@
 
 import datetime, json, os, pprint, sys, time
 import requests
-
-extra_path = os.path.abspath( u'./' )  # adds bell_code to path
-sys.path.append( extra_path )
-import bell_logger
+from bell_code import bell_logger
 
 
 class PidFinder( object ):
