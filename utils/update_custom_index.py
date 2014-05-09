@@ -69,8 +69,11 @@ class Reindexer( object ):
         self.logger.debug( u'- in Reindexer.reindex(); updated_solr_dict, %s' % pprint.pformat(updated_solr_dict) )
         ## validate dict
         validity = bell_indexer.validate_solr_dict( updated_solr_dict )
-        self.logger.debug( u'- in Reindexer.reindex(); validity, %s' % validity )
+        self.logger.debug( u'- in Reindexer.reindex(); validity for pid `%s`, %s' % (pid, validity) )
         ## update custom-solr
+        if validity:
+            post_result = bell_indexer.post_to_solr( updated_solr_dict )
+            self.logger.debug( u'- in Reindexer.reindex(); post_result for pid `%s`, %s' % (pid, post_result) )
 
     # end class Reindexer()
 

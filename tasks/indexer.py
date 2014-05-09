@@ -70,7 +70,7 @@ class Indexer( object ):
     def add_image_metadata( self, solr_dict, links_dict ):
         """ Adds image metadata to dict-to-index. """
         solr_dict[u'jp2_image_url'] = self._set_image_urls__get_jp2_url( links_dict )
-        solr_dict[u'master_image_url'] = self._set_image_urls__get_master_image_url( links_dict )
+        solr_dict[u'master_image_url'] = self._set_image_urls__get_master_image_url( links_dict, solr_dict[u'jp2_image_url'] )
         return solr_dict
 
     def validate_solr_dict( self, solr_dict ):
@@ -94,6 +94,17 @@ class Indexer( object ):
         except Exception as e:
             self.logger.error( u'in tasks.indexer._validate_solr_dict(); exception is: %s' % unicode(repr(e)) )
             return False
+
+    def post_to_solr( self, solr_dict ):
+        """ Posts solr_dict to solr. """
+        SOLR_ROOT_URL = ( os.environ.get(u'BELL_I_SOLR_ROOT') )
+        solr = Solr( SOLR_ROOT_URL )
+        response = solr.update( [solr_dict], u'xml', commit=True )  # 'xml' param converts default json to xml for post; required for our old version of solr
+        response_status = response.status
+        self.logger.info( u'in tasks.indexer.post_to_solr() [for custom-solr]; accession_number, %s; response_status, %s' % (solr_dict[u'accession_number_original'], response_status) )
+        if not response_status == 200:
+            raise Exception( u'custom-solr post problem logged' )
+        return response_status
 
     ## metadata-only helpers ##
 
@@ -224,21 +235,31 @@ class Indexer( object ):
             image_url = u''
         return image_url
 
-    def _set_image_urls__get_master_image_url( self, links_dict ):
+    def _set_image_urls__get_master_image_url( self, links_dict, jp2_url ):
         """ Returns master image url or u''.
             Called by _set_image_urls() """
         image_url = None
-        try:
-            image_url = links_dict[u'content_datastreams'][u'MASTER']
-        except:
-            pass
-        if not image_url:
+        if jp2_url == u'':
+            image_url = u''
+        else:
             try:
-                image_url = links_dict[u'content_datastreams'][u'TIFF']
+                image_url = links_dict[u'content_datastreams'][u'MASTER']  # don't think this is currently exposed
             except:
                 pass
-        if not image_url:
-            image_url = u''
+            if not image_url:
+                try:
+                    image_url = links_dict[u'content_datastreams'][u'TIFF']  # should handle some old items
+                except:
+                    pass
+            if not image_url:
+                try:
+                    jp2_image_url = links_dict[u'content_datastreams'][u'JP2']  # default modern case: if JP2 exists, master is MASTER
+                    image_url = jp2_image_url.replace( u'/JP2/', u'/MASTER/' )
+                except:
+                    pass
+            if not image_url:
+                self.logger.info( u'in tasks.indexer._set_image_urls__get_master_image_url(); odd case, links_dict is `%s`, jp2_url is `%s`' % (pprint.pformat(links_dict), jp2_url) )
+                image_url = u''
         return image_url
 
     ## utils ##
@@ -270,114 +291,6 @@ class Indexer( object ):
         return new_list
 
     # end class Indexer()
-
-
-
-
-def build_metadata_and_image_solr_dict( data ):
-    """ Builds dict-to-index using basic item-dict data and pid.
-        Called after fedora_metadata_updater_and_image_builder.run__update_existing_metadata_and_create_image() task. """
-    assert sorted( data.keys() ) == [ u'item_data', u'pid' ], Exception( u'- in indexer.build_metadata_only_solr_dict(); unexpected data.keys(): %s' % sorted(data.keys()) )
-    logger = bell_logger.setup_logger()
-    time.sleep( 10 )  # gives solr index time to be updated so image url can be grabbed
-    original_dict = data[u'item_data']
-    solr_dict = {}
-    # solr_dict = _set_accession_number_original( original_dict, solr_dict )
-    solr_dict[u'accession_number_original'] = original_dict[u'calc_accession_id']
-    solr_dict[u'pid'] = data[u'pid']
-    solr_dict = _set_author_dates( original_dict, solr_dict )
-    solr_dict = _set_author_description( original_dict, solr_dict )
-    solr_dict = _set_author_names( original_dict, solr_dict )
-    solr_dict = _set_height_width_depth( original_dict, solr_dict )
-    solr_dict = _set_image_urls( solr_dict, pid=data[u'pid'], flag=None, logger=logger )
-    solr_dict = _set_locations( original_dict, solr_dict )
-    solr_dict = _set_note_provenance( original_dict, solr_dict )
-    solr_dict = _set_object_dates( original_dict, solr_dict )
-    solr_dict = _set_physical_extent( original_dict, solr_dict )
-    solr_dict = _set_physical_descriptions( original_dict, solr_dict )
-    solr_dict = _set_title( original_dict, solr_dict )
-    all_good = _validate_solr_dict( solr_dict, logger )
-    logger.info( u'in indexer.build_metadata_and_image_solr_dict(); all_good_flag is %s; solr_dict is %s' % (all_good, solr_dict) )
-    if all_good:
-        task_manager.determine_next_task(
-            unicode(sys._getframe().f_code.co_name),
-            data={ u'solr_dict': solr_dict },
-            logger=logger
-            )
-    else:
-        raise Exception( u'problem preparing solr_dict, check logs' )  # should move job to failed queue
-    return solr_dict  # returned value only for testing
-
-
-def post_to_solr( data ):
-    """ Posts solr_dict to solr. """
-    (SOLR_ROOT_URL, solr_dict, logger) = ( os.environ.get(u'BELL_I_SOLR_ROOT'), data[u'solr_dict'], bell_logger.setup_logger() )  # setup
-    solr = Solr( SOLR_ROOT_URL )
-    response = solr.update( [solr_dict], u'xml', commit=True )  # 'xml' param converts json to xml for post; required for our old version of solr
-    response_status = response.status
-    logger.info( u'in indexer.post_to_solr() [for custom-solr]; accession_number, %s; response_status, %s' % (solr_dict[u'accession_number_original'], response_status) )
-    if not response_status == 200:
-        raise Exception( u'custom-solr post problem logged' )
-
-
-# def _set_image_urls( solr_dict, pid=None, flag=None, logger=None ):
-#     """  Sets jp2 and master image-url info.
-#         Called by build_metadata_only_solr_dict() """
-#     solr_dict[u'jp2_image_url'] = u''
-#     solr_dict[u'master_image_url'] = u''
-#     if flag == u'metadata_only':
-#         pass
-#     else:
-#         logger.debug( u'in indexer._set_image_urls() [for custom-solr]; pid, %s; starting...' % pid )
-#         assert pid != None
-#         item_api_dict = _set_image_urls__get_item_api_data( pid, logger )
-#         logger.debug( u'in indexer._set_image_urls() [for custom-solr]; pid, %s; item_api_dict, %s' % (pid, pprint.pformat(item_api_dict)) )
-#         if item_api_dict != None:
-#             solr_dict[u'jp2_image_url'] = _set_image_urls__get_jp2_url( item_api_dict )
-#             solr_dict[u'master_image_url'] = _set_image_urls__get_master_image_url( item_api_dict )
-#     return solr_dict
-
-
-# def _set_image_urls__get_item_api_data( pid, logger ):
-#     """ Returns repo public item-api json, or None.
-#         Called by _set_image_urls() """
-#     for i in range( 5 ):
-#       try:
-#         url = u'https://repository.library.brown.edu/api/pub/items/%s/' % pid
-#         r = requests.get( url, verify=False )
-#         logger.debug( u'in indexer._set_image_urls__get_item_api_data(); r.text, %s' % r.text )
-#         jdict = r.json()
-#         return jdict
-#       except Exception as e:
-#         logger.error( u'in indexer._set_image_urls__get_item_api_data(); exception, %s' % unicode(repr(e)) )
-#         time.sleep( 2 )
-#     return None
-
-
-def _validate_solr_dict( solr_dict, logger ):
-    """ Returns True if checks pass; False otherwise.
-        Checks that required keys are present.
-        Checks that there are no None values.
-        Checks that any list values are not empty.
-        Checks that no members of a list value are of NoneType.
-        Called by build_metadata_only_solr_dict() """
-    try:
-        for required_key in REQUIRED_KEYS:
-            logger.debug( u'in tasks.indexer._validate_solr_dict(); required_key: %s' % required_key )
-            assert required_key in solr_dict.keys(), Exception( u'ERROR; missing required key: %s' % required_key )
-        for key,value in solr_dict.items():
-          assert value != None, Exception( u'ERROR; value is none for key: %s' % key )
-          if type(value) == list:
-            assert len(value) > 0, Exception( u'ERROR: key "%s" has a value of "%s", which is type-list, which is empty.' % ( key, value ) )
-            for element in value:
-              assert element != None, Exception( u'ERROR: key "%s" has a value "%s", which is type-list, which contains a None element' % ( key, value ) )
-        return True
-    except Exception as e:
-        logger.error( u'in tasks.indexer._validate_solr_dict(); exception is: %e' )
-        return False
-
-
-
 
 
 
