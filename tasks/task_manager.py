@@ -10,43 +10,58 @@ q = rq.Queue( queue_name, connection=redis.Redis() )
 r = redis.StrictRedis( host='localhost', port=6379, db=0 )
 
 
-def determine_next_task( current_task, data=None, logger=None ):
+def determine_next_task( current_task=None, data=None, logger=None ):
     """ Calls next task.
         Intended to eventually handle full flow of normal bell processing. """
 
-    logger.info( u'in task_manager.determine_next_task(); %s' % pprint.pformat({u'current_task': current_task, u'data': data}) )
+    # logger.info( u'in task_manager.determine_next_task(); %s' % pprint.pformat({u'current_task': current_task, u'data': data}) )
+    logger.info( u'in task_manager.determine_next_task(); current task, `%s`' % current_task )
+    logger.info( u'in task_manager.determine_next_task(); current data, `%s`' % pprint.pformat(data) )
+
     next_task = None
 
     if current_task == u'ensure_redis':
-        next_task = u'tasks.check_environment.archive_previous_work'
+        next_task = u'bell_code.tasks.check_environment.archive_previous_work'
 
     elif current_task == u'archive_previous_work':
-        next_task = u'tasks.check_environment.ensure_redis_status_dict'
+        next_task = u'bell_code.tasks.check_environment.ensure_redis_status_dict'
 
     elif current_task == u'ensure_redis_status_dict':
-        next_task = u'tasks.check_environment.check_foundation_files'
+        next_task = u'bell_code.tasks.check_environment.check_foundation_files'
 
     elif current_task == u'check_foundation_files':
-        next_task = u'tasks.task_manager.populate_queue'
+        next_task = u'bell_code.tasks.task_manager.populate_queue'
 
     ## concurrent-processing starts here ##
-    elif current_task == u'populate_queue':
-        next_task = u'tasks.task_manager.determine_handler'
 
-    elif current_task == u'determine_handler':
-        assert sorted(data.keys()) == [ u'handler', u'item_dict', u'pid' ]  # pid could be None
-        if data[u'handler'] == u'add_new_metadata_only_item':
-            next_task = u'tasks.fedora_metadata_only_builder.run__create_fedora_metadata_object'  # built
-        elif data[u'handler'] == u'add_new_item_with_image':
-            next_task = u'tasks.fedora_metadata_and_image_builder.run__add_metadata_and_image'  # built
-        elif data[u'handler'] == u'update_existing_metadata':
-            next_task = u'tasks.fedora_metadata_only_updater.run__update_existing_metadata_object'  # TODO
-            next_task = None
-        elif data[u'handler'] == u'update_existing_metadata_and_create_image':
-            next_task = u'tasks.fedora_metadata_updater_and_image_builder.run__update_existing_metadata_and_create_image'  # built
-        elif data[u'handler'] == u'update_existing_metadata_and_update_image':
-            next_task = u'tasks.fedora_metadata_updater_and_image_updater.run__update_existing_metadata_and_update_image'  # TODO
-            next_task = None
+    elif current_task == u'populate_queue':
+        next_task = u'bell_code.tasks.metadata.run_check_create_metadata'
+
+    elif current_task == u'check_create_metadata' and data[u'create_metadata'] == False:
+        next_task = u'bell_code.tasks.metadata.run_check_update_metadata'
+        data = { u'item_data': data[u'item_data'], u'pid': data[u'pid'] }
+
+    elif current_task == u'check_update_metadata' and data[u'update_metadata'] == False:
+        next_task = u'bell_code.tasks.image.run_check_create_image'
+        data = { u'item_data': data[u'item_data'], u'pid': data[u'pid'] }
+
+    # elif current_task == u'populate_queue':
+    #     next_task = u'tasks.task_manager.determine_handler'
+
+    # elif current_task == u'determine_handler':
+    #     assert sorted(data.keys()) == [ u'handler', u'item_dict', u'pid' ]  # pid could be None
+    #     if data[u'handler'] == u'add_new_metadata_only_item':
+    #         next_task = u'tasks.fedora_metadata_only_builder.run__create_fedora_metadata_object'  # built
+    #     elif data[u'handler'] == u'add_new_item_with_image':
+    #         next_task = u'tasks.fedora_metadata_and_image_builder.run__add_metadata_and_image'  # built
+    #     elif data[u'handler'] == u'update_existing_metadata':
+    #         next_task = u'tasks.fedora_metadata_only_updater.run__update_existing_metadata_object'  # TODO
+    #         next_task = None
+    #     elif data[u'handler'] == u'update_existing_metadata_and_create_image':
+    #         next_task = u'tasks.fedora_metadata_updater_and_image_builder.run__update_existing_metadata_and_create_image'  # built
+    #     elif data[u'handler'] == u'update_existing_metadata_and_update_image':
+    #         next_task = u'tasks.fedora_metadata_updater_and_image_updater.run__update_existing_metadata_and_update_image'  # TODO
+    #         next_task = None
 
     elif current_task == u'create_fedora_metadata_object':
         assert sorted( data.keys() ) == [ u'item_data', u'pid' ]
@@ -69,11 +84,13 @@ def determine_next_task( current_task, data=None, logger=None ):
         next_task = u'tasks.indexer.post_to_solr'
 
     else:
-        message = u'in task_manager.determine_next_task(); no next task selected for current_task, %s; data, %s' % (current_task, data)
+        message = u'in task_manager.determine_next_task(); no next task selected for current_task'
         logger.info( message )
         next_task = None
 
-    logger.info( u'in task_manager.determine_next_task(); %s' % pprint.pformat({u'next_task': next_task, u'data': data}) )
+    # logger.info( u'in task_manager.determine_next_task(); %s' % pprint.pformat({u'next_task': next_task, u'data': data}) )
+    logger.info( u'in task_manager.determine_next_task(); new task, `%s`' % next_task )
+    logger.info( u'in task_manager.determine_next_task(); new data, `%s`' % pprint.pformat(data) )
     if next_task:
         if data:
             job = q.enqueue_call( func=u'%s' % next_task, args=(data,), timeout=600 )
