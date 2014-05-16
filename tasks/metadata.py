@@ -23,10 +23,8 @@ class MetadataHandler( object ):
             create_metadata = False
         else:
             create_metadata = True
-        task_manager.determine_next_task(
-            unicode(sys._getframe().f_code.co_name),
-            data={ u'item_data': self.data[u'item_data_dict'], u'pid': pid, u'create_metadata': create_metadata },
-            logger=self.logger )
+        task_manager.determine_next_task( current_task=unicode(sys._getframe().f_code.co_name), logger=self.logger,
+            data={ u'item_data': self.data[u'item_data_dict'], u'pid': pid, u'create_metadata': create_metadata } )
         return
 
     ## helpers ##

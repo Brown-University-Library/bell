@@ -10,7 +10,7 @@ q = rq.Queue( queue_name, connection=redis.Redis() )
 r = redis.StrictRedis( host='localhost', port=6379, db=0 )
 
 
-def determine_next_task( current_task, data=None, logger=None ):
+def determine_next_task( current_task=None, data=None, logger=None ):
     """ Calls next task.
         Intended to eventually handle full flow of normal bell processing. """
 
@@ -36,6 +36,10 @@ def determine_next_task( current_task, data=None, logger=None ):
 
     elif current_task == u'populate_queue':
         next_task = u'bell_code.tasks.metadata.run_check_create_metadata'
+
+    elif current_task == u'check_create_metadata' and data[u'create_metadata'] == False:
+        next_task = u'bell_code.tasks.metadata.run_check_update_metadata'
+
 
     # elif current_task == u'populate_queue':
     #     next_task = u'tasks.task_manager.determine_handler'
