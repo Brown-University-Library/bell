@@ -1,16 +1,14 @@
 # -*- coding: utf-8 -*-
 
 import datetime, json, os, pprint, sys
-import bell_logger
-import redis
-from redis import Redis
-from rq import Queue
-from tasks import task_manager
+import redis, rq
+from bell_code import bell_logger
+from bell_code.tasks import task_manager
 
 
 r = redis.StrictRedis( host='localhost', port=6379, db=0 )
 queue_name = os.environ.get( u'BELL_QUEUE_NAME' )
-q = Queue( queue_name, connection=Redis() )
+q = rq.Queue( queue_name, connection=redis.Redis() )
 
 
 def ensure_redis():

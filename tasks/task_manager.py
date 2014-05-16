@@ -18,16 +18,16 @@ def determine_next_task( current_task, data=None, logger=None ):
     next_task = None
 
     if current_task == u'ensure_redis':
-        next_task = u'tasks.check_environment.archive_previous_work'
+        next_task = u'bell_code.tasks.check_environment.archive_previous_work'
 
     elif current_task == u'archive_previous_work':
-        next_task = u'tasks.check_environment.ensure_redis_status_dict'
+        next_task = u'bell_code.tasks.check_environment.ensure_redis_status_dict'
 
     elif current_task == u'ensure_redis_status_dict':
-        next_task = u'tasks.check_environment.check_foundation_files'
+        next_task = u'bell_code.tasks.check_environment.check_foundation_files'
 
     elif current_task == u'check_foundation_files':
-        next_task = u'tasks.task_manager.populate_queue'
+        next_task = u'bell_code.tasks.task_manager.populate_queue'
 
     ## concurrent-processing starts here ##
     elif current_task == u'populate_queue':
