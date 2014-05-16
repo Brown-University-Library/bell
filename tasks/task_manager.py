@@ -39,7 +39,11 @@ def determine_next_task( current_task=None, data=None, logger=None ):
 
     elif current_task == u'check_create_metadata' and data[u'create_metadata'] == False:
         next_task = u'bell_code.tasks.metadata.run_check_update_metadata'
+        data = { u'item_data': data[u'item_data'], u'pid': data[u'pid'] }
 
+    elif current_task == u'check_update_metadata' and data[u'update_metadata'] == False:
+        next_task = u'bell_code.tasks.image.run_check_create_image'
+        data = { u'item_data': data[u'item_data'], u'pid': data[u'pid'] }
 
     # elif current_task == u'populate_queue':
     #     next_task = u'tasks.task_manager.determine_handler'

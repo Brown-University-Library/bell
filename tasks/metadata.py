@@ -27,6 +27,16 @@ class MetadataHandler( object ):
             data={ u'item_data': self.data[u'item_data_dict'], u'pid': pid, u'create_metadata': create_metadata } )
         return
 
+    def check_update_metadata( self ):
+        """ Determines whether existing metadata needs to be updated.
+            Called by run_check_update_metadata(). """
+        update_metadata = False  # TODO: build metadata-dict,
+                                 #       do an item-api solr query and compare it to the existing fedora metadata-dict,
+                                 #       and return {u'update_metadata':True} or False
+        task_manager.determine_next_task( current_task=unicode(sys._getframe().f_code.co_name), logger=self.logger,
+            data={ u'item_data': self.data[u'item_data'], u'pid': self.data[u'pid'], u'update_metadata': update_metadata } )
+        return
+
     ## helpers ##
 
     def _check_pid( self, acc_num ):
@@ -54,4 +64,12 @@ def run_check_create_metadata( data ):
     new_data[u'item_data_dict'] = data
     mh = MetadataHandler( new_data, logger )
     mh.check_create_metadata()
+    return
+
+def run_check_update_metadata( data ):
+    """ Runner for check_update_metadata().
+        Called by queue-job triggered by tasks.task_manager.determine_next_task(). """
+    assert sorted( data.keys() ) == [u'item_data', u'pid'], sorted( data.keys() )
+    mh = MetadataHandler( data, logger )
+    mh.check_update_metadata()
     return
