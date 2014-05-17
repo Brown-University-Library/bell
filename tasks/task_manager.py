@@ -49,6 +49,15 @@ def determine_next_task( current_task=None, data=None, logger=None ):
         next_task = u'bell_code.tasks.image.run_check_update_image'
         data = { u'item_data': data[u'item_data'], u'pid': data[u'pid'] }
 
+    elif current_task == u'check_update_image' and data[u'update_image'] == True:
+        next_task == u'bell_code.tasks.image.run_make_jp2'
+        data = { u'item_data': data[u'item_data'], u'pid': data[u'pid'], u'update_image': data[u'update_image'] }  # update_image not used by make_jp2(), but will be passed to next task: add_image_datastream().
+
+    elif current_task == u'make_jp2':
+        next_task == u'bell_code.tasks.image.add_image_datastream'  # will look at the data[u'update_image'] value to determine whether to add 'overwrite' flag to api call.
+        data = { u'item_data': data[u'item_data'], u'pid': data[u'pid'], u'update_image': data[u'update_image'] }
+
+
     # elif current_task == u'populate_queue':
     #     next_task = u'tasks.task_manager.determine_handler'
 
