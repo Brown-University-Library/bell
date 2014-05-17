@@ -27,6 +27,18 @@ class ImageHandler( object ):
             data={ u'item_data': self.data[u'item_data'], u'pid': self.data[u'pid'], u'create_image': create_image } )
         return
 
+    def check_update_image( self ):
+        """ Determines whether an image needs to be updated.
+            TODO: let's say for an image to be updated,
+                  the source item-data dict json will have to have both
+                  a filename, and an entry: "custom_field_UPDATE_IMAGE": "true",
+                  and, of course, the filepath has to be valid.
+                  """
+        update_image = True
+        task_manager.determine_next_task( current_task=unicode(sys._getframe().f_code.co_name), logger=self.logger,
+            data={ u'item_data': self.data[u'item_data'], u'pid': self.data[u'pid'], u'update_image': update_image } )
+        return
+
     ## helpers ##
 
     def _image_already_ingested( self ):
@@ -74,3 +86,12 @@ def run_check_create_image( data ):
     ih = ImageHandler( data, logger )
     ih.check_create_image()
     return
+
+def run_check_update_image( data ):
+    """ Runner for check_update_image().
+        Called by queue-job triggered by tasks.task_manager.determine_next_task(). """
+    assert sorted( data.keys() ) == [u'item_data', u'pid'], sorted( data.keys() )
+    ih = ImageHandler( data, logger )
+    ih.check_update_image()
+    return
+
