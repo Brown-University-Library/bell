@@ -157,7 +157,7 @@ class ImageHandler( object ):
             { u'dsID': u'MASTER', u'url': master_url },
             { u'dsID': u'JP2', u'url': jp2_url }
             ])
-        self.logger.debug( params % pprint.pformat(return_tuple) )
+        self.logger.debug( u'in image._prep_image_datastream_params(); params, `%s`' % pprint.pformat(params) )
         return params
 
     # end class ImageHandler()
