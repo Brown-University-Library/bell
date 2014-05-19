@@ -3,10 +3,10 @@
 """ Handles image-related tasks. """
 
 import json, os, sys
-import requests
+import envoy, requests
 from bell_code import bell_logger
 from bell_code.tasks import task_manager
-from bell_code.tasks.fedora_parts_builder import ImageBuilder
+# from bell_code.tasks.fedora_parts_builder import ImageBuilder
 
 
 class ImageHandler( object ):
@@ -48,8 +48,8 @@ class ImageHandler( object ):
         master_filename_raw = self.data[u'item_data'][u'object_image_scan_filename']
         master_source_filepath = self._make_source_filepath( MASTER_IMAGES_DIR_PATH, master_filename_raw )
         jp2_destination_filepath = self._make_destination_filepath( JP2_IMAGES_DIR_PATH, master_filename_raw )
-        image_builder = ImageBuilder()
-        image_builder.create_jp2( source_filepath, destination_filepath )
+        image_builder = ImageBuilder( self.logger )
+        image_builder.create_jp2( master_source_filepath, jp2_destination_filepath )
         return
 
     ## helpers ##
@@ -100,7 +100,7 @@ class ImageHandler( object ):
         self.logger.info( u'in tasks.image._make_source_filepath(); master source filepath, %s' % source_path )
         return source_path
 
-    def _make_destination_filepath( JP2_IMAGES_DIR_PATH, master_filename_raw ):
+    def _make_destination_filepath( self, JP2_IMAGES_DIR_PATH, master_filename_raw ):
         """ Creates and returns jp2 destination filepath.
             Called by make_jp2(). """
         temp_jp2_filename = master_filename_raw.strip().replace( u' ', u'_' )
@@ -110,6 +110,115 @@ class ImageHandler( object ):
         return destination_filepath
 
     # end class ImageHandler()
+
+
+class ImageBuilder( object ):
+    """ Handles repo new-object datastream assignment.
+        Handles repo new-object rels-int assignment.
+        Creates jp2. """
+
+    def __init__( self, logger ):
+        self.logger = logger
+
+    ## create jp2 ##
+
+    def create_jp2( self, source_filepath, destination_filepath ):
+        """ Creates jp2.
+            Called by tasks.ImageHandler.make_jp2()
+            TODO: consider merging this into that class. """
+        self.logger.debug( u'in fedora_parts_builder._create_jp2(); source_filepath, %s' % source_filepath )
+        self.logger.debug( u'in fedora_parts_builder._create_jp2(); destination_filepath, %s' % destination_filepath )
+        KAKADU_COMMAND_PATH = unicode( os.environ.get(u'BELL_IMAGE__KAKADU_COMMAND_PATH') )
+        CONVERT_COMMAND_PATH = unicode( os.environ.get(u'BELL_IMAGE__CONVERT_COMMAND_PATH') )
+        if source_filepath.split( u'.' )[-1] == u'tif':
+            self.logger.debug( u'in fedora_parts_builder._create_jp2(); in `tif` handling' )
+            self._create_jp2_from_tif( KAKADU_COMMAND_PATH, source_filepath, destination_filepath )
+        elif source_filepath.split( u'.' )[-1] == u'jpg':
+            self.logger.debug( u'in fedora_parts_builder._create_jp2(); in `jpg` handling' )
+            self._create_jp2_from_jpg( CONVERT_COMMAND_PATH, KAKADU_COMMAND_PATH, source_filepath, destination_filepath )
+        return
+
+    def _create_jp2_from_tif( self, KAKADU_COMMAND_PATH, source_filepath, destination_filepath ):
+        """ Creates jp2 directly. """
+        cleaned_source_filepath = source_filepath.replace( u' ', u'\ ' )
+        cmd = u'%s -i "%s" -o "%s" Creversible=yes -rate -,1,0.5,0.25 Clevels=12' % (
+            KAKADU_COMMAND_PATH, cleaned_source_filepath, destination_filepath )
+        self.logger.info( u'in fedora_parts_builder._create_jp2_from_tif(); cmd, %s' % cmd )
+        r = envoy.run( cmd.encode(u'utf-8', u'replace') )  # envoy requires a non-unicode string
+        self.logger.info( u'in fedora_parts_builder._create_jp2_from_tif(); r.std_out, %s' % r.std_out )
+        self.logger.info( u'in fedora_parts_builder._create_jp2_from_tif(); r.std_err, %s' % r.std_err )
+        return
+
+    def _create_jp2_from_jpg( self, CONVERT_COMMAND_PATH, KAKADU_COMMAND_PATH, source_filepath, destination_filepath ):
+        """ Creates jp2 after first converting jpg to tif (due to server limitation). """
+        cleaned_source_filepath = source_filepath.replace( u' ', u'\ ' )
+        self.logger.debug( u'in fedora_parts_builder._create_jp2_from_jpg(); cleaned_source_filepath, %s' % cleaned_source_filepath )
+        tif_destination_filepath = destination_filepath[0:-4] + u'.tif'
+        self.logger.debug( u'in fedora_parts_builder._create_jp2_from_jpg(); tif_destination_filepath, %s' % tif_destination_filepath )
+        cmd = u'%s -compress None "%s" %s' % (
+            CONVERT_COMMAND_PATH, cleaned_source_filepath, tif_destination_filepath )  # source-filepath quotes needed for filename containing spaces
+        self.logger.debug( u'in fedora_parts_builder._create_jp2_from_jpg(); cmd, %s' % cmd )
+        r = envoy.run( cmd.encode(u'utf-8', u'replace') )
+        self.logger.info( u'in fedora_parts_builder._create_jp2_from_jpg(); r.std_out, %s; type(r.std_out), %s' % (r.std_out, type(r.std_out)) )
+        self.logger.info( u'in fedora_parts_builder._create_jp2_from_jpg(); r.std_err, %s; type(r.std_err), %s' % (r.std_err, type(r.std_err)) )
+        if len( r.std_err ) > 0:
+            raise Exception( u'Problem making intermediate .tif from .jpg' )
+        source_filepath = tif_destination_filepath
+        cmd = u'%s -i "%s" -o "%s" Creversible=yes -rate -,1,0.5,0.25 Clevels=12' % (
+            KAKADU_COMMAND_PATH, source_filepath, destination_filepath )
+        r = envoy.run( cmd.encode(u'utf-8', u'replace') )
+        os.remove( tif_destination_filepath )
+        return
+
+    ## datastream work ##
+
+    def build_master_datastream_vars( self, filename, image_dir_url ):
+        """ Builds pieces necessary for assigning the master datastream.
+            Called by fedora_metadata_and_image_builder.add_metadata_and_image(). """
+        encoded_filename = urllib.quote( filename ).decode( u'utf-8' )
+        file_url = u'%s/%s' % ( image_dir_url, encoded_filename )
+        dsID = u'MASTER'
+        mime_type = u'image/tiff'
+        if filename.split( u'.' )[-1] == u'jpg':
+            mime_type = u'image/jpeg'
+        return ( file_url, dsID, mime_type )
+
+    def build_jp2_datastream_vars( self, filename, image_dir_url ):
+        """ Builds pieces necessary for assigning the jp2 datastream.
+            Called by fedora_metadata_and_image_builder.add_metadata_and_image(). """
+        encoded_filename = urllib.quote( filename ).decode( u'utf-8' )
+        file_url = u'%s/%s' % ( image_dir_url, encoded_filename )
+        dsID = u'JP2'
+        mime_type = u'image/jp2'
+        return ( file_url, dsID, mime_type )
+
+    def update_object_datastream( self, new_obj, dsID, file_url, mime_type ):
+        """ Updates the new-object's datastream property.
+            Returns the updated new-object.
+            Called by fedora_metadata_and_image_builder.add_metadata_and_image().
+            Possible TODO: try passing this a 'data-stream' object (instead of the whole new_obj, update it, and send it back.
+                  then in the calling code, say new_obj.master = ds_object and new_obj.jp2 = ds_object. """
+        python_dsID = dsID.lower()
+        ds = getattr( new_obj, python_dsID )
+        ds.ds_location = file_url
+        ds.mimetype = mime_type
+        return new_obj
+
+    ## rels-int work ##
+
+    def update_newobj_relsint( self, filename, new_obj, dsID ):
+        """ Takes the repo new-obj and a dsID of 'MASTER' or 'JP2'.
+            Updates the new-object's rels-int.
+            Returns the updated new-object.
+            Called by fedora_metadata_and_image_builder.add_metadata_and_image(). """
+        download_filename = filename.replace( u' ', u'_' )
+        download_description = rels.Description()
+        download_description.about = u"%s/%s" % ( new_obj.uriref, dsID )
+        download_description.download_filename = download_filename
+        new_obj.rels_int.content.descriptions.append( download_description )
+        return new_obj
+
+    # end class ImageBuilder()
 
 
 ## runners ##
@@ -141,6 +250,7 @@ def run_make_jp2( data ):
         Called by queue-job triggered by tasks.task_manager.determine_next_task(). """
     assert sorted( data.keys() ) == [u'item_data', u'pid', u'update_image'], sorted( data.keys() )
     ih = ImageHandler( data, logger )
+    ih.make_jp2()
     task_manager.determine_next_task( current_task=unicode(sys._getframe().f_code.co_name), logger=logger,
         data=data )
     return
