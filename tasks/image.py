@@ -2,7 +2,7 @@
 
 """ Handles image-related tasks. """
 
-import json, os, sys, urllib
+import json, os, pprint, sys, urllib
 import envoy, requests
 from bell_code import bell_logger
 from bell_code.tasks import task_manager
