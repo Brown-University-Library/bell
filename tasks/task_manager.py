@@ -53,10 +53,13 @@ def determine_next_task( current_task=None, data=None, logger=None ):
         next_task = u'bell_code.tasks.image.run_make_jp2'
         data = { u'item_data': data[u'item_data'], u'pid': data[u'pid'], u'update_image': data[u'update_image'] }  # update_image not used by make_jp2(), but will be passed to next task: add_image_datastream().
 
-    elif current_task == u'make_jp2':
-        next_task = u'bell_code.tasks.image.add_image_datastream'  # will look at the data[u'update_image'] value to determine whether to add 'overwrite' flag to api call.
+    elif current_task == u'run_make_jp2':
+        next_task = u'bell_code.tasks.image.run_add_image_datastream'  # will look at the data[u'update_image'] value to determine whether to add 'overwrite' flag to api call.
         data = { u'item_data': data[u'item_data'], u'pid': data[u'pid'], u'update_image': data[u'update_image'] }
 
+    elif current_task == u'run_add_image_datastream':
+        next_task = u'bell_code.tasks.indexer.update_custom_index'
+        data = { u'item_data': data[u'item_data'], u'pid': data[u'pid'] }
 
     # elif current_task == u'populate_queue':
     #     next_task = u'tasks.task_manager.determine_handler'
@@ -133,115 +136,115 @@ def populate_queue():
         raise Exception( message )
 
 
-def determine_handler( item_dict ):
-    """ Examines item dict after populate_queue() and updates next task.
-        Situations:
-        - accession_number has no pid, & has no image_filename
-            handler == ‘add_new_metadata_only_item’
-        - accession_number has no pid, & has image_filename, & image_file _not_ in image_dir
-            handler == ‘add_new_metadata_only_item’
-        - accession_number has no pid, & has image_filename, & image_file _found_ in image_dir
-            handler == ‘add_new_item_with_image’
-        - accession_number has pid, & has no image_filename
-            handler == ‘update_existing_metadata’
-        - accession_number has pid, & has image_filename, & image_file _not_ in image_dir
-            handler == ‘update_existing_metadata’
-        - accession_number has pid, & has image_filename, & image_file _found_ in image_dir
-            handler == 'update_existing_metadata_and_create_image' _or_ 'update_existing_metadata_and_update_image'
-            """
-    IMAGE_DIR = os.environ.get(u'BELL_TM__IMAGES_DIR_PATH')
-    logger = bell_logger.setup_logger()
-    handler = None
-    acc_num = item_dict[u'calc_accession_id']
-    filename = item_dict[u'object_image_scan_filename']
-    filepath = _check_filepath( filename, IMAGE_DIR, logger )
-    pid = _check_pid( acc_num, logger )
-    if _check_recently_processed( acc_num, logger ):
-        handler = u'skip__already_processed'
-        update_tracker( key=acc_num, message=u'handler: %s' % handler )
-        return
-    if not pid and not filename:
-        handler = u'add_new_metadata_only_item'
-    elif not pid and filename and not filepath:
-        handler = u'add_new_metadata_only_item'
-    elif not pid and filename and filepath:
-        handler = u'add_new_item_with_image'
-    elif pid and not filepath:
-        handler = u'update_existing_metadata'
-    elif pid and filename and not filepath:
-        handler = u'update_existing_metadata'
-    elif pid and filename and filepath:
-        if _image_already_ingested( pid, logger ):
-            handler = u'update_existing_metadata_and_update_image'
-        else:
-            handler = u'update_existing_metadata_and_create_image'
-    else:
-        raise Exception( u'in task_manager.determine_handler(); unhandled case' )
-    update_tracker( key=acc_num, message=u'handler: %s' % handler )
-    determine_next_task(
-        current_task=sys._getframe().f_code.co_name,
-        data={ u'item_dict': item_dict, u'handler': handler, u'pid': pid },
-        logger=logger )
-    logger.info( u'in task_manager.determine_handler(); done; acc_num, %s; filepath, %s; pid, %s; handler, %s' % (acc_num, filepath, pid, handler) )
-    return
+# def determine_handler( item_dict ):
+#     """ Examines item dict after populate_queue() and updates next task.
+#         Situations:
+#         - accession_number has no pid, & has no image_filename
+#             handler == ‘add_new_metadata_only_item’
+#         - accession_number has no pid, & has image_filename, & image_file _not_ in image_dir
+#             handler == ‘add_new_metadata_only_item’
+#         - accession_number has no pid, & has image_filename, & image_file _found_ in image_dir
+#             handler == ‘add_new_item_with_image’
+#         - accession_number has pid, & has no image_filename
+#             handler == ‘update_existing_metadata’
+#         - accession_number has pid, & has image_filename, & image_file _not_ in image_dir
+#             handler == ‘update_existing_metadata’
+#         - accession_number has pid, & has image_filename, & image_file _found_ in image_dir
+#             handler == 'update_existing_metadata_and_create_image' _or_ 'update_existing_metadata_and_update_image'
+#             """
+#     IMAGE_DIR = os.environ.get(u'BELL_TM__IMAGES_DIR_PATH')
+#     logger = bell_logger.setup_logger()
+#     handler = None
+#     acc_num = item_dict[u'calc_accession_id']
+#     filename = item_dict[u'object_image_scan_filename']
+#     filepath = _check_filepath( filename, IMAGE_DIR, logger )
+#     pid = _check_pid( acc_num, logger )
+#     if _check_recently_processed( acc_num, logger ):
+#         handler = u'skip__already_processed'
+#         update_tracker( key=acc_num, message=u'handler: %s' % handler )
+#         return
+#     if not pid and not filename:
+#         handler = u'add_new_metadata_only_item'
+#     elif not pid and filename and not filepath:
+#         handler = u'add_new_metadata_only_item'
+#     elif not pid and filename and filepath:
+#         handler = u'add_new_item_with_image'
+#     elif pid and not filepath:
+#         handler = u'update_existing_metadata'
+#     elif pid and filename and not filepath:
+#         handler = u'update_existing_metadata'
+#     elif pid and filename and filepath:
+#         if _image_already_ingested( pid, logger ):
+#             handler = u'update_existing_metadata_and_update_image'
+#         else:
+#             handler = u'update_existing_metadata_and_create_image'
+#     else:
+#         raise Exception( u'in task_manager.determine_handler(); unhandled case' )
+#     update_tracker( key=acc_num, message=u'handler: %s' % handler )
+#     determine_next_task(
+#         current_task=sys._getframe().f_code.co_name,
+#         data={ u'item_dict': item_dict, u'handler': handler, u'pid': pid },
+#         logger=logger )
+#     logger.info( u'in task_manager.determine_handler(); done; acc_num, %s; filepath, %s; pid, %s; handler, %s' % (acc_num, filepath, pid, handler) )
+#     return
 
-    # end def determine_handler()
+#     # end def determine_handler()
 
 
-def _check_filepath( filename, IMAGE_DIR, logger ):
-    """ Checks to see if file exists.
-        Returns filepath string or None.
-        Called by determine_handler(). """
-    filepath = None
-    temp_filepath = None
-    if filename:
-        temp_filepath = u'%s/%s' % ( IMAGE_DIR, filename )
-        if os.path.isfile( temp_filepath ):
-            filepath = temp_filepath
-    logger.info( u'in task_manager._check_filepath(); temp_filepath, %s; filepath, %s' % (temp_filepath, filepath) )
-    return filepath
-    #
-def _check_pid( acc_num, logger=None ):
-    """ Checks if accession number has a pid and returns it if so.
-        Called by determine_handler() """
-    FILE_PATH = os.environ.get(u'BELL_TM__PID_DICT_JSON_PATH')
-    with open( FILE_PATH ) as f:
-        full_pid_data_dict = json.loads( f.read() )
-        # logger.info( u'in task_manager._check_pid(); full_pid_data_dict, %s' % pprint.pformat(full_pid_data_dict) )
-    pid = full_pid_data_dict[u'final_accession_pid_dict'][acc_num]
-    logger.info( u'in task_manager._check_pid(); pid, %s' % pid )
-    return pid
-    #
-def _check_recently_processed( accession_number_key, logger=None ):
-    """ Checks redis bell:tracker to see if item has recently been successfully ingested.
-        Called by determine_handler() """
-    return_val = False
-    tracker_name = u'bell:tracker'
-    if r.hexists( tracker_name, accession_number_key ):
-        key_value_list = json.loads( r.hget(tracker_name, accession_number_key) )
-        if u'save_successful' in key_value_list:
-            return_val = True
-    logger.info( u'in task_manager._check_recently_processed(); acc_num, %s; return_val, %s' % (accession_number_key, return_val) )
-    return return_val
-    #
-def _image_already_ingested( pid, logger ):
-    """ Checks repo api to see if an image has previously been ingested.
-        Returns boolean.
-        Called by determine_handler() """
-    ITEM_API_ROOT = os.environ.get(u'BELL_TM__ITEM_API_ROOT')
-    image_already_ingested = True
-    item_api_url = u'%s/%s/' % ( ITEM_API_ROOT, pid )
-    logger.debug( u'in task_manager._image_already_ingested(); item_api_url, %s' % item_api_url )
-    r = requests.get( item_api_url, verify=False )
-    d = r.json()
-    if u'JP2' in d[u'links'][u'content_datastreams'].keys()  or  u'jp2' in d[u'rel_content_models_ssim']:
-        pass
-    elif u'image/tiff' in d[u'datastreams_ss']:  # problem, means there's a tiff and no jp2
-        logger.debug( u'in task_manager._image_already_ingested(); whoa, tiff without jp2 detected for pid, `%s`; raising exception' % pid )
-        raise Exception( u'PROBLEM: tiff with no jp2 for pid, `%s`' % pid )
-    else:
-        image_already_ingested = False
-    return image_already_ingested
+# def _check_filepath( filename, IMAGE_DIR, logger ):
+#     """ Checks to see if file exists.
+#         Returns filepath string or None.
+#         Called by determine_handler(). """
+#     filepath = None
+#     temp_filepath = None
+#     if filename:
+#         temp_filepath = u'%s/%s' % ( IMAGE_DIR, filename )
+#         if os.path.isfile( temp_filepath ):
+#             filepath = temp_filepath
+#     logger.info( u'in task_manager._check_filepath(); temp_filepath, %s; filepath, %s' % (temp_filepath, filepath) )
+#     return filepath
+#     #
+# def _check_pid( acc_num, logger=None ):
+#     """ Checks if accession number has a pid and returns it if so.
+#         Called by determine_handler() """
+#     FILE_PATH = os.environ.get(u'BELL_TM__PID_DICT_JSON_PATH')
+#     with open( FILE_PATH ) as f:
+#         full_pid_data_dict = json.loads( f.read() )
+#         # logger.info( u'in task_manager._check_pid(); full_pid_data_dict, %s' % pprint.pformat(full_pid_data_dict) )
+#     pid = full_pid_data_dict[u'final_accession_pid_dict'][acc_num]
+#     logger.info( u'in task_manager._check_pid(); pid, %s' % pid )
+#     return pid
+#     #
+# def _check_recently_processed( accession_number_key, logger=None ):
+#     """ Checks redis bell:tracker to see if item has recently been successfully ingested.
+#         Called by determine_handler() """
+#     return_val = False
+#     tracker_name = u'bell:tracker'
+#     if r.hexists( tracker_name, accession_number_key ):
+#         key_value_list = json.loads( r.hget(tracker_name, accession_number_key) )
+#         if u'save_successful' in key_value_list:
+#             return_val = True
+#     logger.info( u'in task_manager._check_recently_processed(); acc_num, %s; return_val, %s' % (accession_number_key, return_val) )
+#     return return_val
+#     #
+# def _image_already_ingested( pid, logger ):
+#     """ Checks repo api to see if an image has previously been ingested.
+#         Returns boolean.
+#         Called by determine_handler() """
+#     ITEM_API_ROOT = os.environ.get(u'BELL_TM__ITEM_API_ROOT')
+#     image_already_ingested = True
+#     item_api_url = u'%s/%s/' % ( ITEM_API_ROOT, pid )
+#     logger.debug( u'in task_manager._image_already_ingested(); item_api_url, %s' % item_api_url )
+#     r = requests.get( item_api_url, verify=False )
+#     d = r.json()
+#     if u'JP2' in d[u'links'][u'content_datastreams'].keys()  or  u'jp2' in d[u'rel_content_models_ssim']:
+#         pass
+#     elif u'image/tiff' in d[u'datastreams_ss']:  # problem, means there's a tiff and no jp2
+#         logger.debug( u'in task_manager._image_already_ingested(); whoa, tiff without jp2 detected for pid, `%s`; raising exception' % pid )
+#         raise Exception( u'PROBLEM: tiff with no jp2 for pid, `%s`' % pid )
+#     else:
+#         image_already_ingested = False
+#     return image_already_ingested
 
 
 def update_tracker( key, message ):
