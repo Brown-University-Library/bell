@@ -119,7 +119,7 @@ class ImageHandler( object ):
         """ Assembles params and hits api.
             Called by runner. """
         ( API_URL, MASTER_IMAGES_DIR_URL, JP2_IMAGES_DIR_URL ) = self._get_image_datastream_settings()
-        ( master_url, jp2_url ) = self._prep_image_urls( MASTER_IMAGES_DIR_URL, JP2_IMAGES_DIR_URL ):
+        ( master_url, jp2_url ) = self._prep_image_urls( MASTER_IMAGES_DIR_URL, JP2_IMAGES_DIR_URL )
         params_dict = self._prep_image_datastream_params( master_url, jp2_url )
         if self.data[u'update_image'] == True:
             r = requests.put( API_URL, data=params_dict, verify=False, overwrite=True )
