@@ -118,23 +118,23 @@ class ImageHandler( object ):
     def add_image_datastream( self ):
         """ Assembles params and hits api.
             Called by runner. """
-        ( API_URL, MASTER_IMAGES_DIR_URL, JP2_IMAGES_DIR_URL ) = self._get_image_datastream_settings()
+        ( PRIVATE_ITEMS_API_URL, MASTER_IMAGES_DIR_URL, JP2_IMAGES_DIR_URL ) = self._get_image_datastream_settings()
         ( master_url, jp2_url ) = self._prep_image_urls( MASTER_IMAGES_DIR_URL, JP2_IMAGES_DIR_URL )
         params_dict = self._prep_image_datastream_params( master_url, jp2_url )
         if self.data[u'update_image'] == True:
-            r = requests.put( API_URL, data=params_dict, verify=False, overwrite=True )
+            r = requests.put( PRIVATE_ITEMS_API_URL, data=params_dict, verify=False, overwrite=True )
         else:
-            r = requests.put( API_URL, data=params_dict, verify=False, overwrite=True )
+            r = requests.put( PRIVATE_ITEMS_API_URL, data=params_dict, verify=False, overwrite=True )
         return
 
     def _get_image_datastream_settings( self ):
         """ Grabs environmental variables for api call.
             Returns tuple.
             Called by add_image_datastream() """
-        API_URL = unicode( os.environ.get(u'BELL_IMAGE__PRIVATE_API_URL') )
+        PRIVATE_ITEMS_API_URL = unicode( os.environ.get(u'BELL_IMAGE__PRIVATE_API_URL') )
         MASTER_IMAGES_DIR_URL = unicode( os.environ.get(u'BELL_IMAGE__MASTER_IMAGES_DIR_URL') )
         JP2_IMAGES_DIR_URL = unicode( os.environ.get(u'BELL_IMAGE__JP2_IMAGES_DIR_URL') )
-        return ( API_URL, MASTER_IMAGES_DIR_URL, JP2_IMAGES_DIR_URL )
+        return ( PRIVATE_ITEMS_API_URL, MASTER_IMAGES_DIR_URL, JP2_IMAGES_DIR_URL )
 
     def _prep_image_urls( self, MASTER_IMAGES_DIR_URL, JP2_IMAGES_DIR_URL ):
         """ Prepars master and jp2 image_urls for the api (for fedora to grab).
@@ -152,7 +152,7 @@ class ImageHandler( object ):
     def _prep_image_datastream_params( self, master_url, jp2_url ):
         """ Prepares and returns params_dict for api call.
             Called by add_image_datastream(). """
-        params = { u'pid': pid }
+        params = { u'pid': self.data[u'pid'] }
         params[u'content_streams'] = json.dumps([
             { u'dsID': u'MASTER', u'url': master_url },
             { u'dsID': u'JP2', u'url': jp2_url }
