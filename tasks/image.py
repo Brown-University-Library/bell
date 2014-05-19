@@ -123,6 +123,8 @@ class ImageHandler( object ):
         params_dict = self._prep_image_datastream_params( master_url, jp2_url )
         r = requests.put( PRIVATE_ITEMS_API_URL, data=params_dict, verify=False )
         self.logger.debug( u'in image.add_image_datastream(); r.url, `%s`; r.status_code, `%s`; r.content, `%s`' % (r.url, r.status_code, r.content.decode(u'utf-8')) )
+        if not r.status_code == 200:
+            raise Exception( u'Problem in image.ImageHandler.add_image_datastream() logged.' )
         return
 
     def _get_image_datastream_settings( self ):
