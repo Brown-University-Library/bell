@@ -121,10 +121,7 @@ class ImageHandler( object ):
         ( PRIVATE_ITEMS_API_URL, MASTER_IMAGES_DIR_URL, JP2_IMAGES_DIR_URL ) = self._get_image_datastream_settings()
         ( master_url, jp2_url ) = self._prep_image_urls( MASTER_IMAGES_DIR_URL, JP2_IMAGES_DIR_URL )
         params_dict = self._prep_image_datastream_params( master_url, jp2_url )
-        if self.data[u'update_image'] == True:
-            r = requests.put( PRIVATE_ITEMS_API_URL, data=params_dict, verify=False, overwrite=True )
-        else:
-            r = requests.put( PRIVATE_ITEMS_API_URL, data=params_dict, verify=False, overwrite=True )
+        r = requests.put( PRIVATE_ITEMS_API_URL, data=params_dict, verify=False )
         return
 
     def _get_image_datastream_settings( self ):
@@ -157,6 +154,8 @@ class ImageHandler( object ):
             { u'dsID': u'MASTER', u'url': master_url },
             { u'dsID': u'JP2', u'url': jp2_url }
             ])
+        if self.data[u'update_image'] == True:
+            params[u'overwrite'] = True
         self.logger.debug( u'in image._prep_image_datastream_params(); params, `%s`' % pprint.pformat(params) )
         return params
 
