@@ -122,7 +122,7 @@ class ImageHandler( object ):
         ( master_url, jp2_url ) = self._prep_image_urls( MASTER_IMAGES_DIR_URL, JP2_IMAGES_DIR_URL )
         params_dict = self._prep_image_datastream_params( master_url, jp2_url )
         r = requests.put( PRIVATE_ITEMS_API_URL, data=params_dict, verify=False )
-        self.logger.debug( u'in image.add_image_datastream(); r.status_code, `%s`; r.content, `%s`' % (r.status_code, r.content.decode(u'utf-8')) )
+        self.logger.debug( u'in image.add_image_datastream(); r.url, `%s`; r.status_code, `%s`; r.content, `%s`' % (r.url, r.status_code, r.content.decode(u'utf-8')) )
         return
 
     def _get_image_datastream_settings( self ):
