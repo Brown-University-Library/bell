@@ -122,6 +122,7 @@ class ImageHandler( object ):
         ( master_url, jp2_url ) = self._prep_image_urls( MASTER_IMAGES_DIR_URL, JP2_IMAGES_DIR_URL )
         params_dict = self._prep_image_datastream_params( master_url, jp2_url )
         r = requests.put( PRIVATE_ITEMS_API_URL, data=params_dict, verify=False )
+        self.logger.debug( u'in image.add_image_datastream(); r.status_code, `%s`; r.content, `%s`' % (r.status_code, r.content.decode(u'utf-8')) )
         return
 
     def _get_image_datastream_settings( self ):
@@ -131,7 +132,9 @@ class ImageHandler( object ):
         PRIVATE_ITEMS_API_URL = unicode( os.environ.get(u'BELL_IMAGE__PRIVATE_API_URL') )
         MASTER_IMAGES_DIR_URL = unicode( os.environ.get(u'BELL_IMAGE__MASTER_IMAGES_DIR_URL') )
         JP2_IMAGES_DIR_URL = unicode( os.environ.get(u'BELL_IMAGE__JP2_IMAGES_DIR_URL') )
-        return ( PRIVATE_ITEMS_API_URL, MASTER_IMAGES_DIR_URL, JP2_IMAGES_DIR_URL )
+        return_tuple = ( PRIVATE_ITEMS_API_URL, MASTER_IMAGES_DIR_URL, JP2_IMAGES_DIR_URL )
+        self.logger.debug( u'in image._get_image_datastream_settings(); return_tuple, `%s`' % unicode(return_tuple) )
+        return return_tuple
 
     def _prep_image_urls( self, MASTER_IMAGES_DIR_URL, JP2_IMAGES_DIR_URL ):
         """ Prepars master and jp2 image_urls for the api (for fedora to grab).
