@@ -160,7 +160,7 @@ class ImageHandler( object ):
             { u'dsID': u'JP2', u'url': jp2_url }
             ])
         if self.data[u'update_image'] == True:
-            params[u'overwrite'] = True
+            params[u'overwrite_content'] = True
         self.logger.debug( u'in image._prep_image_datastream_params(); params, `%s`' % pprint.pformat(params) )
         return params
 
