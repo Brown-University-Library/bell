@@ -58,7 +58,7 @@ def determine_next_task( current_task=None, data=None, logger=None ):
         data = { u'item_data': data[u'item_data'], u'pid': data[u'pid'], u'update_image': data[u'update_image'] }
 
     elif current_task == u'run_add_image_datastream':
-        next_task = u'bell_code.tasks.indexer.update_custom_index'
+        next_task = u'bell_code.tasks.indexer.run_update_custom_index'
         data = { u'item_data': data[u'item_data'], u'pid': data[u'pid'] }
 
     # elif current_task == u'populate_queue':
