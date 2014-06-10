@@ -17,6 +17,7 @@ class ThumbnailRebuilder( object ):
         """ Returns list of pids for giving collection-pid. """
         doc_list = self._run_studio_solr_query( bell_collection_pid, solr_root_url )
         pid_list = self._build_pidlist( doc_list )
+        return pid_list
         # pprint.pprint( pid_list )
 
     def _run_studio_solr_query( self, bdr_collection_pid, solr_root_url ):
@@ -51,7 +52,7 @@ class ThumbnailRebuilder( object ):
     def _build_pidlist( self, doc_list ):
         """ Returns list of pids for docs that contain a jp2 datastream.
             Called by get_pid_list(). """
-        # print u'- len(doc_list), `%s`' % len( doc_list )
+        print u'- len(doc_list), `%s`' % len( doc_list )
         pid_list = []
         for doc in doc_list:
             jstring = doc.get( u'datastreams_ss' )
@@ -59,9 +60,7 @@ class ThumbnailRebuilder( object ):
                 d = json.loads( jstring )
             if d.get( u'JP2' ) == {u"mimeType": u"image/jp2"}:
                 pid_list.append( doc[u'pid'] )
-        # print u'- len(pid_list), `%s`' % len( pid_list )
         return pid_list
-
 
     ## enqueue jobs ##
 
@@ -79,9 +78,10 @@ class ThumbnailRebuilder( object ):
 
 
 if __name__ == u'__main__':
-    bell_collection_pid = os.environ[u'BJD_TEMP_BELL_COLLECTION_PID']
-    solr_root_url = os.environ[u'BJD_TEMP_BELL_SOLR_ROOT_URL'] + u'/search/'
+    bell_collection_pid = os.environ[u'BELL_ONEOFF__BELL_COLLECTION_PID']
+    solr_root_url = os.environ[u'BELL_ONEOFF__BELL_SOLR_ROOT_URL'] + u'/search/'
     rebuilder = ThumbnailRebuilder()
     pid_list = rebuilder.get_pid_list( bell_collection_pid, solr_root_url )
+    print u'- len(pid_list), `%s`' % len( pid_list )
     # for pid in pid_list:
     #     rebuilder.enqueue_job( pid )
