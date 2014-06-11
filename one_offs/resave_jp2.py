@@ -2,8 +2,7 @@
 
 """ Overwrites jp2 datastream. """
 
-import json, logging, os, pprint, urllib
-import logging.handlers
+import imghdr, json, logging, os, pprint, urllib
 import requests
 
 """ Overwrites bad jp2 with new, good jp2. """
@@ -20,7 +19,8 @@ class Jp2Resaver( object ):
 
     def resave_jp2( self ):
         """ Controls making and overwriting """
-        self._save_master_to_file( self.PID )
+        temp_filepath = self._save_master_to_file( self.PID )
+        self._fix_master_filename( temp_filepath )
         self._make_new_jp2_from_ingested_master()
         self._validate_new_jp2()
         self._overwrite_datastream()
@@ -31,14 +31,27 @@ class Jp2Resaver( object ):
         """ Accesses fedora master and saves it to a file. """
         url = self.MASTER_IMAGE_URL_PATTERN % pid
         print u'- url, %s' % url
-        save_path = u'%s/%s' % ( self.JP2_TEMP_SAVE_DIR_PATH, u'temp_' + pid + u'_.tif' )
+        save_path = u'%s/%s' % ( self.JP2_TEMP_SAVE_DIR_PATH, u'temp_' + pid + u'_.tmp' )
         print u'- save_path, %s' % save_path
         r = requests.get( url, stream=True )
         if r.status_code == 200:
             with open( save_path, 'wb' ) as f:
                 for chunk in r.iter_content(1024):
                     f.write(chunk)
+        return save_path
+
+    def _fix_master_filename( self, temp_filepath ):
+        """ Examines file type and renames it with the proper extension."""
+        image_type = imghdr.what( temp_filepath )
+        print u'- image_type, `%s`' % image_type
+        if image_type == u'jpeg':
+            new_filepath = temp_filepath.replace( u'.tmp', u'.jpg' )
+        else:
+            new_filepath = temp_filepath.replace( u'.tmp', u'.tif' )
+        os.rename( temp_filepath, new_filepath )
         return
+
+    ## end class Jp2Resaver()
 
 
 
