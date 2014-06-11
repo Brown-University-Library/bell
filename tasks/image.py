@@ -183,8 +183,10 @@ class ImageBuilder( object ):
             TODO: consider merging this into that class. """
         self.logger.debug( u'in image._create_jp2(); source_filepath, %s' % source_filepath )
         self.logger.debug( u'in image._create_jp2(); destination_filepath, %s' % destination_filepath )
-        KAKADU_COMMAND_PATH = unicode( os.environ.get(u'BELL_IMAGE__KAKADU_COMMAND_PATH') )
-        CONVERT_COMMAND_PATH = unicode( os.environ.get(u'BELL_IMAGE__CONVERT_COMMAND_PATH') )
+        # KAKADU_COMMAND_PATH = unicode( os.environ.get(u'BELL_IMAGE__KAKADU_COMMAND_PATH') )
+        # CONVERT_COMMAND_PATH = unicode( os.environ.get(u'BELL_IMAGE__CONVERT_COMMAND_PATH') )
+        KAKADU_COMMAND_PATH = unicode( os.environ[u'BELL_IMAGE__KAKADU_COMMAND_PATH'] )
+        CONVERT_COMMAND_PATH = unicode( os.environ[u'BELL_IMAGE__CONVERT_COMMAND_PATH'] )
         if source_filepath.split( u'.' )[-1] == u'tif':
             self.logger.debug( u'in image._create_jp2(); in `tif` handling' )
             self._create_jp2_from_tif( KAKADU_COMMAND_PATH, source_filepath, destination_filepath )
@@ -230,12 +232,13 @@ class ImageBuilder( object ):
 
 ## runners ##
 
-logger = bell_logger.setup_logger()
+# logger = bell_logger.setup_logger()
 
 def run_check_create_image( data ):
     """ Runner for check_create_image().
         Called by queue-job triggered by tasks.task_manager.determine_next_task(). """
     assert sorted( data.keys() ) == [u'item_data', u'pid'], sorted( data.keys() )
+    logger = bell_logger.setup_logger()
     ih = ImageHandler( data, logger )
     create_image = ih.check_create_image()
     task_manager.determine_next_task( current_task=unicode(sys._getframe().f_code.co_name), logger=logger,
@@ -246,6 +249,7 @@ def run_check_update_image( data ):
     """ Runner for check_update_image().
         Called by queue-job triggered by tasks.task_manager.determine_next_task(). """
     assert sorted( data.keys() ) == [u'item_data', u'pid'], sorted( data.keys() )
+    logger = bell_logger.setup_logger()
     ih = ImageHandler( data, logger )
     update_image = ih.check_update_image()
     task_manager.determine_next_task( current_task=unicode(sys._getframe().f_code.co_name), logger=logger,
@@ -256,6 +260,7 @@ def run_make_jp2( data ):
     """ Runner for create_jp2().
         Called by queue-job triggered by tasks.task_manager.determine_next_task(). """
     assert sorted( data.keys() ) == [u'item_data', u'pid', u'update_image'], sorted( data.keys() )  # 'update_image' needed for next task
+    logger = bell_logger.setup_logger()
     ih = ImageHandler( data, logger )
     ih.make_jp2()
     task_manager.determine_next_task( current_task=unicode(sys._getframe().f_code.co_name), logger=logger,
@@ -266,9 +271,9 @@ def run_add_image_datastream( data ):
     """ Runner for add_image_datastream().
         Called by queue-job triggered by tasks.task_manager.determine_next_task(). """
     assert sorted( data.keys() ) == [u'item_data', u'pid', u'update_image'], sorted( data.keys() )
+    logger = bell_logger.setup_logger()
     ih = ImageHandler( data, logger )
     ih.add_image_datastream()
     task_manager.determine_next_task( current_task=unicode(sys._getframe().f_code.co_name), logger=logger,
         data=data )
     return
-

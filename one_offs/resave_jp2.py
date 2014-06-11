@@ -1,11 +1,14 @@
 # -*- coding: utf-8 -*-
 
-""" Overwrites jp2 datastream. """
+""" Overwrites bad jp2 datastream with new, good jp2. """
 
 import imghdr, json, logging, os, pprint, urllib
+import logging.handlers
 import requests
+from bell_code import bell_logger
+from bell_code.tasks.image import ImageBuilder
 
-""" Overwrites bad jp2 with new, good jp2. """
+logger = bell_logger.setup_logger()
 
 
 class Jp2Resaver( object ):
@@ -19,9 +22,9 @@ class Jp2Resaver( object ):
 
     def resave_jp2( self ):
         """ Controls making and overwriting """
-        temp_filepath = self._save_master_to_file( self.PID )
-        self._fix_master_filename( temp_filepath )
-        self._make_new_jp2_from_ingested_master()
+        temp_master_filepath = self._save_master_to_file( self.PID )
+        master_filepath = self._fix_master_filename( temp_master_filepath )
+        self._make_new_jp2_from_master( master_filepath )
         self._validate_new_jp2()
         self._overwrite_datastream()
         print u'- pid `%s` done' % self.PID
@@ -49,6 +52,16 @@ class Jp2Resaver( object ):
         else:
             new_filepath = temp_filepath.replace( u'.tmp', u'.tif' )
         os.rename( temp_filepath, new_filepath )
+        return new_filepath
+
+    def _make_new_jp2_from_master( self, master_filepath ):
+        """ Creates jp2 and returns jp2_filepath and url. """
+        if u'.jpg' in master_filepath:
+            jp2_filepath = master_filepath.replace( u'.jpg', u'.jp2' )
+        else:
+            jp2_filepath = master_filepath.replace( u'.tif', u'.jp2' )
+        image_builder = ImageBuilder( logger )
+        image_builder.create_jp2( master_filepath, jp2_filepath )
         return
 
     ## end class Jp2Resaver()
