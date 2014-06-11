@@ -69,17 +69,16 @@ class Jp2Resaver( object ):
 
     def _overwrite_datastream( self, jp2_filepath ):
         """ Hits api. """
-        jp2_url = u'%s/%s' % ( self.TEMP_IMAGE_DIR_URL, jp2_filepath )
+        jp2_filename = jp2_filepath.split(u'/')[-1]
+        jp2_url = u'%s/%s' % ( self.TEMP_IMAGE_DIR_URL, jp2_filename )
         logger.debug( u'in _overwrite_datastream(); jp2_url, `%s`' % jp2_url )
         logger.debug( u'in _overwrite_datastream(); self.PRIVATE_API_URL, `%s`' % self.PRIVATE_API_URL )
-        params = { u'pid': pid, u'overwrite_content': u'yes' }
+        params = { u'pid': self.PID, u'overwrite_content': u'yes' }
         params[u'content_streams'] = json.dumps([
             {u'dsID': u'JP2', u'url': jp2_url} ])
         r = requests.put( self.PRIVATE_API_URL, data=params, verify=False )
         response_dict = {
-            u'r.url': self.PRIVATE_API_URL,
-            u'r.status_code': r.status_code,
-            u'r.content': r.content.decode(u'utf-8', u'replace') }
+            u'r.url': self.PRIVATE_API_URL, u'r.status_code': r.status_code, u'r.content': r.content.decode(u'utf-8', u'replace') }
         print u'response_dict...'; pprint.pprint( response_dict )
 
     ## end class Jp2Resaver()
