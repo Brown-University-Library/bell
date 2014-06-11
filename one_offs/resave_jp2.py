@@ -25,7 +25,6 @@ class Jp2Resaver( object ):
         temp_master_filepath = self._save_master_to_file( self.PID )
         master_filepath = self._fix_master_filename( temp_master_filepath )
         self._make_new_jp2_from_master( master_filepath )
-        self._validate_new_jp2()
         self._overwrite_datastream()
         print u'- pid `%s` done' % self.PID
         return
@@ -55,14 +54,21 @@ class Jp2Resaver( object ):
         return new_filepath
 
     def _make_new_jp2_from_master( self, master_filepath ):
-        """ Creates jp2 and returns jp2_filepath and url. """
+        """ Creates jp2 and returns jp2_filepath. """
         if u'.jpg' in master_filepath:
             jp2_filepath = master_filepath.replace( u'.jpg', u'.jp2' )
         else:
             jp2_filepath = master_filepath.replace( u'.tif', u'.jp2' )
         image_builder = ImageBuilder( logger )
         image_builder.create_jp2( master_filepath, jp2_filepath )
+        bytes = os.path.getsize( jp2_filepath )
+        if bytes < 1000:
+            raise Exception( u'Problem creating jp2' )
         return
+
+    def _validate_new_jp2( self, jp2_filepath ):
+        """ Ensures jp2 has content. """
+
 
     ## end class Jp2Resaver()
 
