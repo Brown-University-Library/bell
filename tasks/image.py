@@ -177,25 +177,50 @@ class ImageBuilder( object ):
 
     ## create jp2 ##
 
+    # def create_jp2( self, source_filepath, destination_filepath ):
+    #     """ Creates jp2.
+    #         Called by tasks.ImageHandler.make_jp2()
+    #         TODO: consider merging this into that class. """
+    #     self.logger.debug( u'in image._create_jp2(); source_filepath, %s' % source_filepath )
+    #     self.logger.debug( u'in image._create_jp2(); destination_filepath, %s' % destination_filepath )
+    #     KAKADU_COMMAND_PATH = unicode( os.environ[u'BELL_IMAGE__KAKADU_COMMAND_PATH'] )
+    #     CONVERT_COMMAND_PATH = unicode( os.environ[u'BELL_IMAGE__CONVERT_COMMAND_PATH'] )
+    #     if source_filepath.split( u'.' )[-1] == u'tif':
+    #         self.logger.debug( u'in image._create_jp2(); in `tif` handling' )
+    #         self._create_jp2_from_tif( KAKADU_COMMAND_PATH, source_filepath, destination_filepath )
+    #     elif source_filepath.split( u'.' )[-1] == u'jpg':
+    #         self.logger.debug( u'in image._create_jp2(); in `jpg` handling' )
+    #         self._create_jp2_from_jpg( CONVERT_COMMAND_PATH, KAKADU_COMMAND_PATH, source_filepath, destination_filepath )
+    #     return
+
+    # def _create_jp2_from_tif( self, KAKADU_COMMAND_PATH, source_filepath, destination_filepath ):
+    #     """ Creates jp2 directly. """
+    #     cleaned_source_filepath = source_filepath.replace( u' ', u'\ ' )
+    #     cmd = u'%s -i "%s" -o "%s" Creversible=yes -rate -,1,0.5,0.25 Clevels=12' % (
+    #         KAKADU_COMMAND_PATH, cleaned_source_filepath, destination_filepath )
+    #     self.logger.info( u'in image._create_jp2_from_tif(); cmd, %s' % cmd )
+    #     r = envoy.run( cmd.encode(u'utf-8', u'replace') )  # envoy requires a non-unicode string
+    #     self.logger.info( u'in image._create_jp2_from_tif(); r.std_out, %s' % r.std_out )
+    #     self.logger.info( u'in image._create_jp2_from_tif(); r.std_err, %s' % r.std_err )
+    #     return
+
     def create_jp2( self, source_filepath, destination_filepath ):
         """ Creates jp2.
             Called by tasks.ImageHandler.make_jp2()
             TODO: consider merging this into that class. """
         self.logger.debug( u'in image._create_jp2(); source_filepath, %s' % source_filepath )
         self.logger.debug( u'in image._create_jp2(); destination_filepath, %s' % destination_filepath )
-        # KAKADU_COMMAND_PATH = unicode( os.environ.get(u'BELL_IMAGE__KAKADU_COMMAND_PATH') )
-        # CONVERT_COMMAND_PATH = unicode( os.environ.get(u'BELL_IMAGE__CONVERT_COMMAND_PATH') )
         KAKADU_COMMAND_PATH = unicode( os.environ[u'BELL_IMAGE__KAKADU_COMMAND_PATH'] )
         CONVERT_COMMAND_PATH = unicode( os.environ[u'BELL_IMAGE__CONVERT_COMMAND_PATH'] )
         if source_filepath.split( u'.' )[-1] == u'tif':
             self.logger.debug( u'in image._create_jp2(); in `tif` handling' )
-            self._create_jp2_from_tif( KAKADU_COMMAND_PATH, source_filepath, destination_filepath )
+            self._create_jp2_from_tif( CONVERT_COMMAND_PATH, KAKADU_COMMAND_PATH, source_filepath, destination_filepath )
         elif source_filepath.split( u'.' )[-1] == u'jpg':
             self.logger.debug( u'in image._create_jp2(); in `jpg` handling' )
             self._create_jp2_from_jpg( CONVERT_COMMAND_PATH, KAKADU_COMMAND_PATH, source_filepath, destination_filepath )
         return
 
-    def _create_jp2_from_tif( self, KAKADU_COMMAND_PATH, source_filepath, destination_filepath ):
+    def _create_jp2_from_tif( self, CONVERT_COMMAND_PATH, KAKADU_COMMAND_PATH, source_filepath, destination_filepath ):
         """ Creates jp2 directly. """
         cleaned_source_filepath = source_filepath.replace( u' ', u'\ ' )
         cmd = u'%s -i "%s" -o "%s" Creversible=yes -rate -,1,0.5,0.25 Clevels=12' % (
@@ -204,6 +229,21 @@ class ImageBuilder( object ):
         r = envoy.run( cmd.encode(u'utf-8', u'replace') )  # envoy requires a non-unicode string
         self.logger.info( u'in image._create_jp2_from_tif(); r.std_out, %s' % r.std_out )
         self.logger.info( u'in image._create_jp2_from_tif(); r.std_err, %s' % r.std_err )
+        if u'compressed TIFF' in r.std_err:  # kakadu can't handle that
+            ## uncompress the tiff
+            cmd = u'%s -compress None "%s" %s' % (
+                CONVERT_COMMAND_PATH, cleaned_source_filepath, cleaned_source_filepath )  # replaces existing file with uncompressed version
+            self.logger.info( u'in image._create_jp2_from_tif(); compressed-tiff-handling cmd, %s' % cmd )
+            r = envoy.run( cmd.encode(u'utf-8', u'replace') )  # envoy requires a non-unicode string
+            self.logger.info( u'in image._create_jp2_from_tif(); compressed-tiff-handling r.std_out, %s' % r.std_out )
+            self.logger.info( u'in image._create_jp2_from_tif(); compressed-tiff-handling r.std_err, %s' % r.std_err )
+            ## try kakadu again
+            cmd = u'%s -i "%s" -o "%s" Creversible=yes -rate -,1,0.5,0.25 Clevels=12' % (
+                KAKADU_COMMAND_PATH, cleaned_source_filepath, destination_filepath )
+            self.logger.info( u'in image._create_jp2_from_tif(); try2 cmd, %s' % cmd )
+            r = envoy.run( cmd.encode(u'utf-8', u'replace') )  # envoy requires a non-unicode string
+            self.logger.info( u'in image._create_jp2_from_tif(); try2 r.std_out, %s' % r.std_out )
+            self.logger.info( u'in image._create_jp2_from_tif(); try2 r.std_err, %s' % r.std_err )
         return
 
     def _create_jp2_from_jpg( self, CONVERT_COMMAND_PATH, KAKADU_COMMAND_PATH, source_filepath, destination_filepath ):
