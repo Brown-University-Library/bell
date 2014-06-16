@@ -15,7 +15,7 @@ class SourceDictMaker( object ):
         self.NAMESPACE = { u'default': u'http://www.filemaker.com/fmpxmlresult' }
 
     def convert_fmproxml_to_json(
-        self, FMPRO_XML_URL, FMPRO_XML_FILENAME, JSON_OUTPUT_PATH ):
+        self, FMPRO_XML_PATH, JSON_OUTPUT_PATH ):
         """ CONTROLLER
             Produces accession-number dict, and saves to a json file.
             Example: { count:5000,
@@ -24,7 +24,7 @@ class SourceDictMaker( object ):
                    # } """
         #Get data
         #Purpose: gets raw filemaker-pro xml unicode-string from gist
-        unicode_xml_string = self._get_data( FMPRO_XML_URL, FMPRO_XML_FILENAME )
+        unicode_xml_string = self._get_data( FMPRO_XML_PATH )
         print u'- data grabbed'
         #
         #Docify xml string
@@ -74,11 +74,11 @@ class SourceDictMaker( object ):
         print u'- json saved; processing done'
         return
 
-    def _get_data( self, FMPRO_XML_URL, FMPRO_XML_FILENAME ):
-        ''' Returns original xml from github gist. '''
-        r = requests.get( FMPRO_XML_URL )  # url uses safer-for-big-files <https://gist.github.com/HASH.git> syntax
-        d = r.json()
-        unicode_data = d[u'files'][FMPRO_XML_FILENAME][u'content']
+    def _get_data( self, FMPRO_XML_PATH ):
+        """ Reads and returns source filemaker pro xml. """
+        with open( FMPRO_XML_PATH ) as f:
+          utf8_xml = f.read()
+        unicode_data = utf8_xml.decode( u'utf-8' )
         assert type(unicode_data) == unicode
         return unicode_data
 
@@ -217,11 +217,10 @@ class SourceDictMaker( object ):
         f.close()
         return
 
-    def _print_settings( self, FMPRO_XML_URL, FMPRO_XML_FILENAME, JSON_OUTPUT_PATH ):
+    def _print_settings( self, FMPRO_XML_PATH, JSON_OUTPUT_PATH ):
         """ Outputs settings derived from environmental variables for development. """
         print u'- settings...'
-        print u'- FMPRO_XML_URL: %s' % FMPRO_XML_URL
-        print u'- FMPRO_XML_FILENAME: %s' % FMPRO_XML_FILENAME
+        print u'- FMPRO_XML_PATH: %s' % FMPRO_XML_PATH
         print u'- JSON_OUTPUT_PATH: %s' % JSON_OUTPUT_PATH
         print u'---'
         return
@@ -235,11 +234,10 @@ if __name__ == u'__main__':
     """ Assumes env is activated.
         ( 'ANTD' used as a namespace prefix for this 'acc_num_to_data.py' file. ) """
     # pprint.pprint( os.environ.__dict__ )
-    FMPRO_XML_URL=os.environ.get( u'BELL_ANTD__FMPRO_XML_URL', u'' )
-    FMPRO_XML_FILENAME=os.environ.get( u'BELL_ANTD__FMPRO_XML_FILENAME', u'' )  # used to pull proper element from gist-api
-    JSON_OUTPUT_PATH=os.environ.get( u'BELL_ANTD__JSON_OUTPUT_PATH', u'' )
+    FMPRO_XML_PATH=os.environ[u'BELL_ANTD__FMPRO_XML_PATH']
+    JSON_OUTPUT_PATH=os.environ[u'BELL_ANTD__JSON_OUTPUT_PATH']
     maker = SourceDictMaker()
     maker._print_settings(
-        FMPRO_XML_URL, FMPRO_XML_FILENAME, JSON_OUTPUT_PATH )
+        FMPRO_XML_PATH, JSON_OUTPUT_PATH )
     maker.convert_fmproxml_to_json(
-        FMPRO_XML_URL, FMPRO_XML_FILENAME, JSON_OUTPUT_PATH )
+        FMPRO_XML_PATH, JSON_OUTPUT_PATH )
