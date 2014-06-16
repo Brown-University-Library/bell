@@ -8,7 +8,8 @@ from bell_code.tasks import task_manager
 
 
 class MetadataHandler( object ):
-    """ Handles metadata-related tasks. """
+    """ Handles metadata-related tasks.
+        TODO: call determine_next_task() from runners, not from within class. """
 
     def __init__( self, data, logger ):
         self.data = data
