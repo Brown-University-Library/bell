@@ -7,8 +7,13 @@
 
 import json, os, pprint
 import redis, rq
+from bell_code import bell_logger
 from bell_code.foundation.acc_num_to_data import SourceDictMaker
 from bell_code.foundation.acc_num_to_pid import PidFinder
+from bell_code.tasks.indexer import Indexer
+
+
+logger = bell_logger.setup_logger()
 
 
 class CustomReindexer( object ):
@@ -35,7 +40,7 @@ class CustomReindexer( object ):
         return
 
     def make_pid_list( self, collection_pid, bdr_search_api_root ):
-        "Returns a list of pids for the given collection_pid."
+        """ Returns a list of pids for the given collection_pid."""
         pid_finder = PidFinder()
         doc_list = pid_finder._run_studio_solr_query( collection_pid, bdr_search_api_root )
         bdr_pid_list = []
@@ -43,8 +48,25 @@ class CustomReindexer( object ):
             bdr_pid_list.append( entry[u'pid'] )
         bdr_pid_list = sorted( bdr_pid_list )
         print u'- bdr_pid_list...'
-        pprint.pprint( bdr_pid_list )
         return bdr_pid_list
+
+    def make_pids_to_remove( self, pids_from_collection, pids_for_accession_number_json_path ):
+        """ Returns a list of pids for removal from custom index, and, perhaps, later, bdr. """
+        with open( pids_for_accession_number_json_path ) as f:
+            json_dict = json.loads( f.read() )
+        assert sorted( json_dict.keys() ) == [ u'count', u'datetime', u'final_accession_pid_dict' ]
+        pids_for_accession_numbers = json_dict[u'final_accession_pid_dict'].values()
+        pids_to_remove_set = set(pids_from_collection) - set(pids_for_accession_numbers)
+        pids_to_remove_list = list( pids_to_remove_set )
+        print u'pids_to_remove_list...'
+        pprint.pprint( pids_to_remove_list )
+        return pids_to_remove_list
+
+    def remove_pid_from_custom_index( self, pid ):
+        """  Removes entry from custom index. """
+        logger = bell_logger.setup_logger()
+        idxr = Indexer( logger )
+        idxr.delete_item( pid )
 
     ## end class CustomReindexer()
 
@@ -71,8 +93,7 @@ def run_start_reindex_all():
     reindexer.make_initial_json( fmpro_xml_path, fmpro_json_path )  # just savws to json; nothing returned
     bell_q.enqueue_call(
         func=u'bell_code.one_offs.rebuild_custom_index.run_make_pid_dict_from_bell_data',
-        kwargs={}
-        )
+        kwargs={} )
     return
 
 def run_make_pid_dict_from_bell_data():
@@ -84,8 +105,7 @@ def run_make_pid_dict_from_bell_data():
     reindexer.make_pid_dict( bdr_collection_pid, fmpro_json_path, bdr_search_api_root, output_json_path )
     bell_q.enqueue_call(
         func=u'bell_code.one_offs.rebuild_custom_index.run_make_pid_list_from_bdr_data',
-        kwargs={}
-        )
+        kwargs={} )
     return
 
 def run_make_pid_list_from_bdr_data():
@@ -94,13 +114,32 @@ def run_make_pid_list_from_bdr_data():
     bdr_search_api_root=os.environ[u'BELL_ANTP__SOLR_ROOT']
     collection_pids = reindexer.make_pid_list( bdr_collection_pid, bdr_search_api_root )
     bell_q.enqueue_call(
-        func=u'bell_code.one_offs.rebuild_custom_index.run_make_pids_to_remove()',
-        kwargs={ u'collection_pids': collection_pids }
-        )
+        func=u'bell_code.one_offs.rebuild_custom_index.run_make_pids_to_remove',
+        kwargs={ u'pids_from_collection': collection_pids } )
     return
 
-def run_build_pids_to_remove( collection_pids ):
-    """
+def run_make_pids_to_remove( pids_from_collection ):
+    """ Calls for a list of pids to remove. """
+    assert type(pids_from_collection) == list
+    pids_for_accession_number_json_path = unicode( os.environ[u'BELL_ANTP__OUTPUT_JSON_PATH'] )
+    pids_to_remove = reindexer.make_pids_to_remove( pids_from_collection, pids_for_accession_number_json_path )
+    bell_q.enqueue_call(
+        func=u'bell_code.one_offs.rebuild_custom_index.run_make_pids_to_update()',
+        kwargs={} )
+    for pid in pids_to_remove:
+        bell_q.enqueue_call(
+            func=u'bell_code.one_offs.rebuild_custom_index.run_remove_pid_from_custom_index',
+            kwargs={ u'pid': pid } )
+    return
+
+def run_remove_pid_from_custom_index( pid ):
+    """ Calls to remove pid from custom bell index. """
+    assert type(pid) == unicode
+    reindexer.remove_pid_from_custom_index( pid )
+    return
+
+
+
 
 if __name__ == u'__main__':
     run_start_reindex_all()
