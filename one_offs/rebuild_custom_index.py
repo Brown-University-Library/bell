@@ -67,6 +67,7 @@ class CustomReindexer( object ):
         logger = bell_logger.setup_logger()
         idxr = Indexer( logger )
         idxr.delete_item( pid )
+        return
 
     ## end class CustomReindexer()
 
@@ -124,7 +125,7 @@ def run_make_pids_to_remove( pids_from_collection ):
     pids_for_accession_number_json_path = unicode( os.environ[u'BELL_ANTP__OUTPUT_JSON_PATH'] )
     pids_to_remove = reindexer.make_pids_to_remove( pids_from_collection, pids_for_accession_number_json_path )
     bell_q.enqueue_call(
-        func=u'bell_code.one_offs.rebuild_custom_index.run_make_pids_to_update()',
+        func=u'bell_code.one_offs.rebuild_custom_index.run_make_pids_to_update',
         kwargs={} )
     for pid in pids_to_remove:
         bell_q.enqueue_call(
@@ -135,7 +136,7 @@ def run_make_pids_to_remove( pids_from_collection ):
 def run_remove_pid_from_custom_index( pid ):
     """ Calls to remove pid from custom bell index. """
     assert type(pid) == unicode
-    # reindexer.remove_pid_from_custom_index( pid )
+    reindexer.remove_pid_from_custom_index( pid )
     return
 
 
