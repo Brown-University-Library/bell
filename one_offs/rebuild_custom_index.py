@@ -135,7 +135,7 @@ def run_make_pids_to_remove( pids_from_collection ):
 def run_remove_pid_from_custom_index( pid ):
     """ Calls to remove pid from custom bell index. """
     assert type(pid) == unicode
-    reindexer.remove_pid_from_custom_index( pid )
+    # reindexer.remove_pid_from_custom_index( pid )
     return
 
 
