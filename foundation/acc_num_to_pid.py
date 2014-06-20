@@ -12,8 +12,8 @@ class PidFinder( object ):
                  needs to create or update bdr data.
         if __name__... at bottom indicates how to run this script. """
 
-    def __init__( self ):
-        self.logger = bell_logger.setup_logger()
+    def __init__( self, logger ):
+        self.logger = logger
 
     def make_dict( self,
         bdr_collection_pid,
@@ -169,7 +169,8 @@ if __name__ == u'__main__':
     bell_dict_json_path=os.environ.get( u'BELL_ANTP__BELL_DICT_JSON_PATH' )  # file of dict of bell-accession-number to metadata
     solr_root_url=os.environ.get( u'BELL_ANTP__SOLR_ROOT' )
     output_json_path=os.environ.get( u'BELL_ANTP__OUTPUT_JSON_PATH' )
-    pid_finder = PidFinder()
+    logger = bell_logger.setup_logger()
+    pid_finder = PidFinder( logger )
     pid_finder._print_settings(
         bdr_collection_pid, bell_dict_json_path, solr_root_url, output_json_path )
     pid_finder.make_dict(

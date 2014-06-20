@@ -6,17 +6,17 @@
     - run this script. """
 
 import json, os, pprint
-import redis, rq
+import redis, requests, rq
 from bell_code import bell_logger
 from bell_code.foundation.acc_num_to_data import SourceDictMaker
 from bell_code.foundation.acc_num_to_pid import PidFinder
 from bell_code.tasks.indexer import Indexer
 
 
-logger = bell_logger.setup_logger()
-
-
 class CustomReindexer( object ):
+
+    def __init__( self, logger ):
+        self.logger = logger
 
     def make_initial_json( self, fmpro_xml_path, fmpro_json_path ):
         """ Converts raw filemakerpro xml to json.
@@ -30,7 +30,7 @@ class CustomReindexer( object ):
 
     def make_pid_dict( self, bdr_collection_pid, fmpro_json_path, bdr_search_api_root, output_json_path ):
         """ Creates a json file containing an accession-number to pid dict. """
-        pid_finder = PidFinder()
+        pid_finder = PidFinder( self.logger )
         pid_finder.make_dict(
             bdr_collection_pid, fmpro_json_path, bdr_search_api_root, output_json_path )
         with open( output_json_path ) as f:
@@ -41,7 +41,7 @@ class CustomReindexer( object ):
 
     def make_pid_list( self, collection_pid, bdr_search_api_root ):
         """ Returns a list of pids for the given collection_pid."""
-        pid_finder = PidFinder()
+        pid_finder = PidFinder( self.logger )
         doc_list = pid_finder._run_studio_solr_query( collection_pid, bdr_search_api_root )
         bdr_pid_list = []
         for entry in doc_list:
@@ -60,19 +60,31 @@ class CustomReindexer( object ):
         pids_to_remove_list = list( pids_to_remove_set )
         print u'pids_to_remove_list...'
         pprint.pprint( pids_to_remove_list )
+        1/0  # safety: review list before running removals
         return pids_to_remove_list
 
     def remove_pid_from_custom_index( self, pid ):
         """  Removes entry from custom index. """
-        logger = bell_logger.setup_logger()
-        idxr = Indexer( logger )
-        idxr.delete_item( pid )
+        idxr = Indexer( self.logger )
+        response_status = idxr.delete_item( pid )
+        assert response_status == 200, response_status
+        return
+
+    def delete_via_bdr_item_api( self, pid, item_api_url, identity, auth_code ):
+        """ Hits item-api to delete item from bdr. """
+        payload = {
+            u'pid': pid,
+            u'identity': identity,
+            u'authorization_code': auth_code }
+        # print u'- item_api_url, `%s`' % item_api_url
+        # print u'- identity, `%s`' % identity
+        r = requests.delete( item_api_url, data=payload, verify=False )
+        self.logger.debug( u'in rebuild_custom_index.delete_via_bdr_item_api(); r.status_code, `%s`; r.content, `%s`' % (r.status_code, r.content.decode(u'utf-8')) )
         return
 
     ## end class CustomReindexer()
 
 
-reindexer = CustomReindexer()
 bell_q = rq.Queue( u'bell:job_queue', connection=redis.Redis() )
 
 def run_start_reindex_all():
@@ -89,8 +101,9 @@ def run_start_reindex_all():
         - enqueue all the remove jobs
         - enqueue all the reindex jobs
         """
-    fmpro_xml_path = os.environ[u'BELL_ANTD__FMPRO_XML_PATH']
-    fmpro_json_path = os.environ[u'BELL_ANTD__JSON_OUTPUT_PATH']
+    reindexer = CustomReindexer( bell_logger.setup_logger() )
+    fmpro_xml_path = unicode( os.environ[u'BELL_ANTD__FMPRO_XML_PATH'] )
+    fmpro_json_path = unicode( os.environ[u'BELL_ANTD__JSON_OUTPUT_PATH'] )
     reindexer.make_initial_json( fmpro_xml_path, fmpro_json_path )  # just savws to json; nothing returned
     bell_q.enqueue_call(
         func=u'bell_code.one_offs.rebuild_custom_index.run_make_pid_dict_from_bell_data',
@@ -103,6 +116,7 @@ def run_make_pid_dict_from_bell_data():
     fmpro_json_path=os.environ[u'BELL_ANTP__BELL_DICT_JSON_PATH']  # file of dict of bell-accession-number to metadata
     bdr_search_api_root=os.environ[u'BELL_ANTP__SOLR_ROOT']
     output_json_path=os.environ[u'BELL_ANTP__OUTPUT_JSON_PATH']
+    reindexer = CustomReindexer( bell_logger.setup_logger() )
     reindexer.make_pid_dict( bdr_collection_pid, fmpro_json_path, bdr_search_api_root, output_json_path )
     bell_q.enqueue_call(
         func=u'bell_code.one_offs.rebuild_custom_index.run_make_pid_list_from_bdr_data',
@@ -113,6 +127,7 @@ def run_make_pid_list_from_bdr_data():
     """ Calls for a list of pids for the given collection_pid. """
     bdr_collection_pid=os.environ[u'BELL_ANTP__COLLECTION_PID']
     bdr_search_api_root=os.environ[u'BELL_ANTP__SOLR_ROOT']
+    reindexer = CustomReindexer( bell_logger.setup_logger() )
     collection_pids = reindexer.make_pid_list( bdr_collection_pid, bdr_search_api_root )
     bell_q.enqueue_call(
         func=u'bell_code.one_offs.rebuild_custom_index.run_make_pids_to_remove',
@@ -122,7 +137,7 @@ def run_make_pid_list_from_bdr_data():
 def run_make_pids_to_remove( pids_from_collection ):
     """ Calls for a list of pids to remove. """
     assert type(pids_from_collection) == list
-    pids_for_accession_number_json_path = unicode( os.environ[u'BELL_ANTP__OUTPUT_JSON_PATH'] )
+    ( pids_for_accession_number_json_path, reindexer ) = ( unicode(os.environ[u'BELL_ANTP__OUTPUT_JSON_PATH']), CustomReindexer(bell_logger.setup_logger()) )
     pids_to_remove = reindexer.make_pids_to_remove( pids_from_collection, pids_for_accession_number_json_path )
     bell_q.enqueue_call(
         func=u'bell_code.one_offs.rebuild_custom_index.run_make_pids_to_update',
@@ -136,7 +151,26 @@ def run_make_pids_to_remove( pids_from_collection ):
 def run_remove_pid_from_custom_index( pid ):
     """ Calls to remove pid from custom bell index. """
     assert type(pid) == unicode
+    reindexer = CustomReindexer( bell_logger.setup_logger() )
     reindexer.remove_pid_from_custom_index( pid )
+    bell_q.enqueue_call(
+        func=u'bell_code.one_offs.rebuild_custom_index.run_delete_via_bdr_item_api',
+        kwargs={ u'pid': pid } )
+    return
+
+def run_delete_via_bdr_item_api( pid ):
+    """ Calls to remove pid from bdr. """
+    assert type(pid) == unicode
+    reindexer = CustomReindexer( bell_logger.setup_logger() )
+    item_api_url = unicode( os.environ[u'BELL_ONEOFF__OLD_ITEM_API_URL'] )
+    identity = unicode( os.environ[u'BELL_ONEOFF__OLD_ITEM_API_AUTH_NAME'] )
+    auth_code = unicode( os.environ[u'BELL_ONEOFF__OLD_ITEM_API_AUTH_KEY'] )
+    reindexer.delete_via_bdr_item_api( pid, item_api_url, identity, auth_code )
+    return
+
+def run_make_pids_to_update():
+    """ Calls for a list of pids to update in custom-index. """
+    print u'TODO'
     return
 
 
