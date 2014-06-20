@@ -308,13 +308,11 @@ class Indexer( object ):
 
 ## runners ##
 
-logger = bell_logger.setup_logger()
-
 def run_update_custom_index( data ):
     """ Runner for update_custom_index().
         Called by queue-job triggered by tasks.task_manager.determine_next_task(). """
     assert sorted( data.keys() ) == [u'item_data', u'pid'], sorted( data.keys() )
     pass  # TODO: build this out (may require changing indexer to pass it the data-dict)
-    # idx = Indexer( data, logger )
+    # idx = Indexer( data, bell_logger.setup_logger() )
     # result_dict = idx.update_custom_index()  # done!
     return
