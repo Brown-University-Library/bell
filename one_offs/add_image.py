@@ -18,33 +18,21 @@ class ImageAdder( object ):
 
     def __init__( self ):
         self.PID = unicode( os.environ[u'BELL_ONEOFF_ADD_IMAGE__PID'] )
+        self.RAW_MASTER_FILENAME = unicode( os.environ[u'BELL_ONEOFF_ADD_IMAGE__RAW_MASTER_FILENAME'] )
         self.TEMP_IMAGE_DIR_PATH = unicode( os.environ[u'BELL_ONEOFF_ADD_IMAGE__TEMP_IMAGE_DIR_PATH'] )
         self.TEMP_IMAGE_DIR_URL = unicode( os.environ[u'BELL_ONEOFF_ADD_IMAGE__TEMP_IMAGE_DIR_URL'] )
-        self.MASTER_IMAGE_URL_PATTERN = unicode( os.environ[u'BELL_ONEOFF_ADD_IMAGE__MASTER_IMAGE_URL_PATTERN'] )
         self.PRIVATE_API_URL = unicode( os.environ[u'BELL_ONEOFF_ADD_IMAGE__PRIVATE_API_URL'] )
+        self.foo = unicode( os.environ[u'BELL_I_SOLR_ROOT'] )  # not used here; just a check for tasks/indexer.py
 
     def add_image( self ):
         """ Controls making and overwriting """
-        temp_master_filepath = self._save_master_to_file( self.PID )
+        temp_master_filepath = u'%s/%s'
         master_filepath = self._fix_master_filename( temp_master_filepath )
         jp2_filepath = self._make_new_jp2_from_master( master_filepath )
         self._overwrite_datastream( jp2_filepath )
         print u'- pid `%s` added to bdr' % self.PID
         self._update_index()
         return
-
-    def _save_master_to_file( self, pid ):
-        """ Accesses fedora master and saves it to a file. """
-        url = self.MASTER_IMAGE_URL_PATTERN % pid
-        print u'- url, %s' % url
-        save_path = u'%s/%s' % ( self.TEMP_IMAGE_DIR_PATH, u'temp_' + pid + u'_.tmp' )
-        print u'- save_path, %s' % save_path
-        r = requests.get( url, stream=True )
-        if r.status_code == 200:
-            with open( save_path, 'wb' ) as f:
-                for chunk in r.iter_content(1024):
-                    f.write(chunk)
-        return save_path
 
     def _fix_master_filename( self, temp_filepath ):
         """ Examines file type and renames it with the proper extension."""
