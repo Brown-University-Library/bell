@@ -29,7 +29,8 @@ class ImageAdder( object ):
         temp_master_filepath = u'%s/%s' % ( self.TEMP_IMAGE_DIR_PATH, self.RAW_MASTER_FILENAME )
         master_filepath = self._fix_master_filename( temp_master_filepath )
         jp2_filepath = self._make_new_jp2_from_master( master_filepath )
-        self._overwrite_datastream( jp2_filepath )
+        ( jp2_url, master_url ) = self._make_file_urls( jp2_filepath, master_filepath )
+        self._overwrite_datastream( jp2_url, master_url )
         print u'- pid `%s` added to bdr' % self.PID
         return
 
@@ -61,10 +62,16 @@ class ImageAdder( object ):
             raise Exception( u'Problem creating jp2' )
         return jp2_filepath
 
-    def _overwrite_datastream( self, jp2_filepath ):
-        """ Hits api. """
+    def _make_file_urls( self, jp2_filepath, master_filepath ):
+        """ Returns urls for jp2 and master files. """
         jp2_filename = jp2_filepath.split(u'/')[-1]
         jp2_url = u'%s/%s' % ( self.TEMP_IMAGE_DIR_URL, jp2_filename )
+        master_filename = master_filepath.split(u'/')[-1]
+        master_url = u'%s/%s' % ( self.TEMP_IMAGE_DIR_URL, master_filename )
+        return ( jp2_url, master_url )
+
+    def _overwrite_datastream( self, jp2_url, master_url ):
+        """ Hits api. """
         params = { u'pid': self.PID, u'overwrite_content': u'yes' }
         params[u'content_streams'] = json.dumps([
             { u'dsID': u'MASTER', u'url': master_url },
