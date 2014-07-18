@@ -15,12 +15,10 @@ idxr = Indexer( logger )
 class BdrItemReindexer( object ):
 
     def __init__( self ):
-        self.JSON_STRING = os.environ[u'BELL_ONEOFF_JSON_STRING']
-        self.json_dict = json.loads( self.JSON_STRING )
-        self.PID = self.json_dict[ u'pid' ]
-        self.SOLR_URL_ROOT = self.json_dict[ u'solr_url_root' ]
-        self.BDR_BELL_DATA_URL_PATTERN = self.json_dict[ u'bdr_bell_data_url_pattern' ]
-        self.BDR_PUBLIC_ITEM_API_URL_PATTERN = self.json_dict[ u'bdr_public_item_api_url_pattern' ]
+        self.PID = unicode( os.environ[u'BELL_ONEOFF_REINDEX_BDR_ITEM__PID'] )
+        self.SOLR_URL_ROOT = unicode( os.environ[u'BELL_ONEOFF_REINDEX_BDR_ITEM__SOLR_URL_ROOT'] )
+        self.BDR_BELL_DATA_URL_PATTERN = unicode( os.environ[u'BELL_ONEOFF_REINDEX_BDR_ITEM__BDR_BELL_DATA_URL_PATTERN'] )
+        self.BDR_PUBLIC_ITEM_API_URL_PATTERN = unicode( os.environ[u'BELL_ONEOFF_REINDEX_BDR_ITEM__BDR_PUBLIC_ITEM_API_URL_PATTERN'] )
 
     def reindex_bdr_item( self ):
         """ Controls grabbing source metadata and image data, building solr-dict, and posting to solr. """
