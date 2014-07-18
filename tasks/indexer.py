@@ -64,7 +64,7 @@ class Indexer( object ):
         solr_dict = self._set_physical_extent( original_dict, solr_dict )
         solr_dict = self._set_physical_descriptions( original_dict, solr_dict )
         solr_dict = self._set_title( original_dict, solr_dict )
-        self.logger.debug( u'in indexer.build_metadata_only_solr_dict(); solr_dict, `%s`' % pprint.pformat(solr_dict) )
+        self.logger.debug( u'in tasks.indexer.build_metadata_only_solr_dict(); solr_dict, `%s`' % pprint.pformat(solr_dict) )
         return solr_dict
 
     def add_image_metadata( self, solr_dict, links_dict ):

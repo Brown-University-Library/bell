@@ -31,7 +31,6 @@ class ImageAdder( object ):
         jp2_filepath = self._make_new_jp2_from_master( master_filepath )
         self._overwrite_datastream( jp2_filepath )
         print u'- pid `%s` added to bdr' % self.PID
-        self._update_index()
         return
 
     def _fix_master_filename( self, temp_filepath ):
