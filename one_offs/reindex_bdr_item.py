@@ -2,7 +2,7 @@
 
 """ Given pid, reindexes item using bdr's bell data and api data. """
 
-import json
+import json, os, pprint
 import logging.handlers
 import requests
 from bell_code import bell_logger
@@ -22,16 +22,15 @@ class BdrItemReindexer( object ):
 
     def reindex_bdr_item( self ):
         """ Controls grabbing source metadata and image data, building solr-dict, and posting to solr. """
-        bell_dict = self._grab_bell_data( self.PID )
+        bell_dict = self._grab_bell_data( self.PID, self.BDR_BELL_DATA_URL_PATTERN )
         metadata_solr_dict = idxr.build_metadata_only_solr_dict( self.PID, bell_dict )
         bdr_api_links_dict = self._grab_bdr_api_links_data( self.PID, self.BDR_PUBLIC_ITEM_API_URL_PATTERN )
         updated_solr_dict = idxr.add_image_metadata( metadata_solr_dict, bdr_api_links_dict )
+        logger.debug( u'- in reindex_bdr_item.BdrItemReindexer.reindex_bdr_item(); updated_solr_dict, `%s`' %  pprint.pformat(updated_solr_dict) )
         validity = idxr.validate_solr_dict( updated_solr_dict )
         if validity:
-            post_result = bell_indexer.post_to_solr( updated_solr_dict )
-            self.logger.debug( u'- in reindex_bdr_item.BdrItemReindexer.reindex_bdr_item(); post_result for pid `%s`, %s' % (pid, post_result) )
-        else:
-            self.logger.debug( u'- in reindex_bdr_item.BdrItemReindexer.reindex_bdr_item(); why not valid?'
+            post_result = idxr.post_to_solr( updated_solr_dict )
+            logger.debug( u'- in reindex_bdr_item.BdrItemReindexer.reindex_bdr_item(); post_result for pid `%s`, %s' % (self.PID, post_result) )
         return
 
     def _grab_bell_data( self, pid, bdr_bell_data_url_pattern ):
@@ -39,7 +38,9 @@ class BdrItemReindexer( object ):
         url = bdr_bell_data_url_pattern % pid
         logger.debug( u'in _grab_bell_data(); url, `%s`' % url )
         r = requests.get( url )
-        bell_dict = r.json
+        bell_dict = r.json()
+        logger.debug( u'in _grab_bell_data(); type(bell_dict), `%s`' % type(bell_dict) )
+        logger.debug( u'in _grab_bell_data(); bell_dict, `%s`' % pprint.pformat(bell_dict) )
         return bell_dict
 
     def _grab_bdr_api_links_data( self, pid, bdr_public_item_api_url_pattern ):
@@ -48,7 +49,9 @@ class BdrItemReindexer( object ):
         url = bdr_public_item_api_url_pattern % pid
         logger.debug( u'in _grab_bdr_api_links_data(); url, `%s`' % url )
         r = requests.get( url )
-        links_dict = r.json
+        api_dict = r.json()
+        links_dict = api_dict[u'links']
+        logger.debug( u'in _grab_bdr_api_links_data(); links_dict, `%s`' % pprint.pformat(links_dict) )
         return links_dict
 
     ## end class BdrItemReindexer()
