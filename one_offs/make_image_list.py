@@ -2,7 +2,7 @@
 
 """
 Produces a listing of all images in given folder.
-- Reference: https://developer.github.com/v3/gists/#create-a-gist
+Saves to json.
 """
 
 import datetime, glob, json, os, pprint
@@ -33,9 +33,14 @@ class ImageLister( object ):
             Called by list_images() """
         initial_list = glob.glob( self.DIRECTORY_PATH + u'/*' )  # includes any directories
         non_dir_list = [value for value in initial_list if os.path.isfile(value) == True]
-        non_dir_list.sort( key=unicode.lower )
-        logger.debug( u'in one_offs.make_image_list.ImageLister.list_images(); make_file_list, `%s`' % pprint.pformat(non_dir_list) )
-        return non_dir_list
+        filenames = []
+        for path in non_dir_list:
+            parts = path.split( u'/' )
+            filename = parts[-1]
+            filenames.append( filename )
+        filenames.sort( key=unicode.lower )
+        logger.debug( u'in one_offs.make_image_list.ImageLister.make_file_list(); filenames, `%s`' % pprint.pformat(filenames) )
+        return filenames
 
     def make_extension_types( self, non_dir_list ):
         """ Returns dict of extension-types & counts.
