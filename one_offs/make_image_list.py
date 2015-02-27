@@ -5,7 +5,7 @@ Produces a listing of all images in given folder.
 - Reference: https://developer.github.com/v3/gists/#create-a-gist
 """
 
-import datetime, glob, os, pprint
+import datetime, glob, json, os, pprint
 import logging.handlers
 from bell_code import bell_logger
 
@@ -16,7 +16,7 @@ class ImageLister( object ):
 
     def __init__( self ):
         self.DIRECTORY_PATH = unicode( os.environ[u'BELL_ONEOFF__IMAGE_DIRECTORY_PATH'] )
-        self.LEGIT_EXTENSIONS = [ u'*' ]
+        self.OUTPUT_PATH = unicode( os.environ[u'BELL_ONEOFF__IMAGE_DIRECTORY_JSON_PATH'] )
 
     def list_images( self ):
         """ Produces a json list of image file-names. """
@@ -24,6 +24,7 @@ class ImageLister( object ):
         non_dir_list = self.make_file_list()
         extension_types = self.make_extension_types( non_dir_list )
         directory_info_dict = self.build_response( non_dir_list, extension_types )
+        self.output_listing( directory_info_dict )
         pprint.pprint( directory_info_dict )
         return directory_info_dict
 
@@ -61,6 +62,14 @@ class ImageLister( object ):
             u'filelist': non_dir_list, }
         logger.debug( u'in one_offs.make_image_list.ImageLister.build_response(); directory_info_dict, `%s`' % pprint.pformat(directory_info_dict) )
         return directory_info_dict
+
+    def output_listing( self, directory_info_dict ):
+        """ Saves json file.
+            Called by list_images() """
+        jsn = json.dumps( directory_info_dict, indent=2, sort_keys=True )
+        with open( self.OUTPUT_PATH, u'w' ) as f:
+            f.write( jsn )
+        return
 
     # end class ImageLister
 
