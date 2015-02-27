@@ -2,7 +2,7 @@
 
 """
 Produces a listing of all images in given folder.
-- Reference: https://developer.github.com/v3/gists/#create-a-gist
+Saves to json.
 """
 
 import datetime, glob, json, os, pprint
