@@ -5,11 +5,14 @@ code related to ingesting bell-gallery images into the bdr.
 
 ### flow ###
 
-- convert raw filemaker-pro xml to json
+- convert raw filemaker-pro xml to json (foundation/acc_num_to_data.py)
 
 - run script to get list of files in the images-to-ingest directory
 
 - compare imagefile-filenames to metadata-filenames and work through discrepancies w/J.C.
+    - end result: a json complete metadata file that has metadata for all supplied images
+
+- update metadata file with pid info
 
 - run through metadata:
     - update existing metadata object if necessary
