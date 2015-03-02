@@ -21,6 +21,8 @@ code related to ingesting bell-gallery images into the bdr.
     - create image object if necessary
         - update the previous metadata-only object
 
+- run a final check to make sure the custom-solr-index and the updated fedora data match
+
 - let Bell-J.C. & CIS-J.O. know when done
 
 ---
