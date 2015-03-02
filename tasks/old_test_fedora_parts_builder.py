@@ -7,7 +7,7 @@ from fedora_parts_builder import ModsBuilder
     - activate v-env
     - cd into bell_code dir
     - All tests:
-      python ./bell_code/tasks/test_fedora_parts_builder.py
+      python ./tasks/test_fedora_parts_builder.py
     - Single test:
       python ./bell_code/tasks/test_fedora_parts_builder.py MakeModsFromBellJson_Test.test__mods_single_artist """
 
