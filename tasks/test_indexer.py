@@ -2,6 +2,10 @@
 
 import json, os, pprint, unittest
 import indexer
+from bell_code import bell_logger
+
+logger = bell_logger.setup_logger()
+
 
 """ To run tests:
     - activate v-env
@@ -120,17 +124,28 @@ class Indexer_Test(unittest.TestCase):
 
     def test__build_metadata_only_solr_dict(self):
         """ Tests solr_dict creation. """
-        expected = self.test_expected_metadata_only_result
-        result = indexer.build_metadata_only_solr_dict( self.test_original_data )
-        # pprint.pprint( result )
-        self.assertEquals( expected, result )
+        idxr = indexer.Indexer( logger )
+        result = idxr.build_metadata_only_solr_dict( self.test_original_data[u'pid'], self.test_original_data[u'item_data'] )
+        pprint.pprint( result )
+        self.assertEquals(
+            self.test_expected_metadata_only_result,
+            idxr.build_metadata_only_solr_dict( u'bdr:10975', self.test_original_data )
+            )
 
-    def test__build_metadata_and_image_solr_dict(self):
-        """ Tests solr_dict creation. """
-        expected = self.test_expected_metadata_and_image_result
-        result = indexer.build_metadata_and_image_solr_dict( self.test_original_data )
-        # pprint.pprint( result )
-        self.assertEquals( expected, result )
+    # def test__build_metadata_only_solr_dict(self):
+    #     """ Tests solr_dict creation. """
+    #     expected = self.test_expected_metadata_only_result
+    #     result = indexer.build_metadata_only_solr_dict( self.test_original_data )
+    #     # pprint.pprint( result )
+    #     self.assertEquals( expected, result )
+
+
+    # def test__build_metadata_and_image_solr_dict(self):
+    #     """ Tests solr_dict creation. """
+    #     expected = self.test_expected_metadata_and_image_result
+    #     result = indexer.build_metadata_and_image_solr_dict( self.test_original_data )
+    #     # pprint.pprint( result )
+    #     self.assertEquals( expected, result )
 
     # end class Indexer_Test()
 

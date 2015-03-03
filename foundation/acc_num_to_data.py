@@ -7,7 +7,7 @@ from lxml import etree
 
 class SourceDictMaker( object ):
     """ Handles creation of an accession_number-to-item-info dict, saved as a json file.
-        Purpose: This is one of three essential files that should exist before doing almost any bell processing.
+        Purpose: This is one of the essential files that should exist before doing almost any bell processing.
                  It converts the raw filemaker-pro xml into json data for easy processing and viewing.
         if __name__... at bottom indicates how to run this script. """
 

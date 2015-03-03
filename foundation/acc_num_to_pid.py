@@ -7,7 +7,7 @@ from bell_code import bell_logger
 
 class PidFinder( object ):
     """ Handles creation of an accession_number-to-pid-info dict, saved as a json file.
-        Purpose: This is one of three essential files that should exist before doing almost any bell processing,
+        Purpose: This is one of the essential files that should exist before doing almost any bell processing,
                  because the source bell data contains no pid info, and it is essential to know whether a bell item
                  needs to create or update bdr data.
         if __name__... at bottom indicates how to run this script. """
