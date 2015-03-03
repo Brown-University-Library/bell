@@ -35,9 +35,19 @@ class MetadataHandler( object ):
 
     def create_metadata_only_object( self, accession_number ):
         """ Gathers source metadata, prepares call to item-api, calls it, and confirms creation.
-            Called by queue-job. """
+            Called by run_create_metadata_only_object() """
         self.logger.debug( u'in metadata.MetadataHandler.create_metadata_only_object(); starting' )
+        # item_dct = self.grab_item_dct( accession_number )
+        # rights_params = self.make_rights_params( item_dct )
+        # ir_params = self.make_ir_params( item_dct )
+        # mods_params = self.make_mods_params( item_dct )
+        # pid = self.create_object( rights_params, ir_params, mods_params )
+        # self.logger.debug( u'in metadata.MetadataHandler.create_metadata_only_object(); accession_number `%s` object created with pid `%s`' % (accession_number, pid) )
+        # if self.confirm_created_metadata_object( pid ) == False:
+        #     raise Exception( u'could not confirm creation accession_number `%s` ingestion at pid `%s`' % (accession_number, pid) )
         return
+
+    ## helpers ##
 
     # end class MetadataHandler()
 
