@@ -3,7 +3,7 @@
 """ Handles metadata-related tasks. """
 
 import datetime, json, os, pprint, sys
-import redis, rq
+import redis, requests, rq
 from bell_code import bell_logger
 from bell_code.utils import mods_builder
 
@@ -54,6 +54,7 @@ class MetadataCreator( object ):
         self.API_URL = u'foo'
         self.API_IDENTITY = u'foo'
         self.API_KEY = u'foo'
+        self.MODS_SCHEMA_PATH = os.environ[u'BELL_TASKS__MODS_XSD_PATH']
 
     def create_metadata_only_object( self, accession_number ):
         """ Gathers source metadata, prepares call to item-api, calls it, and confirms creation.
@@ -61,16 +62,11 @@ class MetadataCreator( object ):
         self.logger.debug( u'in metadata.MetadataCreator.create_metadata_only_object(); starting' )
         item_dct = self.grab_item_dct( accession_number )
         self.logger.debug( u'in metadata.MetadataCreator.create_metadata_only_object(); item_dct.keys(), %s' % item_dct.keys() )
-        params = { u'identity': API_IDENTITY, u'authorization_code': API_KEY }
+        params = { u'identity': self.API_IDENTITY, u'authorization_code': self.API_KEY }
         params[u'additional_rights'] = u'BDR_PUBLIC#discover,display|Bell Gallery#discover,display,modify,delete'
         params[u'ir'] = self.make_ir_params( item_dct )
         params[u'mods'] = self.make_mods_params( item_dct )
         pid = self.perform_post( params )
-
-        # pid = self.create_object( rights_params, ir_params, mods_params )
-        # self.logger.debug( u'in metadata.MetadataHandler.create_metadata_only_object(); accession_number `%s` object created with pid `%s`' % (accession_number, pid) )
-        # if self.confirm_created_metadata_object( pid ) == False:
-        #     raise Exception( u'could not confirm creation accession_number `%s` ingestion at pid `%s`' % (accession_number, pid) )
         return
 
     def grab_item_dct( self, accession_number ):
@@ -99,6 +95,7 @@ class MetadataCreator( object ):
             u'ir_collection_id': u'test:278',
             u'depositor_name': u'Bell Gallery'
             } }
+        self.logger.debug( u'in metadata.MetadataCreator.make_ir_params(); ir_param, %s' % pprint.pformat(ir_param) )
         jsn = json.dumps( ir_param )
         return jsn
         ## from ben tests...
@@ -110,12 +107,11 @@ class MetadataCreator( object ):
     def make_mods_params( self, item_dct ):
         """ Returns json if mods params.
             Called by create_metadata_only_object() """
-        mods_schema_path = os.path.abspath( u'../lib/mods-3-4.xsd' )
-        self.logger.debug( u'in metadata.MetadataCreator.make_mods_params(); mods_schema_path, %s' % mods_schema_path )
         mb = mods_builder.ModsBuilder()
         return_type = u'return_string'  # or u'return_object'
-        mods_xml = mb.build_mods_object( item_dct, mods_schema_path, return_type ):
-        self.logger.debug( u'in metadata.MetadataCreator.make_mods_params(); mods_xml, %s' % mods_xml )
+        mods_xml_dct = mb.build_mods_object( item_dct, self.MODS_SCHEMA_PATH, return_type )
+        self.logger.debug( u'in metadata.MetadataCreator.make_mods_params(); mods_xml_dct, %s' % pprint.pformat(mods_xml_dct) )
+        mods_xml = mods_xml_dct[u'data']
         mods_param = { u'xml_data': mods_xml }
         jsn = json.dumps( mods_param )
         return jsn
