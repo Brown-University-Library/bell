@@ -56,7 +56,7 @@ class MetadataCreator( object ):
             Called by run_create_metadata_only_object() """
         self.logger.debug( u'in metadata.MetadataCreator.create_metadata_only_object(); starting' )
         item_dct = self.grab_item_dct( accession_number )
-        self.logger.debug( u'in metadata.MetadataCreator.create_metadata_only_object(); item_dct.keys(), %s' item_dct.keys() )
+        self.logger.debug( u'in metadata.MetadataCreator.create_metadata_only_object(); item_dct.keys(), %s' % item_dct.keys() )
         # rights_params = self.make_rights_params( item_dct )
         # ir_params = self.make_ir_params( item_dct )
         # mods_params = self.make_mods_params( item_dct )

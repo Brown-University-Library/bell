@@ -27,18 +27,18 @@ code related to ingesting bell-gallery images into the bdr.
     - end result: `accession_number_to_pid_dict.json` file containing a dict of accession-numbers-to-pids.
     - accession-numbers without pids imply creation of a new metadata-only object (which may gain an associated image below)
     - accession-numbers with pids imply checking to see if fedora metadata needs to be updated
-    - status: done; march-4; rerun march-4 w/updated metadata keys; found about 10 extra pids.
+    - status: done; march-4; rerun march-4 w/updated metadata keys; found 9 extra pids.
 
 - make metadata-only list
-    - utils/make_metadata_only_list.py
+    - tasks/metadata.MetadataOnlyLister.list_metadata_only_accession_numbers()
     - end result: `metadata_only_accession_numbers.json`
-    - status: done; march-4.
+    - status: done; march-4; rerun march-4 w/updated metadata keys; count down to 105 from 114 extra pids.
 
 - create new metadata objects
     - status: not done; in-process
 
 - make metadata-update list
-    - utils/make_metadata_update_list.py
+    - TODO
     - end result: `metadata_updates.json`
     - status: not done;
 
