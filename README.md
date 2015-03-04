@@ -3,12 +3,12 @@
 code related to ingesting bell-gallery images into the bdr.
 
 
-### flow ###
+### normal ingest flow ###
 
 - convert raw filemaker-pro xml to json
     - foundation/acc_num_to_data.py
     - end result: `accession_number_to_data_dict.json`
-    - status: done; discrepancies sorted out march-3.
+    - status: done; discrepancies sorted out march-3; rerun with stripped accession-number keys march-4.
 
 - run script to get list of files in the images-to-ingest directory
     - utils/make_image_list.py
@@ -20,25 +20,29 @@ code related to ingesting bell-gallery images into the bdr.
     - console output lists files for which there's no metadata
     - work through discrepancies w/J.C.
     - end result: updated `accession_number_to_data_dict.json`
-    - status: done; march-3
+    - status: done; march-3; rerun march-4 w/updated metadata keys; no difference.
 
 - match metadata accession-numbers to pid #1
     - foundation/acc_num_to_pid.py
-    - end result: `accession_number_to_pid_dict_PROD.json` file containing a dict of accession-numbers-to-pids.
+    - end result: `accession_number_to_pid_dict.json` file containing a dict of accession-numbers-to-pids.
     - accession-numbers without pids imply creation of a new metadata-only object (which may gain an associated image below)
     - accession-numbers with pids imply checking to see if fedora metadata needs to be updated
-    - status: done; march-4.
+    - status: done; march-4; rerun march-4 w/updated metadata keys; found 9 extra pids.
 
-- run through metadata #1
-    - create new metadata objects if neccessary
+- make metadata-only list
+    - tasks/metadata.MetadataOnlyLister.list_metadata_only_accession_numbers()
+    - end result: `metadata_only_accession_numbers.json`
+    - status: done; march-4; rerun march-4 w/updated metadata keys; count down to 105 from 114 extra pids.
+
+- create new metadata objects
     - status: not done; in-process
 
-- match metadata accession-numbers to pid #2
-    - rerun step and ensure there are no null pids
-    - status: not done
+- make metadata-update list
+    - TODO
+    - end result: `metadata_updates.json`
+    - status: not done;
 
-- run through metadata #2
-    - update existing metadata object if necessary
+- update metadata objects
     - status: not done
 
 - run through images #1

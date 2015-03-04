@@ -201,7 +201,10 @@ class SourceDictMaker( object ):
         """ Takes raw bell list of dict_data, returns accession-number dict. """
         accession_number_dict = {}
         for entry in source_list:
-            accession_number_dict[ entry[u'calc_accession_id'] ] = entry
+            if entry[u'calc_accession_id']:  # handles a null entry
+                accession_number_dict[ entry[u'calc_accession_id'].strip() ] = entry
+            else:
+                print u'- entry, `%s`' % entry
         final_dict = {
           u'count': len( accession_number_dict.items() ),
           u'datetime': unicode( datetime.datetime.now() ),
