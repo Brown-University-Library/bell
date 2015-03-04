@@ -3,7 +3,7 @@
 code related to ingesting bell-gallery images into the bdr.
 
 
-### flow ###
+### normal ingest flow ###
 
 - convert raw filemaker-pro xml to json
     - foundation/acc_num_to_data.py
@@ -24,21 +24,25 @@ code related to ingesting bell-gallery images into the bdr.
 
 - match metadata accession-numbers to pid #1
     - foundation/acc_num_to_pid.py
-    - end result: `accession_number_to_pid_dict_PROD.json` file containing a dict of accession-numbers-to-pids.
+    - end result: `accession_number_to_pid_dict.json` file containing a dict of accession-numbers-to-pids.
     - accession-numbers without pids imply creation of a new metadata-only object (which may gain an associated image below)
     - accession-numbers with pids imply checking to see if fedora metadata needs to be updated
     - status: done; march-4.
 
-- run through metadata #1
-    - create new metadata objects if neccessary
+- make metadata-only list
+    - utils/make_metadata_only_list.py
+    - end result: `metadata_only_accession_numbers.json`
+    - status: done; march-4.
+
+- create new metadata objects
     - status: not done; in-process
 
-- match metadata accession-numbers to pid #2
-    - rerun step and ensure there are no null pids
-    - status: not done
+- make metadata-update list
+    - utils/make_metadata_update_list.py
+    - end result: `metadata_updates.json`
+    - status: not done;
 
-- run through metadata #2
-    - update existing metadata object if necessary
+- update metadata objects
     - status: not done
 
 - run through images #1

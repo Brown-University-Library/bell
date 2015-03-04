@@ -28,7 +28,7 @@ class MetadataHandler( object ):
         lst_to_queue = []
         for (accession_number, pid) in dct_lst:
             if pid == None and not accession_number == "null":
-                lst_to_queue.append( accession_number )
+                lst_to_queue.append( accession_number.strip() )
         return lst_to_queue
 
     def create_metadata_only_object( self, accession_number ):
