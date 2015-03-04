@@ -5,6 +5,7 @@
 import datetime, json, os, pprint, sys
 import redis, rq
 from bell_code import bell_logger
+from bell_code.utils import mods_builder
 
 queue_name = unicode( os.environ.get(u'BELL_QUEUE_NAME') )
 q = rq.Queue( queue_name, connection=redis.Redis() )
@@ -50,6 +51,9 @@ class MetadataCreator( object ):
     def __init__( self, logger ):
         self.logger = logger
         self.SOURCE_FULL_JSON_METADATA_PATH = unicode( os.environ[u'BELL_TASKS__FULL_JSON_METADATA_PATH'] )
+        self.API_URL = u'foo'
+        self.API_IDENTITY = u'foo'
+        self.API_KEY = u'foo'
 
     def create_metadata_only_object( self, accession_number ):
         """ Gathers source metadata, prepares call to item-api, calls it, and confirms creation.
@@ -57,9 +61,12 @@ class MetadataCreator( object ):
         self.logger.debug( u'in metadata.MetadataCreator.create_metadata_only_object(); starting' )
         item_dct = self.grab_item_dct( accession_number )
         self.logger.debug( u'in metadata.MetadataCreator.create_metadata_only_object(); item_dct.keys(), %s' % item_dct.keys() )
-        rights_params = self.make_rights_params( item_dct )
-        # ir_params = self.make_ir_params( item_dct )
-        # mods_params = self.make_mods_params( item_dct )
+        params = { u'identity': API_IDENTITY, u'authorization_code': API_KEY }
+        params[u'additional_rights'] = u'BDR_PUBLIC#discover,display|Bell Gallery#discover,display,modify,delete'
+        params[u'ir'] = self.make_ir_params( item_dct )
+        params[u'mods'] = self.make_mods_params( item_dct )
+        pid = self.perform_post( params )
+
         # pid = self.create_object( rights_params, ir_params, mods_params )
         # self.logger.debug( u'in metadata.MetadataHandler.create_metadata_only_object(); accession_number `%s` object created with pid `%s`' % (accession_number, pid) )
         # if self.confirm_created_metadata_object( pid ) == False:
@@ -85,8 +92,52 @@ class MetadataCreator( object ):
     #     self.logger.debug( u'in metadata.MetadataCreator.grab_item_dct(); item_dct, %s' % pprint.pformat(item_dct) )
     #     return item_dct
 
-    def make_rights_params( item_dct ):
-        """
+    def make_ir_params( self, item_dct ):
+        """ Returns json of ir params.
+            Called by create_metadata_only_object() """
+        ir_param = { u'parameters': {
+            u'ir_collection_id': u'test:278',
+            u'depositor_name': u'Bell Gallery'
+            } }
+        jsn = json.dumps( ir_param )
+        return jsn
+        ## from ben tests...
+        # params['ir'] = json.dumps({'parameters': {'folders': 'Brown University Library#468'}})
+        # params['ir'] = json.dumps({'parameters': {'ir_collection_id': 468}})
+        # params['ir'] = json.dumps({'xml_data': IR_XML})
+        # params['ir'] = json.dumps({'parameters': {'depositor_email': 'random@brown.edu'} })
+
+    def make_mods_params( self, item_dct ):
+        """ Returns json if mods params.
+            Called by create_metadata_only_object() """
+        mods_schema_path = os.path.abspath( u'../lib/mods-3-4.xsd' )
+        self.logger.debug( u'in metadata.MetadataCreator.make_mods_params(); mods_schema_path, %s' % mods_schema_path )
+        mb = mods_builder.ModsBuilder()
+        return_type = u'return_string'  # or u'return_object'
+        mods_xml = mb.build_mods_object( item_dct, mods_schema_path, return_type ):
+        self.logger.debug( u'in metadata.MetadataCreator.make_mods_params(); mods_xml, %s' % mods_xml )
+        mods_param = { u'xml_data': mods_xml }
+        jsn = json.dumps( mods_param )
+        return jsn
+        ## from ben tests...
+        # params['mods'] = json.dumps({'parameters': {'title': ''}})
+        # params['mods'] = json.dumps({'parameters': {'title': 'test title', 'by': 'invalid creator'}})
+        # params['mods'] = json.dumps({'url': '%s/test/test.mods' % SERVER_ROOT})
+        # params['mods'] = json.dumps({'xml_data': MODS_XML})
+        #
+        # mods_params = {'title': u'tést object', 'by': 'Tom#creator', 'description': 'Abstract 1', 'keywords': u'large+test', 'create_date': u'2010-01-23'}
+        # params['mods'] = json.dumps({'parameters': mods_params})
+
+    def perform_post( self, params ):
+        """ Hits api w/post. Returns pid.
+            Called by create_metadata_only_object() """
+        r = requests.post( self.API_URL, data=params )
+        self.logger.debug( u'in metadata.MetadataCreator.perform_post(); r.status_code, %s' % r.status_code )
+        response_data = json.loads( r.content.decode(u'utf-8') )
+        self.assertEqual(data[u'post_result'], u'SUCCESS', r.text)
+        self.logger.debug( u'in metadata.MetadataCreator.perform_post(); response_data, %s' % pprint.pformat(response_data) )
+        pid = response_data[u'pid']
+        return pid
 
     # end class MetadataCreator()
 
