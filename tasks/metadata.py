@@ -49,12 +49,14 @@ class MetadataCreator( object ):
 
     def __init__( self, logger ):
         self.logger = logger
+        self.SOURCE_FULL_JSON_METADATA_PATH = unicode( os.environ[u'BELL_TASKS__FULL_JSON_METADATA_PATH'] )
 
     def create_metadata_only_object( self, accession_number ):
         """ Gathers source metadata, prepares call to item-api, calls it, and confirms creation.
             Called by run_create_metadata_only_object() """
         self.logger.debug( u'in metadata.MetadataCreator.create_metadata_only_object(); starting' )
-        # item_dct = self.grab_item_dct( accession_number )
+        item_dct = self.grab_item_dct( accession_number )
+        self.logger.debug( u'in metadata.MetadataCreator.create_metadata_only_object(); item_dct.keys(), %s' item_dct.keys() )
         # rights_params = self.make_rights_params( item_dct )
         # ir_params = self.make_ir_params( item_dct )
         # mods_params = self.make_mods_params( item_dct )
@@ -63,6 +65,14 @@ class MetadataCreator( object ):
         # if self.confirm_created_metadata_object( pid ) == False:
         #     raise Exception( u'could not confirm creation accession_number `%s` ingestion at pid `%s`' % (accession_number, pid) )
         return
+
+    def grab_item_dct( self, accession_number ):
+        """ Loads data """
+        with open( self.SOURCE_FULL_JSON_METADATA_PATH ) as f:
+            metadata_dct = json.loads( f.read() )
+        items = metadata_dct[u'items']
+        item_dct = items[u'accession_number' ]
+
 
     ## helpers ##
 
