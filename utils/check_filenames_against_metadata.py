@@ -16,9 +16,8 @@ logger = bell_logger.setup_logger()
 class Checker( object ):
 
     def __init__( self ):
-        self.METADATA_PATH = unicode( os.environ[u'BELL_ONEOFF__JSON_METADATA_PATH'] )
-        self.FILENAMES_PATH = unicode( os.environ[u'BELL_ONEOFF__JSON_FILENAMES_PATH'] )
-        # self.OUTPUT_PATH = unicode( os.environ[u'BELL_ONEOFF__JSON_MATCH_PATH'] )
+        self.METADATA_PATH = unicode( os.environ[u'BELL_UTILS__JSON_METADATA_PATH'] )
+        self.FILENAMES_PATH = unicode( os.environ[u'BELL_UTILS__JSON_FILENAMES_PATH'] )
 
     def check_filenames( self ):
         """ Checks filenames against metadata. """
