@@ -292,7 +292,9 @@ class IRBuilder( object ):
 
     def build_ir_object( self ):
         ''' Creates basic bell ir object.
-            'ir_obj.date' and if necessary, 'ir_obj.filename', will be set dynamically '''
+            'ir_obj.date' and if necessary, 'ir_obj.filename', will be set dynamically
+            NOTE: 2015-03-05 -- date unnecessary; already in fedora.
+            '''
         obj = irMetadata.make_ir()
         assert unicode(repr(type(obj))) == u"<class 'bdrxml.irMetadata.IR'>", unicode(repr(type(obj)))
         obj.depositor_name = u'Bell Gallery'
