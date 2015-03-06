@@ -58,6 +58,7 @@ class MetadataCreator( object ):
         self.API_KEY = unicode( os.environ[u'BELL_TASKS_META__AUTH_API_KEY'] )
         self.MODS_SCHEMA_PATH = unicode( os.environ[u'BELL_TASKS_META__MODS_XSD_PATH'] )
         self.OWNING_COLLECTION = unicode( os.environ[u'BELL_TASKS_META__OWNING_COLLECTION_PID'] )
+        self.TRACKER_PATH = unicode( os.environ[u'BELL_TASKS_META__TRACKER_JSON_PATH'] )
 
     def create_metadata_only_object( self, accession_number ):
         """ Gathers source metadata, prepares call to item-api, calls it, and confirms creation.
@@ -67,11 +68,11 @@ class MetadataCreator( object ):
         item_dct = self.grab_item_dct( accession_number )
         params[u'ir'] = self.make_ir_params( item_dct )
         params[u'mods'] = self.make_mods_params( item_dct )
-        params[u'rels'] = json.dumps( {u'owning_collection': self.OWNING_COLLECTION} )
         ( file_obj, param_string ) = self.prep_content_datastream( item_dct )
         params[u'content_streams'] = param_string
         self.logger.debug( u'in metadata.MetadataCreator.create_metadata_only_object(); params, %s' % pprint.pformat(params) )
         pid = self.perform_post( params, file_obj )  # perform_post() closes the file
+        self.track_progress( accession_number, pid )
         return
 
     def set_basic_params( self ):
@@ -81,6 +82,7 @@ class MetadataCreator( object ):
             u'identity': self.API_IDENTITY,
             u'authorization_code': self.API_KEY,
             u'additional_rights': u'BDR_PUBLIC#discover,display+Bell Gallery#discover,display,modify,delete',
+            u'rels': json.dumps( {u'owning_collection': self.OWNING_COLLECTION} )
             # u'content_model': u'CommonMetadataDO'
             }
         return params
@@ -149,6 +151,20 @@ class MetadataCreator( object ):
         pid = response_data[u'pid']
         return pid
 
+    def track_progress( self, accession_number, pid ):
+        """ Logs progress to json file.
+            TODO: log progress to redis hash.
+            Called by create_metadata_only_object() """
+        try:
+            with open( self.TRACKER_PATH ) as f:
+                dct = json.loads( f.read() )
+        except ( IOError, ValueError ):
+            dct = {}
+        dct[u'accession_number'] = pid
+        with open( self.TRACKER_PATH, u'w' ) as f:
+            f.write( json.dumps(dct, indent=2, sort_keys=True) )
+        return
+
     # end class MetadataCreator
 
 
@@ -159,20 +175,19 @@ logger = bell_logger.setup_logger()
 def run_enqueue_create_metadata_only_jobs():
     """ Prepares list of accession numbers and enqueues jobs.
         Called manually. """
-    with open( self.PID_JSON_PATH ) as f:
+    METADATA_ONLY_JSON = unicode( os.environ[u'BELL_TASKS_META__METADATA_ONLY_ACCNUMS_JSON_PATH'] )
+    with open( METADATA_ONLY_JSON ) as f:
         dct = json.loads( f.read() )
     accession_numbers = dct[u'accession_numbers']
-    # for num in accession_numbers:
-    for i,num in enumerate( accession_numbers ):
+    for (i, accession_number) in enumerate( accession_numbers ):
         print u'i is, `%s`' % i
-        if i > 2:
+        if i+1 > 2:
             break
-        # bell_q.enqueue_call(
-        #   func=u'bell_code.one_offs.rebuild_custom_index.run_make_pid_dict_from_bell_data',
-        #   kwargs={ u'accession_number': accession_number } )
-
-
-    pass
+        q.enqueue_call(
+          func=u'bell_code.tasks.metadata.run_create_metadata_only_object',
+          kwargs={ u'accession_number': accession_number } )
+    print u'done'
+    return
 
 def run_create_metadata_only_object( accession_number ):
     """ Runner for create_metadata_only_object()
