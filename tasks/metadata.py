@@ -18,8 +18,8 @@ class MetadataOnlyLister( object ):
     """ Creates json file of accession numbers for which new metatdata-only objects will be created. """
 
     def __init__( self ):
-        self.PID_JSON_PATH = unicode( os.environ[u'BELL_UTILS__PID_DICT_JSON_PATH'] )
-        self.OUTPUT_PATH = unicode( os.environ[u'BELL_UTILS__METADATA_ONLY_ACCNUMS_JSON_PATH'] )
+        self.PID_JSON_PATH = unicode( os.environ[u'BELL_TASKS_META__PID_DICT_JSON_PATH'] )
+        self.OUTPUT_PATH = unicode( os.environ[u'BELL_TASKS_META__METADATA_ONLY_ACCNUMS_JSON_PATH'] )
 
     def list_metadata_only_accession_numbers( self ):
         """ Saves a json list of accession_numbers.
@@ -85,26 +85,24 @@ class MetadataCreator( object ):
             }
         return params
 
-
-    def grab_item_dct( self, accession_number ):
-        """ TEST -- Loads data for given accession_number.
-            Called by create_metadata_only_object() """
-        self.logger.debug( u'in metadata.MetadataCreator.grab_item_dct(); accession_number, %s' % accession_number )
-        item_dct = json.loads( '{"ARTISTS::artist_nationality_name": [null], "ARTISTS::artist_alias": [null], "object_title": "Portrait of Linda Tanner", "credit_line": "Gift of Louis A. Tanner \'55 and Linda P. Tanner (Vassar) \'61", "SERIES::series_end_year": ["2007"], "ARTISTS::artist_birth_year": [null], "series_id": "0", "ARTISTS::calc_nationality": [null], "ARTISTS::artist_first_name": ["Sydney"], "object_depth": null, "ARTISTS::artist_middle_name": [null], "OBJECT_ARTISTS::artist_id": ["1293"], "object_year_start": "1966", "SERIES::series_start_year": ["2005"], "OBJECT_ARTISTS::primary_flag": ["yes"], "object_height": null, "object_date": "1966", "ARTISTS::artist_birth_country_id": [null], "object_width": null, "object_year_end": "1966", "OBJECT_ARTISTS::artist_role": [null], "object_id": "6478", "SERIES::series_name": [null], "ARTISTS::artist_lifetime": [null], "object_image_scan_filename": null, "MEDIA::object_medium_name": "Drawing", "ARTISTS::use_alias_flag": ["no"], "object_medium": "Pencil", "ARTISTS::artist_last_name": ["Tillman"], "image_width": null, "OBJECT_MEDIA_SUB::media_sub_id": ["44"], "calc_accession_id": "D 2012.3.46", "image_height": null, "ARTISTS::artist_death_year": [null], "MEDIA_SUB::sub_media_name": ["Pencil"], "ARTISTS::calc_artist_full_name": ["Sydney Tillman"]}' )
-        self.logger.debug( u'in metadata.MetadataCreator.grab_item_dct(); item_dct, %s' % pprint.pformat(item_dct) )
-        return item_dct
-
     # def grab_item_dct( self, accession_number ):
-    #     """ Loads data for given accession_number.
+    #     """ TEST -- Loads data for given accession_number.
     #         Called by create_metadata_only_object() """
     #     self.logger.debug( u'in metadata.MetadataCreator.grab_item_dct(); accession_number, %s' % accession_number )
-    #     with open( self.SOURCE_FULL_JSON_METADATA_PATH ) as f:
-    #         metadata_dct = json.loads( f.read() )
-    #     items = metadata_dct[u'items']
-    #     item_dct = items[ accession_number ]
+    #     item_dct = json.loads( '{"ARTISTS::artist_nationality_name": [null], "ARTISTS::artist_alias": [null], "object_title": "Portrait of Linda Tanner", "credit_line": "Gift of Louis A. Tanner \'55 and Linda P. Tanner (Vassar) \'61", "SERIES::series_end_year": ["2007"], "ARTISTS::artist_birth_year": [null], "series_id": "0", "ARTISTS::calc_nationality": [null], "ARTISTS::artist_first_name": ["Sydney"], "object_depth": null, "ARTISTS::artist_middle_name": [null], "OBJECT_ARTISTS::artist_id": ["1293"], "object_year_start": "1966", "SERIES::series_start_year": ["2005"], "OBJECT_ARTISTS::primary_flag": ["yes"], "object_height": null, "object_date": "1966", "ARTISTS::artist_birth_country_id": [null], "object_width": null, "object_year_end": "1966", "OBJECT_ARTISTS::artist_role": [null], "object_id": "6478", "SERIES::series_name": [null], "ARTISTS::artist_lifetime": [null], "object_image_scan_filename": null, "MEDIA::object_medium_name": "Drawing", "ARTISTS::use_alias_flag": ["no"], "object_medium": "Pencil", "ARTISTS::artist_last_name": ["Tillman"], "image_width": null, "OBJECT_MEDIA_SUB::media_sub_id": ["44"], "calc_accession_id": "D 2012.3.46", "image_height": null, "ARTISTS::artist_death_year": [null], "MEDIA_SUB::sub_media_name": ["Pencil"], "ARTISTS::calc_artist_full_name": ["Sydney Tillman"]}' )
     #     self.logger.debug( u'in metadata.MetadataCreator.grab_item_dct(); item_dct, %s' % pprint.pformat(item_dct) )
     #     return item_dct
 
+    def grab_item_dct( self, accession_number ):
+        """ Loads data for given accession_number.
+            Called by create_metadata_only_object() """
+        self.logger.debug( u'in metadata.MetadataCreator.grab_item_dct(); accession_number, %s' % accession_number )
+        with open( self.SOURCE_FULL_JSON_METADATA_PATH ) as f:
+            metadata_dct = json.loads( f.read() )
+        items = metadata_dct[u'items']
+        item_dct = items[ accession_number ]
+        self.logger.debug( u'in metadata.MetadataCreator.grab_item_dct(); item_dct, %s' % pprint.pformat(item_dct) )
+        return item_dct
 
     def make_ir_params( self, item_dct ):
         """ Returns json of ir params.
@@ -142,7 +140,6 @@ class MetadataCreator( object ):
     def perform_post( self, params, file_obj ):
         """ Hits api w/post. Returns pid.
             Called by create_metadata_only_object() """
-        self.logger.debug( u'in metadata.MetadataCreator.perform_post(); type(file_obj), %s' % type(file_obj) )
         files = { u'bell_item.json': file_obj }
         r = requests.post( self.API_URL, data=params, files=files )
         file_obj.close()
@@ -158,6 +155,24 @@ class MetadataCreator( object ):
 ## runners ##
 
 logger = bell_logger.setup_logger()
+
+def run_enqueue_create_metadata_only_jobs():
+    """ Prepares list of accession numbers and enqueues jobs.
+        Called manually. """
+    with open( self.PID_JSON_PATH ) as f:
+        dct = json.loads( f.read() )
+    accession_numbers = dct[u'accession_numbers']
+    # for num in accession_numbers:
+    for i,num in enumerate( accession_numbers ):
+        print u'i is, `%s`' % i
+        if i > 2:
+            break
+        # bell_q.enqueue_call(
+        #   func=u'bell_code.one_offs.rebuild_custom_index.run_make_pid_dict_from_bell_data',
+        #   kwargs={ u'accession_number': accession_number } )
+
+
+    pass
 
 def run_create_metadata_only_object( accession_number ):
     """ Runner for create_metadata_only_object()
