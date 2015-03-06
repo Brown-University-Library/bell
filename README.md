@@ -35,25 +35,32 @@ code related to ingesting bell-gallery images into the bdr.
     - status: done; march-4; rerun march-4 w/updated metadata keys; count down to 105 from 114 extra pids.
 
 - create new metadata objects
-    - status: not done; in-process
+    - after creates, confirm a re-run of `foundation/acc_num_to_pid.py` results in zero non-pid matches.
+    - status: done; march-6.
+
+- make list of images to add
+    - tasks/images.ImagesToAddLister.list_images()
+    - end result: `g_images_to_add.json`
+    - status: not done
+
+- add images
+    - after adds, confirm a re-run of `tasks/images.ImagesToAddLister.list_images()` results in zero images-to-add
+    - status: not done
 
 - make metadata-update list
     - TODO
     - end result: `metadata_updates.json`
-    - status: not done;
+    - status: not done
 
 - update metadata objects
     - status: not done
 
-- run through images #1
-    - update existing image object if necessary
-        - update associated metadata object if necessary (unlikely -- i.e. master jpg becomes master tif)
+- make image-replace list
+    - TODO
+    - end result: `image_replacements.json`
     - status: not done
 
-- run through images #2
-    - create image object if necessary
-        - update the previous metadata-only object
-    - status: not done
+- replace images
 
 - run a final check to make sure the custom-solr-index and the updated fedora data match
     - status: not done
