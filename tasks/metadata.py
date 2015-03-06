@@ -52,12 +52,12 @@ class MetadataCreator( object ):
 
     def __init__( self, logger ):
         self.logger = logger
-        self.SOURCE_FULL_JSON_METADATA_PATH = unicode( os.environ[u'BELL_TASKS__FULL_JSON_METADATA_PATH'] )
-        self.API_URL = unicode( os.environ[u'BELL_TASKS___AUTH_API_URL'] )
-        self.API_IDENTITY = unicode( os.environ[u'BELL_TASKS___AUTH_API_IDENTITY'] )
-        self.API_KEY = unicode( os.environ[u'BELL_TASKS___AUTH_API_KEY'] )
-        self.MODS_SCHEMA_PATH = unicode( os.environ[u'BELL_TASKS__MODS_XSD_PATH'] )
-        self.OWNING_COLLECTION = unicode( os.environ[u'BELL_TASKS__OWNING_COLLECTION_PID'] )
+        self.SOURCE_FULL_JSON_METADATA_PATH = unicode( os.environ[u'BELL_TASKS_META__FULL_JSON_METADATA_PATH'] )
+        self.API_URL = unicode( os.environ[u'BELL_TASKS_META__AUTH_API_URL'] )
+        self.API_IDENTITY = unicode( os.environ[u'BELL_TASKS_META__AUTH_API_IDENTITY'] )
+        self.API_KEY = unicode( os.environ[u'BELL_TASKS_META__AUTH_API_KEY'] )
+        self.MODS_SCHEMA_PATH = unicode( os.environ[u'BELL_TASKS_META__MODS_XSD_PATH'] )
+        self.OWNING_COLLECTION = unicode( os.environ[u'BELL_TASKS_META__OWNING_COLLECTION_PID'] )
 
     def create_metadata_only_object( self, accession_number ):
         """ Gathers source metadata, prepares call to item-api, calls it, and confirms creation.
