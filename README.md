@@ -35,7 +35,8 @@ code related to ingesting bell-gallery images into the bdr.
     - status: done; march-4; rerun march-4 w/updated metadata keys; count down to 105 from 114 extra pids.
 
 - create new metadata objects
-    - status: not done; in-process
+    - confirmed a re-run of `foundation/acc_num_to_pid.py` results in zero non-pid matches.
+    - status: done; march-6;
 
 - make metadata-update list
     - TODO
