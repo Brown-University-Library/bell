@@ -153,7 +153,7 @@ class MetadataCreator( object ):
                 dct = json.loads( f.read() )
         except ( IOError, ValueError ):
             dct = {}
-        dct[u'accession_number'] = pid
+        dct[accession_number] = pid
         with open( self.TRACKER_PATH, u'w' ) as f:
             f.write( json.dumps(dct, indent=2, sort_keys=True) )
         return
@@ -174,7 +174,7 @@ def run_enqueue_create_metadata_only_jobs():
     accession_numbers = dct[u'accession_numbers']
     for (i, accession_number) in enumerate( accession_numbers ):
         print u'i is, `%s`' % i
-        if i+1 > 2:
+        if i+1 > 200:
             break
         q.enqueue_call(
           func=u'bell_code.tasks.metadata.run_create_metadata_only_object',
