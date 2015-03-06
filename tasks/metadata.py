@@ -9,7 +9,6 @@ from bell_code import bell_logger
 from bell_code.utils import mods_builder
 
 
-
 queue_name = unicode( os.environ.get(u'BELL_QUEUE_NAME') )
 q = rq.Queue( queue_name, connection=redis.Redis() )
 r = redis.StrictRedis( host='localhost', port=6379, db=0 )
@@ -45,7 +44,7 @@ class MetadataOnlyLister( object ):
             f.write( jsn )
         return
 
-    # end class MetadataOnlyLister()
+    # end class MetadataOnlyLister
 
 
 class MetadataCreator( object ):
@@ -148,13 +147,12 @@ class MetadataCreator( object ):
         r = requests.post( self.API_URL, data=params, files=files )
         file_obj.close()
         self.logger.debug( u'in metadata.MetadataCreator.perform_post(); r.status_code, %s' % r.status_code )
-        self.logger.debug( u'in metadata.MetadataCreator.perform_post(); r.content, %s' % r.content.decode(u'utf-8') )
         response_data = json.loads( r.content.decode(u'utf-8') )
         self.logger.debug( u'in metadata.MetadataCreator.perform_post(); response_data, %s' % pprint.pformat(response_data) )
         pid = response_data[u'pid']
         return pid
 
-    # end class MetadataCreator()
+    # end class MetadataCreator
 
 
 ## runners ##
