@@ -2,7 +2,7 @@
 
 """ Handles metadata-related tasks. """
 
-import datetime, json, os, pprint, sys
+import datetime, json, os, pprint, sys, time
 from StringIO import StringIO as SIO
 import filelike, redis, requests, rq
 from bell_code import bell_logger
@@ -87,14 +87,6 @@ class MetadataCreator( object ):
             }
         return params
 
-    # def grab_item_dct( self, accession_number ):
-    #     """ TEST -- Loads data for given accession_number.
-    #         Called by create_metadata_only_object() """
-    #     self.logger.debug( u'in metadata.MetadataCreator.grab_item_dct(); accession_number, %s' % accession_number )
-    #     item_dct = json.loads( '{"ARTISTS::artist_nationality_name": [null], "ARTISTS::artist_alias": [null], "object_title": "Portrait of Linda Tanner", "credit_line": "Gift of Louis A. Tanner \'55 and Linda P. Tanner (Vassar) \'61", "SERIES::series_end_year": ["2007"], "ARTISTS::artist_birth_year": [null], "series_id": "0", "ARTISTS::calc_nationality": [null], "ARTISTS::artist_first_name": ["Sydney"], "object_depth": null, "ARTISTS::artist_middle_name": [null], "OBJECT_ARTISTS::artist_id": ["1293"], "object_year_start": "1966", "SERIES::series_start_year": ["2005"], "OBJECT_ARTISTS::primary_flag": ["yes"], "object_height": null, "object_date": "1966", "ARTISTS::artist_birth_country_id": [null], "object_width": null, "object_year_end": "1966", "OBJECT_ARTISTS::artist_role": [null], "object_id": "6478", "SERIES::series_name": [null], "ARTISTS::artist_lifetime": [null], "object_image_scan_filename": null, "MEDIA::object_medium_name": "Drawing", "ARTISTS::use_alias_flag": ["no"], "object_medium": "Pencil", "ARTISTS::artist_last_name": ["Tillman"], "image_width": null, "OBJECT_MEDIA_SUB::media_sub_id": ["44"], "calc_accession_id": "D 2012.3.46", "image_height": null, "ARTISTS::artist_death_year": [null], "MEDIA_SUB::sub_media_name": ["Pencil"], "ARTISTS::calc_artist_full_name": ["Sydney Tillman"]}' )
-    #     self.logger.debug( u'in metadata.MetadataCreator.grab_item_dct(); item_dct, %s' % pprint.pformat(item_dct) )
-    #     return item_dct
-
     def grab_item_dct( self, accession_number ):
         """ Loads data for given accession_number.
             Called by create_metadata_only_object() """
@@ -143,6 +135,7 @@ class MetadataCreator( object ):
         """ Hits api w/post. Returns pid.
             Called by create_metadata_only_object() """
         files = { u'bell_item.json': file_obj }
+        time.sleep( .5 )
         r = requests.post( self.API_URL, data=params, files=files )
         file_obj.close()
         self.logger.debug( u'in metadata.MetadataCreator.perform_post(); r.status_code, %s' % r.status_code )
