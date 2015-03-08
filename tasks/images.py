@@ -2,7 +2,7 @@
 
 """ Handles image-related tasks. """
 
-import json, os, pprint, sys, urllib
+import datetime, json, os, pprint, sys, time, urllib
 import envoy, requests
 from bell_code import bell_logger
 
@@ -23,16 +23,12 @@ class ImageLister( object ):
         logger.debug( u'in tasks.images.ImageLister.make_image_lists(); starting' )
         ( accession_data_dct, accession_pid_dct, images_lst, images_to_add, images_to_update ) = self.setup()
         filename_to_data_dct = self.make_filename_to_data_dct( accession_data_dct, accession_pid_dct, images_lst )
-        for image_filename in sorted( filename_to_data_dct.keys() ):
-            self.check_image( image_filename, filename_to_data_dct, images_to_add, images_to_update )
-            break
-        data = {
-            u'datetime': unicode( datetime.datetime.now() ),
-            u'count_images_to_add': len( images_to_add ),
-            u'count_images_to_update': len( images_to_update ),
-            u'lst_images_to_add': images_to_add,
-            u'lst_images_to_update': images_to_update }
-        self.output_listing( data )
+        for ( i, image_filename ) in enumerate(sorted( filename_to_data_dct.keys()) ):
+            api_dct = self.get_api_data( image_filename, filename_to_data_dct )
+            self.check_api_data( api_dct, image_filename, images_to_add, images_to_update )
+            if i+1 >= 500:
+                break
+        self.output_listing( images_to_add, images_to_update )
         return
 
     def setup( self ):
@@ -61,20 +57,26 @@ class ImageLister( object ):
             non_extension_filename = image_filename[0:extension_idx]
             for ( accession_number_key, data_dct_value ) in accession_data_dct.items():
                 if image_filename == data_dct_value[u'object_image_scan_filename'] or non_extension_filename == data_dct_value[u'object_image_scan_filename']:
-                    filename_to_data_dct[image_filename] = {
-                        u'accession_number': accession_number_key, u'pid': accession_pid_dct[accession_number_key] }
+                    filename_to_data_dct[image_filename] = { u'accession_number': accession_number_key, u'pid': accession_pid_dct[accession_number_key] }
+        logger.debug( u'in tasks.images.ImageLister.make_filename_to_data_dct(); filename_to_data_dct, `%s`' % pprint.pformat(filename_to_data_dct) )
         return filename_to_data_dct
 
-    def check_image( self, image_filename, filename_to_data_dct, images_to_add, images_to_update ):
-        """ Looks up image-filename via public api; stores whether image exists or not.
+    def get_api_data( self, image_filename, filename_to_data_dct ):
+        """ Makes api call.
             Called by make_image_lists() """
-        pid = filename_to_data_dct[image_filename][pid]
-        image_already_ingested = True
+        pid = filename_to_data_dct[image_filename][u'pid']
         item_api_url = u'%s/%s/' % ( self.API_URL, pid )
         self.logger.debug( u'in tasks.images.ImageLister.check_image(); item_api_url, %s' % item_api_url )
+        time.sleep( 2 )
         r = requests.get( item_api_url, verify=False )
-        d = r.json()
-        if u'JP2' in d[u'links'][u'content_datastreams'].keys() or  u'jp2' in d[u'rel_content_models_ssim']:
+        api_dct = r.json()
+        return api_dct
+
+    def check_api_data( self, api_dct, image_filename, images_to_add, images_to_update ):
+        """ Looks up image-filename via public api; stores whether image exists or not.
+            Called by make_image_lists() """
+        image_already_ingested = True
+        if u'JP2' in api_dct[u'links'][u'content_datastreams'].keys() or  u'jp2' in api_dct[u'rel_content_models_ssim']:
             pass
         else:
             image_already_ingested = False
@@ -82,6 +84,21 @@ class ImageLister( object ):
             images_to_update.append( image_filename )
         else:
             images_to_add.append( image_filename )
+        return
+
+    def output_listing( self, images_to_add, images_to_update ):
+        """ Saves json file.
+            Called by make_image_lists() """
+        data = {
+            u'datetime': unicode( datetime.datetime.now() ),
+            u'count_images': len( images_to_add ) + len( images_to_update ),
+            u'count_images_to_add': len( images_to_add ),
+            u'count_images_to_update': len( images_to_update ),
+            u'lst_images_to_add': images_to_add,
+            u'lst_images_to_update': images_to_update }
+        jsn = json.dumps( data, indent=2, sort_keys=True )
+        with open( self.IMAGES_TO_PROCESS_OUTPUT_PATH, u'w' ) as f:
+            f.write( jsn )
         return
 
 
