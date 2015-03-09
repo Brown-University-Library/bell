@@ -12,21 +12,88 @@ class ImageAdder( object ):
 
     def __init__( self, logger ):
         self.logger = logger
-        self.MASTER_IMAGES_DIR_PATH = unicode( os.environ[u'BELL_TASKS_META__FULL_JSON_METADATA_PATH'] )
-        self.MASTER_IMAGES_DIR_URL = unicode( os.environ[u'BELL_TASKS_META__AUTH_API_URL'] )
-        self.JP2_IMAGES_DIR_PATH = unicode( os.environ[u'BELL_TASKS_META__AUTH_API_IDENTITY'] )
-        self.JP2_IMAGES_DIR_URL = unicode( os.environ[u'BELL_TASKS_META__AUTH_API_KEY'] )
-        self.API_URL = unicode( os.environ[u'BELL_TASKS_META__AUTH_API_URL'] )
-        self.API_IDENTITY = unicode( os.environ[u'BELL_TASKS_META__AUTH_API_IDENTITY'] )
-        self.API_KEY = unicode( os.environ[u'BELL_TASKS_META__AUTH_API_KEY'] )
+        self.MASTER_IMAGES_DIR_PATH = unicode( os.environ[u'BELL_TASKS_IMGS__MASTER_IMAGES_DIR_PATH'] )
+        self.JP2_IMAGES_DIR_PATH = unicode( os.environ[u'BELL_TASKS_IMGS__JP2_IMAGES_DIR_PATH'] )
+        self.KAKADU_COMMAND_PATH = unicode( os.environ[u'BELL_TASKS_IMGS__KAKADU_COMMAND_PATH'] )
+        self.CONVERT_COMMAND_PATH = unicode( os.environ[u'BELL_TASKS_IMGS__CONVERT_COMMAND_PATH'] )
 
-    def add_image( self, pid, item_data_dict ):
+        # self.MASTER_IMAGES_DIR_URL = unicode( os.environ[u'BELL_TASKS_IMGS__MASTER_IMAGES_DIR_URL'] )
+        # self.JP2_IMAGES_DIR_URL = unicode( os.environ[u'BELL_TASKS_IMGS__JP2_IMAGES_DIR_URL'] )
+        # self.AUTH_API_URL = unicode( os.environ[u'BELL_TASKS_IMGS__AUTH_API_URL'] )
+        # self.AUTH_API_IDENTITY = unicode( os.environ[u'BELL_TASKS_IMGS__AUTH_API_IDENTITY'] )
+        # self.AUTH_API_KEY = unicode( os.environ[u'BELL_TASKS_IMGS__AUTH_API_KEY'] )
+
+    def add_image( self, filename_dct ):
         """ Manages: creates jp2, hits api, & cleans up.
             Called by run_add_image() """
-        ( source_filepath, destination_filepath ) = self.create_temp_filenames()
+        logger.debug( u'in tasks.images.ImageAdder.add_image(); starting; filename_dct, `%s`' % pprint.pformat(filename_dct) )
+        ( source_filepath, destination_filepath ) = self.create_temp_filenames( filename_dct.keys()[0] )
         self.create_jp2( source_filepath, destination_filepath )
-        print u'- jp2 created.'
-        #
+        1/0
+        resp = self.hit_api()
+        self.track_response( resp )
+        return
+
+    def create_temp_filenames( self, image_filename ):
+        """ Creates filenames for subsequent jp2 creation.
+            Called by add_image() """
+        master_filename_raw = image_filename  # includes spaces
+        master_filename_utf8 = master_filename_raw.encode( u'utf-8' )
+        master_filename_encoded = urllib.quote( master_filename_utf8 ).decode( u'utf-8' )
+        source_filepath = u'%s/%s' % ( self.MASTER_IMAGES_DIR_PATH, master_filename_raw )
+        temp_jp2_filename = master_filename_raw.replace( u' ', u'_' )
+        extension_idx = temp_jp2_filename.rfind( u'.' )
+        non_extension_filename = temp_jp2_filename[0:extension_idx]
+        jp2_filename = temp_jp2_filename + u'.jp2'
+        destination_filepath = u'%s/%s' % ( self.JP2_IMAGES_DIR_PATH, jp2_filename )
+        logger.debug( u'in tasks.images.ImageAdder.create_temp_filenames(); source_filepath, `%s`; destination_filepath, `%s`' % ( source_filepath, destination_filepath ) )
+        return ( source_filepath, destination_filepath )
+
+    def create_jp2( self, source_filepath, destination_filepath ):
+        """ Creates jp2.
+            Called by add_image() """
+        if u'tif' in source_filepath.split( u'.' )[-1]:
+            self._create_jp2_from_tif( self.KAKADU_COMMAND_PATH, source_filepath, destination_filepath )
+        elif u'jp' in source_filepath.split( u'.' )[-1]:
+            self._create_jp2_from_jpg( self.CONVERT_COMMAND_PATH, self.KAKADU_COMMAND_PATH, source_filepath, destination_filepath )
+        return
+
+    def _create_jp2_from_tif( self, source_filepath, destination_filepath ):
+        """ Creates jp2 directly. """
+        cleaned_source_filepath = source_filepath.replace( u' ', u'\ ' )
+        cmd = u'%s -i "%s" -o "%s" Creversible=yes -rate -,1,0.5,0.25 Clevels=12' % (
+            self.KAKADU_COMMAND_PATH, cleaned_source_filepath, destination_filepath )
+        self.logger.info( u'in tasks.images.ImageAdder._create_jp2_from_tif(); cmd, %s' % cmd )
+        r = envoy.run( cmd.encode(u'utf-8', u'replace') )  # envoy requires a non-unicode string
+        self.logger.info( u'in tasks.images.ImageAdder._create_jp2_from_tif(); r.std_out, %s' % r.std_out )
+        self.logger.info( u'in tasks.images.ImageAdder._create_jp2_from_tif(); r.std_err, %s' % r.std_err )
+        return
+
+    def _create_jp2_from_jpg( self, CONVERT_COMMAND_PATH, KAKADU_COMMAND_PATH, source_filepath, destination_filepath ):
+        """ Creates jp2 after first converting jpg to tif (due to server limitation). """
+        cleaned_source_filepath = source_filepath.replace( u' ', u'\ ' )
+        self.logger.debug( u'in fedora_parts_builder._create_jp2_from_jpg(); cleaned_source_filepath, %s' % cleaned_source_filepath )
+        tif_destination_filepath = destination_filepath[0:-4] + u'.tif'
+        self.logger.debug( u'in fedora_parts_builder._create_jp2_from_jpg(); tif_destination_filepath, %s' % tif_destination_filepath )
+        cmd = u'%s -compress None "%s" %s' % (
+            self.CONVERT_COMMAND_PATH, cleaned_source_filepath, tif_destination_filepath )  # source-filepath quotes needed for filename containing spaces
+        self.logger.debug( u'in fedora_parts_builder._create_jp2_from_jpg(); cmd, %s' % cmd )
+        r = envoy.run( cmd.encode(u'utf-8', u'replace') )
+        self.logger.info( u'in fedora_parts_builder._create_jp2_from_jpg(); r.std_out, %s; type(r.std_out), %s' % (r.std_out, type(r.std_out)) )
+        self.logger.info( u'in fedora_parts_builder._create_jp2_from_jpg(); r.std_err, %s; type(r.std_err), %s' % (r.std_err, type(r.std_err)) )
+        if len( r.std_err ) > 0:
+            raise Exception( u'Problem making intermediate .tif from .jpg' )
+        source_filepath = tif_destination_filepath
+        cmd = u'%s -i "%s" -o "%s" Creversible=yes -rate -,1,0.5,0.25 Clevels=12' % (
+            self.KAKADU_COMMAND_PATH, source_filepath, destination_filepath )
+        r = envoy.run( cmd.encode(u'utf-8', u'replace') )
+        os.remove( tif_destination_filepath )
+        return
+
+
+    def hit_api( self ):
+        """ Sets params.
+            Called by add_image() """
         #Prepare api call
         master_url = u'%s/%s' % ( MASTER_IMAGES_DIR_URL, master_filename_encoded )
         jp2_url = u'%s/%s' % ( JP2_IMAGES_DIR_URL, jp2_filename )
@@ -35,61 +102,14 @@ class ImageAdder( object ):
             { u'dsID': u'MASTER', u'url': master_url },
             { u'dsID': u'JP2', u'url': jp2_url }
             ])
-        print u'api params prepared'
-        #
-        #Make api call
         r = requests.put( API_URL, data=params, verify=False )
-        print u'http put executed'
-        self.logger.debug( u'in fedora_metadata_updater_and_image_builder.update_existing_metadata_and_create_image(); r.status_code, %s' % r.status_code )
-        self.logger.debug( u'in fedora_metadata_updater_and_image_builder.update_existing_metadata_and_create_image(); r.content, %s' % r.content.decode(u'utf-8') )
-        #
-        #Read response
-        resp = r.json()
-        self.logger.debug( u'in fedora_metadata_updater_and_image_builder.update_existing_metadata_and_create_image(); api_response, %s' % resp )
-        #
-        #Update logging
-        print u'- done.'
-        self._update_task_tracker( message=u'save_successful' )
-        print u'response: `%s` logged' % resp
-        #
-        #Set next task
-        task_manager.determine_next_task(
-            unicode(sys._getframe().f_code.co_name),
-            data={ u'item_data': item_data_dict, u'jp2_path': destination_filepath, u'pid': pid },
-            logger=logger
-            )
-        print u'- next task set.'
-        # done
-        return
+        return r
 
-    def create_temp_filenames( self ):
-        """ Creates filenames for subsequent jp2 creation.
+    def track_response( self, resp ):
+        """ Outputs put result.
             Called by add_image() """
-        #Create jp2
-        master_filename_raw = item_data_dict[u'object_image_scan_filename']  # includes spaces
-        master_filename_utf8 = master_filename_raw.encode( u'utf-8' )
-        master_filename_encoded = urllib.quote( master_filename_utf8 ).decode( u'utf-8' )
-        source_filepath = u'%s/%s' % ( MASTER_IMAGES_DIR_PATH, master_filename_raw )
-        self.logger.info( u'in fedora_metadata_updater_and_image_builder.update_existing_metadata_and_create_image(); source_filepath, %s' % source_filepath )
-        temp_jp2_filename = master_filename_raw.replace( u' ', u'_' )
-        jp2_filename = temp_jp2_filename[0:-4] + u'.jp2'
-        destination_filepath = u'%s/%s' % ( JP2_IMAGES_DIR_PATH, jp2_filename )
-        self.logger.info( u'in fedora_metadata_updater_and_image_builder.update_existing_metadata_and_create_image(); destination_filepath, %s' % destination_filepath )
-        return ( source_filepath, destination_filepath )
-
-    def create_jp2( self, source_filepath, destination_filepath ):
-        """ Creates jp2.
-            Called by add_image() """
-        self.logger.debug( u'in fedora_parts_builder._create_jp2(); source_filepath, %s' % source_filepath )
-        self.logger.debug( u'in fedora_parts_builder._create_jp2(); destination_filepath, %s' % destination_filepath )
-        KAKADU_COMMAND_PATH = unicode( os.environ.get(u'BELL_FPB__KAKADU_COMMAND_PATH') )
-        CONVERT_COMMAND_PATH = unicode( os.environ.get(u'BELL_FPB__CONVERT_COMMAND_PATH') )
-        if source_filepath.split( u'.' )[-1] == u'tif':
-            self.logger.debug( u'in fedora_parts_builder._create_jp2(); in `tif` handling' )
-            self._create_jp2_from_tif( KAKADU_COMMAND_PATH, source_filepath, destination_filepath )
-        elif source_filepath.split( u'.' )[-1] == u'jpg':
-            self.logger.debug( u'in fedora_parts_builder._create_jp2(); in `jpg` handling' )
-            self._create_jp2_from_jpg( CONVERT_COMMAND_PATH, KAKADU_COMMAND_PATH, source_filepath, destination_filepath )
+        print u'text, `%s`' % r.content.decode( u'utf-8' )
+        pprint.pprint( r.json )
         return
 
     # end class ImageAdder
@@ -113,8 +133,9 @@ class ImageLister( object ):
         ( accession_data_dct, accession_pid_dct, images_lst, images_to_add, images_to_update ) = self.setup()
         filename_to_data_dct = self.make_filename_to_data_dct( accession_data_dct, accession_pid_dct, images_lst )
         for ( i, image_filename ) in enumerate(sorted( filename_to_data_dct.keys()) ):
-            api_dct = self.get_api_data( image_filename, filename_to_data_dct )
-            self.check_api_data( api_dct, image_filename, images_to_add, images_to_update )
+            ( pid, accession_number ) = ( filename_to_data_dct[image_filename][u'pid'], filename_to_data_dct[image_filename][u'accession_number'] )
+            api_dct = self.get_api_data( pid )
+            self.check_api_data( api_dct, image_filename, pid, accession_number, images_to_add, images_to_update )
             if i+1 >= 500:
                 break
         self.output_listing( images_to_add, images_to_update )
@@ -150,10 +171,9 @@ class ImageLister( object ):
         logger.debug( u'in tasks.images.ImageLister.make_filename_to_data_dct(); filename_to_data_dct, `%s`' % pprint.pformat(filename_to_data_dct) )
         return filename_to_data_dct
 
-    def get_api_data( self, image_filename, filename_to_data_dct ):
+    def get_api_data( self, pid ):
         """ Makes api call.
             Called by make_image_lists() """
-        pid = filename_to_data_dct[image_filename][u'pid']
         item_api_url = u'%s/%s/' % ( self.API_URL, pid )
         self.logger.debug( u'in tasks.images.ImageLister.check_image(); item_api_url, %s' % item_api_url )
         time.sleep( 2 )
@@ -161,7 +181,7 @@ class ImageLister( object ):
         api_dct = r.json()
         return api_dct
 
-    def check_api_data( self, api_dct, image_filename, images_to_add, images_to_update ):
+    def check_api_data( self, api_dct, image_filename, pid, accession_number, images_to_add, images_to_update ):
         """ Looks up image-filename via public api; stores whether image exists or not.
             Called by make_image_lists() """
         image_already_ingested = True
@@ -170,9 +190,10 @@ class ImageLister( object ):
         else:
             image_already_ingested = False
         if image_already_ingested:
-            images_to_update.append( image_filename )
+            # images_to_update.append( image_filename )
+            images_to_update.append( {image_filename: {u'pid': pid, u'accession_number': accession_number}} )
         else:
-            images_to_add.append( image_filename )
+            images_to_add.append( {image_filename: {u'pid': pid, u'accession_number': accession_number}} )
         return
 
     def output_listing( self, images_to_add, images_to_update ):
@@ -202,4 +223,11 @@ def run_make_image_lists():
         Called manually as per readme """
     lister = ImageLister( logger )
     lister.make_image_lists()
+    return
+
+def run_add_image( filename_dct ):
+    """ Runner for add_image()
+        Called manually as per readme """
+    adder = ImageAdder( logger )
+    adder.add_image( filename_dct )
     return
