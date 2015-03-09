@@ -16,12 +16,11 @@ class ImageAdder( object ):
         self.JP2_IMAGES_DIR_PATH = unicode( os.environ[u'BELL_TASKS_IMGS__JP2_IMAGES_DIR_PATH'] )
         self.KAKADU_COMMAND_PATH = unicode( os.environ[u'BELL_TASKS_IMGS__KAKADU_COMMAND_PATH'] )
         self.CONVERT_COMMAND_PATH = unicode( os.environ[u'BELL_TASKS_IMGS__CONVERT_COMMAND_PATH'] )
-
-        # self.MASTER_IMAGES_DIR_URL = unicode( os.environ[u'BELL_TASKS_IMGS__MASTER_IMAGES_DIR_URL'] )
-        # self.JP2_IMAGES_DIR_URL = unicode( os.environ[u'BELL_TASKS_IMGS__JP2_IMAGES_DIR_URL'] )
-        # self.AUTH_API_URL = unicode( os.environ[u'BELL_TASKS_IMGS__AUTH_API_URL'] )
-        # self.AUTH_API_IDENTITY = unicode( os.environ[u'BELL_TASKS_IMGS__AUTH_API_IDENTITY'] )
-        # self.AUTH_API_KEY = unicode( os.environ[u'BELL_TASKS_IMGS__AUTH_API_KEY'] )
+        self.MASTER_IMAGES_DIR_URL = unicode( os.environ[u'BELL_TASKS_IMGS__MASTER_IMAGES_DIR_URL'] )
+        self.JP2_IMAGES_DIR_URL = unicode( os.environ[u'BELL_TASKS_IMGS__JP2_IMAGES_DIR_URL'] )
+        self.AUTH_API_URL = unicode( os.environ[u'BELL_TASKS_IMGS__AUTH_API_URL'] )
+        self.AUTH_API_IDENTITY = unicode( os.environ[u'BELL_TASKS_IMGS__AUTH_API_IDENTITY'] )
+        self.AUTH_API_KEY = unicode( os.environ[u'BELL_TASKS_IMGS__AUTH_API_KEY'] )
 
     def add_image( self, filename_dct ):
         """ Manages: creates jp2, hits api, & cleans up.
@@ -32,6 +31,7 @@ class ImageAdder( object ):
         1/0
         resp = self.hit_api()
         self.track_response( resp )
+        os.remove( destination_filepath )
         return
 
     def create_temp_filenames( self, image_filename ):
@@ -53,13 +53,14 @@ class ImageAdder( object ):
         """ Creates jp2.
             Called by add_image() """
         if u'tif' in source_filepath.split( u'.' )[-1]:
-            self._create_jp2_from_tif( self.KAKADU_COMMAND_PATH, source_filepath, destination_filepath )
+            self._create_jp2_from_tif( source_filepath, destination_filepath )
         elif u'jp' in source_filepath.split( u'.' )[-1]:
-            self._create_jp2_from_jpg( self.CONVERT_COMMAND_PATH, self.KAKADU_COMMAND_PATH, source_filepath, destination_filepath )
+            self._create_jp2_from_jpg( source_filepath, destination_filepath )
         return
 
     def _create_jp2_from_tif( self, source_filepath, destination_filepath ):
-        """ Creates jp2 directly. """
+        """ Creates jp2 directly.
+            Called by create_jp2() """
         cleaned_source_filepath = source_filepath.replace( u' ', u'\ ' )
         cmd = u'%s -i "%s" -o "%s" Creversible=yes -rate -,1,0.5,0.25 Clevels=12' % (
             self.KAKADU_COMMAND_PATH, cleaned_source_filepath, destination_filepath )
@@ -69,18 +70,19 @@ class ImageAdder( object ):
         self.logger.info( u'in tasks.images.ImageAdder._create_jp2_from_tif(); r.std_err, %s' % r.std_err )
         return
 
-    def _create_jp2_from_jpg( self, CONVERT_COMMAND_PATH, KAKADU_COMMAND_PATH, source_filepath, destination_filepath ):
-        """ Creates jp2 after first converting jpg to tif (due to server limitation). """
+    def _create_jp2_from_jpg( self, source_filepath, destination_filepath ):
+        """ Creates jp2 after first converting jpg to tif (due to server limitation).
+            Called by create_jp2() """
         cleaned_source_filepath = source_filepath.replace( u' ', u'\ ' )
-        self.logger.debug( u'in fedora_parts_builder._create_jp2_from_jpg(); cleaned_source_filepath, %s' % cleaned_source_filepath )
+        self.logger.debug( u'in tasks.images.ImageAdder._create_jp2_from_jpg(); cleaned_source_filepath, %s' % cleaned_source_filepath )
         tif_destination_filepath = destination_filepath[0:-4] + u'.tif'
-        self.logger.debug( u'in fedora_parts_builder._create_jp2_from_jpg(); tif_destination_filepath, %s' % tif_destination_filepath )
+        self.logger.debug( u'in tasks.images.ImageAdder._create_jp2_from_jpg(); tif_destination_filepath, %s' % tif_destination_filepath )
         cmd = u'%s -compress None "%s" %s' % (
             self.CONVERT_COMMAND_PATH, cleaned_source_filepath, tif_destination_filepath )  # source-filepath quotes needed for filename containing spaces
-        self.logger.debug( u'in fedora_parts_builder._create_jp2_from_jpg(); cmd, %s' % cmd )
+        self.logger.debug( u'in tasks.images.ImageAdder._create_jp2_from_jpg(); cmd, %s' % cmd )
         r = envoy.run( cmd.encode(u'utf-8', u'replace') )
-        self.logger.info( u'in fedora_parts_builder._create_jp2_from_jpg(); r.std_out, %s; type(r.std_out), %s' % (r.std_out, type(r.std_out)) )
-        self.logger.info( u'in fedora_parts_builder._create_jp2_from_jpg(); r.std_err, %s; type(r.std_err), %s' % (r.std_err, type(r.std_err)) )
+        self.logger.info( u'in tasks.images.ImageAdder._create_jp2_from_jpg(); r.std_out, %s; type(r.std_out), %s' % (r.std_out, type(r.std_out)) )
+        self.logger.info( u'in tasks.images.ImageAdder._create_jp2_from_jpg(); r.std_err, %s; type(r.std_err), %s' % (r.std_err, type(r.std_err)) )
         if len( r.std_err ) > 0:
             raise Exception( u'Problem making intermediate .tif from .jpg' )
         source_filepath = tif_destination_filepath
@@ -90,19 +92,17 @@ class ImageAdder( object ):
         os.remove( tif_destination_filepath )
         return
 
-
-    def hit_api( self ):
+    def hit_api( self, master_filename_encoded, jp2_filename, pid ):
         """ Sets params.
             Called by add_image() """
-        #Prepare api call
-        master_url = u'%s/%s' % ( MASTER_IMAGES_DIR_URL, master_filename_encoded )
-        jp2_url = u'%s/%s' % ( JP2_IMAGES_DIR_URL, jp2_filename )
+        master_url = u'%s/%s' % ( self.MASTER_IMAGES_DIR_URL, master_filename_encoded )
+        jp2_url = u'%s/%s' % ( self.JP2_IMAGES_DIR_URL, jp2_filename )
         params = { u'pid': pid }
         params[u'content_streams'] = json.dumps([
             { u'dsID': u'MASTER', u'url': master_url },
             { u'dsID': u'JP2', u'url': jp2_url }
             ])
-        r = requests.put( API_URL, data=params, verify=False )
+        r = requests.put( self.API_AUTH_URL, data=params, verify=False )
         return r
 
     def track_response( self, resp ):
