@@ -6,6 +6,95 @@ import datetime, json, os, pprint, sys, time, urllib
 import envoy, requests
 from bell_code import bell_logger
 
+
+class ImageAdder( object ):
+    """ Adds image to metadata object. """
+
+    def __init__( self, logger ):
+        self.logger = logger
+        self.MASTER_IMAGES_DIR_PATH = unicode( os.environ[u'BELL_TASKS_META__FULL_JSON_METADATA_PATH'] )
+        self.MASTER_IMAGES_DIR_URL = unicode( os.environ[u'BELL_TASKS_META__AUTH_API_URL'] )
+        self.JP2_IMAGES_DIR_PATH = unicode( os.environ[u'BELL_TASKS_META__AUTH_API_IDENTITY'] )
+        self.JP2_IMAGES_DIR_URL = unicode( os.environ[u'BELL_TASKS_META__AUTH_API_KEY'] )
+        self.API_URL = unicode( os.environ[u'BELL_TASKS_META__AUTH_API_URL'] )
+        self.API_IDENTITY = unicode( os.environ[u'BELL_TASKS_META__AUTH_API_IDENTITY'] )
+        self.API_KEY = unicode( os.environ[u'BELL_TASKS_META__AUTH_API_KEY'] )
+
+    def add_image( self, pid, item_data_dict ):
+        """ Manages: creates jp2, hits api, & cleans up.
+            Called by run_add_image() """
+        ( source_filepath, destination_filepath ) = self.create_temp_filenames()
+        self.create_jp2( source_filepath, destination_filepath )
+        print u'- jp2 created.'
+        #
+        #Prepare api call
+        master_url = u'%s/%s' % ( MASTER_IMAGES_DIR_URL, master_filename_encoded )
+        jp2_url = u'%s/%s' % ( JP2_IMAGES_DIR_URL, jp2_filename )
+        params = { u'pid': pid }
+        params[u'content_streams'] = json.dumps([
+            { u'dsID': u'MASTER', u'url': master_url },
+            { u'dsID': u'JP2', u'url': jp2_url }
+            ])
+        print u'api params prepared'
+        #
+        #Make api call
+        r = requests.put( API_URL, data=params, verify=False )
+        print u'http put executed'
+        self.logger.debug( u'in fedora_metadata_updater_and_image_builder.update_existing_metadata_and_create_image(); r.status_code, %s' % r.status_code )
+        self.logger.debug( u'in fedora_metadata_updater_and_image_builder.update_existing_metadata_and_create_image(); r.content, %s' % r.content.decode(u'utf-8') )
+        #
+        #Read response
+        resp = r.json()
+        self.logger.debug( u'in fedora_metadata_updater_and_image_builder.update_existing_metadata_and_create_image(); api_response, %s' % resp )
+        #
+        #Update logging
+        print u'- done.'
+        self._update_task_tracker( message=u'save_successful' )
+        print u'response: `%s` logged' % resp
+        #
+        #Set next task
+        task_manager.determine_next_task(
+            unicode(sys._getframe().f_code.co_name),
+            data={ u'item_data': item_data_dict, u'jp2_path': destination_filepath, u'pid': pid },
+            logger=logger
+            )
+        print u'- next task set.'
+        # done
+        return
+
+    def create_temp_filenames( self ):
+        """ Creates filenames for subsequent jp2 creation.
+            Called by add_image() """
+        #Create jp2
+        master_filename_raw = item_data_dict[u'object_image_scan_filename']  # includes spaces
+        master_filename_utf8 = master_filename_raw.encode( u'utf-8' )
+        master_filename_encoded = urllib.quote( master_filename_utf8 ).decode( u'utf-8' )
+        source_filepath = u'%s/%s' % ( MASTER_IMAGES_DIR_PATH, master_filename_raw )
+        self.logger.info( u'in fedora_metadata_updater_and_image_builder.update_existing_metadata_and_create_image(); source_filepath, %s' % source_filepath )
+        temp_jp2_filename = master_filename_raw.replace( u' ', u'_' )
+        jp2_filename = temp_jp2_filename[0:-4] + u'.jp2'
+        destination_filepath = u'%s/%s' % ( JP2_IMAGES_DIR_PATH, jp2_filename )
+        self.logger.info( u'in fedora_metadata_updater_and_image_builder.update_existing_metadata_and_create_image(); destination_filepath, %s' % destination_filepath )
+        return ( source_filepath, destination_filepath )
+
+    def create_jp2( self, source_filepath, destination_filepath ):
+        """ Creates jp2.
+            Called by add_image() """
+        self.logger.debug( u'in fedora_parts_builder._create_jp2(); source_filepath, %s' % source_filepath )
+        self.logger.debug( u'in fedora_parts_builder._create_jp2(); destination_filepath, %s' % destination_filepath )
+        KAKADU_COMMAND_PATH = unicode( os.environ.get(u'BELL_FPB__KAKADU_COMMAND_PATH') )
+        CONVERT_COMMAND_PATH = unicode( os.environ.get(u'BELL_FPB__CONVERT_COMMAND_PATH') )
+        if source_filepath.split( u'.' )[-1] == u'tif':
+            self.logger.debug( u'in fedora_parts_builder._create_jp2(); in `tif` handling' )
+            self._create_jp2_from_tif( KAKADU_COMMAND_PATH, source_filepath, destination_filepath )
+        elif source_filepath.split( u'.' )[-1] == u'jpg':
+            self.logger.debug( u'in fedora_parts_builder._create_jp2(); in `jpg` handling' )
+            self._create_jp2_from_jpg( CONVERT_COMMAND_PATH, KAKADU_COMMAND_PATH, source_filepath, destination_filepath )
+        return
+
+    # end class ImageAdder
+
+
 class ImageLister( object ):
     """ Lists images that need to be added, and those that need to be updated. """
 
@@ -100,6 +189,8 @@ class ImageLister( object ):
         with open( self.IMAGES_TO_PROCESS_OUTPUT_PATH, u'w' ) as f:
             f.write( jsn )
         return
+
+    # end class ImageLister
 
 
 ## runners
