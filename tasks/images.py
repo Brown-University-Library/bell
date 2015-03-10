@@ -26,9 +26,9 @@ class ImageAdder( object ):
         """ Manages: creates jp2, hits api, & cleans up.
             Called by run_add_image() """
         logger.debug( u'in tasks.images.ImageAdder.add_image(); starting; filename_dct, `%s`' % pprint.pformat(filename_dct) )
-        ( source_filepath, destination_filepath ) = self.create_temp_filenames( filename_dct.keys()[0] )
+        ( source_filepath, destination_filepath, master_filename_encoded, jp2_filename ) = self.create_temp_filenames( filename_dct.keys()[0] )
         self.create_jp2( source_filepath, destination_filepath )
-        resp = self.hit_api()
+        resp = self.hit_api( master_filename_encoded, jp2_filename, pid )
         self.track_response( resp )
         os.remove( destination_filepath )
         return
@@ -38,7 +38,7 @@ class ImageAdder( object ):
             Called by add_image() """
         master_filename_raw = image_filename  # includes spaces
         master_filename_utf8 = master_filename_raw.encode( u'utf-8' )
-        master_filename_encoded = urllib.quote( master_filename_utf8 ).decode( u'utf-8' )
+        master_filename_encoded = urllib.quote( master_filename_utf8 ).decode( u'utf-8' )  # used for api call
         source_filepath = u'%s/%s' % ( self.MASTER_IMAGES_DIR_PATH, master_filename_raw )
         temp_jp2_filename = master_filename_raw.replace( u' ', u'_' )
         extension_idx = temp_jp2_filename.rfind( u'.' )
@@ -46,7 +46,7 @@ class ImageAdder( object ):
         jp2_filename = temp_jp2_filename + u'.jp2'
         destination_filepath = u'%s/%s' % ( self.JP2_IMAGES_DIR_PATH, jp2_filename )
         logger.debug( u'in tasks.images.ImageAdder.create_temp_filenames(); source_filepath, `%s`; destination_filepath, `%s`' % ( source_filepath, destination_filepath ) )
-        return ( source_filepath, destination_filepath )
+        return ( source_filepath, destination_filepath, master_filename_encoded, jp2_filename )
 
     def create_jp2( self, source_filepath, destination_filepath ):
         """ Creates jp2.
