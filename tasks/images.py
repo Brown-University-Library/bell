@@ -104,6 +104,7 @@ class ImageAdder( object ):
             { u'dsID': u'MASTER', u'url': master_url },
             { u'dsID': u'JP2', u'url': jp2_url }
             ])
+        self.logger.info( u'in tasks.images.ImageAdder.prep_params(); params/content_streams, `%s`' % params[u'content_streams'] )
         return params
 
     def hit_api( self, params ):
