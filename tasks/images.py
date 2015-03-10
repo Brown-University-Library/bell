@@ -103,14 +103,15 @@ class ImageAdder( object ):
             { u'dsID': u'MASTER', u'url': master_url },
             { u'dsID': u'JP2', u'url': jp2_url }
             ])
-        r = requests.put( self.API_AUTH_URL, data=params, verify=False )
+        r = requests.put( self.AUTH_API_URL, data=params, verify=False )
         return r
 
     def track_response( self, resp ):
         """ Outputs put result.
             Called by add_image() """
-        print u'text, `%s`' % r.content.decode( u'utf-8' )
-        pprint.pprint( r.json )
+        resp_txt = resp.content.decode( u'utf-8' )
+        self.logger.info( u'in tasks.images.ImageAdder.track_response(); resp_txt, `%s`; status_code, `%s`' % ( resp_txt, resp.status_code )
+        print u'resp_txt, `%s`' % resp_txt
         return
 
     # end class ImageAdder
