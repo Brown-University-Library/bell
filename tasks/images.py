@@ -110,7 +110,7 @@ class ImageAdder( object ):
         """ Outputs put result.
             Called by add_image() """
         resp_txt = resp.content.decode( u'utf-8' )
-        self.logger.info( u'in tasks.images.ImageAdder.track_response(); resp_txt, `%s`; status_code, `%s`' % ( resp_txt, resp.status_code )
+        self.logger.info( u'in tasks.images.ImageAdder.track_response(); resp_txt, `%s`; status_code, `%s`' % (resp_txt, resp.status_code) )
         print u'resp_txt, `%s`' % resp_txt
         return
 
