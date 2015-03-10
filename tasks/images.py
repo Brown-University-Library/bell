@@ -26,8 +26,10 @@ class ImageAdder( object ):
         """ Manages: creates jp2, hits api, & cleans up.
             Called by run_add_image() """
         logger.debug( u'in tasks.images.ImageAdder.add_image(); starting; filename_dct, `%s`' % pprint.pformat(filename_dct) )
-        ( source_filepath, destination_filepath, master_filename_encoded, jp2_filename ) = self.create_temp_filenames( filename_dct.keys()[0] )
+        image_filename = filename_dct.keys()[0]
+        ( source_filepath, destination_filepath, master_filename_encoded, jp2_filename ) = self.create_temp_filenames( image_filename )
         self.create_jp2( source_filepath, destination_filepath )
+        pid = filename_dct[image_filename][u'pid']
         resp = self.hit_api( master_filename_encoded, jp2_filename, pid )
         self.track_response( resp )
         os.remove( destination_filepath )
