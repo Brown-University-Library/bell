@@ -28,7 +28,6 @@ class ImageAdder( object ):
         logger.debug( u'in tasks.images.ImageAdder.add_image(); starting; filename_dct, `%s`' % pprint.pformat(filename_dct) )
         ( source_filepath, destination_filepath ) = self.create_temp_filenames( filename_dct.keys()[0] )
         self.create_jp2( source_filepath, destination_filepath )
-        1/0
         resp = self.hit_api()
         self.track_response( resp )
         os.remove( destination_filepath )
