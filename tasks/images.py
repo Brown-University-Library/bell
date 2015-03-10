@@ -99,7 +99,7 @@ class ImageAdder( object ):
             Called by add_image() """
         master_url = u'%s/%s' % ( self.MASTER_IMAGES_DIR_URL, master_filename_encoded )
         jp2_url = u'%s/%s' % ( self.JP2_IMAGES_DIR_URL, jp2_filename )
-        params = { u'pid': pid }
+        params = { u'pid': pid, u'identity': self.AUTH_API_IDENTITY, u'authorization_code': self.AUTH_API_KEY }
         params[u'content_streams'] = json.dumps([
             { u'dsID': u'MASTER', u'url': master_url },
             { u'dsID': u'JP2', u'url': jp2_url }
@@ -116,23 +116,6 @@ class ImageAdder( object ):
             err = unicode(repr(e))
             self.logger.error( u'in tasks.images.ImageAdder.hit_api(); error, `%s`' % err )
             raise Exception( err )
-
-    # def hit_api( self, master_filename_encoded, jp2_filename, pid ):
-    #     """ Sets params.
-    #         Called by add_image() """
-    #     master_url = u'%s/%s' % ( self.MASTER_IMAGES_DIR_URL, master_filename_encoded )
-    #     jp2_url = u'%s/%s' % ( self.JP2_IMAGES_DIR_URL, jp2_filename )
-    #     params = { u'pid': pid }
-    #     params[u'content_streams'] = json.dumps([
-    #         { u'dsID': u'MASTER', u'url': master_url },
-    #         { u'dsID': u'JP2', u'url': jp2_url } ])
-    #     try:
-    #         r = requests.put( self.AUTH_API_URL, data=params, verify=False )
-    #         return r
-    #     except Exception as e:
-    #         err = unicode(repr(e))
-    #         self.logger.error( u'in tasks.images.ImageAdder.hit_api(); error, `%s`' % err )
-    #         raise Exception( err )
 
     def track_response( self, resp ):
         """ Outputs put result.
