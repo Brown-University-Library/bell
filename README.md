@@ -38,10 +38,11 @@ code related to ingesting bell-gallery images into the bdr.
     - after creates, confirm a re-run of `foundation/acc_num_to_pid.py` results in zero non-pid matches.
     - status: done; march-6.
 
-- make list of images to add
-    - tasks/images.ImagesToAddLister.list_images()
-    - end result: `g_images_to_add.json`
-    - status: not done
+- make list of images to process
+    - tasks/images.ImageLister.make_image_lists()
+    - produces a file containing both a list of images to add, and a list of images to update
+    - end result: `g_images_to_process.json`
+    - status: in process
 
 - add images
     - after adds, confirm a re-run of `tasks/images.ImagesToAddLister.list_images()` results in zero images-to-add
