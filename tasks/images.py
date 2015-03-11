@@ -3,8 +3,13 @@
 """ Handles image-related tasks. """
 
 import datetime, json, os, pprint, sys, time, urllib
-import envoy, requests
+import envoy, redis, requests, rq
 from bell_code import bell_logger
+
+
+queue_name = unicode( os.environ.get(u'BELL_QUEUE_NAME') )
+q = rq.Queue( queue_name, connection=redis.Redis() )
+r = redis.StrictRedis( host='localhost', port=6379, db=0 )
 
 
 class ImageLister( object ):
