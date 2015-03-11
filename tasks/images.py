@@ -135,7 +135,6 @@ class ImageAdder( object ):
         self.create_jp2( source_filepath, destination_filepath )
         pid = filename_dct[image_filename][u'pid']
         params = self.prep_params( master_filename_encoded, jp2_filename, pid )
-        1/0
         resp = self.hit_api( params )
         self.track_response( resp )
         os.remove( destination_filepath )
