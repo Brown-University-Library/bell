@@ -178,7 +178,8 @@ def run_enqueue_create_metadata_only_jobs():
             break
         q.enqueue_call(
           func=u'bell_code.tasks.metadata.run_create_metadata_only_object',
-          kwargs={ u'accession_number': accession_number } )
+          kwargs={ u'accession_number': accession_number },
+          timeout=600 )
     print u'done'
     return
 

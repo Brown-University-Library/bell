@@ -272,8 +272,9 @@ def run_enqueue_add_image_jobs():
         if i+1 > 1:
             break
         q.enqueue_call(
-          func=u'bell_code.tasks.images.run_add_image',
-          kwargs={ u'filename_dct': filename_dct } )
+            func=u'bell_code.tasks.images.run_add_image',
+            kwargs={ u'filename_dct': filename_dct },
+            timeout=600 )
     print u'done'
     return
 
