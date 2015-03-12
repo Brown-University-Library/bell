@@ -243,6 +243,8 @@ class ImageAdder( object ):
         resp_txt = resp.content.decode( u'utf-8' )
         self.logger.info( u'in tasks.images.ImageAdder.track_response(); resp_txt, `%s`; status_code, `%s`' % (resp_txt, resp.status_code) )
         print u'resp_txt, `%s`' % resp_txt
+        if not resp.status_code == 200:
+            raise Exception( u'Bad http status code detected.' )
         return
 
     # end class ImageAdder
