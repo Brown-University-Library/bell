@@ -230,7 +230,7 @@ class ImageAdder( object ):
         """ Hits auth-api.
             Called by add_image() """
         try:
-            self.logger.info( u'in tasks.images.ImageAdder.hit_api(); url, `%s`; identity, `%s`; pid, `%s`' % (self.AUTH_API_URL, params[u'identity'], pid) )
+            self.logger.info( u'in tasks.images.ImageAdder.hit_api(); url, `%s`; identity, `%s`; pid, `%s`' % (self.AUTH_API_URL, params[u'identity'], params[u'pid']) )
             r = requests.put( self.AUTH_API_URL, data=params, verify=False )
             return r
         except Exception as e:
