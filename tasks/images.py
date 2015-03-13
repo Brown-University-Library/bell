@@ -230,6 +230,7 @@ class ImageAdder( object ):
         """ Hits auth-api.
             Called by add_image() """
         try:
+            self.logger.info( u'in tasks.images.ImageAdder.hit_api(); url, `%s`; identity, `%s`; pid, `%s`' % (self.AUTH_API_URL, params[u'identity'], params[u'pid']) )
             r = requests.put( self.AUTH_API_URL, data=params, verify=False )
             return r
         except Exception as e:
@@ -243,6 +244,8 @@ class ImageAdder( object ):
         resp_txt = resp.content.decode( u'utf-8' )
         self.logger.info( u'in tasks.images.ImageAdder.track_response(); resp_txt, `%s`; status_code, `%s`' % (resp_txt, resp.status_code) )
         print u'resp_txt, `%s`' % resp_txt
+        if not resp.status_code == 200:
+            raise Exception( u'Bad http status code detected.' )
         return
 
     # end class ImageAdder
@@ -269,7 +272,7 @@ def run_enqueue_add_image_jobs():
     images_to_add = dct[u'lst_images_to_add']  # each lst entry is like: { "Agam PR_1981.1694.tif": {"accession_number": "PR 1981.1694", "pid": "bdr:300120"} }
     for (i, filename_dct) in enumerate( images_to_add ):
         print u'i is, `%s`' % i
-        if i+1 > 1:
+        if i+1 > 500:
             break
         q.enqueue_call(
             func=u'bell_code.tasks.images.run_add_image',
