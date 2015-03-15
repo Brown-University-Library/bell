@@ -21,7 +21,7 @@ def make_jp2_and_overwrite_existing_image():
         unicode(os.environ[u'BELL_ONEOFF_ADD_IMAGE__RAW_MASTER_FILENAME']),
         unicode(os.environ[u'BELL_ONEOFF_ADD_IMAGE__ACCESSION_NUMBER']),
         unicode(os.environ[u'BELL_ONEOFF_ADD_IMAGE__PID']) )
-    file_dct = {
+    filename_dct = {
         RAW_MASTER_FILENAME: {u'accession_number': ACCESSION_NUMBER, u'pid': PID} }
     adder = images.ImageAdder( logger )
     adder.add_image( filename_dct )
