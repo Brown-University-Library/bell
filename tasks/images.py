@@ -205,7 +205,7 @@ class ImageAdder( object ):
             Called by add_image() """
         params = { u'pid': pid, u'identity': self.AUTH_API_IDENTITY, u'authorization_code': self.AUTH_API_KEY }
         if overwrite == True:
-            params[u'overwrite_content'] == u'yes'
+            params[u'overwrite_content'] = u'yes'
         master_url = u'%s/%s' % ( self.MASTER_IMAGES_DIR_URL, master_filename_encoded )
         jp2_url = u'%s/%s' % ( self.JP2_IMAGES_DIR_URL, jp2_filename )
         params[u'content_streams'] = json.dumps([
