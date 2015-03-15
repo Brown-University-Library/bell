@@ -3,6 +3,7 @@
 """ Calls tasks.images.py functions to do work. """
 
 # import imghdr, json, logging, os, pprint
+import os
 import logging.handlers
 import requests
 from bell_code import bell_logger
