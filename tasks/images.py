@@ -150,8 +150,9 @@ class ImageAdder( object ):
         master_filename_encoded = urllib.quote( master_filename_utf8 ).decode( u'utf-8' )  # used for api call
         source_filepath = u'%s/%s' % ( self.MASTER_IMAGES_DIR_PATH, master_filename_raw )
         temp_jp2_filename = master_filename_raw.replace( u' ', u'_' )
-        extension_idx = temp_jp2_filename.rfind( u'.' )
-        non_extension_filename = temp_jp2_filename[0:extension_idx]
+        temp_jp2_filename2 = temp_jp2_filename.replace( u"'", u'_' )
+        extension_idx = temp_jp2_filename2.rfind( u'.' )
+        non_extension_filename = temp_jp2_filename2[0:extension_idx]
         jp2_filename = non_extension_filename + u'.jp2'
         destination_filepath = u'%s/%s' % ( self.JP2_IMAGES_DIR_PATH, jp2_filename )
         logger.debug( u'in tasks.images.ImageAdder.create_temp_filenames(); source_filepath, `%s`; destination_filepath, `%s`' % ( source_filepath, destination_filepath ) )
@@ -169,9 +170,10 @@ class ImageAdder( object ):
     def _create_jp2_from_tif( self, source_filepath, destination_filepath ):
         """ Creates jp2 directly.
             Called by create_jp2() """
-        cleaned_source_filepath = source_filepath.replace( u' ', u'\ ' )
+        source_filepath2 = source_filepath.replace( u' ', u'\ ' )
+        source_filepath3 = source_filepath2.replace( u"'", u"\\'" )
         cmd = u'%s -i "%s" -o "%s" Creversible=yes -rate -,1,0.5,0.25 Clevels=12' % (
-            self.KAKADU_COMMAND_PATH, cleaned_source_filepath, destination_filepath )
+            self.KAKADU_COMMAND_PATH, source_filepath3, destination_filepath )
         self.logger.info( u'in tasks.images.ImageAdder._create_jp2_from_tif(); cmd, %s' % cmd )
         r = envoy.run( cmd.encode(u'utf-8', u'replace') )  # envoy requires a non-unicode string
         self.logger.info( u'in tasks.images.ImageAdder._create_jp2_from_tif(); r.std_out, %s' % r.std_out )
