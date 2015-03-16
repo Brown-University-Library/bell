@@ -45,10 +45,12 @@ code related to ingesting bell-gallery images into the bdr.
     - status: done; march-9.
 
 - add images
+    - tasks/images.run_enqueue_add_image_jobs() -- and tasks/images.run_add_image( filename_dct )
     - many iterations; permissions issues; Meyerowitz fixes; apostrophe-in-filename handling.
     - status: done; march-16.
 
 - update the custom-solr-index
+    - one-offs/rebuild_custom_index.py
     - status: in-process
 
 - let Bell-J.C. & CIS-J.O. know when done
