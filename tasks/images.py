@@ -142,10 +142,11 @@ class ImageAdder( object ):
         os.remove( destination_filepath )
         return
 
-    def create_temp_filenames( self, image_filename ):
+    def create_temp_filenames( self, master_filename_raw ):
         """ Creates filenames for subsequent jp2 creation.
-            Called by add_image() """
-        master_filename_raw = image_filename  # includes spaces
+            Called by add_image()
+            Note, master_filename_raw likely includes spaces and may include apostrophes,
+              and self.MASTER_IMAGES_DIR_PATH may include spaces. """
         master_filename_utf8 = master_filename_raw.encode( u'utf-8' )
         master_filename_encoded = urllib.quote( master_filename_utf8 ).decode( u'utf-8' )  # used for api call
         source_filepath = u'%s/%s' % ( self.MASTER_IMAGES_DIR_PATH, master_filename_raw )
