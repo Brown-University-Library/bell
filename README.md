@@ -50,8 +50,24 @@ code related to ingesting bell-gallery images into the bdr.
     - status: done; march-16.
 
 - update the custom-solr-index
-    - one-offs/rebuild_custom_index.py
-    - status: in-process
+    - prep list of pids from bdr
+        - tasks/indexer.run_make_pids_from_bdr_list()
+        - end result: `h__pids_from_bdr_list.json`
+    - prep pids to update list
+        - tasks/indexer.run_make_pids_to_update_list()
+        - end result: `i__pids_to_update_list.json`
+    - prep pids to delete lists
+        - tasks/indexer.run_make_pids_to_update_list()
+        - end result: `j__pids_to_delete_lists.json`
+        - NOTE: This contains a dict of two lists, pids-to-delete-from-the-custom-index, and pids-to-delete-from-the-bdr.
+                Review carefully.
+    - run updates
+        - tasks/indexer.run_update_pids()
+        - end result: `k__pids_updated_list.json`
+    - run deletes
+        - tasks/indexer.run_delete_pids()
+        - end result: `l__pids_deleted_lists.json`
+    - status: at `prep list of pids from bdr`
 
 - let Bell-J.C. & CIS-J.O. know when done
     - status: not done
