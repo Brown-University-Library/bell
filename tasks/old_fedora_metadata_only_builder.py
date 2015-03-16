@@ -183,8 +183,8 @@ if __name__ == u'__main__':
     FEDORA_ADMIN_USERNAME=unicode( os.environ.get(u'BELL_FMOB__FEDORA_ADMIN_USERNAME') )
     FEDORA_ADMIN_PASSWORD=unicode( os.environ.get(u'BELL_FMOB__FEDORA_ADMIN_PASSWORD') )
     COLLECTION_PID=unicode( os.environ.get(u'BELL_FMOB__COLLECTION_PID') )
-    with open( os.path.abspath(u'./tasks/test_data/raw_source_single_artist.json') ) as f:
-        item_data_dict = json.loads( f.read() )
+    # with open( os.path.abspath(u'./tasks/test_data/raw_source_single_artist.json') ) as f:
+    #     item_data_dict = json.loads( f.read() )
     mods_schema_path = os.path.abspath( u'./lib/mods-3-4.xsd' )
     #work...
     task = Task()
