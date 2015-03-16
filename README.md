@@ -42,29 +42,14 @@ code related to ingesting bell-gallery images into the bdr.
     - tasks/images.ImageLister.make_image_lists()
     - produces a file containing both a list of images to add, and a list of images to update
     - end result: `g_images_to_process.json`
-    - status: in process
+    - status: done; march-9.
 
 - add images
-    - after adds, confirm a re-run of `tasks/images.ImagesToAddLister.list_images()` results in zero images-to-add
-    - status: not done
+    - many iterations; permissions issues; Meyerowitz fixes; apostrophe-in-filename handling.
+    - status: done; march-16.
 
-- make metadata-update list
-    - TODO
-    - end result: `metadata_updates.json`
-    - status: not done
-
-- update metadata objects
-    - status: not done
-
-- make image-replace list
-    - TODO
-    - end result: `image_replacements.json`
-    - status: not done
-
-- replace images
-
-- run a final check to make sure the custom-solr-index and the updated fedora data match
-    - status: not done
+- update the custom-solr-index
+    - status: in-process
 
 - let Bell-J.C. & CIS-J.O. know when done
     - status: not done
