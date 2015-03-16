@@ -112,7 +112,7 @@ class ImageLister( object ):
 
 
 class ImageAdder( object ):
-    """ Adds image to metadata object. """
+    """ Adds image to object. """
 
     def __init__( self, logger ):
         self.logger = logger
@@ -125,6 +125,8 @@ class ImageAdder( object ):
         self.AUTH_API_URL = unicode( os.environ[u'BELL_TASKS_IMGS__AUTH_API_URL'] )
         self.AUTH_API_IDENTITY = unicode( os.environ[u'BELL_TASKS_IMGS__AUTH_API_IDENTITY'] )
         self.AUTH_API_KEY = unicode( os.environ[u'BELL_TASKS_IMGS__AUTH_API_KEY'] )
+        self.OVERWRITE_EXISTING_IMAGE = json.loads( unicode( os.environ[u'BELL_TASKS_OVERWRITE_EXISTING_IMAGE']) )
+        assert type( self.OVERWRITE_EXISTING_IMAGE ) == bool, type( self.OVERWRITE_EXISTING_IMAGE )
 
     def add_image( self, filename_dct ):
         """ Manages: creates jp2, hits api, & cleans up.
@@ -134,41 +136,28 @@ class ImageAdder( object ):
         ( source_filepath, destination_filepath, master_filename_encoded, jp2_filename ) = self.create_temp_filenames( image_filename )
         self.create_jp2( source_filepath, destination_filepath )
         pid = filename_dct[image_filename][u'pid']
-        params = self.prep_params( master_filename_encoded, jp2_filename, pid )
+        params = self.prep_params( master_filename_encoded, jp2_filename, pid, self.OVERWRITE_EXISTING_IMAGE )
         resp = self.hit_api( params )
         self.track_response( resp )
         os.remove( destination_filepath )
         return
 
-    def create_temp_filenames( self, image_filename ):
+    def create_temp_filenames( self, master_filename_raw ):
         """ Creates filenames for subsequent jp2 creation.
-            Called by add_image() """
-        master_filename_raw = image_filename  # includes spaces
+            Called by add_image()
+            Note, master_filename_raw likely includes spaces and may include apostrophes,
+              and self.MASTER_IMAGES_DIR_PATH may include spaces. """
         master_filename_utf8 = master_filename_raw.encode( u'utf-8' )
         master_filename_encoded = urllib.quote( master_filename_utf8 ).decode( u'utf-8' )  # used for api call
         source_filepath = u'%s/%s' % ( self.MASTER_IMAGES_DIR_PATH, master_filename_raw )
         temp_jp2_filename = master_filename_raw.replace( u' ', u'_' )
-        extension_idx = temp_jp2_filename.rfind( u'.' )
-        non_extension_filename = temp_jp2_filename[0:extension_idx]
+        temp_jp2_filename2 = temp_jp2_filename.replace( u"'", u'_' )
+        extension_idx = temp_jp2_filename2.rfind( u'.' )
+        non_extension_filename = temp_jp2_filename2[0:extension_idx]
         jp2_filename = non_extension_filename + u'.jp2'
         destination_filepath = u'%s/%s' % ( self.JP2_IMAGES_DIR_PATH, jp2_filename )
         logger.debug( u'in tasks.images.ImageAdder.create_temp_filenames(); source_filepath, `%s`; destination_filepath, `%s`' % ( source_filepath, destination_filepath ) )
         return ( source_filepath, destination_filepath, master_filename_encoded, jp2_filename )
-
-    # def create_temp_filenames( self, image_filename ):
-    #     """ Creates filenames for subsequent jp2 creation.
-    #         Called by add_image() """
-    #     master_filename_raw = image_filename  # includes spaces
-    #     master_filename_utf8 = master_filename_raw.encode( u'utf-8' )
-    #     master_filename_encoded = urllib.quote( master_filename_utf8 ).decode( u'utf-8' )  # used for api call
-    #     source_filepath = u'%s/%s' % ( self.MASTER_IMAGES_DIR_PATH, master_filename_raw )
-    #     temp_jp2_filename = master_filename_raw.replace( u' ', u'_' )
-    #     extension_idx = temp_jp2_filename.rfind( u'.' )
-    #     non_extension_filename = temp_jp2_filename[0:extension_idx]
-    #     jp2_filename = temp_jp2_filename + u'.jp2'
-    #     destination_filepath = u'%s/%s' % ( self.JP2_IMAGES_DIR_PATH, jp2_filename )
-    #     logger.debug( u'in tasks.images.ImageAdder.create_temp_filenames(); source_filepath, `%s`; destination_filepath, `%s`' % ( source_filepath, destination_filepath ) )
-    #     return ( source_filepath, destination_filepath, master_filename_encoded, jp2_filename )
 
     def create_jp2( self, source_filepath, destination_filepath ):
         """ Creates jp2.
@@ -182,9 +171,10 @@ class ImageAdder( object ):
     def _create_jp2_from_tif( self, source_filepath, destination_filepath ):
         """ Creates jp2 directly.
             Called by create_jp2() """
-        cleaned_source_filepath = source_filepath.replace( u' ', u'\ ' )
+        source_filepath2 = source_filepath.replace( u' ', u'\ ' )
+        source_filepath3 = source_filepath2.replace( u"'", u"\\'" )
         cmd = u'%s -i "%s" -o "%s" Creversible=yes -rate -,1,0.5,0.25 Clevels=12' % (
-            self.KAKADU_COMMAND_PATH, cleaned_source_filepath, destination_filepath )
+            self.KAKADU_COMMAND_PATH, source_filepath3, destination_filepath )
         self.logger.info( u'in tasks.images.ImageAdder._create_jp2_from_tif(); cmd, %s' % cmd )
         r = envoy.run( cmd.encode(u'utf-8', u'replace') )  # envoy requires a non-unicode string
         self.logger.info( u'in tasks.images.ImageAdder._create_jp2_from_tif(); r.std_out, %s' % r.std_out )
@@ -213,12 +203,14 @@ class ImageAdder( object ):
         os.remove( tif_destination_filepath )
         return
 
-    def prep_params( self, master_filename_encoded, jp2_filename, pid ):
+    def prep_params( self, master_filename_encoded, jp2_filename, pid, overwrite ):
         """ Sets params.
             Called by add_image() """
+        params = { u'pid': pid, u'identity': self.AUTH_API_IDENTITY, u'authorization_code': self.AUTH_API_KEY }
+        if overwrite == True:
+            params[u'overwrite_content'] = u'yes'
         master_url = u'%s/%s' % ( self.MASTER_IMAGES_DIR_URL, master_filename_encoded )
         jp2_url = u'%s/%s' % ( self.JP2_IMAGES_DIR_URL, jp2_filename )
-        params = { u'pid': pid, u'identity': self.AUTH_API_IDENTITY, u'authorization_code': self.AUTH_API_KEY }
         params[u'content_streams'] = json.dumps([
             { u'dsID': u'MASTER', u'url': master_url },
             { u'dsID': u'JP2', u'url': jp2_url }

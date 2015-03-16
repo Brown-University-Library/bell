@@ -6,7 +6,7 @@
     Adds jp2 and master to given bdr-pid.
     Does _not_ update custom index. """
 
-import imghdr, json, logging, os, pprint, urllib
+import imghdr, json, logging, os, pprint
 import logging.handlers
 import requests
 from bell_code import bell_logger

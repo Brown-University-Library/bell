@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 import json, os, pprint, unittest
-import indexer
+from bell_code.tasks import indexer
 from bell_code import bell_logger
 
 logger = bell_logger.setup_logger()
@@ -10,17 +10,17 @@ logger = bell_logger.setup_logger()
 """ To run tests:
     - activate v-env
     - cd into bell_code dir
-    - All tests:
-      python ./tasks/test_indexer.py
+    - All tests in this file:
+      python ./tests/indexer_tests.py
     - Single test:
-      python ./tasks/test_indexer.py Indexer_Test.test__build_metadata_only_solr_dict """
+      python ./tests/indexer_tests.py Indexer_Test.test__build_metadata_only_solr_dict """
 
 
 class Indexer_Test(unittest.TestCase):
     """ Tests indexer.py code.
         Note, test_original_data is a mishmash of real data; it's just for testing. """
 
-    test_original_data = {
+    sample_original_data = {
         u'pid': u'bdr:10975',
         u'item_data': {
             u'ARTISTS::artist_alias': [None],
@@ -62,7 +62,7 @@ class Indexer_Test(unittest.TestCase):
             }
         }
 
-    test_expected_metadata_only_result = {
+    sample_expected_metadata_only_result = {
         u'accession_number_original': u'B 1979.1204',
         u'author_birth_date': [u'1937'],
         u'author_date': [u'1937'],
@@ -92,7 +92,7 @@ class Indexer_Test(unittest.TestCase):
         u'title': u'Suite of Daze'
         }
 
-    test_expected_metadata_and_image_result = {
+    sample_expected_metadata_and_image_result = {
         u'accession_number_original': u'B 1979.1204',
         u'author_birth_date': [u'1937'],
         u'author_date': [u'1937'],
@@ -125,29 +125,16 @@ class Indexer_Test(unittest.TestCase):
     def test__build_metadata_only_solr_dict(self):
         """ Tests solr_dict creation. """
         idxr = indexer.Indexer( logger )
-        result = idxr.build_metadata_only_solr_dict( self.test_original_data[u'pid'], self.test_original_data[u'item_data'] )
-        pprint.pprint( result )
-        self.assertEquals(
-            self.test_expected_metadata_only_result,
-            idxr.build_metadata_only_solr_dict( u'bdr:10975', self.test_original_data )
-            )
+        expected_dct = self.sample_expected_metadata_only_result
+        result_dct = idxr.build_metadata_only_solr_dict( self.sample_original_data[u'pid'], self.sample_original_data[u'item_data'] )
+        # pprint.pprint( result )
+        for ( result_key, result_value ) in result_dct.items():
+            print u'- result_key, `%s`' % result_key
+            expected_value = expected_dct[result_key]
+            self.assertEquals(
+                expected_value, result_value )
 
-    # def test__build_metadata_only_solr_dict(self):
-    #     """ Tests solr_dict creation. """
-    #     expected = self.test_expected_metadata_only_result
-    #     result = indexer.build_metadata_only_solr_dict( self.test_original_data )
-    #     # pprint.pprint( result )
-    #     self.assertEquals( expected, result )
-
-
-    # def test__build_metadata_and_image_solr_dict(self):
-    #     """ Tests solr_dict creation. """
-    #     expected = self.test_expected_metadata_and_image_result
-    #     result = indexer.build_metadata_and_image_solr_dict( self.test_original_data )
-    #     # pprint.pprint( result )
-    #     self.assertEquals( expected, result )
-
-    # end class Indexer_Test()
+    # end class Indexer_Test
 
 
 
