@@ -1,15 +1,19 @@
 # -*- coding: utf-8 -*-
 
-""" Reindexes a list of pids.
-    Iterates through them, updating custom index.
+""" Reindexes -- in the bell custom index -- a list of pids.
+    Iterates through them, updating the custom index.
         - Checks:
             - accession number in correct place.
             - bell_meta datastream exists.
             - (future) existence of both jp2 and master if either exists
             - (future) initial stream check on jp2 and master image
     If list contains string 'all',
-        - all bell collection pids will be reindexed (custom index).
-        - any custom-index entries not in full-pid-list will be removed. """
+        - all bell collection pids will be reindexed (in custom index).
+        - any custom-index entries not in full-pid-list will be removed.
+    Notes:
+        - Assumes env is activated.
+        - 'UCI' used as a namespace prefix for this 'update_custom_index.py' file.
+    See `if __name__ == u'__main__'` for examples of how to call this code. """
 
 import argparse, json, os, pprint, sys, time
 import redis, requests, rq
@@ -122,8 +126,14 @@ def run_reindexer( pid ):
 
 
 if __name__ == u'__main__':
-    """ Assumes env is activated.
-        ( 'UCI' used as a namespace prefix for this 'update_custom_index.py' file. ) """
+    """ Called manually.
+        Note: pids string must be json.
+        Example call for single pid:
+            $ python ./utils/update_custom_index.py --pids '["abc"]'
+        Example call for multiple pids:
+            $ python ./utils/update_custom_index.py --pids '["abc", "def"]'
+        Call to process _all_ pids:
+            $ python ./utils/update_custom_index.py --pids '["all"]' """
     reindexer = Reindexer( kwargs={u'solr_root_url': unicode(os.environ.get(u'BELL_I_SOLR_ROOT'))} )
     args = parse_args()
     pid_list = json.loads( args[u'pids'] )
