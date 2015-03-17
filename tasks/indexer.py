@@ -16,7 +16,7 @@ class CustomIndexPidsLister( object ):
     def __init__( self, logger=None ):
         self.logger = logger
         self.BELL_CUSTOM_IDX_ROOT_URL = unicode( os.environ[u'BELL_TASKS_IDXR__BELL_CUSTOM_IDX_ROOT_URL'] )
-        self.OUTPUT_PATH = unicode( os.environ[u'BELL_TASKS_IDXR__CUSTOM_IDX_PIDS_JSON_PATH'] )
+        self.OUTPUT_PATH = unicode( os.environ[u'BELL_TASKS_IDXR__CUSTOM_IDX_DELETES_PIDS_JSON_PATH'] )
 
     def grab_custom_index_pids( self ):
         """ Manages calls to create `h__pids_from_custom_index_list.json`.
@@ -51,54 +51,60 @@ class CustomIndexPidsLister( object ):
     # end class CustomIndexPidsLister
 
 
-class UpdateAndDeletePidsLister( object ):
+class DeletePidsLister( object ):
     """ Prepares lists of custom-solr items to be created/updated, and removed. """
 
     def __init__( self, logger=None ):
         self.logger = logger
-        self.BELL_SOURCE_DATA_JSON_PATH = unicode( os.environ[u'BELL_SOURCE_DATA_JSON_PATH'] )
-        self.BDR_PIDS_JSON_PATH = unicode( os.environ[u'BELL_TASKS_IDXR__BDR_PIDS_JSON_PATH'] )
+        self.BELL_SOURCE_DATA_JSON_PATH = unicode( os.environ[u'BELL_TASKS_IDXR__BELL_SOURCE_DATA_JSON_PATH'] )
+        self.CUSTOM_IDX_PIDS_JSON_PATH = unicode( os.environ[u'BELL_TASKS_IDXR__CUSTOM_IDX_PIDS_JSON_PATH'] )
+        self.OUTPUT_PATH = unicode( os.environ[u'BELL_TASKS_IDXR__CUSTOM_IDX_DELETES_PIDS_JSON_PATH'] )
 
-    def make_update_and_delete_pids_lists( self ):
+    def make_delete_pids_list( self ):
         """ Manages the creation of lists of pids to add/update, and to delete.
             Called by run_make_pids_from_bdr_list() """
         pids_from_xml_dump = self.make_xml_pids()
-        pids_from_bdr = self.grab_bdr_pids()
         pids_from_custom_index = self.grab_custom_index_pids()
-        ( adds_or_updates, deletes ) = self.prepare_lists( pids_from_xml_dump, pids_from_bdr )
-        self.output_data( adds_or_updates, deletes )
+        self.logger.debug( u'in tasks.indexer.UpdateAndDeletePidsLister.make_delete_pids_list(); len(pids_from_xml_dump), `%s`' % len(pids_from_xml_dump) )
+        self.logger.debug( u'in tasks.indexer.UpdateAndDeletePidsLister.make_delete_pids_list(); len(pids_from_custom_index), `%s`' % len(pids_from_custom_index) )
+        deletes = self.prepare_deletes( pids_from_xml_dump, pids_from_custom_index )
+        self.output_list( deletes )
+        return
 
     def make_xml_pids( self ):
         """ Returns list of pids from bell-source-data.
-            Called by make_update_and_delete_pids_lists() """
+            Called by make_delete_pids_list() """
         with open( self.BELL_SOURCE_DATA_JSON_PATH ) as f:
             dct = json.loads( f.read() )
         assert sorted( dct.keys() ) == [ u'count', u'datetime', u'final_accession_pid_dict' ], sorted( json_dict.keys() )
         assert dct[u'count'][u'count_null'] == 0  # not initially null, but is after re-running after ingestions
-        pids_for_accession_numbers = dct[u'final_accession_pid_dict'].values()
-        return pids_for_accession_numbers.sort()
-
-    def grab_bdr_pids( self ):
-        """ Loads and returns list of pids previously prepared.
-            Called by make_update_and_delete_pids_lists() """
-        with open( self.BELL_SOURCE_DATA_JSON_PATH ) as f:
-            pids_from_bdr = json.loads( f.read() )
-        assert type(pids_from_bdr) == list, type(pids_from_bdr)
-        return pids_from_bdr
+        pids_from_accession_numbers = dct[u'final_accession_pid_dict'].values()
+        return sorted( pids_from_accession_numbers )
 
     def grab_custom_index_pids( self ):
-        pass
+        """ Loads list of custom-index pids saved previously.
+            Called by make_delete_pids_list() """
+        with open( self.CUSTOM_IDX_PIDS_JSON_PATH ) as f:
+            pids_from_custom_index = json.loads( f.read() )
+        return pids_from_custom_index
 
-    def prepare_lists( self, pids_from_xml_dump, pids_from_bdr ):
+    def prepare_deletes( self, pids_from_xml_dump, pids_from_custom_index ):
         """ Runs set operations to make lists.
-            Called bu make_update_and_delete_pids_lists() """
-        deletes_set = set(pids_from_bdr) - set(pids_from_xml_dump)
+            Called by make_delete_pids_list() """
+        deletes_set = set(pids_from_custom_index) - set(pids_from_xml_dump)
+        self.logger.debug( u'in tasks.indexer.UpdateAndDeletePidsLister.prepare_deletes(); deletes_set, `%s`' % deletes_set )
         deletes_list = list( deletes_set )
+        return deletes_list
 
-    def output_data( self ):
-        pass
+    def output_list( self, deletes ):
+        """ Saves json file.
+            Called by make_delete_pids_list() """
+        jsn = json.dumps( deletes, indent=2, sort_keys=True )
+        with open( self.OUTPUT_PATH, u'w' ) as f:
+            f.write( jsn )
+        return
 
-    # end class UpdateRemoveListsMaker
+    # end class DeletePidsLister
 
 
 class Indexer( object ):
@@ -152,12 +158,12 @@ def run_make_pids_from_custom_index():
     logger.debug( u'in tasks.indexer.run_make_pids_from_custom_index(); done' )
     return
 
-def run_make_update_and_delete_pids_lists():
-    """ Saves pids list for updating, and deleting, to `i__update_and_delete_pids.json`.
+def run_make_delete_pids_list():
+    """ Saves custom-index pids to be deleted to `i__custom_index_delete_pids.json`.
         Called manually per readme.md """
-    logger.debug( u'in tasks.indexer.run_make_update_and_delete_pids_lists(); starting' )
-    udp = UpdateAndDeletePidsLister( logger )
-    udp.make_update_and_delete_pids_lists()
-    logger.debug( u'in tasks.indexer.run_make_update_and_delete_pids_lists(); done' )
+    logger.debug( u'in tasks.indexer.run_make_delete_pids_list(); starting' )
+    del_lstr = DeletePidsLister( logger )
+    del_lstr.make_delete_pids_list()
+    logger.debug( u'in tasks.indexer.run_make_delete_pids_list(); done' )
     return
 
