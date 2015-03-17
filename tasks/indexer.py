@@ -172,8 +172,7 @@ class CustomIndexUpdater( object ):
 
     def __init__( self, logger=None ):
         self.logger = logger
-        self.SRC_ACC_NUM_TO_DATA_DCT_JSON_PATH = unicode( os.environ[u'BELL_TASKS_IDXR__SRC_ACC_NUM_TO_DATA_DCT_JSON_PATH'] )
-        self.SRC_ACC_NUM_TO_PID_DCT_JSON_PATH = unicode( os.environ[u'BELL_TASKS_IDXR__SRC_ACC_NUM_TO_PID_DCT_JSON_PATH'] )
+        self.FULL_DATA_DCTS_JSON_PATH = unicode( os.environ[u'BELL_TASKS_IDXR__FULL_DATA_DCTS_JSON_PATH'] )
         self.REQUIRED_KEYS = [  # used by _validate_solr_dict()
             u'accession_number_original',
             u'author_birth_date',
@@ -207,27 +206,17 @@ class CustomIndexUpdater( object ):
     def enqueue_index_jobs( self ):
         """ Loads up json list of dicts and hits a prep&post job.
             Called by runner, triggered manually as per readme.md """
-        with open( self.SRC_ACC_NUM_TO_DATA_DCT_JSON_PATH ) as f:
-            dct = json.loads( f.read() )
-            accession_number_to_data_dct = dct[u'items']
-        with open( self.SRC_ACC_NUM_TO_PID_DCT_JSON_PATH ) as f:
-            dct = json.loads( f.read() )
-            accession_number_to_pid_dct = dct[u'final_accession_pid_dict']
-        new_accession_number_to_pid_dct = {}
-        for (i, key) in enumerate( accession_number_to_data_dct.keys() ):
+        with open( self.FULL_DATA_DCTS_JSON_PATH ) as f:
+            accession_number_to_data_dct_lst = json.loads( f.read() )
+        for (i, entry) in enumerate( accession_number_to_data_dct_lst ):  # entry: { accession_number: {data_key_a: data_value_a, etc} }
             if i + 1 > 1:
                 break
-            print key
-            value = accession_number_to_data_dct[key]
-            value_keys = sorted( value.keys() )
-            print u'before value keys...'; pprint.pprint( value_keys )
-            pid = accession_number_to_pid_dct[key]
-            print u'pid...'; print pid
-            value[u'pid'] = pid
-            accession_number_to_data_dct[key] = value
-            value_keys2 = sorted( accession_number_to_data_dct[key].keys() )
-            print u'after value keys...'; pprint.pprint( value_keys2 )
-        pass
+            ( accession_number, data_dct ) = entry.items[0]
+            q.enqueue_call(
+              func=u'bell_code.tasks.indexer.run_update_custom_index_entry',
+              kwargs={ u'accession_number': accession_number, u'data': data_dct },
+              timeout=600 )
+        return
 
     # end class CustomIndexUpdater
 
@@ -264,10 +253,20 @@ def run_make_update_pids_list():
     return
 
 def run_enqueue_index_jobs():
-    """ Preps data and posts to custom-solr index.
+    """ Enqueues update-custom-solr-index-entry jobs.
         Called manually per readme.md """
     logger.debug( u'in tasks.indexer.run_enqueue_index_jobs(); starting' )
     idxr = CustomIndexUpdater( logger )
     idxr.enqueue_index_jobs()
-    logger.debug( u'in tasks.indexer.run_enqueue_index_jobs(); starting' )
+    logger.debug( u'in tasks.indexer.run_enqueue_index_jobs(); done' )
     return
+
+def run_update_custom_index_entry():
+    """ Preps and executes post for single entry.
+        Called by CustomIndexUpdater.enqueue_index_jobs() """
+    logger.debug( u'in tasks.indexer.run_update_custom_index_entry(); starting' )
+    idxr = CustomIndexUpdater( logger )
+    idxr.update_custom_index_entry( accession_number, data_dct )
+    logger.debug( u'in tasks.indexer.run_update_custom_index_entry(); done' )
+    return
+
