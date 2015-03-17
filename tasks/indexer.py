@@ -52,7 +52,7 @@ class CustomIndexPidsLister( object ):
 
 
 class DeletePidsLister( object ):
-    """ Prepares lists of custom-solr items to be created/updated, and removed. """
+    """ Prepares lists of custom-solr items to be removed. """
 
     def __init__( self, logger=None ):
         self.logger = logger
@@ -107,11 +107,73 @@ class DeletePidsLister( object ):
     # end class DeletePidsLister
 
 
-class Indexer( object ):
+class UpdatePidsLister( object ):
+    """ Prepares lists of custom-solr items to be created/updated. """
+
+    def __init__( self, logger ):
+        self.logger = logger
+        self.SRC_ACC_NUM_TO_DATA_DCT_JSON_PATH = unicode( os.environ[u'BELL_TASKS_IDXR__SRC_ACC_NUM_TO_DATA_DCT_JSON_PATH'] )
+        self.SRC_ACC_NUM_TO_PID_DCT_JSON_PATH = unicode( os.environ[u'BELL_TASKS_IDXR__SRC_ACC_NUM_TO_PID_DCT_JSON_PATH'] )
+        self.OUTPUT_PATH = unicode( os.environ[u'BELL_TASKS_IDXR__CUSTOM_IDX_UPDATES_DATA_JSON_PATH'] )
+
+    def make_update_pids_lst( self ):
+        """ Loads up two source-data dicts and outputs an accession-number-to-data dict that includes pid-info.
+            Called by runner as per readme.md """
+        accession_number_to_data_dct = self.load_data_dct()
+        accession_number_to_pid_dct = self.load_pid_dct()
+        updated_accesson_number_to_data_dct_lst = self.add_pid( accession_number_to_data_dct, accession_number_to_pid_dct )
+        self.output_lst( updated_accesson_number_to_data_dct_lst )
+        return
+
+    def load_data_dct( self ):
+        """ Loads initial source data dct.
+            Called by make_update_pids_lst() """
+        with open( self.SRC_ACC_NUM_TO_DATA_DCT_JSON_PATH ) as f:
+            dct = json.loads( f.read() )
+            accession_number_to_data_dct = dct[u'items']
+        return accession_number_to_data_dct
+
+    def load_pid_dct( self ):
+        """ Loads source pid dct.
+            Called by make_update_pids_lst() """
+        with open( self.SRC_ACC_NUM_TO_PID_DCT_JSON_PATH ) as f:
+            dct = json.loads( f.read() )
+            accession_number_to_pid_dct = dct[u'final_accession_pid_dict']
+        return accession_number_to_pid_dct
+
+    def add_pid( self, accession_number_to_data_dct, accession_number_to_pid_dct ):
+        """ Adds pid to data-dct, returns list of accession-number-to-updated-data-dct.
+            Called by make_update_pids_lst() """
+        updated_data_lst = []
+        for (i, key) in enumerate( sorted(accession_number_to_data_dct.keys()) ):
+            if i + 1 > 70000:
+                break
+            print key
+            value_dct = accession_number_to_data_dct[key]
+            pid = accession_number_to_pid_dct[key]
+            value_dct[u'pid'] = pid
+            entry = { key: value_dct }
+            updated_data_lst.append( entry )
+        return updated_data_lst
+
+    def output_lst( self, lst ):
+        """ Saves json file.
+            Called by make_delete_pids_list() """
+        jsn = json.dumps( lst, indent=2, sort_keys=True )
+        with open( self.OUTPUT_PATH, u'w' ) as f:
+            f.write( jsn )
+        return
+
+    # end class UpdatePidsLister
+
+
+class CustomIndexUpdater( object ):
     """ Handles custom solr index. """
 
     def __init__( self, logger=None ):
         self.logger = logger
+        self.SRC_ACC_NUM_TO_DATA_DCT_JSON_PATH = unicode( os.environ[u'BELL_TASKS_IDXR__SRC_ACC_NUM_TO_DATA_DCT_JSON_PATH'] )
+        self.SRC_ACC_NUM_TO_PID_DCT_JSON_PATH = unicode( os.environ[u'BELL_TASKS_IDXR__SRC_ACC_NUM_TO_PID_DCT_JSON_PATH'] )
         self.REQUIRED_KEYS = [  # used by _validate_solr_dict()
             u'accession_number_original',
             u'author_birth_date',
@@ -142,7 +204,32 @@ class Indexer( object ):
             u'title',
             ]
 
-    # end class Indexer
+    def enqueue_index_jobs( self ):
+        """ Loads up json list of dicts and hits a prep&post job.
+            Called by runner, triggered manually as per readme.md """
+        with open( self.SRC_ACC_NUM_TO_DATA_DCT_JSON_PATH ) as f:
+            dct = json.loads( f.read() )
+            accession_number_to_data_dct = dct[u'items']
+        with open( self.SRC_ACC_NUM_TO_PID_DCT_JSON_PATH ) as f:
+            dct = json.loads( f.read() )
+            accession_number_to_pid_dct = dct[u'final_accession_pid_dict']
+        new_accession_number_to_pid_dct = {}
+        for (i, key) in enumerate( accession_number_to_data_dct.keys() ):
+            if i + 1 > 1:
+                break
+            print key
+            value = accession_number_to_data_dct[key]
+            value_keys = sorted( value.keys() )
+            print u'before value keys...'; pprint.pprint( value_keys )
+            pid = accession_number_to_pid_dct[key]
+            print u'pid...'; print pid
+            value[u'pid'] = pid
+            accession_number_to_data_dct[key] = value
+            value_keys2 = sorted( accession_number_to_data_dct[key].keys() )
+            print u'after value keys...'; pprint.pprint( value_keys2 )
+        pass
+
+    # end class CustomIndexUpdater
 
 
 ## runners ##
@@ -167,3 +254,20 @@ def run_make_delete_pids_list():
     logger.debug( u'in tasks.indexer.run_make_delete_pids_list(); done' )
     return
 
+def run_make_update_pids_list():
+    """ Saves custom-index pids to be created/updated to `j__custom_index_update_pids.json`.
+        Called manually per readme.md """
+    logger.debug( u'in tasks.indexer.run_make_update_pids_list(); starting' )
+    update_lstr = UpdatePidsLister( logger )
+    update_lstr.make_update_pids_lst()
+    logger.debug( u'in tasks.indexer.run_make_update_pids_list(); done' )
+    return
+
+# def run_update_custom_index():
+#     """ Preps data and posts to custom-solr index.
+#         Called manually per readme.md """
+#     logger.debug( u'in tasks.indexer.run_update_custom_index(); starting' )
+#     idxr = CustomIndexUpdater( logger )
+#     idxr.enqueue_index_jobs()
+#     logger.debug( u'in tasks.indexer.run_update_custom_index(); starting' )
+#     return

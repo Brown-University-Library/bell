@@ -55,15 +55,19 @@ code related to ingesting bell-gallery images into the bdr.
         - end result: `h__pids_from_custom_index_list.json`
         - status: done
     - prep pids-to-delete list
-        - ( no need for pids-to-update list, because that comes from `e__accession_number_to_pid_dict.json` )
         - tasks/indexer.run_make_deletes_list()
         - end result: `i__custom_index_delete_pids.json`
         - review that list
+        - status: done
+    - prep pids-to-delete list
+        - tasks/indexer.run_make_deletes_list()
+        - adds pid to accession-number-to-data-dct data.
+        - end result: `j__custom_index_update_data_list.json`
         - status: in-process
     - run updates
-        - tasks/indexer.run_update_pids()
+        - tasks/indexer.run_update_custom_index()
         - end result: `j__pids_updated_list.json`
-    - run deletes
+    - run deletes -- maybe, check w/J.C.
         - tasks/indexer.run_delete_pids()
         - end result: `k__pids_deleted_lists.json`
     - status: at `prep list of pids from bdr`
