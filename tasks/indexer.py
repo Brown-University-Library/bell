@@ -263,11 +263,11 @@ def run_make_update_pids_list():
     logger.debug( u'in tasks.indexer.run_make_update_pids_list(); done' )
     return
 
-# def run_update_custom_index():
-#     """ Preps data and posts to custom-solr index.
-#         Called manually per readme.md """
-#     logger.debug( u'in tasks.indexer.run_update_custom_index(); starting' )
-#     idxr = CustomIndexUpdater( logger )
-#     idxr.enqueue_index_jobs()
-#     logger.debug( u'in tasks.indexer.run_update_custom_index(); starting' )
-#     return
+def run_enqueue_index_jobs():
+    """ Preps data and posts to custom-solr index.
+        Called manually per readme.md """
+    logger.debug( u'in tasks.indexer.run_enqueue_index_jobs(); starting' )
+    idxr = CustomIndexUpdater( logger )
+    idxr.enqueue_index_jobs()
+    logger.debug( u'in tasks.indexer.run_enqueue_index_jobs(); starting' )
+    return
