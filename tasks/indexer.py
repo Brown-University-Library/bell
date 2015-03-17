@@ -46,6 +46,23 @@ class Indexer( object ):
             u'title',
             ]
 
+    # end class Indexer
+
+
+## runners ##
+
+logger = bell_logger.setup_logger()
+
+def run_make_pids_from_bdr_list():
+    """ Saves collection pids from bdr-api call to json file.
+        Called manually per readme.md """
+    idx = Indexer( logger )
+    logger.debug( u'in tasks.indexer.run_make_pids_from_bdr_list(); starting' )
+    return
+
+
+
+
     ## main functions ##
 
 #     def build_metadata_only_solr_dict( self, pid, original_dict ):
