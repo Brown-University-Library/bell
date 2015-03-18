@@ -66,7 +66,7 @@ code related to ingesting bell-gallery images into the bdr.
         - status: done
     - run updates
         - tasks/indexer.run_enqueue_index_jobs()
-        - end result: `k__pids_updated_tracker.json`
+        - end result: `k__entries_updated_tracker.json`
         - status: in-process
     - run deletes -- maybe, check w/J.C.
         - tasks/indexer.run_delete_pids()

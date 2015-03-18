@@ -4,7 +4,7 @@
 """ Prepares data for updating and deleting custom-index records.
     Executes custom-index changes as per readme.md """
 
-import json, os, pprint, sys, time
+import datetime, json, os, pprint, sys, time
 import redis, requests, rq
 from bell_code import bell_logger
 from mysolr import Solr
@@ -182,6 +182,7 @@ class CustomIndexUpdater( object ):
         self.FULL_DATA_DCTS_JSON_PATH = unicode( os.environ[u'BELL_TASKS_IDXR__FULL_DATA_DCTS_JSON_PATH'] )
         self.BDR_PUBLIC_ITEM_API_URL_ROOT = unicode( os.environ[u'BELL_TASKS_IDXR__BDR_PUBLIC_ITEM_API_URL_ROOT'] )
         self.CUSTOM_INDEX_SOLR_URL_ROOT = unicode( os.environ[u'BELL_TASKS_IDXR__CUSTOM_INDEX_SOLR_URL_ROOT'] )
+        self.TRACKER_JSON_PATH = unicode( os.environ[u'BELL_TASKS_IDXR__CUSTOM_INDEX_UPDATER_TRACKER_JSON_PATH'] )
         self.REQUIRED_KEYS = [  # used by _validate_solr_dict()
             u'accession_number_original',
             u'author_birth_date',
@@ -218,12 +219,10 @@ class CustomIndexUpdater( object ):
         with open( self.FULL_DATA_DCTS_JSON_PATH ) as f:
             accession_number_to_data_dct_lst = json.loads( f.read() )
         for (i, entry) in enumerate( accession_number_to_data_dct_lst ):  # entry: { accession_number: {data_key_a: data_value_a, etc} }
-            if i + 1 > 2:
+            if i + 1 > 200:
                 break
-            print u'entry...'; print entry
             ( accession_number, data_dct ) = entry.items()[0]
             print u'accession_number...'; print accession_number
-            print u'data_dct...'; pprint.pprint( data_dct )
             q.enqueue_call(
               func=u'bell_code.tasks.indexer.run_update_custom_index_entry',
               kwargs={ u'accession_number': accession_number, u'data_dct': data_dct, u'pid': data_dct[u'pid'] },
@@ -233,6 +232,7 @@ class CustomIndexUpdater( object ):
     def update_custom_index_entry( self, accession_number, data_dct, pid ):
         """ Manages prep & post of update custom index entry.
             Called by runner. """
+        time.sleep( .5 )
         metadata_solr_dict = self.build_metadata_only_solr_dict( pid, data_dct )
         bdr_api_links_dict = self.grab_bdr_api_links_data( pid )
         updated_solr_dict = self.add_image_metadata( metadata_solr_dict, bdr_api_links_dict )
@@ -263,7 +263,8 @@ class CustomIndexUpdater( object ):
 
     def grab_bdr_api_links_data( self, pid ):
         """ Grabs and returns link info from item-api json.
-            The links dict is used by tasks.indexer to add to the solr-metadata if needed. """
+            The links dict is used by tasks.indexer to add image info to the solr-metadata if needed.
+            Called by update_custom_index_entry() """
         url = u'%s/%s/' % ( self.BDR_PUBLIC_ITEM_API_URL_ROOT, pid )
         self.logger.debug( u'in tasks.indexer.CustomIndexUpdater.grab_bdr_api_links_data(); url, `%s`' % url )
         r = requests.get( url )
@@ -273,7 +274,8 @@ class CustomIndexUpdater( object ):
         return links_dict
 
     def add_image_metadata( self, solr_dict, links_dict ):
-        """ Adds image metadata to dict-to-index. """
+        """ Adds image metadata to dict-to-index.
+            Called by update_custom_index_entry() """
         solr_dict[u'jp2_image_url'] = self._set_image_urls__get_jp2_url( links_dict )
         solr_dict[u'master_image_url'] = self._set_image_urls__get_master_image_url( links_dict, solr_dict[u'jp2_image_url'] )
         self.logger.debug( u'in tasks.indexer.CustomIndexUpdater.add_image_metadata(); final solr_dict, `%s`' % pprint.pformat(solr_dict) )
@@ -285,7 +287,7 @@ class CustomIndexUpdater( object ):
             Checks that there are no None values.
             Checks that any list values are not empty.
             Checks that no members of a list value are of NoneType.
-            Called by build_metadata_only_solr_dict() """
+            Called by update_custom_index_entry() """
         try:
             for required_key in self.REQUIRED_KEYS:
                 # self.logger.debug( u'in tasks.indexer.CustomIndexUpdater._validate_solr_dict(); required_key: %s' % required_key )
@@ -303,7 +305,8 @@ class CustomIndexUpdater( object ):
             return False
 
     def post_to_solr( self, solr_dict ):
-        """ Posts solr_dict to solr. """
+        """ Posts solr_dict to solr.
+            Called by update_custom_index_entry() """
         solr = Solr( self.CUSTOM_INDEX_SOLR_URL_ROOT )
         response = solr.update( [solr_dict], u'xml', commit=True )  # 'xml' param converts default json to xml for post; required for our old version of solr
         response_status = response.status
@@ -311,6 +314,21 @@ class CustomIndexUpdater( object ):
         if not response_status == 200:
             raise Exception( u'custom-solr post problem logged' )
         return response_status
+
+    def update_tracker( self, accession_number, post_result ):
+        """ Stores result to json file.
+            Not thread-safe - redis would be good for this.
+            Called by update_custom_index_entry() """
+        try:
+            with open( self.TRACKER_JSON_PATH ) as f:
+                dct = json.loads( f.read() )
+        except:
+            dct = {}
+        dct[accession_number] = { u'datetime': unicode(datetime.datetime.now()), u'post_result': post_result }
+        jsn = json.dumps( dct, indent=2, sort_keys=True )
+        with open( self.TRACKER_JSON_PATH, u'w' ) as f:
+            f.write( jsn )
+        return
 
     ## metadata-only helpers ##
 
