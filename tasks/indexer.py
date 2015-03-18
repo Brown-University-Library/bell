@@ -8,7 +8,6 @@ import datetime, json, os, pprint, sys, time
 import redis, requests, rq
 from bell_code import bell_logger
 from mysolr import Solr
-from bell_code.tasks import task_manager
 
 
 queue_name = unicode( os.environ.get(u'BELL_QUEUE_NAME') )
