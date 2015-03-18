@@ -181,6 +181,7 @@ class CustomIndexUpdater( object ):
         self.logger = logger
         self.FULL_DATA_DCTS_JSON_PATH = unicode( os.environ[u'BELL_TASKS_IDXR__FULL_DATA_DCTS_JSON_PATH'] )
         self.BDR_PUBLIC_ITEM_API_URL_ROOT = unicode( os.environ[u'BELL_TASKS_IDXR__BDR_PUBLIC_ITEM_API_URL_ROOT'] )
+        self.CUSTOM_INDEX_SOLR_URL_ROOT = unicode( os.environ[u'BELL_TASKS_IDXR__CUSTOM_INDEX_SOLR_URL_ROOT'] )
         self.REQUIRED_KEYS = [  # used by _validate_solr_dict()
             u'accession_number_original',
             u'author_birth_date',
@@ -221,6 +222,8 @@ class CustomIndexUpdater( object ):
                 break
             print u'entry...'; print entry
             ( accession_number, data_dct ) = entry.items()[0]
+            print u'accession_number...'; print accession_number
+            print u'data_dct...'; pprint.pprint( data_dct )
             q.enqueue_call(
               func=u'bell_code.tasks.indexer.run_update_custom_index_entry',
               kwargs={ u'accession_number': accession_number, u'data_dct': data_dct, u'pid': data_dct[u'pid'] },
@@ -231,7 +234,7 @@ class CustomIndexUpdater( object ):
         """ Manages prep & post of update custom index entry.
             Called by runner. """
         metadata_solr_dict = self.build_metadata_only_solr_dict( pid, data_dct )
-        bdr_api_links_dict = self.grab_bdr_api_links_data( pid, self.BDR_PUBLIC_ITEM_API_URL_PATTERN )
+        bdr_api_links_dict = self.grab_bdr_api_links_data( pid )
         updated_solr_dict = self.add_image_metadata( metadata_solr_dict, bdr_api_links_dict )
         validity = self.validate_solr_dict( updated_solr_dict )
         if validity:
@@ -256,7 +259,7 @@ class CustomIndexUpdater( object ):
         solr_dict = self._set_physical_descriptions( data_dct, solr_dict )
         solr_dict = self._set_title( data_dct, solr_dict )
         self.logger.debug( u'in tasks.indexer.CustomIndexUpdater.build_metadata_only_solr_dict(); solr_dict, `%s`' % pprint.pformat(solr_dict) )
-        return metadata_solr_dict
+        return solr_dict
 
     def grab_bdr_api_links_data( self, pid ):
         """ Grabs and returns link info from item-api json.
@@ -273,6 +276,7 @@ class CustomIndexUpdater( object ):
         """ Adds image metadata to dict-to-index. """
         solr_dict[u'jp2_image_url'] = self._set_image_urls__get_jp2_url( links_dict )
         solr_dict[u'master_image_url'] = self._set_image_urls__get_master_image_url( links_dict, solr_dict[u'jp2_image_url'] )
+        self.logger.debug( u'in tasks.indexer.CustomIndexUpdater.add_image_metadata(); final solr_dict, `%s`' % pprint.pformat(solr_dict) )
         return solr_dict
 
     def validate_solr_dict( self, solr_dict ):
@@ -284,7 +288,7 @@ class CustomIndexUpdater( object ):
             Called by build_metadata_only_solr_dict() """
         try:
             for required_key in self.REQUIRED_KEYS:
-                # self.logger.debug( u'in tasks.indexer._validate_solr_dict(); required_key: %s' % required_key )
+                # self.logger.debug( u'in tasks.indexer.CustomIndexUpdater._validate_solr_dict(); required_key: %s' % required_key )
                 assert required_key in solr_dict.keys(), Exception( u'ERROR; missing required key: %s' % required_key )
             for key,value in solr_dict.items():
               assert value != None, Exception( u'ERROR; value is none for key: %s' % key )
@@ -292,18 +296,18 @@ class CustomIndexUpdater( object ):
                 assert len(value) > 0, Exception( u'ERROR: key "%s" has a value of "%s", which is type-list, which is empty.' % ( key, value ) )
                 for element in value:
                   assert element != None, Exception( u'ERROR: key "%s" has a value "%s", which is type-list, which contains a None element' % ( key, value ) )
+            self.logger.debug( u'in tasks.indexer.CustomIndexUpdater.validate_solr_dict(); is valid' )
             return True
         except Exception as e:
-            self.logger.error( u'in tasks.indexer._validate_solr_dict(); exception is: %s' % unicode(repr(e)) )
+            self.logger.error( u'in tasks.indexer.CustomIndexUpdater.validate_solr_dict(); exception is: %s' % unicode(repr(e)) )
             return False
 
     def post_to_solr( self, solr_dict ):
         """ Posts solr_dict to solr. """
-        SOLR_ROOT_URL = ( os.environ.get(u'BELL_I_SOLR_ROOT') )
-        solr = Solr( SOLR_ROOT_URL )
+        solr = Solr( self.CUSTOM_INDEX_SOLR_URL_ROOT )
         response = solr.update( [solr_dict], u'xml', commit=True )  # 'xml' param converts default json to xml for post; required for our old version of solr
         response_status = response.status
-        self.logger.info( u'in tasks.indexer.post_to_solr() [for custom-solr]; accession_number, %s; response_status, %s' % (solr_dict[u'accession_number_original'], response_status) )
+        self.logger.info( u'in tasks.indexer.CustomIndexUpdater.post_to_solr() [for custom-solr]; accession_number, %s; response_status, %s' % (solr_dict[u'accession_number_original'], response_status) )
         if not response_status == 200:
             raise Exception( u'custom-solr post problem logged' )
         return response_status
@@ -460,7 +464,7 @@ class CustomIndexUpdater( object ):
                 except:
                     pass
             if not image_url:
-                self.logger.info( u'in tasks.indexer._set_image_urls__get_master_image_url(); odd case, links_dict is `%s`, jp2_url is `%s`' % (pprint.pformat(links_dict), jp2_url) )
+                self.logger.info( u'in tasks.indexer.CustomIndexUpdater._set_image_urls__get_master_image_url(); odd case, links_dict is `%s`, jp2_url is `%s`' % (pprint.pformat(links_dict), jp2_url) )
                 image_url = u''
         return image_url
 
