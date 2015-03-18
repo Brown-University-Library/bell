@@ -1,0 +1,385 @@
+[
+  {
+    "B 1980.1575": {
+      "ARTISTS::artist_alias": [
+        null, 
+        null
+      ], 
+      "ARTISTS::artist_birth_country_id": [
+        "107", 
+        null
+      ], 
+      "ARTISTS::artist_birth_year": [
+        "1905", 
+        "1901"
+      ], 
+      "ARTISTS::artist_death_year": [
+        "1995", 
+        "1988"
+      ], 
+      "ARTISTS::artist_first_name": [
+        "Brian", 
+        "Stanley"
+      ], 
+      "ARTISTS::artist_last_name": [
+        "Coffey", 
+        "Hayter"
+      ], 
+      "ARTISTS::artist_lifetime": [
+        "1905-1995", 
+        "1901-1988"
+      ], 
+      "ARTISTS::artist_middle_name": [
+        null, 
+        "William"
+      ], 
+      "ARTISTS::artist_nationality_name": [
+        "Irish", 
+        "British"
+      ], 
+      "ARTISTS::calc_artist_full_name": [
+        "Brian Coffey", 
+        "Stanley William Hayter"
+      ], 
+      "ARTISTS::calc_nationality": [
+        "Irish", 
+        "British"
+      ], 
+      "ARTISTS::use_alias_flag": [
+        null, 
+        null
+      ], 
+      "MEDIA::object_medium_name": "Book", 
+      "MEDIA_SUB::sub_media_name": [
+        "Engraving", 
+        "Etching ", 
+        "Letterpress"
+      ], 
+      "OBJECT_ARTISTS::artist_id": [
+        "618", 
+        "125"
+      ], 
+      "OBJECT_ARTISTS::artist_role": [
+        null, 
+        null
+      ], 
+      "OBJECT_ARTISTS::primary_flag": [
+        "yes", 
+        "no"
+      ], 
+      "OBJECT_MEDIA_SUB::media_sub_id": [
+        "32", 
+        "23", 
+        "22"
+      ], 
+      "SERIES::series_end_year": [
+        null
+      ], 
+      "SERIES::series_name": [
+        null
+      ], 
+      "SERIES::series_start_year": [
+        null
+      ], 
+      "calc_accession_id": "B 1980.1575", 
+      "credit_line": "Gift of Saul P. Steinberg", 
+      "image_height": null, 
+      "image_width": null, 
+      "object_date": "1979", 
+      "object_depth": null, 
+      "object_height": null, 
+      "object_id": "184", 
+      "object_image_scan_filename": null, 
+      "object_medium": "Letterpress, etching and engraving", 
+      "object_title": "The Death of Hector", 
+      "object_width": null, 
+      "object_year_end": "1979", 
+      "object_year_start": "1979", 
+      "pid": "bdr:10982", 
+      "series_id": null
+    }
+  }, 
+  {
+    "B 1980.1578": {
+      "ARTISTS::artist_alias": [
+        null
+      ], 
+      "ARTISTS::artist_birth_country_id": [
+        null
+      ], 
+      "ARTISTS::artist_birth_year": [
+        "1940"
+      ], 
+      "ARTISTS::artist_death_year": [
+        null
+      ], 
+      "ARTISTS::artist_first_name": [
+        "Michael"
+      ], 
+      "ARTISTS::artist_last_name": [
+        "Peel"
+      ], 
+      "ARTISTS::artist_lifetime": [
+        "1940"
+      ], 
+      "ARTISTS::artist_middle_name": [
+        null
+      ], 
+      "ARTISTS::artist_nationality_name": [
+        "British"
+      ], 
+      "ARTISTS::calc_artist_full_name": [
+        "Michael Peel"
+      ], 
+      "ARTISTS::calc_nationality": [
+        "British"
+      ], 
+      "ARTISTS::use_alias_flag": [
+        null
+      ], 
+      "MEDIA::object_medium_name": "Book", 
+      "MEDIA_SUB::sub_media_name": [
+        "Chromogentic color print", 
+        "Offset lithograph", 
+        "Photo lithograph"
+      ], 
+      "OBJECT_ARTISTS::artist_id": [
+        "117"
+      ], 
+      "OBJECT_ARTISTS::artist_role": [
+        null
+      ], 
+      "OBJECT_ARTISTS::primary_flag": [
+        "yes"
+      ], 
+      "OBJECT_MEDIA_SUB::media_sub_id": [
+        "39", 
+        "46", 
+        "11"
+      ], 
+      "SERIES::series_end_year": [
+        null
+      ], 
+      "SERIES::series_name": [
+        null
+      ], 
+      "SERIES::series_start_year": [
+        null
+      ], 
+      "calc_accession_id": "B 1980.1578", 
+      "credit_line": "Gift of Saul P. Steinberg", 
+      "image_height": null, 
+      "image_width": null, 
+      "object_date": "1979", 
+      "object_depth": null, 
+      "object_height": null, 
+      "object_id": "194", 
+      "object_image_scan_filename": "Peel B_1980.1578.tif", 
+      "object_medium": "Offset lithograph with photographs", 
+      "object_title": "The Camera Never Lies: A Mystery in Eight Parts", 
+      "object_width": null, 
+      "object_year_end": "1979", 
+      "object_year_start": "1979", 
+      "pid": "bdr:10983", 
+      "series_id": null
+    }
+  }, 
+  {
+    "B 1980.1579": {
+      "ARTISTS::artist_alias": [
+        null, 
+        null
+      ], 
+      "ARTISTS::artist_birth_country_id": [
+        null, 
+        null
+      ], 
+      "ARTISTS::artist_birth_year": [
+        "1933", 
+        "1947"
+      ], 
+      "ARTISTS::artist_death_year": [
+        null, 
+        null
+      ], 
+      "ARTISTS::artist_first_name": [
+        "John", 
+        "Thomas"
+      ], 
+      "ARTISTS::artist_last_name": [
+        "Furnival", 
+        "Meyer"
+      ], 
+      "ARTISTS::artist_lifetime": [
+        "1933", 
+        "1947"
+      ], 
+      "ARTISTS::artist_middle_name": [
+        null, 
+        null
+      ], 
+      "ARTISTS::artist_nationality_name": [
+        "British", 
+        null
+      ], 
+      "ARTISTS::calc_artist_full_name": [
+        "John Furnival", 
+        "Thomas Meyer"
+      ], 
+      "ARTISTS::calc_nationality": [
+        "British", 
+        null
+      ], 
+      "ARTISTS::use_alias_flag": [
+        null, 
+        null
+      ], 
+      "MEDIA::object_medium_name": "Book", 
+      "MEDIA_SUB::sub_media_name": [
+        "Embossing ", 
+        "Etching ", 
+        "Letterpress"
+      ], 
+      "OBJECT_ARTISTS::artist_id": [
+        "106", 
+        "124"
+      ], 
+      "OBJECT_ARTISTS::artist_role": [
+        null, 
+        null
+      ], 
+      "OBJECT_ARTISTS::primary_flag": [
+        "yes", 
+        "no"
+      ], 
+      "OBJECT_MEDIA_SUB::media_sub_id": [
+        "32", 
+        "23", 
+        "20"
+      ], 
+      "SERIES::series_end_year": [
+        null
+      ], 
+      "SERIES::series_name": [
+        null
+      ], 
+      "SERIES::series_start_year": [
+        null
+      ], 
+      "calc_accession_id": "B 1980.1579", 
+      "credit_line": "Gift of Saul P. Steinberg", 
+      "image_height": null, 
+      "image_width": null, 
+      "object_date": "1979", 
+      "object_depth": null, 
+      "object_height": null, 
+      "object_id": "183", 
+      "object_image_scan_filename": null, 
+      "object_medium": "Letterpress, etching and embossing", 
+      "object_title": "Blind Date", 
+      "object_width": null, 
+      "object_year_end": "1979", 
+      "object_year_start": "1979", 
+      "pid": "bdr:10984", 
+      "series_id": null
+    }
+  }, 
+  {
+    "B 1980.1581": {
+      "ARTISTS::artist_alias": [
+        null, 
+        null
+      ], 
+      "ARTISTS::artist_birth_country_id": [
+        null, 
+        null
+      ], 
+      "ARTISTS::artist_birth_year": [
+        "1939", 
+        "1923"
+      ], 
+      "ARTISTS::artist_death_year": [
+        null, 
+        null
+      ], 
+      "ARTISTS::artist_first_name": [
+        "Patrick", 
+        "Paul"
+      ], 
+      "ARTISTS::artist_last_name": [
+        "Hughes", 
+        "Hammond"
+      ], 
+      "ARTISTS::artist_lifetime": [
+        "1939", 
+        "1923"
+      ], 
+      "ARTISTS::artist_middle_name": [
+        null, 
+        null
+      ], 
+      "ARTISTS::artist_nationality_name": [
+        "British", 
+        null
+      ], 
+      "ARTISTS::calc_artist_full_name": [
+        "Patrick Hughes", 
+        "Paul Hammond"
+      ], 
+      "ARTISTS::calc_nationality": [
+        "British", 
+        null
+      ], 
+      "ARTISTS::use_alias_flag": [
+        null, 
+        null
+      ], 
+      "MEDIA::object_medium_name": "Book", 
+      "MEDIA_SUB::sub_media_name": [
+        "Dye transfer print", 
+        "Screenprint"
+      ], 
+      "OBJECT_ARTISTS::artist_id": [
+        "108", 
+        "126"
+      ], 
+      "OBJECT_ARTISTS::artist_role": [
+        null, 
+        null
+      ], 
+      "OBJECT_ARTISTS::primary_flag": [
+        "yes", 
+        "no"
+      ], 
+      "OBJECT_MEDIA_SUB::media_sub_id": [
+        "52", 
+        "37"
+      ], 
+      "SERIES::series_end_year": [
+        null
+      ], 
+      "SERIES::series_name": [
+        "The Domestic Life of the Rainbow"
+      ], 
+      "SERIES::series_start_year": [
+        "1979"
+      ], 
+      "calc_accession_id": "B 1980.1581", 
+      "credit_line": "Gift of Saul P. Steinberg", 
+      "image_height": null, 
+      "image_width": null, 
+      "object_date": "1978", 
+      "object_depth": null, 
+      "object_height": null, 
+      "object_id": "185", 
+      "object_image_scan_filename": "Hughes B_1980.1581.tif", 
+      "object_medium": "Book with 6 screenprints", 
+      "object_title": "Upon the Pun: Dual Meaning in Words and Pictures/ The Domestic Life of the Rainbow", 
+      "object_width": null, 
+      "object_year_end": "1978", 
+      "object_year_start": "1978", 
+      "pid": "bdr:10985", 
+      "series_id": "5"
+    }
+  }
+]
