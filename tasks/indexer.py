@@ -218,7 +218,7 @@ class CustomIndexUpdater( object ):
         with open( self.FULL_DATA_DCTS_JSON_PATH ) as f:
             accession_number_to_data_dct_lst = json.loads( f.read() )
         for (i, entry) in enumerate( accession_number_to_data_dct_lst ):  # entry: { accession_number: {data_key_a: data_value_a, etc} }
-            if i + 1 > 200:
+            if i + 1 > 70000:
                 break
             ( accession_number, data_dct ) = entry.items()[0]
             print u'accession_number...'; print accession_number
