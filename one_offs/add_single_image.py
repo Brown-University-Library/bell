@@ -27,3 +27,9 @@ def make_jp2_and_overwrite_existing_image():
     adder = images.ImageAdder( logger )
     adder.add_image( filename_dct )
     return
+
+
+
+
+if __name__ == u'__main__':
+    make_jp2_and_overwrite_existing_image()
