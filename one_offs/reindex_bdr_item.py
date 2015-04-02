@@ -35,7 +35,7 @@ class BdrItemReindexer( object ):
         logger.debug( u'in _grab_bell_data(); url, `%s`' % url )
         r = requests.get( url )
         api_dct = r.json()
-        bell_jsn_url = dct[u'links'][u'content_datastreams'][u'bell_metadata']
+        bell_jsn_url = api_dct[u'links'][u'content_datastreams'][u'bell_metadata']
         logger.debug( u'in _grab_bell_data(); bell_jsn_url, `%s`' % bell_jsn_url )
         r2 = requests.get( bell_jsn_url )
         bell_dct = r.json()
