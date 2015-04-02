@@ -125,7 +125,7 @@ class ImageAdder( object ):
         self.AUTH_API_URL = unicode( os.environ[u'BELL_TASKS_IMGS__AUTH_API_URL'] )
         self.AUTH_API_IDENTITY = unicode( os.environ[u'BELL_TASKS_IMGS__AUTH_API_IDENTITY'] )
         self.AUTH_API_KEY = unicode( os.environ[u'BELL_TASKS_IMGS__AUTH_API_KEY'] )
-        self.OVERWRITE_EXISTING_IMAGE = json.loads( unicode( os.environ[u'BELL_TASKS_OVERWRITE_EXISTING_IMAGE']) )
+        self.OVERWRITE_EXISTING_IMAGE = json.loads( unicode( os.environ[u'BELL_TASKS_IMGS__OVERWRITE_EXISTING_IMAGE']) )
         assert type( self.OVERWRITE_EXISTING_IMAGE ) == bool, type( self.OVERWRITE_EXISTING_IMAGE )
 
     def add_image( self, filename_dct ):

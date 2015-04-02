@@ -14,6 +14,7 @@ logger = bell_logger.setup_logger()
 
 def make_jp2_and_overwrite_existing_image():
     """ Ingests an image.
+        Assumes metadata object already exists.
         Note, run on dev server for jp2 kakadu creation.
         Note, tasks.images.ImageAdder() needs its own set of environmental variables.
         Called manually. """
