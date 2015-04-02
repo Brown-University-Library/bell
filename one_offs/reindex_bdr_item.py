@@ -25,7 +25,7 @@ class BdrItemReindexer( object ):
         """ Manages source data-grab and reindexer call.
             Called manually. """
         bell_dct = self.grab_bell_data()
-        idxr.update_custom_index_entry( accession_number, bell_dct, self.PID )
+        idxr.update_custom_index_entry( self.ACCESSION_NUMBER, bell_dct, self.PID )
         return
 
     def grab_bell_data( self, pid ):
