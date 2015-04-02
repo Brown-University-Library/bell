@@ -28,10 +28,10 @@ class BdrItemReindexer( object ):
         idxr.update_custom_index_entry( self.ACCESSION_NUMBER, bell_dct, self.PID )
         return
 
-    def grab_bell_data( self, pid ):
+    def grab_bell_data( self ):
         """ Grabs bell json; returns dict.
             Called by reindex_bdr_item() """
-        url = u'%s/%s/' % ( self.BDR_PUBLIC_ITEM_API_URL_ROOT, pid )
+        url = u'%s/%s/' % ( self.BDR_PUBLIC_ITEM_API_URL_ROOT, self.PID )
         logger.debug( u'in _grab_bell_data(); url, `%s`' % url )
         r = requests.get( url )
         api_dct = r.json()
