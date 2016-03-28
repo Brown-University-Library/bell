@@ -1,5 +1,7 @@
 # -*- coding: utf-8 -*-
 
+from __future__ import unicode_literals
+
 """ Calls tasks.images.py functions to do work. """
 
 # import imghdr, json, logging, os, pprint
@@ -19,11 +21,11 @@ def make_jp2_and_overwrite_existing_image():
         Note, tasks.images.ImageAdder() needs its own set of environmental variables.
         Called manually. """
     ( RAW_MASTER_FILENAME, ACCESSION_NUMBER, PID ) = (
-        unicode(os.environ[u'BELL_ONEOFF_ADD_IMAGE__RAW_MASTER_FILENAME']),
-        unicode(os.environ[u'BELL_ONEOFF_ADD_IMAGE__ACCESSION_NUMBER']),
-        unicode(os.environ[u'BELL_ONEOFF_ADD_IMAGE__PID']) )
+        unicode(os.environ['BELL_ONEOFF_ADD_IMAGE__RAW_MASTER_FILENAME']),
+        unicode(os.environ['BELL_ONEOFF_ADD_IMAGE__ACCESSION_NUMBER']),
+        unicode(os.environ['BELL_ONEOFF_ADD_IMAGE__PID']) )
     filename_dct = {
-        RAW_MASTER_FILENAME: {u'accession_number': ACCESSION_NUMBER, u'pid': PID} }
+        RAW_MASTER_FILENAME: {'accession_number': ACCESSION_NUMBER, 'pid': PID} }
     adder = images.ImageAdder( logger )
     adder.add_image( filename_dct )
     return
@@ -31,5 +33,5 @@ def make_jp2_and_overwrite_existing_image():
 
 
 
-if __name__ == u'__main__':
+if __name__ == '__main__':
     make_jp2_and_overwrite_existing_image()

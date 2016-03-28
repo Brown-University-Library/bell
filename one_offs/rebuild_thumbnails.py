@@ -1,5 +1,7 @@
 # -*- coding: utf-8 -*-
 
+from __future__ import unicode_literals
+
 """ Forces rebuild of thumbnails.
     To run:
     - activate virtual environment
@@ -28,11 +30,11 @@ class ThumbnailRebuilder( object ):
         doc_list = []
         for i in range( 100 ):  # would handle 50,000 records
             data_dict = self.__query_solr( i, bdr_collection_pid, solr_root_url )
-            docs = data_dict[u'response'][u'docs']
+            docs = data_dict['response']['docs']
             doc_list.extend( docs )
             if not len( docs ) > 0:
                 break
-        # self.logger.info( u'in _run_studio_solr_query(); doc_list, %s' % pprint.pformat(doc_list) )
+        # self.logger.info( 'in _run_studio_solr_query(); doc_list, %s' % pprint.pformat(doc_list) )
         return doc_list
 
     def __query_solr( self, i, bell_collection_pid, solr_root_url ):
@@ -41,34 +43,34 @@ class ThumbnailRebuilder( object ):
             Called by self._run_studio_solr_query() """
         new_start = i * 500  # for solr start=i parameter (cool, eh?)
         params = {
-            u'q': u'rel_is_member_of_ssim:"%s"' % bell_collection_pid,
-            u'fl': u'pid,mods_id_bell_accession_number_ssim,primary_title,datastreams_ss',
-            u'rows': 500, u'start': new_start, u'wt': u'json' }
+            'q': 'rel_is_member_of_ssim:"%s"' % bell_collection_pid,
+            'fl': 'pid,mods_id_bell_accession_number_ssim,primary_title,datastreams_ss',
+            'rows': 500, 'start': new_start, 'wt': 'json' }
         r = requests.get( solr_root_url, params=params, verify=False )
-        data_dict = json.loads( r.content.decode(u'utf-8', u'replace') )
+        data_dict = json.loads( r.content.decode('utf-8', 'replace') )
         time.sleep( .1 )
         return data_dict
 
     def _build_pidlist( self, doc_list ):
         """ Returns list of pids for docs that contain a jp2 datastream.
             Called by get_pid_list(). """
-        print u'- len(doc_list), `%s`' % len( doc_list )
+        print '- len(doc_list), `%s`' % len( doc_list )
         pid_list = []
         for doc in doc_list:
-            jstring = doc.get( u'datastreams_ss' )
+            jstring = doc.get( 'datastreams_ss' )
             if jstring:
                 d = json.loads( jstring )
-            if d.get( u'JP2' ) == {u"mimeType": u"image/jp2"}:
-                pid_list.append( doc[u'pid'] )
+            if d.get( 'JP2' ) == {'mimeType': 'image/jp2'}:
+                pid_list.append( doc['pid'] )
         return pid_list
 
     ## enqueue jobs ##
 
     def enqueue_job( self, pid ):
-        thumbnail_q = rq.Queue( u'thumbnails', connection=redis.Redis() )
+        thumbnail_q = rq.Queue( 'thumbnails', connection=redis.Redis() )
         thumbnail_q.enqueue_call(
-            func=u'thumbnail_creator.thumbnails.create_thumbnail',
-            kwargs={ u'pid': pid, u'force': True }
+            func='thumbnail_creator.thumbnails.create_thumbnail',
+            kwargs={ 'pid': pid, 'force': True }
             )
         return
 
@@ -77,11 +79,11 @@ class ThumbnailRebuilder( object ):
 
 
 
-if __name__ == u'__main__':
-    bell_collection_pid = os.environ[u'BELL_ONEOFF__BELL_COLLECTION_PID']
-    solr_root_url = os.environ[u'BELL_ONEOFF__BELL_SOLR_ROOT_URL'] + u'/search/'
+if __name__ == '__main__':
+    bell_collection_pid = os.environ['BELL_ONEOFF__BELL_COLLECTION_PID']
+    solr_root_url = os.environ['BELL_ONEOFF__BELL_SOLR_ROOT_URL'] + '/search/'
     rebuilder = ThumbnailRebuilder()
     pid_list = rebuilder.get_pid_list( bell_collection_pid, solr_root_url )
-    print u'- len(pid_list), `%s`' % len( pid_list )
+    print '- len(pid_list), `%s`' % len( pid_list )
     # for pid in pid_list:
     #     rebuilder.enqueue_job( pid )

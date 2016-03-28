@@ -5,6 +5,17 @@ code related to ingesting bell-gallery images into the bdr.
 
 ### normal ingest flow ###
 
+- get metadata
+    - metadata should be for _all_ the records
+    - from having all the metadata, the code can determine what image-&-metadata additions to make, what metadata-only additions to make, and make corrections to existing bdr metadata
+    - 2016-03-28 status: metadata file from November only contained a few records; J.C. emailed for new file
+
+- get access to image-directory
+    - desktop
+        - 2016-03-28 status: instructions to view images from desktop from March 17 worked
+    - mount
+        - 2016-03-28 status: TODO
+
 - convert raw filemaker-pro xml to json
     - foundation/acc_num_to_data.py
     - end result: `accession_number_to_data_dict.json`

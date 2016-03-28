@@ -1,5 +1,7 @@
 # -*- coding: utf-8 -*-
 
+from __future__ import unicode_literals
+
 """ Creates a json list of item-pids for bell collection pid.
     To run:
     - activate virtual environment
@@ -13,8 +15,8 @@ class ItemPidMaker( object ):
 
     def __init__( self, BELL_COLLECTION_PID, API_ROOT_URL ):
         self.BELL_COLLECTION_PID = BELL_COLLECTION_PID
-        self.SEARCH_URL = u'%s/search/' % API_ROOT_URL
-        self.ITEM_URL = u'%s/items/' % API_ROOT_URL
+        self.SEARCH_URL = '%s/search/' % API_ROOT_URL
+        self.ITEM_URL = '%s/items/' % API_ROOT_URL
 
     def make_pid_list( self ):
         """ Controls pid build. """
@@ -29,7 +31,7 @@ class ItemPidMaker( object ):
         doc_list = []
         for i in range( 100 ):  # would handle 50,000 records
             data_dict = self.__query_solr( i, self.BELL_COLLECTION_PID, self.SEARCH_URL )
-            docs = data_dict[u'response'][u'docs']
+            docs = data_dict['response']['docs']
             doc_list.extend( docs )
             if not len( docs ) > 0:
                 break
@@ -41,12 +43,12 @@ class ItemPidMaker( object ):
             Called by _make_initial_doc_list(). """
         new_start = i * 500  # for solr start=i parameter (cool, eh?)
         params = {
-            u'q': u'rel_is_member_of_ssim:"%s"' % bell_collection_pid,
-            u'fl': u'pid,mods_id_bell_accession_number_ssim,primary_title,datastreams_ss',
-            u'rows': 500, u'start': new_start, u'wt': u'json' }
+            'q': 'rel_is_member_of_ssim:"%s"' % bell_collection_pid,
+            'fl': 'pid,mods_id_bell_accession_number_ssim,primary_title,datastreams_ss',
+            'rows': 500, 'start': new_start, 'wt': 'json' }
         r = requests.get( solr_root_url, params=params, verify=False )
-        data_dict = json.loads( r.content.decode(u'utf-8', u'replace') )
-        # data_dict[u'item_api_url'] = u'%s%s'
+        data_dict = json.loads( r.content.decode('utf-8', 'replace') )
+        # data_dict['item_api_url'] = '%s%s'
         time.sleep( .1 )
         return data_dict
 
@@ -56,18 +58,18 @@ class ItemPidMaker( object ):
         enhanced_doc_list = []
         for item in doc_list:
             new_item = {
-                u'pid': item[u'pid'],
-                u'accession_number': item[u'mods_id_bell_accession_number_ssim'],
-                u'has_jp2': self.__add_jp2_info( item ),
-                u'item_api_url': u'%s%s/' % ( self.ITEM_URL, item[u'pid'] ) }
+                'pid': item['pid'],
+                'accession_number': item['mods_id_bell_accession_number_ssim'],
+                'has_jp2': self.__add_jp2_info( item ),
+                'item_api_url': '%s%s/' % ( self.ITEM_URL, item['pid'] ) }
             enhanced_doc_list.append( new_item )
         return enhanced_doc_list
 
     def __add_jp2_info( self, item ):
         """ Returns has_jp2 = True or False.
             Called by _enhance_doc_list(). """
-        datastream_info = json.loads( item[u'datastreams_ss'] )
-        has_jp2 = True if u'JP2' in datastream_info.keys() else False
+        datastream_info = json.loads( item['datastreams_ss'] )
+        has_jp2 = True if 'JP2' in datastream_info.keys() else False
         return has_jp2
 
     def _count_images( self, cleaned_doc_list ):
@@ -75,7 +77,7 @@ class ItemPidMaker( object ):
             Called by make_pid_list(). """
         count = 0
         for item in cleaned_doc_list:
-            if item[u'has_jp2'] == True:
+            if item['has_jp2'] == True:
                 count += 1
         return count
 
@@ -83,10 +85,10 @@ class ItemPidMaker( object ):
         """ Builds and returns final dict.
             Called by make_pid_list(). """
         return_dict = {
-            u'datetime': unicode( datetime.datetime.now() ),
-            u'count_items': len( enhanced_doc_list ),
-            u'count_images': image_count,
-            u'items': enhanced_doc_list }
+            'datetime': unicode( datetime.datetime.now() ),
+            'count_items': len( enhanced_doc_list ),
+            'count_images': image_count,
+            'items': enhanced_doc_list }
         return return_dict
 
     # end class ItemPidMaker()
@@ -94,9 +96,9 @@ class ItemPidMaker( object ):
 
 
 
-if __name__ == u'__main__':
-    BELL_COLLECTION_PID = os.environ[u'BELL_ONEOFF__BELL_COLLECTION_PID']
-    API_ROOT_URL = os.environ[u'BELL_ONEOFF__API_ROOT_URL']
+if __name__ == '__main__':
+    BELL_COLLECTION_PID = os.environ['BELL_ONEOFF__BELL_COLLECTION_PID']
+    API_ROOT_URL = os.environ['BELL_ONEOFF__API_ROOT_URL']
     maker = ItemPidMaker( BELL_COLLECTION_PID, API_ROOT_URL )
     pids = maker.make_pid_list()
     print json.dumps( pids, sort_keys=True, indent=2 )

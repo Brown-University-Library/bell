@@ -1,5 +1,7 @@
 # -*- coding: utf-8 -*-
 
+from __future__ import unicode_literals
+
 """ Rebuilds bell custom index.
     To run:
     - activate virtual environment
@@ -25,7 +27,7 @@ class CustomReindexer( object ):
         json_maker.convert_fmproxml_to_json( fmpro_xml_path, fmpro_json_path )
         with open( fmpro_json_path ) as f:
             fmpro_json_dict = json.loads( f.read() )
-        assert sorted( fmpro_json_dict.keys() ) == [ u'count', u'datetime', u'items' ], sorted( fmpro_json_dict.keys() )
+        assert sorted( fmpro_json_dict.keys() ) == [ 'count', 'datetime', 'items' ], sorted( fmpro_json_dict.keys() )
         return
 
     def make_pid_dict( self, bdr_collection_pid, fmpro_json_path, bdr_search_api_root, output_json_path ):
@@ -35,8 +37,8 @@ class CustomReindexer( object ):
             bdr_collection_pid, fmpro_json_path, bdr_search_api_root, output_json_path )
         with open( output_json_path ) as f:
             json_dict = json.loads( f.read() )
-        assert sorted( json_dict.keys() ) == [ u'count', u'datetime', u'final_accession_pid_dict' ], sorted( json_dict.keys() )
-        # assert json_dict[u'count'][u'count_null'] == 0  # count_null SHOULD be zero but i'm skipping this issue for now
+        assert sorted( json_dict.keys() ) == [ 'count', 'datetime', 'final_accession_pid_dict' ], sorted( json_dict.keys() )
+        # assert json_dict['count']['count_null'] == 0  # count_null SHOULD be zero but i'm skipping this issue for now
         return
 
     def make_pid_list( self, collection_pid, bdr_search_api_root ):
@@ -45,20 +47,20 @@ class CustomReindexer( object ):
         doc_list = pid_finder._run_studio_solr_query( collection_pid, bdr_search_api_root )
         bdr_pid_list = []
         for entry in doc_list:
-            bdr_pid_list.append( entry[u'pid'] )
+            bdr_pid_list.append( entry['pid'] )
         bdr_pid_list = sorted( bdr_pid_list )
-        print u'- bdr_pid_list...'
+        print '- bdr_pid_list...'
         return bdr_pid_list
 
     def make_pids_to_remove( self, pids_from_collection, pids_for_accession_number_json_path ):
         """ Returns a list of pids for removal from custom index, and, perhaps, later, bdr. """
         with open( pids_for_accession_number_json_path ) as f:
             json_dict = json.loads( f.read() )
-        assert sorted( json_dict.keys() ) == [ u'count', u'datetime', u'final_accession_pid_dict' ]
-        pids_for_accession_numbers = json_dict[u'final_accession_pid_dict'].values()
+        assert sorted( json_dict.keys() ) == [ 'count', 'datetime', 'final_accession_pid_dict' ]
+        pids_for_accession_numbers = json_dict['final_accession_pid_dict'].values()
         pids_to_remove_set = set(pids_from_collection) - set(pids_for_accession_numbers)
         pids_to_remove_list = list( pids_to_remove_set )
-        print u'pids_to_remove_list...'
+        print 'pids_to_remove_list...'
         pprint.pprint( pids_to_remove_list )
         1/0  # safety: review list before running removals
         return pids_to_remove_list
@@ -73,19 +75,19 @@ class CustomReindexer( object ):
     def delete_via_bdr_item_api( self, pid, item_api_url, identity, auth_code ):
         """ Hits item-api to delete item from bdr. """
         payload = {
-            u'pid': pid,
-            u'identity': identity,
-            u'authorization_code': auth_code }
-        # print u'- item_api_url, `%s`' % item_api_url
-        # print u'- identity, `%s`' % identity
+            'pid': pid,
+            'identity': identity,
+            'authorization_code': auth_code }
+        # print '- item_api_url, `%s`' % item_api_url
+        # print '- identity, `%s`' % identity
         r = requests.delete( item_api_url, data=payload, verify=False )
-        self.logger.debug( u'in rebuild_custom_index.delete_via_bdr_item_api(); r.status_code, `%s`; r.content, `%s`' % (r.status_code, r.content.decode(u'utf-8')) )
+        self.logger.debug( 'in rebuild_custom_index.delete_via_bdr_item_api(); r.status_code, `%s`; r.content, `%s`' % (r.status_code, r.content.decode('utf-8')) )
         return
 
     ## end class CustomReindexer()
 
 
-bell_q = rq.Queue( u'bell:job_queue', connection=redis.Redis() )
+bell_q = rq.Queue( 'bell:job_queue', connection=redis.Redis() )
 
 def run_start_reindex_all():
     """ Starts full custom-reindex process
@@ -102,50 +104,50 @@ def run_start_reindex_all():
         - enqueue all the reindex jobs
         """
     reindexer = CustomReindexer( bell_logger.setup_logger() )
-    fmpro_xml_path = unicode( os.environ[u'BELL_ANTD__FMPRO_XML_PATH'] )
-    fmpro_json_path = unicode( os.environ[u'BELL_ANTD__JSON_OUTPUT_PATH'] )
+    fmpro_xml_path = unicode( os.environ['BELL_ANTD__FMPRO_XML_PATH'] )
+    fmpro_json_path = unicode( os.environ['BELL_ANTD__JSON_OUTPUT_PATH'] )
     reindexer.make_initial_json( fmpro_xml_path, fmpro_json_path )  # just savws to json; nothing returned
     bell_q.enqueue_call(
-        func=u'bell_code.one_offs.rebuild_custom_index.run_make_pid_dict_from_bell_data',
+        func='bell_code.one_offs.rebuild_custom_index.run_make_pid_dict_from_bell_data',
         kwargs={} )
     return
 
 def run_make_pid_dict_from_bell_data():
     """ Calls to create a json file containing an accession_number-to-pid dict. """
-    bdr_collection_pid=os.environ[u'BELL_ANTP__COLLECTION_PID']
-    fmpro_json_path=os.environ[u'BELL_ANTP__BELL_DICT_JSON_PATH']  # file of dict of bell-accession-number to metadata
-    bdr_search_api_root=os.environ[u'BELL_ANTP__SOLR_ROOT']
-    output_json_path=os.environ[u'BELL_ANTP__OUTPUT_JSON_PATH']
+    bdr_collection_pid=os.environ['BELL_ANTP__COLLECTION_PID']
+    fmpro_json_path=os.environ['BELL_ANTP__BELL_DICT_JSON_PATH']  # file of dict of bell-accession-number to metadata
+    bdr_search_api_root=os.environ['BELL_ANTP__SOLR_ROOT']
+    output_json_path=os.environ['BELL_ANTP__OUTPUT_JSON_PATH']
     reindexer = CustomReindexer( bell_logger.setup_logger() )
     reindexer.make_pid_dict( bdr_collection_pid, fmpro_json_path, bdr_search_api_root, output_json_path )
     bell_q.enqueue_call(
-        func=u'bell_code.one_offs.rebuild_custom_index.run_make_pid_list_from_bdr_data',
+        func='bell_code.one_offs.rebuild_custom_index.run_make_pid_list_from_bdr_data',
         kwargs={} )
     return
 
 def run_make_pid_list_from_bdr_data():
     """ Calls for a list of pids for the given collection_pid. """
-    bdr_collection_pid=os.environ[u'BELL_ANTP__COLLECTION_PID']
-    bdr_search_api_root=os.environ[u'BELL_ANTP__SOLR_ROOT']
+    bdr_collection_pid=os.environ['BELL_ANTP__COLLECTION_PID']
+    bdr_search_api_root=os.environ['BELL_ANTP__SOLR_ROOT']
     reindexer = CustomReindexer( bell_logger.setup_logger() )
     collection_pids = reindexer.make_pid_list( bdr_collection_pid, bdr_search_api_root )
     bell_q.enqueue_call(
-        func=u'bell_code.one_offs.rebuild_custom_index.run_make_pids_to_remove',
-        kwargs={ u'pids_from_collection': collection_pids } )
+        func='bell_code.one_offs.rebuild_custom_index.run_make_pids_to_remove',
+        kwargs={ 'pids_from_collection': collection_pids } )
     return
 
 def run_make_pids_to_remove( pids_from_collection ):
     """ Calls for a list of pids to remove. """
     assert type(pids_from_collection) == list
-    ( pids_for_accession_number_json_path, reindexer ) = ( unicode(os.environ[u'BELL_ANTP__OUTPUT_JSON_PATH']), CustomReindexer(bell_logger.setup_logger()) )
+    ( pids_for_accession_number_json_path, reindexer ) = ( unicode(os.environ['BELL_ANTP__OUTPUT_JSON_PATH']), CustomReindexer(bell_logger.setup_logger()) )
     pids_to_remove = reindexer.make_pids_to_remove( pids_from_collection, pids_for_accession_number_json_path )
     bell_q.enqueue_call(
-        func=u'bell_code.one_offs.rebuild_custom_index.run_make_pids_to_update',
+        func='bell_code.one_offs.rebuild_custom_index.run_make_pids_to_update',
         kwargs={} )
     for pid in pids_to_remove:
         bell_q.enqueue_call(
-            func=u'bell_code.one_offs.rebuild_custom_index.run_remove_pid_from_custom_index',
-            kwargs={ u'pid': pid } )
+            func='bell_code.one_offs.rebuild_custom_index.run_remove_pid_from_custom_index',
+            kwargs={ 'pid': pid } )
     return
 
 def run_remove_pid_from_custom_index( pid ):
@@ -154,27 +156,27 @@ def run_remove_pid_from_custom_index( pid ):
     reindexer = CustomReindexer( bell_logger.setup_logger() )
     reindexer.remove_pid_from_custom_index( pid )
     bell_q.enqueue_call(
-        func=u'bell_code.one_offs.rebuild_custom_index.run_delete_via_bdr_item_api',
-        kwargs={ u'pid': pid } )
+        func='bell_code.one_offs.rebuild_custom_index.run_delete_via_bdr_item_api',
+        kwargs={ 'pid': pid } )
     return
 
 def run_delete_via_bdr_item_api( pid ):
     """ Calls to remove pid from bdr. """
     assert type(pid) == unicode
     reindexer = CustomReindexer( bell_logger.setup_logger() )
-    item_api_url = unicode( os.environ[u'BELL_ONEOFF__OLD_ITEM_API_URL'] )
-    identity = unicode( os.environ[u'BELL_ONEOFF__OLD_ITEM_API_AUTH_NAME'] )
-    auth_code = unicode( os.environ[u'BELL_ONEOFF__OLD_ITEM_API_AUTH_KEY'] )
+    item_api_url = unicode( os.environ['BELL_ONEOFF__OLD_ITEM_API_URL'] )
+    identity = unicode( os.environ['BELL_ONEOFF__OLD_ITEM_API_AUTH_NAME'] )
+    auth_code = unicode( os.environ['BELL_ONEOFF__OLD_ITEM_API_AUTH_KEY'] )
     reindexer.delete_via_bdr_item_api( pid, item_api_url, identity, auth_code )
     return
 
 def run_make_pids_to_update():
     """ Calls for a list of pids to update in custom-index. """
-    print u'TODO'
+    print 'TODO'
     return
 
 
 
 
-if __name__ == u'__main__':
+if __name__ == '__main__':
     run_start_reindex_all()

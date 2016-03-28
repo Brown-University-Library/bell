@@ -111,7 +111,7 @@ class ImageBuilder( object ):
             Called by fedora_metadata_and_image_builder.add_metadata_and_image(). """
         download_filename = filename.replace( u' ', u'_' )
         download_description = rels.Description()
-        download_description.about = u"%s/%s" % ( new_obj.uriref, dsID )
+        download_description.about = '%s/%s' % ( new_obj.uriref, dsID )
         download_description.download_filename = download_filename
         new_obj.rels_int.content.descriptions.append( download_description )
         return new_obj
