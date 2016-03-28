@@ -8,13 +8,18 @@ code related to ingesting bell-gallery images into the bdr.
 - get metadata
     - metadata should be for _all_ the records
     - from having all the metadata, the code can determine what image-&-metadata additions to make, what metadata-only additions to make, and make corrections to existing bdr metadata
-    - 2016-03-28 status: metadata file from November only contained a few records; J.C. emailed for new file
+    - status: done 2016-03-28
+        - metadata file from November only contained a few records; J.C. emailed for new file
+        - git it, good added it to repo
+            - `a__all_data_raw.xml`
+            - `b__all_data_formatted.xml`
 
 - get access to image-directory
     - desktop
-        - 2016-03-28 status: instructions to view images from desktop from March 17 worked
+        - status: done 2016-03-26
+            - instructions to view images from desktop from March 17 worked
     - mount
-        - 2016-03-28 status: TODO
+        - status: 2016-03-16 -- TODO
 
 - convert raw filemaker-pro xml to json
     - foundation/acc_num_to_data.py
