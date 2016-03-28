@@ -1,5 +1,7 @@
 # -*- coding: utf-8 -*-
 
+from __future__ import unicode_literals
+
 import pprint, unittest
 from acc_num_to_data import SourceDictMaker
 
@@ -10,7 +12,7 @@ class MakeSourceBellJson_Test(unittest.TestCase):
         ''' Tests conversion of xml into dict.
             Note, normalization of data-types happens later. '''
         maker = SourceDictMaker()
-        NAMESPACE = { u'default': u'http://www.filemaker.com/fmpxmlresult' }
+        NAMESPACE = { 'default': 'http://www.filemaker.com/fmpxmlresult' }
         XML_DOC = maker._docify_xml( self.TEST_FMPRO_XML_A )                      # docify xml string
         dict_keys = maker._make_dict_keys( XML_DOC, NAMESPACE )                 # get dict keys
         xml_doc_rows = maker._get_xml_doc_rows( XML_DOC, NAMESPACE )            # get list of doc-items
@@ -23,7 +25,7 @@ class MakeSourceBellJson_Test(unittest.TestCase):
             This xml contains multiple empty data elements.
             Note, normalization of data-types happens later. '''
         maker = SourceDictMaker()
-        NAMESPACE = { u'default': u'http://www.filemaker.com/fmpxmlresult' }
+        NAMESPACE = { 'default': 'http://www.filemaker.com/fmpxmlresult' }
         XML_DOC = maker._docify_xml( self.TEST_FMPRO_XML_B )                      # docify xml string
         dict_keys = maker._make_dict_keys( XML_DOC, NAMESPACE )                 # get dict keys
         xml_doc_rows = maker._get_xml_doc_rows( XML_DOC, NAMESPACE )            # get list of doc-items
@@ -38,11 +40,11 @@ class MakeSourceBellJson_Test(unittest.TestCase):
   #   key_type_dict = msbj._make_key_type_dict( self.TEST_INITIAL_DICT_LIST )
   #   result = msbj._normalize_value_types( key_type_dict, self.TEST_INITIAL_DICT_LIST )
   #   pprint.pprint( result )
-  #   self.assertEquals( u'z', result )
+  #   self.assertEquals( 'z', result )
 
   ## class test data ##
 
-    TEST_FMPRO_XML_A = u'''<?xml version="1.0" ?>
+    TEST_FMPRO_XML_A = '''<?xml version="1.0" ?>
 <FMPXMLRESULT xmlns="http://www.filemaker.com/fmpxmlresult">
   <ERRORCODE>0</ERRORCODE>
   <PRODUCT BUILD="03-21-2013" NAME="FileMaker" VERSION="Pro 12.0v4"/>
@@ -196,45 +198,45 @@ class MakeSourceBellJson_Test(unittest.TestCase):
 </FMPXMLRESULT>'''
 
     TEST_INITIAL_DICT_LIST_A = [ {  # it's ok that author entries are strings instead of lists at this point
-    u'ARTISTS::artist_alias': None,
-    u'ARTISTS::artist_birth_country_id': u'231',
-    u'ARTISTS::artist_birth_year': u'1898',
-    u'ARTISTS::artist_death_year': u'1991',
-    u'ARTISTS::artist_first_name': u'Berenice',
-    u'ARTISTS::artist_last_name': u'Abbott',
-    u'ARTISTS::artist_lifetime': u'1898-1991',
-    u'ARTISTS::artist_middle_name': None,
-    u'ARTISTS::artist_nationality_name': u'American',
-    u'ARTISTS::calc_artist_full_name': u'Berenice Abbott',
-    u'ARTISTS::calc_nationality': u'American',
-    u'ARTISTS::use_alias_flag': None,
-    u'MEDIA::object_medium_name': u'Book',
-    u'MEDIA_SUB::sub_media_name': [u'Letterpress', u'Lithograph '],
-    u'OBJECT_ARTISTS::artist_id': u'223',
-    u'OBJECT_ARTISTS::artist_role': None,
-    u'OBJECT_ARTISTS::primary_flag': u'yes',
-    u'OBJECT_MEDIA_SUB::media_sub_id': [u'32', u'35'],
-    u'SERIES::series_end_year': None,
-    u'SERIES::series_name': None,
-    u'SERIES::series_start_year': None,
-    u'calc_accession_id': u'B 1980.1566',
-    u'credit_line': u'Gift of Saul P. Steinberg',
-    u'image_height': None,
-    u'image_width': None,
-    u'object_date': u'1978',
-    u'object_depth': None,
-    u'object_height': None,
-    u'object_id': u'176',
-    u'object_image_scan_filename': None,
-    u'object_medium': u'Letterpress and lithography',
-    u'object_title': u'A Glimpse of Thomas Traherne by Thomas Traherne',
-    u'object_width': None,
-    u'object_year_end': u'1978',
-    u'object_year_start': u'1978',
-    u'series_id': None } ]
+    'ARTISTS::artist_alias': None,
+    'ARTISTS::artist_birth_country_id': '231',
+    'ARTISTS::artist_birth_year': '1898',
+    'ARTISTS::artist_death_year': '1991',
+    'ARTISTS::artist_first_name': 'Berenice',
+    'ARTISTS::artist_last_name': 'Abbott',
+    'ARTISTS::artist_lifetime': '1898-1991',
+    'ARTISTS::artist_middle_name': None,
+    'ARTISTS::artist_nationality_name': 'American',
+    'ARTISTS::calc_artist_full_name': 'Berenice Abbott',
+    'ARTISTS::calc_nationality': 'American',
+    'ARTISTS::use_alias_flag': None,
+    'MEDIA::object_medium_name': 'Book',
+    'MEDIA_SUB::sub_media_name': ['Letterpress', 'Lithograph '],
+    'OBJECT_ARTISTS::artist_id': '223',
+    'OBJECT_ARTISTS::artist_role': None,
+    'OBJECT_ARTISTS::primary_flag': 'yes',
+    'OBJECT_MEDIA_SUB::media_sub_id': ['32', '35'],
+    'SERIES::series_end_year': None,
+    'SERIES::series_name': None,
+    'SERIES::series_start_year': None,
+    'calc_accession_id': 'B 1980.1566',
+    'credit_line': 'Gift of Saul P. Steinberg',
+    'image_height': None,
+    'image_width': None,
+    'object_date': '1978',
+    'object_depth': None,
+    'object_height': None,
+    'object_id': '176',
+    'object_image_scan_filename': None,
+    'object_medium': 'Letterpress and lithography',
+    'object_title': 'A Glimpse of Thomas Traherne by Thomas Traherne',
+    'object_width': None,
+    'object_year_end': '1978',
+    'object_year_start': '1978',
+    'series_id': None } ]
 
 
-    TEST_FMPRO_XML_B = u'''<?xml version="1.0" ?>
+    TEST_FMPRO_XML_B = '''<?xml version="1.0" ?>
 <FMPXMLRESULT xmlns="http://www.filemaker.com/fmpxmlresult">
   <ERRORCODE>0</ERRORCODE>
   <PRODUCT BUILD="03-21-2013" NAME="FileMaker" VERSION="Pro 12.0v4"/>
@@ -402,42 +404,42 @@ class MakeSourceBellJson_Test(unittest.TestCase):
   </RESULTSET>
 </FMPXMLRESULT>'''
 
-    TEST_INITIAL_DICT_LIST_B = [{u'ARTISTS::artist_alias': [None, None],
-  u'ARTISTS::artist_birth_country_id': [None, None],
-  u'ARTISTS::artist_birth_year': [None, u'1945'],
-  u'ARTISTS::artist_death_year': [None, None],
-  u'ARTISTS::artist_first_name': [u'Christopher', u'John'],
-  u'ARTISTS::artist_last_name': [u'Logue', u'Christie'],
-  u'ARTISTS::artist_lifetime': [None, u'1945'],
-  u'ARTISTS::artist_middle_name': [None, None],
-  u'ARTISTS::artist_nationality_name': [None, u'British'],
-  u'ARTISTS::calc_artist_full_name': [u'Christopher Logue', u'John Christie'],
-  u'ARTISTS::calc_nationality': [None, u'British'],
-  u'ARTISTS::use_alias_flag': [None, None],
-  u'MEDIA::object_medium_name': u'Book',
-  u'MEDIA_SUB::sub_media_name': [u'Letterpress', u'Screenprint'],
-  u'OBJECT_ARTISTS::artist_id': [u'466', u'122'],
-  u'OBJECT_ARTISTS::artist_role': [None, None],
-  u'OBJECT_ARTISTS::primary_flag': [u'yes', u'no'],
-  u'OBJECT_MEDIA_SUB::media_sub_id': [u'32', u'52'],
-  u'SERIES::series_end_year': None,
-  u'SERIES::series_name': None,
-  u'SERIES::series_start_year': None,
-  u'calc_accession_id': u'B 1980.1570',
-  u'credit_line': u'Gift of Saul P. Steinberg',
-  u'image_height': None,
-  u'image_width': None,
-  u'object_date': u'1979',
-  u'object_depth': None,
-  u'object_height': None,
-  u'object_id': u'178',
-  u'object_image_scan_filename': None,
-  u'object_medium': u'Letterpress and screenprint',
-  u'object_title': u'Red Bird',
-  u'object_width': None,
-  u'object_year_end': u'1979',
-  u'object_year_start': u'1979',
-  u'series_id': None}]
+    TEST_INITIAL_DICT_LIST_B = [{'ARTISTS::artist_alias': [None, None],
+  'ARTISTS::artist_birth_country_id': [None, None],
+  'ARTISTS::artist_birth_year': [None, '1945'],
+  'ARTISTS::artist_death_year': [None, None],
+  'ARTISTS::artist_first_name': ['Christopher', 'John'],
+  'ARTISTS::artist_last_name': ['Logue', 'Christie'],
+  'ARTISTS::artist_lifetime': [None, '1945'],
+  'ARTISTS::artist_middle_name': [None, None],
+  'ARTISTS::artist_nationality_name': [None, 'British'],
+  'ARTISTS::calc_artist_full_name': ['Christopher Logue', 'John Christie'],
+  'ARTISTS::calc_nationality': [None, 'British'],
+  'ARTISTS::use_alias_flag': [None, None],
+  'MEDIA::object_medium_name': 'Book',
+  'MEDIA_SUB::sub_media_name': ['Letterpress', 'Screenprint'],
+  'OBJECT_ARTISTS::artist_id': ['466', '122'],
+  'OBJECT_ARTISTS::artist_role': [None, None],
+  'OBJECT_ARTISTS::primary_flag': ['yes', 'no'],
+  'OBJECT_MEDIA_SUB::media_sub_id': ['32', '52'],
+  'SERIES::series_end_year': None,
+  'SERIES::series_name': None,
+  'SERIES::series_start_year': None,
+  'calc_accession_id': 'B 1980.1570',
+  'credit_line': 'Gift of Saul P. Steinberg',
+  'image_height': None,
+  'image_width': None,
+  'object_date': '1979',
+  'object_depth': None,
+  'object_height': None,
+  'object_id': '178',
+  'object_image_scan_filename': None,
+  'object_medium': 'Letterpress and screenprint',
+  'object_title': 'Red Bird',
+  'object_width': None,
+  'object_year_end': '1979',
+  'object_year_start': '1979',
+  'series_id': None}]
 
   # end class MakeSourceBellJson_Test()
 

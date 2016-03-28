@@ -1,5 +1,7 @@
 # -*- coding: utf-8 -*-
 
+from __future__ import unicode_literals
+
 import json, os, pprint
 import gspread  # <https://github.com/burnash/gspread>
 
@@ -23,42 +25,42 @@ class GoogleSpreadsheetFilenameLinker( object ):
             ( key, value ) = self._get_cell_data( cell_1=col_1[i], cell_2=col_2[i] )
             dic[ key ] = value
         jstring = json.dumps( dic, sort_keys=True, indent=2 )
-        with open( JSON_OUTPUT_PATH, u'w' ) as f:
+        with open( JSON_OUTPUT_PATH, 'w' ) as f:
             f.write( jstring )
         return
 
     def _get_worksheet( self, G_EMAIL, G_PASSWORD ):
         """ Returns worksheet. """
         gc = gspread.login( G_EMAIL, G_PASSWORD )  # gc == 'gspread_client'
-        sp_sheet = gc.open( u'bell_tracker' )
-        wk_sheet = sp_sheet.worksheet( u'overview' )
+        sp_sheet = gc.open( 'bell_tracker' )
+        wk_sheet = sp_sheet.worksheet( 'overview' )
         return wk_sheet
 
     def _get_columns( self, wk_sheet ):
         """ Returns columns without header row. """
         tmp_col_1 = wk_sheet.col_values( 1 )  # not zero-indexed -- this is column A
         tmp_col_2 = wk_sheet.col_values( 2 )
-        assert len(tmp_col_1) == len(tmp_col_2), Exception( u'column-length mismatch' )
+        assert len(tmp_col_1) == len(tmp_col_2), Exception( 'column-length mismatch' )
         col_1 = tmp_col_1[ 1: ]  # ignore header row
         col_2 = tmp_col_2[ 1: ]
         return ( col_1, col_2 )
 
     def _get_cell_data( self, cell_1, cell_2 ):
         """ Returns cleaned key/value. """
-        key = cell_1.strip().decode( u'utf-8', u'replace' )
+        key = cell_1.strip().decode( 'utf-8', 'replace' )
         value = cell_2
         if type(value) == str:
-            value = value.strip().decode( u'utf-8', u'replace' )
+            value = value.strip().decode( 'utf-8', 'replace' )
         return ( key, value )
 
     def _print_settings( self, G_EMAIL, B, JSON_OUTPUT_PATH ):
         """ Outputs settings derived from environmental variables for development. """
-        print u'- settings...'
-        print u'- G_EMAIL: %s' % G_EMAIL
-        print u'- G_PASSWORD: %s' % u'---------'
-        # print u'- G_PASSWORD: %s' % G_PASSWORD
-        print u'- JSON_OUTPUT_PATH: %s' % JSON_OUTPUT_PATH
-        print u'---'
+        print '- settings...'
+        print '- G_EMAIL: %s' % G_EMAIL
+        print '- G_PASSWORD: %s' % '---------'
+        # print '- G_PASSWORD: %s' % G_PASSWORD
+        print '- JSON_OUTPUT_PATH: %s' % JSON_OUTPUT_PATH
+        print '---'
         return
 
     # end class GoogleSpreadsheetFilenameLinker()
@@ -66,12 +68,12 @@ class GoogleSpreadsheetFilenameLinker( object ):
 
 
 
-if __name__ == u'__main__':
+if __name__ == '__main__':
     """ Assumes env is activated.
         ( 'ANTF' used as a namespace prefix for this 'acc_num_to_filename.py' file. ) """
-    G_EMAIL=os.environ.get( u'BELL_ANTF__G_MAIL' )
-    G_PASSWORD=os.environ.get( u'BELL_ANTF__G_PASSWORD' )
-    JSON_OUTPUT_PATH=os.environ.get( u'BELL_ANTF__JSON_OUTPUT_PATH' )
+    G_EMAIL=os.environ.get( 'BELL_ANTF__G_MAIL' )
+    G_PASSWORD=os.environ.get( 'BELL_ANTF__G_PASSWORD' )
+    JSON_OUTPUT_PATH=os.environ.get( 'BELL_ANTF__JSON_OUTPUT_PATH' )
     linker = FilenameLinker()
     linker._print_settings(
         G_EMAIL, G_PASSWORD, JSON_OUTPUT_PATH )
