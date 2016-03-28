@@ -15,80 +15,82 @@ code related to ingesting bell-gallery images into the bdr.
             - `b__all_data_formatted.xml`
 
 - get access to image-directory
-    - desktop
+    - check desktop access
         - status: done 2016-03-26
             - instructions to view images from desktop from March 17 worked
-    - mount
-        - status: 2016-03-16 -- TODO
+    - check dev `mount` access
+        - status: done 2016-03-16
+    - check image-files readability
+        - status:
 
 - convert raw filemaker-pro xml to json
     - foundation/acc_num_to_data.py
     - end result: `accession_number_to_data_dict.json`
-    - status: done; discrepancies sorted out march-3; rerun with stripped accession-number keys march-4.
+    - status:
 
 - run script to get list of files in the images-to-ingest directory
     - utils/make_image_list.py
     - end result: `bell_images_listing.json`
-    - status: done; march-3.
+    - status:
 
 - compare imagefile-filenames to metadata-filenames
     - utils/check_filenames_against_metadata.py
     - console output lists files for which there's no metadata
     - work through discrepancies w/J.C.
     - end result: updated `accession_number_to_data_dict.json`
-    - status: done; march-3; rerun march-4 w/updated metadata keys; no difference.
+    - status:
 
 - match metadata accession-numbers to pid #1
     - foundation/acc_num_to_pid.py
     - end result: `accession_number_to_pid_dict.json` file containing a dict of accession-numbers-to-pids.
     - accession-numbers without pids imply creation of a new metadata-only object (which may gain an associated image below)
     - accession-numbers with pids imply checking to see if fedora metadata needs to be updated
-    - status: done; march-4; rerun march-4 w/updated metadata keys; found 9 extra pids.
+    - status:
 
 - make metadata-only list
     - tasks/metadata.MetadataOnlyLister.list_metadata_only_accession_numbers()
     - end result: `metadata_only_accession_numbers.json`
-    - status: done; march-4; rerun march-4 w/updated metadata keys; count down to 105 from 114 extra pids.
+    - status:
 
 - create new metadata objects
     - after creates, confirm a re-run of `foundation/acc_num_to_pid.py` results in zero non-pid matches.
-    - status: done; march-6.
+    - status:
 
 - make list of images to process
     - tasks/images.ImageLister.make_image_lists()
     - produces a file containing both a list of images to add, and a list of images to update
     - end result: `g_images_to_process.json`
-    - status: done; march-9.
+    - status:
 
 - add images
     - tasks/images.run_enqueue_add_image_jobs() -- and tasks/images.run_add_image( filename_dct )
     - many iterations; permissions issues; Meyerowitz fixes; apostrophe-in-filename handling.
-    - status: done; march-16.
+    - status:
 
 - update the custom-solr-index
     - prep list of pids from custom-index
         - tasks/indexer.run_make_pids_from_custom_index()
         - end result: `h__pids_from_custom_index_list.json`
-        - status: done
+        - status:
     - prep pids-to-delete list
         - tasks/indexer.run_make_deletes_list()
         - end result: `i__custom_index_delete_pids.json`
         - review that list
-        - status: done
+        - status:
     - prep pids-to-update list
         - tasks/indexer.run_make_deletes_list()
         - adds pid to accession-number-to-data-dct data.
         - end result: `j__custom_index_update_data_list.json`
-        - status: done
+        - status:
     - run updates
         - tasks/indexer.run_enqueue_index_jobs()
         - end result: `k__entries_updated_tracker.json`
-        - status: in-process
+        - status:
     - run deletes -- maybe, check w/J.C.
         - tasks/indexer.run_delete_pids()
         - end result: `l__pids_deleted_tracker.json`
 
 - let Bell-J.C. & CIS-J.O. know when done
-    - status: not done
+    - status:
 
 ---
