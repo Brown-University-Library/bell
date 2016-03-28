@@ -1,5 +1,7 @@
 # -*- coding: utf-8 -*-
 
+from __future__ import unicode_literals
+
 import json, pprint
 import redis
 
@@ -7,7 +9,7 @@ import redis
 
 
 rds = redis.StrictRedis( host='localhost', port=6379, db=0 )
-dct = rds.hgetall( u'bell:tracker' )
+dct = rds.hgetall( 'bell:tracker' )
 
 dct2 = {}
 for key, value in dct.items():
