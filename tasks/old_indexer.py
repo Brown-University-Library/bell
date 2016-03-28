@@ -1,5 +1,7 @@
 # -*- coding: utf-8 -*-
 
+from __future__ import unicode_literals
+
 import os, pprint, sys, time
 import requests
 from bell_code import bell_logger
@@ -17,33 +19,33 @@ class Indexer( object ):
     def __init__( self, logger=None ):
         self.logger = logger
         self.REQUIRED_KEYS = [  # used by _validate_solr_dict()
-            u'accession_number_original',
-            u'author_birth_date',
-            u'author_date',
-            u'author_death_date',
-            u'author_description',
-            u'author_display',
-            u'author_names_first',
-            u'author_names_last',
-            u'author_names_middle',
-            u'image_height',
-            u'image_width',
-            u'jp2_image_url',
-            u'location_physical_location',
-            u'location_shelf_locator',
-            u'master_image_url',
-            u'note_provenance',
-            u'object_date',
-            u'object_depth',
-            u'object_height',
-            u'object_width',
-            u'origin_datecreated_end',
-            u'origin_datecreated_start',
-            u'physical_description_extent',
-            u'physical_description_material',
-            u'physical_description_technique',
-            u'pid',
-            u'title',
+            'accession_number_original',
+            'author_birth_date',
+            'author_date',
+            'author_death_date',
+            'author_description',
+            'author_display',
+            'author_names_first',
+            'author_names_last',
+            'author_names_middle',
+            'image_height',
+            'image_width',
+            'jp2_image_url',
+            'location_physical_location',
+            'location_shelf_locator',
+            'master_image_url',
+            'note_provenance',
+            'object_date',
+            'object_depth',
+            'object_height',
+            'object_width',
+            'origin_datecreated_end',
+            'origin_datecreated_start',
+            'physical_description_extent',
+            'physical_description_material',
+            'physical_description_technique',
+            'pid',
+            'title',
             ]
 
     ## main functions ##
@@ -52,8 +54,8 @@ class Indexer( object ):
         """ Builds dict-to-index using just basic item-dict data and pid; image-check handled in separate function.
             Called by utils.update_custom_index.py """
         solr_dict = {}
-        solr_dict[u'accession_number_original'] = original_dict[u'calc_accession_id']
-        solr_dict[u'pid'] = pid
+        solr_dict['accession_number_original'] = original_dict['calc_accession_id']
+        solr_dict['pid'] = pid
         solr_dict = self._set_author_dates( original_dict, solr_dict )
         solr_dict = self._set_author_description( original_dict, solr_dict )
         solr_dict = self._set_author_names( original_dict, solr_dict )
@@ -64,13 +66,13 @@ class Indexer( object ):
         solr_dict = self._set_physical_extent( original_dict, solr_dict )
         solr_dict = self._set_physical_descriptions( original_dict, solr_dict )
         solr_dict = self._set_title( original_dict, solr_dict )
-        self.logger.debug( u'in tasks.indexer.build_metadata_only_solr_dict(); solr_dict, `%s`' % pprint.pformat(solr_dict) )
+        self.logger.debug( 'in tasks.indexer.build_metadata_only_solr_dict(); solr_dict, `%s`' % pprint.pformat(solr_dict) )
         return solr_dict
 
     def add_image_metadata( self, solr_dict, links_dict ):
         """ Adds image metadata to dict-to-index. """
-        solr_dict[u'jp2_image_url'] = self._set_image_urls__get_jp2_url( links_dict )
-        solr_dict[u'master_image_url'] = self._set_image_urls__get_master_image_url( links_dict, solr_dict[u'jp2_image_url'] )
+        solr_dict['jp2_image_url'] = self._set_image_urls__get_jp2_url( links_dict )
+        solr_dict['master_image_url'] = self._set_image_urls__get_master_image_url( links_dict, solr_dict['jp2_image_url'] )
         return solr_dict
 
     def validate_solr_dict( self, solr_dict ):
@@ -82,41 +84,41 @@ class Indexer( object ):
             Called by build_metadata_only_solr_dict() """
         try:
             for required_key in self.REQUIRED_KEYS:
-                # self.logger.debug( u'in tasks.indexer._validate_solr_dict(); required_key: %s' % required_key )
-                assert required_key in solr_dict.keys(), Exception( u'ERROR; missing required key: %s' % required_key )
+                # self.logger.debug( 'in tasks.indexer._validate_solr_dict(); required_key: %s' % required_key )
+                assert required_key in solr_dict.keys(), Exception( 'ERROR; missing required key: %s' % required_key )
             for key,value in solr_dict.items():
-              assert value != None, Exception( u'ERROR; value is none for key: %s' % key )
+              assert value != None, Exception( 'ERROR; value is none for key: %s' % key )
               if type(value) == list:
-                assert len(value) > 0, Exception( u'ERROR: key "%s" has a value of "%s", which is type-list, which is empty.' % ( key, value ) )
+                assert len(value) > 0, Exception( 'ERROR: key "%s" has a value of "%s", which is type-list, which is empty.' % ( key, value ) )
                 for element in value:
-                  assert element != None, Exception( u'ERROR: key "%s" has a value "%s", which is type-list, which contains a None element' % ( key, value ) )
+                  assert element != None, Exception( 'ERROR: key "%s" has a value "%s", which is type-list, which contains a None element' % ( key, value ) )
             return True
         except Exception as e:
-            self.logger.error( u'in tasks.indexer._validate_solr_dict(); exception is: %s' % unicode(repr(e)) )
+            self.logger.error( 'in tasks.indexer._validate_solr_dict(); exception is: %s' % unicode(repr(e)) )
             return False
 
     def post_to_solr( self, solr_dict ):
         """ Posts solr_dict to solr. """
-        SOLR_ROOT_URL = ( os.environ.get(u'BELL_I_SOLR_ROOT') )
+        SOLR_ROOT_URL = ( os.environ.get('BELL_I_SOLR_ROOT') )
         solr = Solr( SOLR_ROOT_URL )
-        response = solr.update( [solr_dict], u'xml', commit=True )  # 'xml' param converts default json to xml for post; required for our old version of solr
+        response = solr.update( [solr_dict], 'xml', commit=True )  # 'xml' param converts default json to xml for post; required for our old version of solr
         response_status = response.status
-        self.logger.info( u'in tasks.indexer.post_to_solr() [for custom-solr]; accession_number, %s; response_status, %s' % (solr_dict[u'accession_number_original'], response_status) )
+        self.logger.info( 'in tasks.indexer.post_to_solr() [for custom-solr]; accession_number, %s; response_status, %s' % (solr_dict['accession_number_original'], response_status) )
         if not response_status == 200:
-            raise Exception( u'custom-solr post problem logged' )
+            raise Exception( 'custom-solr post problem logged' )
         return response_status
 
     def delete_item( self, pid ):
         """ Deletes item from custom bell index.
             Called by one_offs.rebuild_custom_index(). """
-        SOLR_ROOT_URL = ( os.environ.get(u'BELL_I_SOLR_ROOT') )
-        self.logger.info( u'in tasks.indexer.delete_item() [for custom-solr]; SOLR_ROOT_URL, %s' % SOLR_ROOT_URL )
+        SOLR_ROOT_URL = ( os.environ.get('BELL_I_SOLR_ROOT') )
+        self.logger.info( 'in tasks.indexer.delete_item() [for custom-solr]; SOLR_ROOT_URL, %s' % SOLR_ROOT_URL )
         solr = Solr( SOLR_ROOT_URL )
-        response = solr.delete_by_query( u'pid:"%s"' % pid, commit=True )
+        response = solr.delete_by_query( 'pid:"%s"' % pid, commit=True )
         response_status = response.status
-        self.logger.info( u'in tasks.indexer.delete_item() [for custom-solr]; pid, %s; response_status, %s' % (pid, response_status) )
+        self.logger.info( 'in tasks.indexer.delete_item() [for custom-solr]; pid, %s; response_status, %s' % (pid, response_status) )
         if not response_status == 200:
-            raise Exception( u'custom-solr delete problem logged' )
+            raise Exception( 'custom-solr delete problem logged' )
         return response_status
 
     ## metadata-only helpers ##
@@ -124,37 +126,37 @@ class Indexer( object ):
     def _set_author_dates( self, original_dict, solr_dict ):
         """ Sets author dates.
             Called by build_metadata_only_solr_dict() """
-        solr_dict[u'author_birth_date'] = original_dict[u'ARTISTS::artist_birth_year']
-        solr_dict[u'author_death_date'] = original_dict[u'ARTISTS::artist_death_year']
-        solr_dict[u'author_date'] = original_dict[u'ARTISTS::artist_lifetime']
-        solr_dict = self.__ensure_list_unicode_values( solr_dict, [u'author_birth_date', u'author_death_date', u'author_date'] )
+        solr_dict['author_birth_date'] = original_dict['ARTISTS::artist_birth_year']
+        solr_dict['author_death_date'] = original_dict['ARTISTS::artist_death_year']
+        solr_dict['author_date'] = original_dict['ARTISTS::artist_lifetime']
+        solr_dict = self.__ensure_list_unicode_values( solr_dict, ['author_birth_date', 'author_death_date', 'author_date'] )
         return solr_dict
 
     def _set_author_description( self, original_dict, solr_dict ):
         """ Sets author descriptions.
             Called by build_metadata_only_solr_dict() """
-        solr_dict[u'author_description'] = original_dict[u'ARTISTS::calc_nationality']
-        solr_dict = self.__ensure_list_unicode_values( solr_dict, [u'author_description'] )
+        solr_dict['author_description'] = original_dict['ARTISTS::calc_nationality']
+        solr_dict = self.__ensure_list_unicode_values( solr_dict, ['author_description'] )
         return solr_dict
 
     def _set_author_names( self, original_dict, solr_dict ):
         """ Sets author names.
             Called by build_metadata_only_solr_dict() """
-        solr_dict[u'author_names_first'] = original_dict[u'ARTISTS::artist_first_name']
-        solr_dict[u'author_names_middle'] = original_dict[u'ARTISTS::artist_middle_name']
-        solr_dict[u'author_names_last'] = original_dict[u'ARTISTS::artist_last_name']
-        solr_dict[u'author_display'] = original_dict[u'ARTISTS::calc_artist_full_name']
-        solr_dict = self.__ensure_list_unicode_values( solr_dict, [u'author_names_first',
-            u'author_names_middle', u'author_names_last', u'author_display'] )
+        solr_dict['author_names_first'] = original_dict['ARTISTS::artist_first_name']
+        solr_dict['author_names_middle'] = original_dict['ARTISTS::artist_middle_name']
+        solr_dict['author_names_last'] = original_dict['ARTISTS::artist_last_name']
+        solr_dict['author_display'] = original_dict['ARTISTS::calc_artist_full_name']
+        solr_dict = self.__ensure_list_unicode_values( solr_dict, ['author_names_first',
+            'author_names_middle', 'author_names_last', 'author_display'] )
         return solr_dict
 
     def _set_height_width_depth( self, original_dict, solr_dict ):
         """ Sets item dimensions.
             Called by build_metadata_only_solr_dict() """
-        target_keys = [ u'image_width', u'image_height', u'object_width', u'object_height', u'object_depth' ]
+        target_keys = [ 'image_width', 'image_height', 'object_width', 'object_height', 'object_depth' ]
         for entry in target_keys:
             if original_dict[entry] == None:
-                solr_dict[entry] = u''
+                solr_dict[entry] = ''
             else:
                 solr_dict[entry] = original_dict[entry]
         return solr_dict
@@ -162,117 +164,117 @@ class Indexer( object ):
     def _set_locations( self, original_dict, solr_dict ):
         """ Returns location_physical_location & location_shelf_locator.
             Called by build_metadata_only_solr_dict() """
-        solr_dict[u'location_physical_location'] = u'Bell Art Gallery'
-        solr_dict[u'location_shelf_locator'] = u''
-        if original_dict[u'MEDIA::object_medium_name'] != None:
-          solr_dict[u'location_shelf_locator'] = original_dict[u'MEDIA::object_medium_name']
+        solr_dict['location_physical_location'] = 'Bell Art Gallery'
+        solr_dict['location_shelf_locator'] = ''
+        if original_dict['MEDIA::object_medium_name'] != None:
+          solr_dict['location_shelf_locator'] = original_dict['MEDIA::object_medium_name']
         return solr_dict
 
     def _set_note_provenance( self, original_dict, solr_dict ):
         """ Updates note_provenance.
             Called by build_metadata_only_solr_dict() """
-        solr_dict[u'note_provenance'] = u''
-        if original_dict[u'credit_line'] != None:
-          solr_dict[u'note_provenance'] = original_dict[u'credit_line']
+        solr_dict['note_provenance'] = ''
+        if original_dict['credit_line'] != None:
+          solr_dict['note_provenance'] = original_dict['credit_line']
         return solr_dict
 
     def _set_object_dates( self, original_dict, solr_dict ):
         """ Updates object_date, origin_datecreated_start, origin_datecreated_end.
             Called by build_metadata_only_solr_dict() """
-        solr_dict[u'object_date'] = u''
-        solr_dict[u'origin_datecreated_start'] = u''
-        solr_dict[u'origin_datecreated_end'] = u''
-        if original_dict[u'object_date'] != None:
-            solr_dict[u'object_date'] = original_dict[u'object_date']
-        if original_dict[u'object_year_start'] != None:
-            solr_dict[u'origin_datecreated_start'] = original_dict[u'object_year_start']
-        if original_dict[u'object_year_end'] != None:
-            solr_dict[u'origin_datecreated_end'] = original_dict[u'object_year_end']
+        solr_dict['object_date'] = ''
+        solr_dict['origin_datecreated_start'] = ''
+        solr_dict['origin_datecreated_end'] = ''
+        if original_dict['object_date'] != None:
+            solr_dict['object_date'] = original_dict['object_date']
+        if original_dict['object_year_start'] != None:
+            solr_dict['origin_datecreated_start'] = original_dict['object_year_start']
+        if original_dict['object_year_end'] != None:
+            solr_dict['origin_datecreated_end'] = original_dict['object_year_end']
         return solr_dict
 
     def _set_physical_extent( self, original_dict, solr_dict ):
         """ Updates physical_description_extent, which is a display field based on the five dimension fields.
             Called by build_metadata_only_solr_dict() """
         ( height, width, depth ) = self.__set_physical_extent_prep( original_dict )
-        solr_dict[u'physical_description_extent'] = [ u'' ]
+        solr_dict['physical_description_extent'] = [ '' ]
         if height and width and depth:
-            solr_dict[u'physical_description_extent'] = [ u'%s x %s x %s' % (height, width, depth) ]
+            solr_dict['physical_description_extent'] = [ '%s x %s x %s' % (height, width, depth) ]
         elif height and width:
-            solr_dict[u'physical_description_extent'] = [ u'%s x %s' % (height, width ) ]
+            solr_dict['physical_description_extent'] = [ '%s x %s' % (height, width ) ]
         return solr_dict
 
     def  __set_physical_extent_prep( self, original_dict ):
         """ Sets initial height, width, and depth from possible image and object dimension fields.
             Called by _set_physical_extent() """
         temp_dict = {}
-        for field in [ u'image_height', u'image_width', u'object_height', u'object_width', u'object_depth' ]:  # strip original-dict values
-            temp_dict[field] = u''
+        for field in [ 'image_height', 'image_width', 'object_height', 'object_width', 'object_depth' ]:  # strip original-dict values
+            temp_dict[field] = ''
             if original_dict[field]:
                 temp_dict[field] = original_dict[field].strip()
-        height = temp_dict[u'image_height'] if temp_dict[u'image_height'] else temp_dict[u'object_height']
-        width = temp_dict[u'image_width'] if temp_dict[u'image_width'] else temp_dict[u'object_width']
-        depth = temp_dict[u'object_depth']
+        height = temp_dict['image_height'] if temp_dict['image_height'] else temp_dict['object_height']
+        width = temp_dict['image_width'] if temp_dict['image_width'] else temp_dict['object_width']
+        depth = temp_dict['object_depth']
         return ( height, width, depth )
 
     def _set_physical_descriptions( self, original_dict, solr_dict ):
         """ Updates physical_description_material, physical_description_technique.
             Called by build_metadata_only_solr_dict() """
-        solr_dict[u'physical_description_material'] = [ u'' ]
-        solr_dict[u'physical_description_technique'] = [ u'' ]
-        if original_dict[u'object_medium'] != None:
-            solr_dict[u'physical_description_material'] = [ original_dict[u'object_medium'] ]
-        if original_dict[u'MEDIA_SUB::sub_media_name'] != None:
-            if type( original_dict[u'MEDIA_SUB::sub_media_name'] ) == unicode:
-                solr_dict[u'physical_description_technique'] = [ original_dict[u'MEDIA_SUB::sub_media_name'] ]
-            elif type( original_dict[u'MEDIA_SUB::sub_media_name'] ) == list:
-                cleaned_list = self.__ensure_list_unicode_values__handle_type_list( original_dict[u'MEDIA_SUB::sub_media_name'] )
-                solr_dict[u'physical_description_technique'] = cleaned_list
+        solr_dict['physical_description_material'] = [ '' ]
+        solr_dict['physical_description_technique'] = [ '' ]
+        if original_dict['object_medium'] != None:
+            solr_dict['physical_description_material'] = [ original_dict['object_medium'] ]
+        if original_dict['MEDIA_SUB::sub_media_name'] != None:
+            if type( original_dict['MEDIA_SUB::sub_media_name'] ) == unicode:
+                solr_dict['physical_description_technique'] = [ original_dict['MEDIA_SUB::sub_media_name'] ]
+            elif type( original_dict['MEDIA_SUB::sub_media_name'] ) == list:
+                cleaned_list = self.__ensure_list_unicode_values__handle_type_list( original_dict['MEDIA_SUB::sub_media_name'] )
+                solr_dict['physical_description_technique'] = cleaned_list
         return solr_dict
 
     def _set_title( self, original_dict, solr_dict ):
         """ Updates title.
             Called by build_metadata_only_solr_dict() """
-        solr_dict[u'title'] = u''
-        if original_dict[u'object_title'] != None:
-            solr_dict[u'title'] = original_dict[u'object_title']
+        solr_dict['title'] = ''
+        if original_dict['object_title'] != None:
+            solr_dict['title'] = original_dict['object_title']
         return solr_dict
 
     ## image helpers ##
 
     def _set_image_urls__get_jp2_url( self, links_dict ):
-        """ Returns jp2 url or u''.
+        """ Returns jp2 url or ''.
             Called by _set_image_urls() """
         try:
-            image_url = links_dict[u'content_datastreams'][u'JP2']
+            image_url = links_dict['content_datastreams']['JP2']
         except:
-            image_url = u''
+            image_url = ''
         return image_url
 
     def _set_image_urls__get_master_image_url( self, links_dict, jp2_url ):
-        """ Returns master image url or u''.
+        """ Returns master image url or ''.
             Called by _set_image_urls() """
         image_url = None
-        if jp2_url == u'':
-            image_url = u''
+        if jp2_url == '':
+            image_url = ''
         else:
             try:
-                image_url = links_dict[u'content_datastreams'][u'MASTER']  # don't think this is currently exposed
+                image_url = links_dict['content_datastreams']['MASTER']  # don't think this is currently exposed
             except:
                 pass
             if not image_url:
                 try:
-                    image_url = links_dict[u'content_datastreams'][u'TIFF']  # should handle some old items
+                    image_url = links_dict['content_datastreams']['TIFF']  # should handle some old items
                 except:
                     pass
             if not image_url:
                 try:
-                    jp2_image_url = links_dict[u'content_datastreams'][u'JP2']  # default modern case: if JP2 exists, master is MASTER
-                    image_url = jp2_image_url.replace( u'/JP2/', u'/MASTER/' )
+                    jp2_image_url = links_dict['content_datastreams']['JP2']  # default modern case: if JP2 exists, master is MASTER
+                    image_url = jp2_image_url.replace( '/JP2/', '/MASTER/' )
                 except:
                     pass
             if not image_url:
-                self.logger.info( u'in tasks.indexer._set_image_urls__get_master_image_url(); odd case, links_dict is `%s`, jp2_url is `%s`' % (pprint.pformat(links_dict), jp2_url) )
-                image_url = u''
+                self.logger.info( 'in tasks.indexer._set_image_urls__get_master_image_url(); odd case, links_dict is `%s`, jp2_url is `%s`' % (pprint.pformat(links_dict), jp2_url) )
+                image_url = ''
         return image_url
 
     ## utils ##
@@ -289,7 +291,7 @@ class Indexer( object ):
             elif type(value) == list:
                 solr_dict_copy[key] = self.__ensure_list_unicode_values__handle_type_list( value )
             elif value == None:
-              solr_dict_copy[key] = [ u'' ]
+              solr_dict_copy[key] = [ '' ]
         return solr_dict_copy
 
     def __ensure_list_unicode_values__handle_type_list( self, list_value ):
@@ -297,10 +299,10 @@ class Indexer( object ):
             Called by __ensure_list_unicode_values() and _set_physical_descriptions() """
         new_list = []
         if len( list_value ) == 0:
-          new_list.append( u'' )
+          new_list.append( '' )
         else:
           for entry in list_value:
-            new_list.append( u'' ) if (entry == None) else new_list.append( entry )
+            new_list.append( '' ) if (entry == None) else new_list.append( entry )
         return new_list
 
     # end class Indexer()
@@ -311,7 +313,7 @@ class Indexer( object ):
 def run_update_custom_index( data ):
     """ Runner for update_custom_index().
         Called by queue-job triggered by tasks.task_manager.determine_next_task(). """
-    assert sorted( data.keys() ) == [u'item_data', u'pid'], sorted( data.keys() )
+    assert sorted( data.keys() ) == ['item_data', 'pid'], sorted( data.keys() )
     pass  # TODO: build this out (may require changing indexer to pass it the data-dict)
     # idx = Indexer( data, bell_logger.setup_logger() )
     # result_dict = idx.update_custom_index()  # done!

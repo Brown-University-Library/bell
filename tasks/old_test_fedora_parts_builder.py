@@ -1,5 +1,7 @@
 # -*- coding: utf-8 -*-
 
+from __future__ import unicode_literals
+
 import json, os, pprint, unittest
 from fedora_parts_builder import ModsBuilder
 
@@ -19,26 +21,26 @@ class MakeModsFromBellJson_Test(unittest.TestCase):
   def test__mods_single_artist(self):
     """ Tests bell mods creation. """
     data_dict = json.loads( self.TEST_BELL_JSON_ENTRY_SINGLE_ARTIST )
-    mods_schema_path = os.path.abspath( u'./lib/mods-3-4.xsd' )
+    mods_schema_path = os.path.abspath( './lib/mods-3-4.xsd' )
     expected = self.TEST_EXPECTED_SINGLE_ARTIST_XML
     mods_maker = ModsBuilder()
-    result = mods_maker.build_mods_object( data_dict, mods_schema_path, u'return_string' )
+    result = mods_maker.build_mods_object( data_dict, mods_schema_path, 'return_string' )
     self.assertEquals( expected, result['data'] )
 
   def test__mods_multiple_artists(self):
     """ Tests bell mods creation. """
     data_dict = json.loads( self.TEST_BELL_JSON_ENTRY_MULTIPLE_ARTISTS )
-    mods_schema_path = os.path.abspath( u'./lib/mods-3-4.xsd' )
+    mods_schema_path = os.path.abspath( './lib/mods-3-4.xsd' )
     expected = self.TEST_EXPECTED_MULTIPLE_ARTISTS_XML
     mods_maker = ModsBuilder()
-    result = mods_maker.build_mods_object( data_dict, mods_schema_path, u'return_string' )
-    self.assertEquals( expected, result[u'data'] )
+    result = mods_maker.build_mods_object( data_dict, mods_schema_path, 'return_string' )
+    self.assertEquals( expected, result['data'] )
 
   ## end of tests ##
 
   ## test data ##
 
-  TEST_BELL_JSON_ENTRY_SINGLE_ARTIST = u'''
+  TEST_BELL_JSON_ENTRY_SINGLE_ARTIST = '''
   {
     "ARTISTS::artist_alias": [
       null
@@ -120,7 +122,7 @@ class MakeModsFromBellJson_Test(unittest.TestCase):
     "series_id": null
   }'''
 
-  TEST_EXPECTED_SINGLE_ARTIST_XML = u'''<mods:mods xmlns:mods="http://www.loc.gov/mods/v3" ID="B1980.1566" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.loc.gov/mods/v3 http://www.loc.gov/standards/mods/futures/mods-3-4.xsd">
+  TEST_EXPECTED_SINGLE_ARTIST_XML = '''<mods:mods xmlns:mods="http://www.loc.gov/mods/v3" ID="B1980.1566" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.loc.gov/mods/v3 http://www.loc.gov/standards/mods/futures/mods-3-4.xsd">
   <mods:titleInfo>
     <mods:title>A Glimpse of Thomas Traherne by Thomas Traherne</mods:title>
   </mods:titleInfo>
@@ -155,7 +157,7 @@ class MakeModsFromBellJson_Test(unittest.TestCase):
 </mods:mods>
 '''
 
-  TEST_BELL_JSON_ENTRY_MULTIPLE_ARTISTS = u'''
+  TEST_BELL_JSON_ENTRY_MULTIPLE_ARTISTS = '''
   {
     "ARTISTS::artist_alias": [
       null,
@@ -252,7 +254,7 @@ class MakeModsFromBellJson_Test(unittest.TestCase):
     "series_id": null
   }'''
 
-  TEST_EXPECTED_MULTIPLE_ARTISTS_XML = u'''<mods:mods xmlns:mods="http://www.loc.gov/mods/v3" ID="B1980.1551" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.loc.gov/mods/v3 http://www.loc.gov/standards/mods/futures/mods-3-4.xsd">
+  TEST_EXPECTED_MULTIPLE_ARTISTS_XML = '''<mods:mods xmlns:mods="http://www.loc.gov/mods/v3" ID="B1980.1551" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.loc.gov/mods/v3 http://www.loc.gov/standards/mods/futures/mods-3-4.xsd">
   <mods:titleInfo>
     <mods:title>De Morandi</mods:title>
   </mods:titleInfo>

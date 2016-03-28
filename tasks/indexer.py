@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 
+from __future__ import unicode_literals
 
 """ Prepares data for updating and deleting custom-index records.
     Executes custom-index changes as per readme.md """
@@ -10,7 +11,7 @@ from bell_code import bell_logger
 from mysolr import Solr
 
 
-queue_name = unicode( os.environ.get(u'BELL_QUEUE_NAME') )
+queue_name = unicode( os.environ.get('BELL_QUEUE_NAME') )
 q = rq.Queue( queue_name, connection=redis.Redis() )
 r = redis.StrictRedis( host='localhost', port=6379, db=0 )
 
@@ -20,8 +21,8 @@ class CustomIndexPidsLister( object ):
 
     def __init__( self, logger=None ):
         self.logger = logger
-        self.BELL_CUSTOM_IDX_ROOT_URL = unicode( os.environ[u'BELL_TASKS_IDXR__BELL_CUSTOM_IDX_ROOT_URL'] )
-        self.OUTPUT_PATH = unicode( os.environ[u'BELL_TASKS_IDXR__CUSTOM_IDX_DELETES_PIDS_JSON_PATH'] )
+        self.BELL_CUSTOM_IDX_ROOT_URL = unicode( os.environ['BELL_TASKS_IDXR__BELL_CUSTOM_IDX_ROOT_URL'] )
+        self.OUTPUT_PATH = unicode( os.environ['BELL_TASKS_IDXR__CUSTOM_IDX_DELETES_PIDS_JSON_PATH'] )
 
     def grab_custom_index_pids( self ):
         """ Manages calls to create `h__pids_from_custom_index_list.json`.
@@ -33,23 +34,23 @@ class CustomIndexPidsLister( object ):
         """ Returns list of pids from custom-index.
             Called by grab_custom_index_pids() """
         params = {
-            u'q': u'*:*', u'fl': u'pid', u'start': u'0', u'rows': u'70000', u'wt': u'json' }
+            'q': '*:*', 'fl': 'pid', 'start': '0', 'rows': '70000', 'wt': 'json' }
         r = requests.get( self.BELL_CUSTOM_IDX_ROOT_URL, params=params, verify=False )
-        self.logger.debug( u'in tasks.indexer.CustomIndexPidsLister.grab_pids(); r.url, `%s`' % r.url )
-        dct = json.loads( r.content.decode(u'utf-8') )
-        pid_dcts = dct[u'response'][u'docs']
-        self.logger.debug( u'in tasks.indexer.CustomIndexPidsLister.grab_pids(); len(pid_dcts), `%s`' % len(pid_dcts) )
-        self.logger.debug( u'in tasks.indexer.CustomIndexPidsLister.grab_pids(); pid_dcts[0]["pid"], `%s`' % pid_dcts[0]["pid"] )
+        self.logger.debug( 'in tasks.indexer.CustomIndexPidsLister.grab_pids(); r.url, `%s`' % r.url )
+        dct = json.loads( r.content.decode('utf-8') )
+        pid_dcts = dct['response']['docs']
+        self.logger.debug( 'in tasks.indexer.CustomIndexPidsLister.grab_pids(); len(pid_dcts), `%s`' % len(pid_dcts) )
+        self.logger.debug( 'in tasks.indexer.CustomIndexPidsLister.grab_pids(); pid_dcts[0]["pid"], `%s`' % pid_dcts[0]["pid"] )
         pids = []
         for pid_dct in pid_dcts:
-            pids.append( pid_dct[u'pid'] )
+            pids.append( pid_dct['pid'] )
         return sorted( pids )
 
     def output_list( self, pid_list ):
         """ Saves json file.
             Called by grab_bdr_pids() """
         jsn = json.dumps( pid_list, indent=2, sort_keys=True )
-        with open( self.OUTPUT_PATH, u'w' ) as f:
+        with open( self.OUTPUT_PATH, 'w' ) as f:
             f.write( jsn )
         return
 
@@ -61,17 +62,17 @@ class DeletePidsLister( object ):
 
     def __init__( self, logger=None ):
         self.logger = logger
-        self.BELL_SOURCE_DATA_JSON_PATH = unicode( os.environ[u'BELL_TASKS_IDXR__BELL_SOURCE_DATA_JSON_PATH'] )
-        self.CUSTOM_IDX_PIDS_JSON_PATH = unicode( os.environ[u'BELL_TASKS_IDXR__CUSTOM_IDX_PIDS_JSON_PATH'] )
-        self.OUTPUT_PATH = unicode( os.environ[u'BELL_TASKS_IDXR__CUSTOM_IDX_DELETES_PIDS_JSON_PATH'] )
+        self.BELL_SOURCE_DATA_JSON_PATH = unicode( os.environ['BELL_TASKS_IDXR__BELL_SOURCE_DATA_JSON_PATH'] )
+        self.CUSTOM_IDX_PIDS_JSON_PATH = unicode( os.environ['BELL_TASKS_IDXR__CUSTOM_IDX_PIDS_JSON_PATH'] )
+        self.OUTPUT_PATH = unicode( os.environ['BELL_TASKS_IDXR__CUSTOM_IDX_DELETES_PIDS_JSON_PATH'] )
 
     def make_delete_pids_list( self ):
         """ Manages the creation of lists of pids to add/update, and to delete.
             Called by run_make_pids_from_bdr_list() """
         pids_from_xml_dump = self.make_xml_pids()
         pids_from_custom_index = self.grab_custom_index_pids()
-        self.logger.debug( u'in tasks.indexer.UpdateAndDeletePidsLister.make_delete_pids_list(); len(pids_from_xml_dump), `%s`' % len(pids_from_xml_dump) )
-        self.logger.debug( u'in tasks.indexer.UpdateAndDeletePidsLister.make_delete_pids_list(); len(pids_from_custom_index), `%s`' % len(pids_from_custom_index) )
+        self.logger.debug( 'in tasks.indexer.UpdateAndDeletePidsLister.make_delete_pids_list(); len(pids_from_xml_dump), `%s`' % len(pids_from_xml_dump) )
+        self.logger.debug( 'in tasks.indexer.UpdateAndDeletePidsLister.make_delete_pids_list(); len(pids_from_custom_index), `%s`' % len(pids_from_custom_index) )
         deletes = self.prepare_deletes( pids_from_xml_dump, pids_from_custom_index )
         self.output_list( deletes )
         return
@@ -81,9 +82,9 @@ class DeletePidsLister( object ):
             Called by make_delete_pids_list() """
         with open( self.BELL_SOURCE_DATA_JSON_PATH ) as f:
             dct = json.loads( f.read() )
-        assert sorted( dct.keys() ) == [ u'count', u'datetime', u'final_accession_pid_dict' ], sorted( json_dict.keys() )
-        assert dct[u'count'][u'count_null'] == 0  # not initially null, but is after re-running after ingestions
-        pids_from_accession_numbers = dct[u'final_accession_pid_dict'].values()
+        assert sorted( dct.keys() ) == [ 'count', 'datetime', 'final_accession_pid_dict' ], sorted( json_dict.keys() )
+        assert dct['count']['count_null'] == 0  # not initially null, but is after re-running after ingestions
+        pids_from_accession_numbers = dct['final_accession_pid_dict'].values()
         return sorted( pids_from_accession_numbers )
 
     def grab_custom_index_pids( self ):
@@ -97,7 +98,7 @@ class DeletePidsLister( object ):
         """ Runs set operations to make lists.
             Called by make_delete_pids_list() """
         deletes_set = set(pids_from_custom_index) - set(pids_from_xml_dump)
-        self.logger.debug( u'in tasks.indexer.UpdateAndDeletePidsLister.prepare_deletes(); deletes_set, `%s`' % deletes_set )
+        self.logger.debug( 'in tasks.indexer.UpdateAndDeletePidsLister.prepare_deletes(); deletes_set, `%s`' % deletes_set )
         deletes_list = list( deletes_set )
         return deletes_list
 
@@ -105,7 +106,7 @@ class DeletePidsLister( object ):
         """ Saves json file.
             Called by make_delete_pids_list() """
         jsn = json.dumps( deletes, indent=2, sort_keys=True )
-        with open( self.OUTPUT_PATH, u'w' ) as f:
+        with open( self.OUTPUT_PATH, 'w' ) as f:
             f.write( jsn )
         return
 
@@ -117,9 +118,9 @@ class UpdatePidsLister( object ):
 
     def __init__( self, logger ):
         self.logger = logger
-        self.SRC_ACC_NUM_TO_DATA_DCT_JSON_PATH = unicode( os.environ[u'BELL_TASKS_IDXR__SRC_ACC_NUM_TO_DATA_DCT_JSON_PATH'] )
-        self.SRC_ACC_NUM_TO_PID_DCT_JSON_PATH = unicode( os.environ[u'BELL_TASKS_IDXR__SRC_ACC_NUM_TO_PID_DCT_JSON_PATH'] )
-        self.OUTPUT_PATH = unicode( os.environ[u'BELL_TASKS_IDXR__CUSTOM_IDX_UPDATES_DATA_JSON_PATH'] )
+        self.SRC_ACC_NUM_TO_DATA_DCT_JSON_PATH = unicode( os.environ['BELL_TASKS_IDXR__SRC_ACC_NUM_TO_DATA_DCT_JSON_PATH'] )
+        self.SRC_ACC_NUM_TO_PID_DCT_JSON_PATH = unicode( os.environ['BELL_TASKS_IDXR__SRC_ACC_NUM_TO_PID_DCT_JSON_PATH'] )
+        self.OUTPUT_PATH = unicode( os.environ['BELL_TASKS_IDXR__CUSTOM_IDX_UPDATES_DATA_JSON_PATH'] )
 
     def make_update_pids_lst( self ):
         """ Loads up two source-data dicts and outputs an accession-number-to-data dict that includes pid-info.
@@ -135,7 +136,7 @@ class UpdatePidsLister( object ):
             Called by make_update_pids_lst() """
         with open( self.SRC_ACC_NUM_TO_DATA_DCT_JSON_PATH ) as f:
             dct = json.loads( f.read() )
-            accession_number_to_data_dct = dct[u'items']
+            accession_number_to_data_dct = dct['items']
         return accession_number_to_data_dct
 
     def load_pid_dct( self ):
@@ -143,7 +144,7 @@ class UpdatePidsLister( object ):
             Called by make_update_pids_lst() """
         with open( self.SRC_ACC_NUM_TO_PID_DCT_JSON_PATH ) as f:
             dct = json.loads( f.read() )
-            accession_number_to_pid_dct = dct[u'final_accession_pid_dict']
+            accession_number_to_pid_dct = dct['final_accession_pid_dict']
         return accession_number_to_pid_dct
 
     def add_pid( self, accession_number_to_data_dct, accession_number_to_pid_dct ):
@@ -156,7 +157,7 @@ class UpdatePidsLister( object ):
             print key
             value_dct = accession_number_to_data_dct[key]
             pid = accession_number_to_pid_dct[key]
-            value_dct[u'pid'] = pid
+            value_dct['pid'] = pid
             entry = { key: value_dct }
             updated_data_lst.append( entry )
         return updated_data_lst
@@ -165,7 +166,7 @@ class UpdatePidsLister( object ):
         """ Saves json file.
             Called by make_delete_pids_list() """
         jsn = json.dumps( lst, indent=2, sort_keys=True )
-        with open( self.OUTPUT_PATH, u'w' ) as f:
+        with open( self.OUTPUT_PATH, 'w' ) as f:
             f.write( jsn )
         return
 
@@ -178,38 +179,38 @@ class CustomIndexUpdater( object ):
 
     def __init__( self, logger=None ):
         self.logger = logger
-        self.FULL_DATA_DCTS_JSON_PATH = unicode( os.environ[u'BELL_TASKS_IDXR__FULL_DATA_DCTS_JSON_PATH'] )
-        self.BDR_PUBLIC_ITEM_API_URL_ROOT = unicode( os.environ[u'BELL_TASKS_IDXR__BDR_PUBLIC_ITEM_API_URL_ROOT'] )
-        self.CUSTOM_INDEX_SOLR_URL_ROOT = unicode( os.environ[u'BELL_TASKS_IDXR__CUSTOM_INDEX_SOLR_URL_ROOT'] )
-        self.TRACKER_JSON_PATH = unicode( os.environ[u'BELL_TASKS_IDXR__CUSTOM_INDEX_UPDATER_TRACKER_JSON_PATH'] )
+        self.FULL_DATA_DCTS_JSON_PATH = unicode( os.environ['BELL_TASKS_IDXR__FULL_DATA_DCTS_JSON_PATH'] )
+        self.BDR_PUBLIC_ITEM_API_URL_ROOT = unicode( os.environ['BELL_TASKS_IDXR__BDR_PUBLIC_ITEM_API_URL_ROOT'] )
+        self.CUSTOM_INDEX_SOLR_URL_ROOT = unicode( os.environ['BELL_TASKS_IDXR__CUSTOM_INDEX_SOLR_URL_ROOT'] )
+        self.TRACKER_JSON_PATH = unicode( os.environ['BELL_TASKS_IDXR__CUSTOM_INDEX_UPDATER_TRACKER_JSON_PATH'] )
         self.REQUIRED_KEYS = [  # used by _validate_solr_dict()
-            u'accession_number_original',
-            u'author_birth_date',
-            u'author_date',
-            u'author_death_date',
-            u'author_description',
-            u'author_display',
-            u'author_names_first',
-            u'author_names_last',
-            u'author_names_middle',
-            u'image_height',
-            u'image_width',
-            u'jp2_image_url',
-            u'location_physical_location',
-            u'location_shelf_locator',
-            u'master_image_url',
-            u'note_provenance',
-            u'object_date',
-            u'object_depth',
-            u'object_height',
-            u'object_width',
-            u'origin_datecreated_end',
-            u'origin_datecreated_start',
-            u'physical_description_extent',
-            u'physical_description_material',
-            u'physical_description_technique',
-            u'pid',
-            u'title',
+            'accession_number_original',
+            'author_birth_date',
+            'author_date',
+            'author_death_date',
+            'author_description',
+            'author_display',
+            'author_names_first',
+            'author_names_last',
+            'author_names_middle',
+            'image_height',
+            'image_width',
+            'jp2_image_url',
+            'location_physical_location',
+            'location_shelf_locator',
+            'master_image_url',
+            'note_provenance',
+            'object_date',
+            'object_depth',
+            'object_height',
+            'object_width',
+            'origin_datecreated_end',
+            'origin_datecreated_start',
+            'physical_description_extent',
+            'physical_description_material',
+            'physical_description_technique',
+            'pid',
+            'title',
             ]
 
     def enqueue_index_jobs( self ):
@@ -221,10 +222,10 @@ class CustomIndexUpdater( object ):
             if i + 1 > 70000:
                 break
             ( accession_number, data_dct ) = entry.items()[0]
-            print u'accession_number...'; print accession_number
+            print 'accession_number...'; print accession_number
             q.enqueue_call(
-              func=u'bell_code.tasks.indexer.run_update_custom_index_entry',
-              kwargs={ u'accession_number': accession_number, u'data_dct': data_dct, u'pid': data_dct[u'pid'] },
+              func='bell_code.tasks.indexer.run_update_custom_index_entry',
+              kwargs={ 'accession_number': accession_number, 'data_dct': data_dct, 'pid': data_dct['pid'] },
               timeout=600 )
         return
 
@@ -245,8 +246,8 @@ class CustomIndexUpdater( object ):
         """ Builds dict-to-index using just basic item-dict data and pid; image-check handled in separate function.
             Called by run_update_custom_index_entry() """
         solr_dict = {}
-        solr_dict[u'accession_number_original'] = data_dct[u'calc_accession_id']
-        solr_dict[u'pid'] = pid
+        solr_dict['accession_number_original'] = data_dct['calc_accession_id']
+        solr_dict['pid'] = pid
         solr_dict = self._set_author_dates( data_dct, solr_dict )
         solr_dict = self._set_author_description( data_dct, solr_dict )
         solr_dict = self._set_author_names( data_dct, solr_dict )
@@ -257,27 +258,27 @@ class CustomIndexUpdater( object ):
         solr_dict = self._set_physical_extent( data_dct, solr_dict )
         solr_dict = self._set_physical_descriptions( data_dct, solr_dict )
         solr_dict = self._set_title( data_dct, solr_dict )
-        self.logger.debug( u'in tasks.indexer.CustomIndexUpdater.build_metadata_only_solr_dict(); solr_dict, `%s`' % pprint.pformat(solr_dict) )
+        self.logger.debug( 'in tasks.indexer.CustomIndexUpdater.build_metadata_only_solr_dict(); solr_dict, `%s`' % pprint.pformat(solr_dict) )
         return solr_dict
 
     def grab_bdr_api_links_data( self, pid ):
         """ Grabs and returns link info from item-api json.
             The links dict is used by tasks.indexer to add image info to the solr-metadata if needed.
             Called by update_custom_index_entry() """
-        url = u'%s/%s/' % ( self.BDR_PUBLIC_ITEM_API_URL_ROOT, pid )
-        self.logger.debug( u'in tasks.indexer.CustomIndexUpdater.grab_bdr_api_links_data(); url, `%s`' % url )
+        url = '%s/%s/' % ( self.BDR_PUBLIC_ITEM_API_URL_ROOT, pid )
+        self.logger.debug( 'in tasks.indexer.CustomIndexUpdater.grab_bdr_api_links_data(); url, `%s`' % url )
         r = requests.get( url )
         api_dict = r.json()
-        links_dict = api_dict[u'links']
-        self.logger.debug( u'in tasks.indexer.CustomIndexUpdater.grab_bdr_api_links_data(); links_dict, `%s`' % pprint.pformat(links_dict) )
+        links_dict = api_dict['links']
+        self.logger.debug( 'in tasks.indexer.CustomIndexUpdater.grab_bdr_api_links_data(); links_dict, `%s`' % pprint.pformat(links_dict) )
         return links_dict
 
     def add_image_metadata( self, solr_dict, links_dict ):
         """ Adds image metadata to dict-to-index.
             Called by update_custom_index_entry() """
-        solr_dict[u'jp2_image_url'] = self._set_image_urls__get_jp2_url( links_dict )
-        solr_dict[u'master_image_url'] = self._set_image_urls__get_master_image_url( links_dict, solr_dict[u'jp2_image_url'] )
-        self.logger.debug( u'in tasks.indexer.CustomIndexUpdater.add_image_metadata(); final solr_dict, `%s`' % pprint.pformat(solr_dict) )
+        solr_dict['jp2_image_url'] = self._set_image_urls__get_jp2_url( links_dict )
+        solr_dict['master_image_url'] = self._set_image_urls__get_master_image_url( links_dict, solr_dict['jp2_image_url'] )
+        self.logger.debug( 'in tasks.indexer.CustomIndexUpdater.add_image_metadata(); final solr_dict, `%s`' % pprint.pformat(solr_dict) )
         return solr_dict
 
     def validate_solr_dict( self, solr_dict ):
@@ -289,29 +290,29 @@ class CustomIndexUpdater( object ):
             Called by update_custom_index_entry() """
         try:
             for required_key in self.REQUIRED_KEYS:
-                # self.logger.debug( u'in tasks.indexer.CustomIndexUpdater._validate_solr_dict(); required_key: %s' % required_key )
-                assert required_key in solr_dict.keys(), Exception( u'ERROR; missing required key: %s' % required_key )
+                # self.logger.debug( 'in tasks.indexer.CustomIndexUpdater._validate_solr_dict(); required_key: %s' % required_key )
+                assert required_key in solr_dict.keys(), Exception( 'ERROR; missing required key: %s' % required_key )
             for key,value in solr_dict.items():
-              assert value != None, Exception( u'ERROR; value is none for key: %s' % key )
+              assert value != None, Exception( 'ERROR; value is none for key: %s' % key )
               if type(value) == list:
-                assert len(value) > 0, Exception( u'ERROR: key "%s" has a value of "%s", which is type-list, which is empty.' % ( key, value ) )
+                assert len(value) > 0, Exception( 'ERROR: key "%s" has a value of "%s", which is type-list, which is empty.' % ( key, value ) )
                 for element in value:
-                  assert element != None, Exception( u'ERROR: key "%s" has a value "%s", which is type-list, which contains a None element' % ( key, value ) )
-            self.logger.debug( u'in tasks.indexer.CustomIndexUpdater.validate_solr_dict(); is valid' )
+                  assert element != None, Exception( 'ERROR: key "%s" has a value "%s", which is type-list, which contains a None element' % ( key, value ) )
+            self.logger.debug( 'in tasks.indexer.CustomIndexUpdater.validate_solr_dict(); is valid' )
             return True
         except Exception as e:
-            self.logger.error( u'in tasks.indexer.CustomIndexUpdater.validate_solr_dict(); exception is: %s' % unicode(repr(e)) )
+            self.logger.error( 'in tasks.indexer.CustomIndexUpdater.validate_solr_dict(); exception is: %s' % unicode(repr(e)) )
             return False
 
     def post_to_solr( self, solr_dict ):
         """ Posts solr_dict to solr.
             Called by update_custom_index_entry() """
         solr = Solr( self.CUSTOM_INDEX_SOLR_URL_ROOT )
-        response = solr.update( [solr_dict], u'xml', commit=True )  # 'xml' param converts default json to xml for post; required for our old version of solr
+        response = solr.update( [solr_dict], 'xml', commit=True )  # 'xml' param converts default json to xml for post; required for our old version of solr
         response_status = response.status
-        self.logger.info( u'in tasks.indexer.CustomIndexUpdater.post_to_solr() [for custom-solr]; accession_number, %s; response_status, %s' % (solr_dict[u'accession_number_original'], response_status) )
+        self.logger.info( 'in tasks.indexer.CustomIndexUpdater.post_to_solr() [for custom-solr]; accession_number, %s; response_status, %s' % (solr_dict['accession_number_original'], response_status) )
         if not response_status == 200:
-            raise Exception( u'custom-solr post problem logged' )
+            raise Exception( 'custom-solr post problem logged' )
         return response_status
 
     def update_tracker( self, accession_number, post_result ):
@@ -323,9 +324,9 @@ class CustomIndexUpdater( object ):
                 dct = json.loads( f.read() )
         except:
             dct = {}
-        dct[accession_number] = { u'datetime': unicode(datetime.datetime.now()), u'post_result': post_result }
+        dct[accession_number] = { 'datetime': unicode(datetime.datetime.now()), 'post_result': post_result }
         jsn = json.dumps( dct, indent=2, sort_keys=True )
-        with open( self.TRACKER_JSON_PATH, u'w' ) as f:
+        with open( self.TRACKER_JSON_PATH, 'w' ) as f:
             f.write( jsn )
         return
 
@@ -334,37 +335,37 @@ class CustomIndexUpdater( object ):
     def _set_author_dates( self, original_dict, solr_dict ):
         """ Sets author dates.
             Called by build_metadata_only_solr_dict() """
-        solr_dict[u'author_birth_date'] = original_dict[u'ARTISTS::artist_birth_year']
-        solr_dict[u'author_death_date'] = original_dict[u'ARTISTS::artist_death_year']
-        solr_dict[u'author_date'] = original_dict[u'ARTISTS::artist_lifetime']
-        solr_dict = self.__ensure_list_unicode_values( solr_dict, [u'author_birth_date', u'author_death_date', u'author_date'] )
+        solr_dict['author_birth_date'] = original_dict['ARTISTS::artist_birth_year']
+        solr_dict['author_death_date'] = original_dict['ARTISTS::artist_death_year']
+        solr_dict['author_date'] = original_dict['ARTISTS::artist_lifetime']
+        solr_dict = self.__ensure_list_unicode_values( solr_dict, ['author_birth_date', 'author_death_date', 'author_date'] )
         return solr_dict
 
     def _set_author_description( self, original_dict, solr_dict ):
         """ Sets author descriptions.
             Called by build_metadata_only_solr_dict() """
-        solr_dict[u'author_description'] = original_dict[u'ARTISTS::calc_nationality']
-        solr_dict = self.__ensure_list_unicode_values( solr_dict, [u'author_description'] )
+        solr_dict['author_description'] = original_dict['ARTISTS::calc_nationality']
+        solr_dict = self.__ensure_list_unicode_values( solr_dict, ['author_description'] )
         return solr_dict
 
     def _set_author_names( self, original_dict, solr_dict ):
         """ Sets author names.
             Called by build_metadata_only_solr_dict() """
-        solr_dict[u'author_names_first'] = original_dict[u'ARTISTS::artist_first_name']
-        solr_dict[u'author_names_middle'] = original_dict[u'ARTISTS::artist_middle_name']
-        solr_dict[u'author_names_last'] = original_dict[u'ARTISTS::artist_last_name']
-        solr_dict[u'author_display'] = original_dict[u'ARTISTS::calc_artist_full_name']
-        solr_dict = self.__ensure_list_unicode_values( solr_dict, [u'author_names_first',
-            u'author_names_middle', u'author_names_last', u'author_display'] )
+        solr_dict['author_names_first'] = original_dict['ARTISTS::artist_first_name']
+        solr_dict['author_names_middle'] = original_dict['ARTISTS::artist_middle_name']
+        solr_dict['author_names_last'] = original_dict['ARTISTS::artist_last_name']
+        solr_dict['author_display'] = original_dict['ARTISTS::calc_artist_full_name']
+        solr_dict = self.__ensure_list_unicode_values( solr_dict, ['author_names_first',
+            'author_names_middle', 'author_names_last', 'author_display'] )
         return solr_dict
 
     def _set_height_width_depth( self, original_dict, solr_dict ):
         """ Sets item dimensions.
             Called by build_metadata_only_solr_dict() """
-        target_keys = [ u'image_width', u'image_height', u'object_width', u'object_height', u'object_depth' ]
+        target_keys = [ 'image_width', 'image_height', 'object_width', 'object_height', 'object_depth' ]
         for entry in target_keys:
             if original_dict[entry] == None:
-                solr_dict[entry] = u''
+                solr_dict[entry] = ''
             else:
                 solr_dict[entry] = original_dict[entry]
         return solr_dict
@@ -372,117 +373,117 @@ class CustomIndexUpdater( object ):
     def _set_locations( self, original_dict, solr_dict ):
         """ Returns location_physical_location & location_shelf_locator.
             Called by build_metadata_only_solr_dict() """
-        solr_dict[u'location_physical_location'] = u'Bell Art Gallery'
-        solr_dict[u'location_shelf_locator'] = u''
-        if original_dict[u'MEDIA::object_medium_name'] != None:
-          solr_dict[u'location_shelf_locator'] = original_dict[u'MEDIA::object_medium_name']
+        solr_dict['location_physical_location'] = 'Bell Art Gallery'
+        solr_dict['location_shelf_locator'] = ''
+        if original_dict['MEDIA::object_medium_name'] != None:
+          solr_dict['location_shelf_locator'] = original_dict['MEDIA::object_medium_name']
         return solr_dict
 
     def _set_note_provenance( self, original_dict, solr_dict ):
         """ Updates note_provenance.
             Called by build_metadata_only_solr_dict() """
-        solr_dict[u'note_provenance'] = u''
-        if original_dict[u'credit_line'] != None:
-          solr_dict[u'note_provenance'] = original_dict[u'credit_line']
+        solr_dict['note_provenance'] = ''
+        if original_dict['credit_line'] != None:
+          solr_dict['note_provenance'] = original_dict['credit_line']
         return solr_dict
 
     def _set_object_dates( self, original_dict, solr_dict ):
         """ Updates object_date, origin_datecreated_start, origin_datecreated_end.
             Called by build_metadata_only_solr_dict() """
-        solr_dict[u'object_date'] = u''
-        solr_dict[u'origin_datecreated_start'] = u''
-        solr_dict[u'origin_datecreated_end'] = u''
-        if original_dict[u'object_date'] != None:
-            solr_dict[u'object_date'] = original_dict[u'object_date']
-        if original_dict[u'object_year_start'] != None:
-            solr_dict[u'origin_datecreated_start'] = original_dict[u'object_year_start']
-        if original_dict[u'object_year_end'] != None:
-            solr_dict[u'origin_datecreated_end'] = original_dict[u'object_year_end']
+        solr_dict['object_date'] = ''
+        solr_dict['origin_datecreated_start'] = ''
+        solr_dict['origin_datecreated_end'] = ''
+        if original_dict['object_date'] != None:
+            solr_dict['object_date'] = original_dict['object_date']
+        if original_dict['object_year_start'] != None:
+            solr_dict['origin_datecreated_start'] = original_dict['object_year_start']
+        if original_dict['object_year_end'] != None:
+            solr_dict['origin_datecreated_end'] = original_dict['object_year_end']
         return solr_dict
 
     def _set_physical_extent( self, original_dict, solr_dict ):
         """ Updates physical_description_extent, which is a display field based on the five dimension fields.
             Called by build_metadata_only_solr_dict() """
         ( height, width, depth ) = self.__set_physical_extent_prep( original_dict )
-        solr_dict[u'physical_description_extent'] = [ u'' ]
+        solr_dict['physical_description_extent'] = [ '' ]
         if height and width and depth:
-            solr_dict[u'physical_description_extent'] = [ u'%s x %s x %s' % (height, width, depth) ]
+            solr_dict['physical_description_extent'] = [ '%s x %s x %s' % (height, width, depth) ]
         elif height and width:
-            solr_dict[u'physical_description_extent'] = [ u'%s x %s' % (height, width ) ]
+            solr_dict['physical_description_extent'] = [ '%s x %s' % (height, width ) ]
         return solr_dict
 
     def  __set_physical_extent_prep( self, original_dict ):
         """ Sets initial height, width, and depth from possible image and object dimension fields.
             Called by _set_physical_extent() """
         temp_dict = {}
-        for field in [ u'image_height', u'image_width', u'object_height', u'object_width', u'object_depth' ]:  # strip original-dict values
-            temp_dict[field] = u''
+        for field in [ 'image_height', 'image_width', 'object_height', 'object_width', 'object_depth' ]:  # strip original-dict values
+            temp_dict[field] = ''
             if original_dict[field]:
                 temp_dict[field] = original_dict[field].strip()
-        height = temp_dict[u'image_height'] if temp_dict[u'image_height'] else temp_dict[u'object_height']
-        width = temp_dict[u'image_width'] if temp_dict[u'image_width'] else temp_dict[u'object_width']
-        depth = temp_dict[u'object_depth']
+        height = temp_dict['image_height'] if temp_dict['image_height'] else temp_dict['object_height']
+        width = temp_dict['image_width'] if temp_dict['image_width'] else temp_dict['object_width']
+        depth = temp_dict['object_depth']
         return ( height, width, depth )
 
     def _set_physical_descriptions( self, original_dict, solr_dict ):
         """ Updates physical_description_material, physical_description_technique.
             Called by build_metadata_only_solr_dict() """
-        solr_dict[u'physical_description_material'] = [ u'' ]
-        solr_dict[u'physical_description_technique'] = [ u'' ]
-        if original_dict[u'object_medium'] != None:
-            solr_dict[u'physical_description_material'] = [ original_dict[u'object_medium'] ]
-        if original_dict[u'MEDIA_SUB::sub_media_name'] != None:
-            if type( original_dict[u'MEDIA_SUB::sub_media_name'] ) == unicode:
-                solr_dict[u'physical_description_technique'] = [ original_dict[u'MEDIA_SUB::sub_media_name'] ]
-            elif type( original_dict[u'MEDIA_SUB::sub_media_name'] ) == list:
-                cleaned_list = self.__ensure_list_unicode_values__handle_type_list( original_dict[u'MEDIA_SUB::sub_media_name'] )
-                solr_dict[u'physical_description_technique'] = cleaned_list
+        solr_dict['physical_description_material'] = [ '' ]
+        solr_dict['physical_description_technique'] = [ '' ]
+        if original_dict['object_medium'] != None:
+            solr_dict['physical_description_material'] = [ original_dict['object_medium'] ]
+        if original_dict['MEDIA_SUB::sub_media_name'] != None:
+            if type( original_dict['MEDIA_SUB::sub_media_name'] ) == unicode:
+                solr_dict['physical_description_technique'] = [ original_dict['MEDIA_SUB::sub_media_name'] ]
+            elif type( original_dict['MEDIA_SUB::sub_media_name'] ) == list:
+                cleaned_list = self.__ensure_list_unicode_values__handle_type_list( original_dict['MEDIA_SUB::sub_media_name'] )
+                solr_dict['physical_description_technique'] = cleaned_list
         return solr_dict
 
     def _set_title( self, original_dict, solr_dict ):
         """ Updates title.
             Called by build_metadata_only_solr_dict() """
-        solr_dict[u'title'] = u''
-        if original_dict[u'object_title'] != None:
-            solr_dict[u'title'] = original_dict[u'object_title']
+        solr_dict['title'] = ''
+        if original_dict['object_title'] != None:
+            solr_dict['title'] = original_dict['object_title']
         return solr_dict
 
     ## image helpers ##
 
     def _set_image_urls__get_jp2_url( self, links_dict ):
-        """ Returns jp2 url or u''.
+        """ Returns jp2 url or ''.
             Called by _set_image_urls() """
         try:
-            image_url = links_dict[u'content_datastreams'][u'JP2']
+            image_url = links_dict['content_datastreams']['JP2']
         except:
-            image_url = u''
+            image_url = ''
         return image_url
 
     def _set_image_urls__get_master_image_url( self, links_dict, jp2_url ):
-        """ Returns master image url or u''.
+        """ Returns master image url or ''.
             Called by _set_image_urls() """
         image_url = None
-        if jp2_url == u'':
-            image_url = u''
+        if jp2_url == '':
+            image_url = ''
         else:
             try:
-                image_url = links_dict[u'content_datastreams'][u'MASTER']  # don't think this is currently exposed
+                image_url = links_dict['content_datastreams']['MASTER']  # don't think this is currently exposed
             except:
                 pass
             if not image_url:
                 try:
-                    image_url = links_dict[u'content_datastreams'][u'TIFF']  # should handle some old items
+                    image_url = links_dict['content_datastreams']['TIFF']  # should handle some old items
                 except:
                     pass
             if not image_url:
                 try:
-                    jp2_image_url = links_dict[u'content_datastreams'][u'JP2']  # default modern case: if JP2 exists, master is MASTER
-                    image_url = jp2_image_url.replace( u'/JP2/', u'/MASTER/' )
+                    jp2_image_url = links_dict['content_datastreams']['JP2']  # default modern case: if JP2 exists, master is MASTER
+                    image_url = jp2_image_url.replace( '/JP2/', '/MASTER/' )
                 except:
                     pass
             if not image_url:
-                self.logger.info( u'in tasks.indexer.CustomIndexUpdater._set_image_urls__get_master_image_url(); odd case, links_dict is `%s`, jp2_url is `%s`' % (pprint.pformat(links_dict), jp2_url) )
-                image_url = u''
+                self.logger.info( 'in tasks.indexer.CustomIndexUpdater._set_image_urls__get_master_image_url(); odd case, links_dict is `%s`, jp2_url is `%s`' % (pprint.pformat(links_dict), jp2_url) )
+                image_url = ''
         return image_url
 
     ## utils ##
@@ -499,7 +500,7 @@ class CustomIndexUpdater( object ):
             elif type(value) == list:
                 solr_dict_copy[key] = self.__ensure_list_unicode_values__handle_type_list( value )
             elif value == None:
-              solr_dict_copy[key] = [ u'' ]
+              solr_dict_copy[key] = [ '' ]
         return solr_dict_copy
 
     def __ensure_list_unicode_values__handle_type_list( self, list_value ):
@@ -507,10 +508,10 @@ class CustomIndexUpdater( object ):
             Called by __ensure_list_unicode_values() and _set_physical_descriptions() """
         new_list = []
         if len( list_value ) == 0:
-          new_list.append( u'' )
+          new_list.append( '' )
         else:
           for entry in list_value:
-            new_list.append( u'' ) if (entry == None) else new_list.append( entry )
+            new_list.append( '' ) if (entry == None) else new_list.append( entry )
         return new_list
 
     # end class CustomIndexUpdater
@@ -523,45 +524,45 @@ logger = bell_logger.setup_logger()
 def run_make_pids_from_custom_index():
     """ Saves pids from custom-index to `h__pids_from_custom_index_list.json`.
         Called manually per readme.md """
-    logger.debug( u'in tasks.indexer.run_make_pids_from_custom_index(); starting' )
+    logger.debug( 'in tasks.indexer.run_make_pids_from_custom_index(); starting' )
     cip_lstr = CustomIndexPidsLister( logger )
     cip_lstr.grab_custom_index_pids()
-    logger.debug( u'in tasks.indexer.run_make_pids_from_custom_index(); done' )
+    logger.debug( 'in tasks.indexer.run_make_pids_from_custom_index(); done' )
     return
 
 def run_make_delete_pids_list():
     """ Saves custom-index pids to be deleted to `i__custom_index_delete_pids.json`.
         Called manually per readme.md """
-    logger.debug( u'in tasks.indexer.run_make_delete_pids_list(); starting' )
+    logger.debug( 'in tasks.indexer.run_make_delete_pids_list(); starting' )
     del_lstr = DeletePidsLister( logger )
     del_lstr.make_delete_pids_list()
-    logger.debug( u'in tasks.indexer.run_make_delete_pids_list(); done' )
+    logger.debug( 'in tasks.indexer.run_make_delete_pids_list(); done' )
     return
 
 def run_make_update_pids_list():
     """ Saves custom-index pids to be created/updated to `j__custom_index_update_pids.json`.
         Called manually per readme.md """
-    logger.debug( u'in tasks.indexer.run_make_update_pids_list(); starting' )
+    logger.debug( 'in tasks.indexer.run_make_update_pids_list(); starting' )
     update_lstr = UpdatePidsLister( logger )
     update_lstr.make_update_pids_lst()
-    logger.debug( u'in tasks.indexer.run_make_update_pids_list(); done' )
+    logger.debug( 'in tasks.indexer.run_make_update_pids_list(); done' )
     return
 
 def run_enqueue_index_jobs():
     """ Enqueues update-custom-solr-index-entry jobs.
         Called manually per readme.md """
-    logger.debug( u'in tasks.indexer.run_enqueue_index_jobs(); starting' )
+    logger.debug( 'in tasks.indexer.run_enqueue_index_jobs(); starting' )
     idxr = CustomIndexUpdater( logger )
     idxr.enqueue_index_jobs()
-    logger.debug( u'in tasks.indexer.run_enqueue_index_jobs(); done' )
+    logger.debug( 'in tasks.indexer.run_enqueue_index_jobs(); done' )
     return
 
 def run_update_custom_index_entry( accession_number, data_dct, pid ):
     """ Preps and executes post for single entry.
         Called by CustomIndexUpdater.enqueue_index_jobs() """
-    logger.debug( u'in tasks.indexer.run_update_custom_index_entry(); starting' )
+    logger.debug( 'in tasks.indexer.run_update_custom_index_entry(); starting' )
     idxr = CustomIndexUpdater( logger )
     idxr.update_custom_index_entry( accession_number, data_dct, pid )
-    logger.debug( u'in tasks.indexer.run_update_custom_index_entry(); done' )
+    logger.debug( 'in tasks.indexer.run_update_custom_index_entry(); done' )
     return
 
