@@ -1,5 +1,7 @@
 # -*- coding: utf-8 -*-
 
+from __future__ import unicode_literals
+
 import json, os, pprint, unittest
 from bell_code.tasks import images
 from bell_code import bell_logger
@@ -23,22 +25,22 @@ class ImageAdder_Test(unittest.TestCase):
     def test__create_temp_filenames(self):
         """ Tests master and jp2 paths and filenames. """
         adder = images.ImageAdder( logger )
-        adder.MASTER_IMAGES_DIR_PATH = u'/path/to/masters'
-        adder.JP2_IMAGES_DIR_PATH = u'/path/to/jp2s'
+        adder.MASTER_IMAGES_DIR_PATH = '/path/to/masters'
+        adder.JP2_IMAGES_DIR_PATH = '/path/to/jp2s'
         ## spaces
-        image_filename = u'abc def.ghi.tif'
+        image_filename = 'abc def.ghi.tif'
         ( source_filepath, destination_filepath, master_filename_encoded, jp2_filename ) = adder.create_temp_filenames( image_filename )
-        self.assertEquals( u'/path/to/masters/abc def.ghi.tif', source_filepath )
-        self.assertEquals( u'/path/to/jp2s/abc_def.ghi.jp2', destination_filepath )  # no spaces
-        self.assertEquals( u'abc%20def.ghi.tif', master_filename_encoded )  # for url access
-        self.assertEquals( u'abc_def.ghi.jp2', jp2_filename ) # for url access
+        self.assertEquals( '/path/to/masters/abc def.ghi.tif', source_filepath )
+        self.assertEquals( '/path/to/jp2s/abc_def.ghi.jp2', destination_filepath )  # no spaces
+        self.assertEquals( 'abc%20def.ghi.tif', master_filename_encoded )  # for url access
+        self.assertEquals( 'abc_def.ghi.jp2', jp2_filename ) # for url access
         # apostrophes
         image_filename = u"a'bc def.ghi.tif"
         ( source_filepath, destination_filepath, master_filename_encoded, jp2_filename ) = adder.create_temp_filenames( image_filename )
         self.assertEquals( u"/path/to/masters/a'bc def.ghi.tif", source_filepath )
-        self.assertEquals( u'/path/to/jp2s/a_bc_def.ghi.jp2', destination_filepath )  # no apostrophe
-        self.assertEquals( u'a%27bc%20def.ghi.tif', master_filename_encoded )  # for url access
-        self.assertEquals( u'a_bc_def.ghi.jp2', jp2_filename ) # for url access
+        self.assertEquals( '/path/to/jp2s/a_bc_def.ghi.jp2', destination_filepath )  # no apostrophe
+        self.assertEquals( 'a%27bc%20def.ghi.tif', master_filename_encoded )  # for url access
+        self.assertEquals( 'a_bc_def.ghi.jp2', jp2_filename ) # for url access
 
     # end class ImageAdder_Test
 
