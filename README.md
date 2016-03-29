@@ -19,14 +19,12 @@ code related to ingesting bell-gallery images into the bdr.
         - status: done 2016-03-26
             - instructions to view images from desktop from March 17 worked
     - check dev `mount` access
-        - status: done 2016-03-16
-    - check image-files readability
-        - status:
+        - status: done 2016-03-26
 
 - convert raw filemaker-pro xml to json
     - foundation/acc_num_to_data.py
     - end result: `accession_number_to_data_dict.json`
-    - status:
+    - status: done 2016-03-27
 
 - run script to get list of files in the images-to-ingest directory
     - utils/make_image_list.py
