@@ -1,24 +1,30 @@
-# Note: on osx mavericks, had to install lxml like:
-# $ STATIC_DEPS=true pip install lxml
-# ...instead of referencing this file.
+# Note: over time, the need for some things like bdrcmodels and bdrxml will vanish, as I begin using the new apis
 
-# uh, on Mavericks 10.9.2 the static_deps doesn't work; possible solutions: <http://stackoverflow.com/questions/19548011/cannot-install-lxml-on-mac-os-x-10-9>
-# lxml==3.2.4
+# Note: eulfedora installs a bunch of stuff, including 'requests'
 
-# Note #2: over time, the need for some things like bdrcmodels and bdrxml will vanish, as I begin using the new apis
-
-
-envoy==0.0.2
-eulfedora==0.21.0
+## new
+envoy==0.0.3
+eulfedora==1.5.2
 filelike==0.4.1
-gspread==0.1.0
-mysolr==0.8
-redis==2.8.0
-requests==2.0.1
-rq==0.3.11
+gspread==0.3.0
+mysolr==0.8.3
+redis==2.10.5
+rq==0.5.6
+requests==2.9.1
+lxml==3.6.0
+
+## old
+# envoy==0.0.2
+# eulfedora==0.21.0
+# filelike==0.4.1
+# gspread==0.1.0
+# mysolr==0.8
+# redis==2.8.0
+# requests==2.0.1
+# rq==0.3.11
 
 # 2013-12-06, installed bdrcmodels==0.1
-git+git://github.com/Brown-University-Library/bdrcmodels.git
+# git+git://github.com/Brown-University-Library/bdrcmodels.git
 
 # 2013-12-06, installed bdrxml==0.6-dev
-git+git://github.com/Brown-University-Library/bdrxml.git
+# git+git://github.com/Brown-University-Library/bdrxml.git
