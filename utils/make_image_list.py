@@ -17,8 +17,8 @@ logger = bell_logger.setup_logger()
 class ImageLister( object ):
 
     def __init__( self ):
-        self.DIRECTORY_PATH = unicode( os.environ['BELL_ONEOFF__IMAGE_DIRECTORY_PATH'] )
-        self.OUTPUT_PATH = unicode( os.environ['BELL_ONEOFF__IMAGE_DIRECTORY_JSON_PATH'] )
+        self.DIRECTORY_PATH = unicode( os.environ['BELL_UTILS__IMAGE_DIRECTORY_PATH'] )
+        self.OUTPUT_PATH = unicode( os.environ['BELL_UTILS__IMAGE_DIRECTORY_JSON_PATH'] )
 
     def list_images( self ):
         """ Produces a json list of image file-names. """
