@@ -36,6 +36,7 @@ code related to ingesting bell-gallery images into the bdr.
     - log output will list any image-files for which there's no metadata; work through any discrepancies w/J.C.
     - end result: updated `e__accession_number_to_data_dict.json`
     - status:
+        - emailed J.C. list of non-matches 2016-04-11
         - 558 image-directory filenames were found in the metadata
         - 69 image-directory filenames were not found in the metadata:
 
