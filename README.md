@@ -29,13 +29,15 @@ code related to ingesting bell-gallery images into the bdr.
 - run script to get list of files in the images-to-ingest directory
     - utils/make_image_list.py
     - end result: `d__bell_images_listing.json`
-    - status: done 2016-04-11
+    - status:
+        - done 2016-04-11
+        - redone 2016-04-18 after J.C. updated metadata and images
 
 - compare imagefile-filenames to metadata-filenames
     - utils/check_filenames_against_metadata.py
     - log output will list any image-files for which there's no metadata; work through any discrepancies w/J.C.
     - end result: updated `e__accession_number_to_data_dict.json`
-    - status:
+    - work:
         - emailed J.C. list of non-matches 2016-04-11
         - 558 image-directory filenames were found in the metadata
         - 69 image-directory filenames were not found in the metadata:
@@ -111,6 +113,14 @@ code related to ingesting bell-gallery images into the bdr.
                 'Van Ostade PR_1946.117.tif',
                 'Zorn PR_1942.506.tif'
                 [end]
+        - per J.C.'s instructions, removed 2 unneeded files from image-folder:
+            - Delaune PR_2001.8.8.tif
+            - Goodyear PR_2010.1.12 copy.tif
+        - ...and added 3 new files to the image-folder:
+            - Abbott PH_1982.1698.10.tif
+            - Cohen PR_1981.1681.B.tif
+            - Goya PR_1942.506.tif
+    - status: in-process
 
 - match metadata accession-numbers to pid #1
     - foundation/acc_num_to_pid.py

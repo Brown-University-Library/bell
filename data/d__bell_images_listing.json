@@ -1,11 +1,12 @@
 {
-  "count_filelist": 647,
-  "date_time": "2016-04-11 13:15:22.193089",
+  "count_filelist": 649,
+  "date_time": "2016-04-18 13:34:44.886208",
   "directory_path": "/Bell Gallery Files/TO BDR Nov 2015/",
   "extension_types": {
     ".105": 1,
+    ".db": 1,
     ".jpg": 19,
-    ".tif": 627
+    ".tif": 628
   },
   "filelist": [
     "Abbott PH_1980.1533.tif",
@@ -53,6 +54,7 @@
     "Artschwager D_1998.37.tif",
     "Artschwager D_1998.38.tif",
     "Artschwager D_2001.8.3.tif",
+    "Baskin PR_2005.2 copy.tif",
     "Baskin PR_2005.2.tif",
     "Bayer PR_1980.1347.tif",
     "Beardsley PR_1973.1076.tif",
@@ -150,6 +152,7 @@
     "Clergue PH_1990.29.8.tif",
     "Clergue PH_1990.29.9.tif",
     "Cohen PR_1980.1681.B.tif",
+    "Cohen PR_1981.1681.B.tif",
     "Cohen PR_1981.1681.C.tif",
     "Cohen PR_1981.1681.D.tif",
     "Cohen PR_1981.1681.E.tif",
@@ -191,7 +194,6 @@
     "Delaune PR_2001.8.8.B.tif",
     "Delaune PR_2001.8.8.C.tif",
     "Delaune PR_2001.8.8.D.tif",
-    "Delaune PR_2001.8.8.tif",
     "Detaille PR_1945.644.tif",
     "Diaz PR_1985.1924.C.1.tif",
     "Dill PR_1979.1211.tif",
@@ -278,7 +280,6 @@
     "Gibson PH_2012.1.1.tif",
     "Gibson PH_2012.1.2 copy.tif",
     "Gibson PH_2012.1.2.tif",
-    "Goodyear PR_2010.1.12 copy.tif",
     "Goodyear PR_2010.1.12.tif",
     "Gousse PR_1984.1840.tif",
     "Goya PR_00.387 copy.tif",
@@ -288,6 +289,7 @@
     "Goya PR_00.389.tif",
     "Goya PR_00.390 copy.tif",
     "Goya PR_00.390.tif",
+    "Goya PR_1942.506.tif",
     "Goya PR_1942.527.tif",
     "Goya PR_1942.536.tif",
     "Goya PR_1942.557.tif",
@@ -594,6 +596,7 @@
     "Sultan PH_2000.5.11.tif",
     "Sultan PR_2003.6.1.tif",
     "Telleria_Diez D_2003.5.tif",
+    "Thumbs.db",
     "Tiepolo PR_0.221.tif",
     "Tiepolo PR_0.222.tif",
     "Tiepolo PR_0.223.tif",
