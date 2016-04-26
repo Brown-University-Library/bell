@@ -158,6 +158,17 @@ code related to ingesting bell-gallery images into the bdr.
                 'Zorn PR_1942.506.tif'
                 [end]
 
+        - 2016-04-26, emailed J.C. new list of non-matches, and in email listed the specific differences
+
+                [list start]
+                'Gibson PH_1987.7.7.tif'
+                'Starn PH_2014.15.A,B.tif'
+                'Ulreich PR_1986.25.tif'
+                'Ulreich PR_1986.26.tif'
+                'Ulreich PR_1986.27.tif'
+                'Ulreich PR_1986.28.tif'
+                [list end]
+
     - status: in-process
 
 - match metadata accession-numbers to pid #1
