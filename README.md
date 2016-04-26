@@ -15,6 +15,7 @@ code related to ingesting bell-gallery images into the bdr.
             - `a__all_data_raw.xml`
             - `b__all_data_formatted.xml`
         - redone 2016-04-18 after J.C. metadata-imagefile matching
+        - redone 2016-04-26 after J.C. metadata-imagefile matching
 
 - get access to image-directory
     - check desktop access
@@ -29,6 +30,7 @@ code related to ingesting bell-gallery images into the bdr.
     - status:
         - done 2016-03-27
         - redone 2016-04-18 after J.C. metadata-imagefile matching
+        - redone 2016-04-26 after J.C. metadata-imagefile matching
 
 - run script to get list of files in the images-to-ingest directory
     - utils/make_image_list.py
