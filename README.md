@@ -38,6 +38,7 @@ code related to ingesting bell-gallery images into the bdr.
     - status:
         - done 2016-04-11
         - redone 2016-04-18 after J.C. updated metadata and images
+        - redone 2016-04-26 after J.C. updated metadata and images
 
 - compare imagefile-filenames to metadata-filenames
     - utils/check_filenames_against_metadata.py
@@ -126,6 +127,37 @@ code related to ingesting bell-gallery images into the bdr.
             - Abbott PH_1982.1698.10.tif
             - Cohen PR_1981.1681.B.tif
             - Goya PR_1942.506.tif
+        - 2016-04-18, emailed J.C. new list of non-matches
+
+                [start]
+                'Abbott PH_1982.1689.10.tif',
+                'Abbott PH_1982.1697.7.tif',
+                'Andre PR_2012.3.43.tif',
+                'Anonymous PH_1994.13.tif',
+                'Baskin PR_2005.2 copy.tif',
+                'Cohen PR_1980.1681.B.tif',
+                'Gibson PH_1987.7.7.tif',
+                'Gibson PH_2011.4.2.tif',
+                'Gibson PH_2011.4.3.tif',
+                'Gibson PH_2012.1.1.tif',
+                'Gibson PH_2012.1.2.tif',
+                'Goya PR_00.387.tif',
+                'Goya PR_00.389 copy.tif',
+                'Goya PR_00.390.tif',
+                'Jones PR_1981.1675.B.tif',
+                'Manet PR_0.606.tif',
+                'Mense PR_0.742.tif',
+                'Newman PR_2011.5.tif',
+                'Olitski SC_1990.39.A-E.tif',
+                'Starn PH_2014.14.A-D.tif',
+                'Starn PH_2014.15.A,B.tif',
+                'Ulreich PR_1986.25.tif',
+                'Ulreich PR_1986.26.tif',
+                'Ulreich PR_1986.27.tif',
+                'Ulreich PR_1986.28.tif',
+                'Zorn PR_1942.506.tif'
+                [end]
+
     - status: in-process
 
 - match metadata accession-numbers to pid #1
