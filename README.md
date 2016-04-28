@@ -41,6 +41,7 @@ code related to ingesting bell-gallery images into the bdr.
         - done 2016-04-11
         - redone 2016-04-18 after J.C. updated metadata and images
         - redone 2016-04-26 after J.C. updated metadata and images
+        - redone 2016-04-28 after J.C. metadata-imagefile matching
 
 - compare imagefile-filenames to metadata-filenames
     - utils/check_filenames_against_metadata.py
