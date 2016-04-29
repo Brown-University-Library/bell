@@ -26,5 +26,6 @@ lxml==3.6.0
 # 2013-12-06, installed bdrcmodels==0.1
 # git+git://github.com/Brown-University-Library/bdrcmodels.git
 
+# 2016-04-29, installed bdrxml==0.7.dev0
 # 2013-12-06, installed bdrxml==0.6-dev
-# git+git://github.com/Brown-University-Library/bdrxml.git
+git+git://github.com/Brown-University-Library/bdrxml.git

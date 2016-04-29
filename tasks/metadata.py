@@ -49,6 +49,14 @@ class MetadataOnlyLister( object ):
     # end class MetadataOnlyLister
 
 
+def run_metadata_only_lister():
+    """ Runs main MetadataOnlyLister() function.
+        Called manually per readme() """
+    lister = MetadataOnlyLister()
+    lister.list_metadata_only_accession_numbers()
+    return
+
+
 class MetadataCreator( object ):
     """ Handles metadata-related tasks. """
 

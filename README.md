@@ -45,8 +45,7 @@ code related to ingesting bell-gallery images into the bdr.
 
 - compare imagefile-filenames to metadata-filenames
     - utils/check_filenames_against_metadata.py
-    - log output will list any image-files for which there's no metadata; work through any discrepancies w/J.C.
-    - end result: updated `e__accession_number_to_data_dict.json`
+    - end result: log output will list any image-files for which there's no metadata; work through any discrepancies w/J.C.
     - work:
         - emailed J.C. list of non-matches 2016-04-11
         - 558 image-directory filenames were found in the metadata
@@ -172,19 +171,26 @@ code related to ingesting bell-gallery images into the bdr.
                 'Ulreich PR_1986.28.tif'
                 [list end]
 
-    - status: in-process
+        - 2016-04-28, reran file; all good; emailed J.C.
+
+    - status: done 2016-04-28.
 
 - match metadata accession-numbers to pid #1
     - foundation/acc_num_to_pid.py
-    - end result: `accession_number_to_pid_dict.json` file containing a dict of accession-numbers-to-pids.
+    - end result: `e__accession_number_to_pid_dict.json` file containing a dict of accession-numbers-to-pids.
     - accession-numbers without pids imply creation of a new metadata-only object (which may gain an associated image below)
     - accession-numbers with pids imply checking to see if fedora metadata needs to be updated
-    - status:
+    - status: done 2016-04-29
 
 - make metadata-only list
-    - tasks/metadata.MetadataOnlyLister.list_metadata_only_accession_numbers()
-    - end result: `metadata_only_accession_numbers.json`
-    - status:
+    - tasks/metadata.run_metadata_only_lister()
+    - to run (from `bell_code` directory)...
+
+            >>> from tasks import metadata
+            >>> metadata.run_metadata_only_lister()
+
+    - end result: `f__metadata_only_accession_numbers.json`
+    - status: done 2016-04-29
 
 - create new metadata objects
     - after creates, confirm a re-run of `foundation/acc_num_to_pid.py` results in zero non-pid matches.
