@@ -184,7 +184,7 @@ def run_enqueue_create_metadata_only_jobs():
     accession_numbers = dct['accession_numbers']
     for (i, accession_number) in enumerate( accession_numbers ):
         print 'i is, `%s`' % i
-        if i+1 > 200:
+        if i+1 > 1:
             break
         q.enqueue_call(
           func='bell_code.tasks.metadata.run_create_metadata_only_object',
