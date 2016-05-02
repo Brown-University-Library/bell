@@ -193,7 +193,15 @@ code related to ingesting bell-gallery images into the bdr.
     - status: done 2016-04-29
 
 - create new metadata objects
+    - tasks/metadata.run_enqueue_create_metadata_only_jobs()
+
+    - to run (from `bell_code` directory)...
+
+            >>> from tasks import metadata
+            >>> metadata.run_enqueue_create_metadata_only_jobs()
+
     - after creates, confirm a re-run of `foundation/acc_num_to_pid.py` results in zero non-pid matches.
+        - note that this re-run will update, as it should, `e__accession_number_to_pid_dict.json` -- the dict of accession-numbers-to-pids.
     - status:
 
 - make list of images to process
@@ -204,7 +212,7 @@ code related to ingesting bell-gallery images into the bdr.
 
 - add images
     - tasks/images.run_enqueue_add_image_jobs() -- and tasks/images.run_add_image( filename_dct )
-    - many iterations; permissions issues; Meyerowitz fixes; apostrophe-in-filename handling.
+    - note from last big ingest: `many iterations; permissions issues; Meyerowitz fixes; apostrophe-in-filename handling.`
     - status:
 
 - update the custom-solr-index
