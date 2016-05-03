@@ -19,14 +19,14 @@ for job in q.jobs:
         continue
     failed_count += 1
     job_d = {
-        'args': job._args,
-        'kwargs': job._kwargs,
-        'function': job._func_name,
+        'args': job.args,
+        'kwargs': job.kwargs,
+        'function': job.func_name,
         'dt_created': job.created_at,
         'dt_enqueued': job.enqueued_at,
         'dt_ended': job.ended_at,
         'origin': job.origin,
-        'id': job._id,
+        'id': job.id,
         'traceback': job.exc_info
         }
     d['jobs'].append( job_d )
