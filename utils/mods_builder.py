@@ -160,6 +160,7 @@ class ModsBuilder( object ):
         except XMLSyntaxError as e:
             message = '- in BellModsMaker._validate_mods(); error is, %s' % unicode(repr(e))
             logger.error( message )
+            logger.error( 'problematic mods_xml, ```{}```'.format(mods_xml) )
             raise Exception( message )
         return True
 
