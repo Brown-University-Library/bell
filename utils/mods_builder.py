@@ -6,8 +6,12 @@ from __future__ import unicode_literals
 
 import envoy, eulxml
 from bdrxml import irMetadata, mods, rels, rights
+from bell_code import bell_logger
 from lxml import etree
 from lxml.etree import XMLSyntaxError
+
+
+logger = bell_logger.setup_logger()
 
 
 class ModsBuilder( object ):
@@ -155,7 +159,7 @@ class ModsBuilder( object ):
             doc = etree.fromstring( mods_xml, parser )
         except XMLSyntaxError as e:
             message = '- in BellModsMaker._validate_mods(); error is, %s' % unicode(repr(e))
-            self.logger.error( message )
+            logger.error( message )
             raise Exception( message )
         return True
 
@@ -170,7 +174,7 @@ class ModsBuilder( object ):
             schema_object = etree.XMLSchema( schema_root )
         except Exception as e:
             message = '- in BellModsMaker.__make_schema_object(); mods_schema_path is, %s; schema_ustring is, %s; type(schema_root) is, %s; and error is, %s' % ( mods_schema_path, schema_ustring, unicode(repr(type(schema_root))), unicode(repr(e)) )
-            self.logger.error( message )
+            logger.error( message )
             raise Exception( message )
         return schema_object
 
