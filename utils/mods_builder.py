@@ -61,7 +61,7 @@ class ModsBuilder( object ):
         bdrxml_mods_obj = mods.make_mods()
         utf8_xml = bdrxml_mods_obj.serialize()
         xml = utf8_xml.decode( 'utf-8' )
-        updated_mods_id = mods_id.replace( ' ', '' ).replace( ',', '' )
+        updated_mods_id = mods_id.replace( ' ', '' ).replace( ',', '' ).replace( '.', '' )  # remove spaces, commas, and periods -- otherwise id element will not validate
         updated_xml = xml.replace( 'xsi:schemaLocation=', 'ID="{}" xsi:schemaLocation='.format(updated_mods_id) )
         self.mods = etree.fromstring( updated_xml.encode('utf-8') )
         return self.mods
