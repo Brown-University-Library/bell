@@ -39,18 +39,31 @@ class ModsBuilder( object ):
 
     ## HELPER FUNCTIONS ##
 
+    # def _initialize_mods( self, mods_id ):
+    #     """ Initialize empty self.mods element; also sets namespace reference. """
+    #     MODS_NAMESPACE = 'http://www.loc.gov/mods/v3'
+    #     self.MODS = '{%s}' % MODS_NAMESPACE
+    #     NSMAP = { 'mods' : MODS_NAMESPACE }
+    #     self.mods = etree.Element(
+    #         self.MODS+'mods',
+    #         nsmap=NSMAP,
+    #         xmlns_xsi='http://www.w3.org/2001/XMLSchema-instance',
+    #         ID='TEMP_MODS_ID',
+    #         xsi_schemaLocation='http://www.loc.gov/mods/v3 http://www.loc.gov/standards/mods/futures/mods-3-4.xsd'  # underscore will be replaced with colon
+    #         )
+    #     return self.mods
+
     def _initialize_mods( self, mods_id ):
-        """ Initialize empty self.mods element; also sets namespace reference. """
+        """ Initialize empty self.mods element; also sets namespace reference.
+            Switching from previous straight etree.Element() build for better bdr compatibility going forward. """
         MODS_NAMESPACE = 'http://www.loc.gov/mods/v3'
         self.MODS = '{%s}' % MODS_NAMESPACE
-        NSMAP = { 'mods' : MODS_NAMESPACE }
-        self.mods = etree.Element(
-            self.MODS+'mods',
-            nsmap=NSMAP,
-            xmlns_xsi='http://www.w3.org/2001/XMLSchema-instance',
-            ID='TEMP_MODS_ID',
-            xsi_schemaLocation='http://www.loc.gov/mods/v3 http://www.loc.gov/standards/mods/futures/mods-3-4.xsd'  # underscore will be replaced with colon
-            )
+        bdrxml_mods_obj = mods.make_mods()
+        utf8_xml = bdrxml_mods_obj.serialize()
+        xml = utf8_xml.decode( 'utf-8' )
+        updated_mods_id = mods_id.replace( ' ', '' ).replace( ',', '' )
+        updated_xml = xml.replace( 'xsi:schemaLocation=', 'ID="{}" xsi:schemaLocation='.format(updated_mods_id) )
+        self.mods = etree.fromstring( updated_xml.encode('utf-8') )
         return self.mods
 
     def _build_mods_element( self, data_dict ):
@@ -139,8 +152,21 @@ class ModsBuilder( object ):
         self.accession_number = identifier.text  # will be used by _make...
         return
 
+    # def _make_mods_xml_string( self ):
+    #     """ Returns unicode xml string to pass to validator. """
+    #     doc = etree.ElementTree( self.mods )
+    #     mods_string = etree.tostring( doc, pretty_print=True ).decode( 'utf-8', 'replace' )
+    #     mods_string = mods_string.replace( 'xmlns_xsi', 'xmlns:xsi')
+    #     mods_string = mods_string.replace( 'xsi_schemaLocation', 'xsi:schemaLocation' )
+    #     valid_id = self.accession_number.replace( ' ', '' )
+    #     valid_id = valid_id.replace( ',', '' )
+    #     mods_string = mods_string.replace( 'TEMP_MODS_ID', valid_id )
+    #     assert type(mods_string) == unicode
+    #     return mods_string
+
     def _make_mods_xml_string( self ):
-        """ Returns unicode xml string to pass to validator. """
+        """ Returns unicode xml string to pass to validator.
+            String replacements in previous version no longer needed since new mods-initialization via bdrxml. """
         doc = etree.ElementTree( self.mods )
         mods_string = etree.tostring( doc, pretty_print=True ).decode( 'utf-8', 'replace' )
         mods_string = mods_string.replace( 'xmlns_xsi', 'xmlns:xsi')
