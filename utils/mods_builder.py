@@ -60,10 +60,13 @@ class ModsBuilder( object ):
         self.MODS = '{%s}' % MODS_NAMESPACE
         bdrxml_mods_obj = mods.make_mods()
         utf8_xml = bdrxml_mods_obj.serialize()
-        xml = utf8_xml.decode( 'utf-8' )
-        updated_mods_id = mods_id.replace( ' ', '' ).replace( ',', '' ).replace( '.', '' )  # remove spaces, commas, and periods -- otherwise id element will not validate
-        updated_xml = xml.replace( 'xsi:schemaLocation=', 'ID="{}" xsi:schemaLocation='.format(updated_mods_id) )
-        self.mods = etree.fromstring( updated_xml.encode('utf-8') )
+        # xml = utf8_xml.decode( 'utf-8' )
+        # updated_mods_id = mods_id.replace(' ', '').replace(',', '')
+        # if updated_mods_id[0] in [ '0', '1', '2', '3', '4']
+        # updated_mods_id = 'id_{}'.format(  )  # 'id_' prefix added to prevent mods-validation error when id starts with a numeral
+        # updated_xml = xml.replace( 'xsi:schemaLocation=', 'ID="{}" xsi:schemaLocation='.format(updated_mods_id) )
+        # self.mods = etree.fromstring( updated_xml.encode('utf-8') )
+        self.mods = etree.fromstring( utf8_xml )
         return self.mods
 
     def _build_mods_element( self, data_dict ):
