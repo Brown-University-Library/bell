@@ -141,12 +141,29 @@ class MetadataCreator( object ):
         return_tuple = ( file_obj, param_string )
         return return_tuple
 
+    # def perform_post( self, params, file_obj ):
+    #     """ Hits api w/post. Returns pid.
+    #         Called by create_metadata_only_object() """
+    #     files = { 'bell_item.json': file_obj }
+    #     time.sleep( .5 )
+    #     r = requests.post( self.API_URL, data=params, files=files )
+    #     file_obj.close()
+    #     self.logger.debug( 'in metadata.MetadataCreator.perform_post(); r.status_code, %s' % r.status_code )
+    #     response_data = json.loads( r.content.decode('utf-8') )
+    #     self.logger.debug( 'in metadata.MetadataCreator.perform_post(); response_data, %s' % pprint.pformat(response_data) )
+    #     pid = response_data['pid']
+    #     return pid
+
     def perform_post( self, params, file_obj ):
         """ Hits api w/post. Returns pid.
             Called by create_metadata_only_object() """
         files = { 'bell_item.json': file_obj }
         time.sleep( .5 )
-        r = requests.post( self.API_URL, data=params, files=files )
+        try:
+            r = requests.post( self.API_URL, data=params, files=files )
+        except Exception as e:
+            self.logger.debug( 'in metadata.MetadataCreator.perform_post(); exception, ```{}```'.format(unicode(repr(e))) )
+            raise Exception( 'failure on metadata.MetadataCreator.perform_post()' )
         file_obj.close()
         self.logger.debug( 'in metadata.MetadataCreator.perform_post(); r.status_code, %s' % r.status_code )
         response_data = json.loads( r.content.decode('utf-8') )
