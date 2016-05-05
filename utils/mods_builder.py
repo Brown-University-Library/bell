@@ -58,7 +58,7 @@ class ModsBuilder( object ):
         self.__build_note_stuff( data_dict )
         self.__build_location_stuff( data_dict )
         self.__build_identifier_stuff( data_dict )
-        # self.__build_type_of_resource_stuff()
+        self.__build_type_of_resource_stuff()
         return
 
     def __build_title_stuff( self, data_dict ):
@@ -134,6 +134,13 @@ class ModsBuilder( object ):
         identifier2 = etree.SubElement( self.mods, self.MODS+'identifier', type='bell_object_id' )
         identifier2.text = data_dict[ 'object_id' ]
         self.accession_number = identifier.text  # will be used by _make...
+        return
+
+    def __build_type_of_resource_stuff( self ):
+        """ Adds to self.mods `typeOfResource`.
+            Called by _build_mods_element() """
+        t_o_r = etree.SubElement( self.mods, self.MODS+'typeOfResource' )
+        t_o_r.text = 'still image'
         return
 
     def _make_mods_xml_string( self ):
