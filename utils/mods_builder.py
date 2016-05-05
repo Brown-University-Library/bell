@@ -58,6 +58,7 @@ class ModsBuilder( object ):
         self.__build_note_stuff( data_dict )
         self.__build_location_stuff( data_dict )
         self.__build_identifier_stuff( data_dict )
+        # self.__build_type_of_resource_stuff()
         return
 
     def __build_title_stuff( self, data_dict ):
@@ -135,28 +136,11 @@ class ModsBuilder( object ):
         self.accession_number = identifier.text  # will be used by _make...
         return
 
-    # def _make_mods_xml_string( self ):
-    #     """ Returns unicode xml string to pass to validator. """
-    #     doc = etree.ElementTree( self.mods )
-    #     mods_string = etree.tostring( doc, pretty_print=True ).decode( 'utf-8', 'replace' )
-    #     mods_string = mods_string.replace( 'xmlns_xsi', 'xmlns:xsi')
-    #     mods_string = mods_string.replace( 'xsi_schemaLocation', 'xsi:schemaLocation' )
-    #     valid_id = self.accession_number.replace( ' ', '' )
-    #     valid_id = valid_id.replace( ',', '' )
-    #     mods_string = mods_string.replace( 'TEMP_MODS_ID', valid_id )
-    #     assert type(mods_string) == unicode
-    #     return mods_string
-
     def _make_mods_xml_string( self ):
         """ Returns unicode xml string to pass to validator.
             String replacements in previous version no longer needed since new mods-initialization via bdrxml. """
         doc = etree.ElementTree( self.mods )
         mods_string = etree.tostring( doc, pretty_print=True ).decode( 'utf-8', 'replace' )
-        # mods_string = mods_string.replace( 'xmlns_xsi', 'xmlns:xsi')
-        # mods_string = mods_string.replace( 'xsi_schemaLocation', 'xsi:schemaLocation' )
-        # valid_id = self.accession_number.replace( ' ', '' )
-        # valid_id = valid_id.replace( ',', '' )
-        # mods_string = mods_string.replace( 'TEMP_MODS_ID', valid_id )
         assert type(mods_string) == unicode
         return mods_string
 
