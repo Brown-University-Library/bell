@@ -39,20 +39,6 @@ class ModsBuilder( object ):
 
     ## HELPER FUNCTIONS ##
 
-    # def _initialize_mods( self, mods_id ):
-    #     """ Initialize empty self.mods element; also sets namespace reference. """
-    #     MODS_NAMESPACE = 'http://www.loc.gov/mods/v3'
-    #     self.MODS = '{%s}' % MODS_NAMESPACE
-    #     NSMAP = { 'mods' : MODS_NAMESPACE }
-    #     self.mods = etree.Element(
-    #         self.MODS+'mods',
-    #         nsmap=NSMAP,
-    #         xmlns_xsi='http://www.w3.org/2001/XMLSchema-instance',
-    #         ID='TEMP_MODS_ID',
-    #         xsi_schemaLocation='http://www.loc.gov/mods/v3 http://www.loc.gov/standards/mods/futures/mods-3-4.xsd'  # underscore will be replaced with colon
-    #         )
-    #     return self.mods
-
     def _initialize_mods( self, mods_id ):
         """ Initialize empty self.mods element; also sets namespace reference.
             Switching from previous straight etree.Element() build for better bdr compatibility going forward. """
@@ -60,12 +46,6 @@ class ModsBuilder( object ):
         self.MODS = '{%s}' % MODS_NAMESPACE
         bdrxml_mods_obj = mods.make_mods()
         utf8_xml = bdrxml_mods_obj.serialize()
-        # xml = utf8_xml.decode( 'utf-8' )
-        # updated_mods_id = mods_id.replace(' ', '').replace(',', '')
-        # if updated_mods_id[0] in [ '0', '1', '2', '3', '4']
-        # updated_mods_id = 'id_{}'.format(  )  # 'id_' prefix added to prevent mods-validation error when id starts with a numeral
-        # updated_xml = xml.replace( 'xsi:schemaLocation=', 'ID="{}" xsi:schemaLocation='.format(updated_mods_id) )
-        # self.mods = etree.fromstring( updated_xml.encode('utf-8') )
         self.mods = etree.fromstring( utf8_xml )
         return self.mods
 
