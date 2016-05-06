@@ -160,16 +160,20 @@ class MetadataCreator( object ):
         files = { 'bell_item.json': file_obj }
         time.sleep( .5 )
         try:
-            r = requests.post( self.API_URL, data=params, files=files )
+            r = requests.post( self.API_URL, data=params, files=files, verify=False )
         except Exception as e:
-            self.logger.debug( 'in metadata.MetadataCreator.perform_post(); exception, ```{}```'.format(unicode(repr(e))) )
-            raise Exception( 'failure on metadata.MetadataCreator.perform_post()' )
+            self._handle_post_exception( e, file_obj )
         file_obj.close()
-        self.logger.debug( 'in metadata.MetadataCreator.perform_post(); r.status_code, %s' % r.status_code )
+        self.logger.debug( 'in metadata.MetadataCreator.perform_post(); r.status_code, `{status_code}`; r.content, ```{content}```'.format(status_code=r.status_code, content=r.content.decode('utf-8', replace)) )
         response_data = json.loads( r.content.decode('utf-8') )
-        self.logger.debug( 'in metadata.MetadataCreator.perform_post(); response_data, %s' % pprint.pformat(response_data) )
         pid = response_data['pid']
         return pid
+
+    def _handle_post_exception( self, e, file_obj ):
+        self.logger.error( 'in metadata.MetadataCreator.perform_post(); exception, ```{}```'.format(unicode(repr(e))) )
+        file_obj.close()
+        raise Exception( 'failure on metadata.MetadataCreator.perform_post()' )
+        return
 
     def track_progress( self, accession_number, pid ):
         """ Logs progress to json file.
