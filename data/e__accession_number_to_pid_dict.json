@@ -1,12 +1,12 @@
 {
   "count": {
     "count_items": 6257, 
-    "count_null": 168, 
-    "count_pids": 6089
+    "count_null": 167, 
+    "count_pids": 6090
   }, 
-  "datetime": "2016-04-29 14:01:33.231894", 
+  "datetime": "2016-05-06 14:43:19.482326", 
   "final_accession_pid_dict": {
-    "2015.11.45": null, 
+    "2015.11.45": "bdr:650774", 
     "B 1979.1204": "bdr:10968", 
     "B 1980.1501": "bdr:316265", 
     "B 1980.1548": "bdr:10970", 
