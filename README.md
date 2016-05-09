@@ -178,9 +178,10 @@ code related to ingesting bell-gallery images into the bdr.
 - match metadata accession-numbers to pid #1
     - foundation/acc_num_to_pid.py
     - end result: `e__accession_number_to_pid_dict.json` file containing a dict of accession-numbers-to-pids.
-    - accession-numbers without pids imply creation of a new metadata-only object (which may gain an associated image below)
+    - accession-numbers without pids imply creation of a new metadata-only object (which may gain an associated image later)
     - accession-numbers with pids imply checking to see if fedora metadata needs to be updated
-    - status: done 2016-04-29
+    - status: done 2016-04-29; shows c. 160 accession-numbers without pids
+    - status: done again 2016-05-09 after metadata-only ingest; shows, appropriately, no accession-numbers without pids.
 
 - make metadata-only list
     - tasks/metadata.run_metadata_only_lister()
@@ -202,7 +203,8 @@ code related to ingesting bell-gallery images into the bdr.
 
     - after creates, confirm a re-run of `foundation/acc_num_to_pid.py` results in zero non-pid matches.
         - note that this re-run will update, as it should, `e__accession_number_to_pid_dict.json` -- the dict of accession-numbers-to-pids.
-    - status:
+    - status: done 2016-05-06
+    - rerun status of `foundation/acc_num_to_pid.py`: done 2016-05-09 -- now, appropriately, shows no accession-numbers without bdr pids.
 
 - make list of images to process
     - tasks/images.ImageLister.make_image_lists()
