@@ -208,6 +208,12 @@ code related to ingesting bell-gallery images into the bdr.
 
 - make list of images to process
     - tasks/images.ImageLister.make_image_lists()
+
+    - to run (from `bell_code` directory)...
+
+            >>> from tasks import images
+            >>> images.run_make_image_lists()
+
     - produces a file containing both a list of images to add, and a list of images to update
     - end result: `g_images_to_process.json`
     - status:
