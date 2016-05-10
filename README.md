@@ -219,7 +219,14 @@ code related to ingesting bell-gallery images into the bdr.
     - status: done: 2016-05-09
 
 - add images
-    - tasks/images.run_enqueue_add_image_jobs() -- and tasks/images.run_add_image( filename_dct )
+    - tasks/images.run_enqueue_add_image_jobs()
+    - to run (from `bell_code` directory)...
+
+            >>> from tasks import images
+            >>> images.run_enqueue_add_image_jobs()
+
+
+    - for adding individual images, if necessary: tasks/images.run_add_image( filename_dct )
     - note from last big ingest: `many iterations; permissions issues; Meyerowitz fixes; apostrophe-in-filename handling.`
     - status:
 

@@ -145,12 +145,12 @@ class ImageAdder( object ):
 
     def __init__( self, logger ):
         self.logger = logger
-        self.MASTER_IMAGES_DIR_PATH = unicode( os.environ['BELL_TASKS_IMGS__MASTER_IMAGES_DIR_PATH'] )
-        self.JP2_IMAGES_DIR_PATH = unicode( os.environ['BELL_TASKS_IMGS__JP2_IMAGES_DIR_PATH'] )
+        self.MASTER_IMAGES_DIR_PATH = unicode( os.environ['BELL_TASKS_IMGS__MASTER_IMAGES_DIR_PATH'] )  # no trailing slash
+        self.JP2_IMAGES_DIR_PATH = unicode( os.environ['BELL_TASKS_IMGS__JP2_IMAGES_DIR_PATH'] )  # no trailing slash
         self.KAKADU_COMMAND_PATH = unicode( os.environ['BELL_TASKS_IMGS__KAKADU_COMMAND_PATH'] )
         self.CONVERT_COMMAND_PATH = unicode( os.environ['BELL_TASKS_IMGS__CONVERT_COMMAND_PATH'] )
-        self.MASTER_IMAGES_DIR_URL = unicode( os.environ['BELL_TASKS_IMGS__MASTER_IMAGES_DIR_URL'] )
-        self.JP2_IMAGES_DIR_URL = unicode( os.environ['BELL_TASKS_IMGS__JP2_IMAGES_DIR_URL'] )
+        self.MASTER_IMAGES_DIR_URL = unicode( os.environ['BELL_TASKS_IMGS__MASTER_IMAGES_DIR_URL'] )  # no trailing slash
+        self.JP2_IMAGES_DIR_URL = unicode( os.environ['BELL_TASKS_IMGS__JP2_IMAGES_DIR_URL'] )  # no trailing slash
         self.AUTH_API_URL = unicode( os.environ['BELL_TASKS_IMGS__AUTH_API_URL'] )
         self.AUTH_API_IDENTITY = unicode( os.environ['BELL_TASKS_IMGS__AUTH_API_IDENTITY'] )
         self.AUTH_API_KEY = unicode( os.environ['BELL_TASKS_IMGS__AUTH_API_KEY'] )
@@ -197,13 +197,26 @@ class ImageAdder( object ):
             self._create_jp2_from_jpg( source_filepath, destination_filepath )
         return
 
+    # def _create_jp2_from_tif( self, source_filepath, destination_filepath ):
+    #     """ Creates jp2 directly.
+    #         Called by create_jp2() """
+    #     source_filepath2 = source_filepath.replace( ' ', '\ ' )
+    #     source_filepath3 = source_filepath2.replace( u"'", u"\\'" )
+    #     cmd = '%s -i "%s" -o "%s" Creversible=yes -rate -,1,0.5,0.25 Clevels=12' % (
+    #         self.KAKADU_COMMAND_PATH, source_filepath3, destination_filepath )
+    #     self.logger.info( 'in tasks.images.ImageAdder._create_jp2_from_tif(); cmd, %s' % cmd )
+    #     r = envoy.run( cmd.encode('utf-8', 'replace') )  # envoy requires a non-unicode string
+    #     self.logger.info( 'in tasks.images.ImageAdder._create_jp2_from_tif(); r.std_out, %s' % r.std_out )
+    #     self.logger.info( 'in tasks.images.ImageAdder._create_jp2_from_tif(); r.std_err, %s' % r.std_err )
+    #     return
+
     def _create_jp2_from_tif( self, source_filepath, destination_filepath ):
         """ Creates jp2 directly.
             Called by create_jp2() """
-        source_filepath2 = source_filepath.replace( ' ', '\ ' )
-        source_filepath3 = source_filepath2.replace( u"'", u"\\'" )
-        cmd = '%s -i "%s" -o "%s" Creversible=yes -rate -,1,0.5,0.25 Clevels=12' % (
-            self.KAKADU_COMMAND_PATH, source_filepath3, destination_filepath )
+        source_filepath2 = source_filepath.replace( "'", "\\'" )
+        cmd = '{command_path} -i "{source_path}" -o "{destination_path}" Creversible=yes -rate -,1,0.5,0.25 Clevels=12'.format(
+            command_path=self.KAKADU_COMMAND_PATH, source_path=source_filepath2, destination_path=destination_filepath
+            )
         self.logger.info( 'in tasks.images.ImageAdder._create_jp2_from_tif(); cmd, %s' % cmd )
         r = envoy.run( cmd.encode('utf-8', 'replace') )  # envoy requires a non-unicode string
         self.logger.info( 'in tasks.images.ImageAdder._create_jp2_from_tif(); r.std_out, %s' % r.std_out )
