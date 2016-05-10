@@ -216,7 +216,7 @@ code related to ingesting bell-gallery images into the bdr.
 
     - produces a file containing both a list of images to add, and a list of images to update
     - end result: `g_images_to_process.json`
-    - status:
+    - status: done: 2016-05-09
 
 - add images
     - tasks/images.run_enqueue_add_image_jobs() -- and tasks/images.run_add_image( filename_dct )
