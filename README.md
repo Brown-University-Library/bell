@@ -218,16 +218,25 @@ code related to ingesting bell-gallery images into the bdr.
     - end result: `g_images_to_process.json`
     - status: done: 2016-05-09
 
-- add images
+- add new images
     - tasks/images.run_enqueue_add_image_jobs()
     - to run (from `bell_code` directory)...
 
             >>> from tasks import images
             >>> images.run_enqueue_add_image_jobs()
 
-
     - for adding individual images, if necessary: tasks/images.run_add_image( filename_dct )
     - note from last big ingest: `many iterations; permissions issues; Meyerowitz fixes; apostrophe-in-filename handling.`
+    - status:
+
+- add updated images
+    - tasks/images.run_enqueue_add_image_jobs()
+    - to run (from `bell_code` directory)...
+
+            >>> from tasks import images
+            >>> images.run_enqueue_update_image_jobs()
+
+    - for adding individual images, if necessary: tasks/images.run_add_image( filename_dct )
     - status:
 
 - update the custom-solr-index
