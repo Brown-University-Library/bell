@@ -297,13 +297,32 @@ def run_make_image_lists():
     return
 
 def run_enqueue_add_image_jobs():
-    """ Prepares list of images-to-add and enqueues jobs.
+    """ Grabs list of images-to-add and enqueues jobs.
         Called manually.
         Suggestion: run on ingestion-server. """
     IMAGES_TO_PROCESS_JSON_PATH = unicode( os.environ['BELL_TASKS_IMGS__IMAGES_TO_PROCESS_JSON_PATH'] )
     with open( IMAGES_TO_PROCESS_JSON_PATH ) as f:
         dct = json.loads( f.read() )
     images_to_add = dct['lst_images_to_add']  # each lst entry is like: { "Agam PR_1981.1694.tif": {"accession_number": "PR 1981.1694", "pid": "bdr:300120"} }
+    for (i, filename_dct) in enumerate( images_to_add ):
+        print 'i is, `%s`' % i
+        if i+1 > 1:
+            break
+        q.enqueue_call(
+            func='bell_code.tasks.images.run_add_image',
+            kwargs={ 'filename_dct': filename_dct },
+            timeout=600 )
+    print 'done'
+    return
+
+def run_enqueue_update_image_jobs():
+    """ Grabs list of images-to-update and enqueues jobs.
+        Called manually.
+        Suggestion: run on ingestion-server. """
+    IMAGES_TO_PROCESS_JSON_PATH = unicode( os.environ['BELL_TASKS_IMGS__IMAGES_TO_PROCESS_JSON_PATH'] )
+    with open( IMAGES_TO_PROCESS_JSON_PATH ) as f:
+        dct = json.loads( f.read() )
+    images_to_add = dct['lst_images_to_update']  # each lst entry is like: { "Agam PR_1981.1694.tif": {"accession_number": "PR 1981.1694", "pid": "bdr:300120"} }
     for (i, filename_dct) in enumerate( images_to_add ):
         print 'i is, `%s`' % i
         if i+1 > 1:
