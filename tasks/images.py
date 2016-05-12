@@ -306,7 +306,7 @@ def run_enqueue_add_image_jobs():
     images_to_add = dct['lst_images_to_add']  # each lst entry is like: { "Agam PR_1981.1694.tif": {"accession_number": "PR 1981.1694", "pid": "bdr:300120"} }
     for (i, filename_dct) in enumerate( images_to_add ):
         print 'i is, `%s`' % i
-        if i+1 > 1:
+        if i+1 > 500:
             break
         q.enqueue_call(
             func='bell_code.tasks.images.run_add_image',
