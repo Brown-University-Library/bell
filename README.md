@@ -227,7 +227,7 @@ code related to ingesting bell-gallery images into the bdr.
 
     - for adding individual images, if necessary: tasks/images.run_add_image( filename_dct )
     - note from last big ingest: `many iterations; permissions issues; Meyerowitz fixes; apostrophe-in-filename handling.`
-    - status:
+    - status: done: 2016-05-12
 
 - add updated images
     - tasks/images.run_enqueue_add_image_jobs()
@@ -237,7 +237,7 @@ code related to ingesting bell-gallery images into the bdr.
             >>> images.run_enqueue_update_image_jobs()
 
     - for adding individual images, if necessary: tasks/images.run_add_image( filename_dct )
-    - status:
+    - status: in-process -- 35 images added fine, but some have old 'TIFF' data-stream that needs to be deleted
 
 - update the custom-solr-index
     - prep list of pids from custom-index
