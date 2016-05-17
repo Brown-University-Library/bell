@@ -237,7 +237,9 @@ code related to ingesting bell-gallery images into the bdr.
             >>> images.run_enqueue_update_image_jobs()
 
     - for adding individual images, if necessary: tasks/images.run_add_image( filename_dct )
-    - status: in-process -- 35 images added fine, but some have old 'TIFF' data-stream that needs to be deleted
+    - status: done
+        - images updated: 2016-05-16
+        - old TIFF datastreams deleted: 2016-05-17
 
 - update the custom-solr-index
     - prep list of pids from custom-index
