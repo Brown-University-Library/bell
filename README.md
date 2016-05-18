@@ -51,7 +51,7 @@ code related to ingesting bell-gallery images into the bdr.
 
             ...with the appropriate suffixes from the d__bell_images_listing - 'extension_types'
 
-    - end result: log output will list any image-files for which there's no metadata; work through any discrepancies w/J.C.
+    - end result: `data/d2__images_metadata_comparison.json` -- work through any not-matched files with J.C. before proceeding.
     - work:
         - emailed J.C. list of non-matches 2016-04-11
         - 558 image-directory filenames were found in the metadata
