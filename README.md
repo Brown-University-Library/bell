@@ -45,6 +45,12 @@ code related to ingesting bell-gallery images into the bdr.
 
 - compare imagefile-filenames to metadata-filenames
     - utils/check_filenames_against_metadata.py
+        - NOTE: update the line:
+
+                filenames_subset = self.filter_filenames( filenames_dct, [ '.22', '.tif', '.tiff' ] )  # from manual inspection of d__bell_images_listing.json
+
+            ...with the appropriate suffixes from the d__bell_images_listing - 'extension_types'
+
     - end result: log output will list any image-files for which there's no metadata; work through any discrepancies w/J.C.
     - work:
         - emailed J.C. list of non-matches 2016-04-11
@@ -240,6 +246,21 @@ code related to ingesting bell-gallery images into the bdr.
     - status: done
         - images updated: 2016-05-16
         - old TIFF datastreams deleted: 2016-05-17
+
+---
+
+- temp unusual-step A
+    - noticed I hadn't processed the 19 jpgs, that's because I hadn't included the .jpg files in the step producing the file `d__bell_images_listing.json`
+        - status: in process
+        - rerunning that after updating the filter.
+
+- temp unusual-step B
+    - noticed the number of 'tif' files processed didn't match the original number of tif files.
+        - see the 500 tif files from `data/g__images_to_process_temp_archive.json` vs the 615 tifs from `d__bell_images_listing.json`
+        - status: not yet done, may be a permissions issue, and possibly related to above step.
+
+---
+
 
 - update the custom-solr-index
     - prep list of pids from custom-index
