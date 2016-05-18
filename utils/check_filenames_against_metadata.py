@@ -24,7 +24,7 @@ class Checker( object ):
     def check_filenames( self ):
         """ Checks filenames against metadata. """
         ( metadata_dct, filenames_dct ) = self.loadup()
-        filenames_subset = self.filter_filenames( filenames_dct, [ '.22', '.tif', '.tiff' ] )  # from manual inspection of filenames json
+        filenames_subset = self.filter_filenames( filenames_dct, ['.105', '.jpg', '.tif'] )  # from manual inspection of d__bell_images_listing.json
         metadata_subset_dct = self.filter_metadata( metadata_dct )
         compare_dct = self.compare( filenames_subset, metadata_subset_dct )
         return
