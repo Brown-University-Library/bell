@@ -26,7 +26,7 @@ class ImageLister( object ):
         self.API_URL = unicode( os.environ['BELL_TASKS_IMGS__API_ROOT_URL'] )
 
     def make_image_lists( self ):
-        """ Saves two json list of accession_numbers, one for images to be added, and one for images to be updated.
+        """ Saves, in one json file, two lists of accession_numbers, one for images to be added, and one for images to be updated.
             Called manuallly per readme. """
         logger.debug( 'in tasks.images.ImageLister.make_image_lists(); starting' )
         ( accession_data_dct, accession_pid_dct, images_lst, images_to_add, images_to_update ) = self.setup()
@@ -55,30 +55,54 @@ class ImageLister( object ):
         accession_pid_dct = dct3['final_accession_pid_dict']
         return ( accession_data_dct, accession_pid_dct, images_lst, images_to_add, images_to_update )
 
+    # def make_filename_to_data_dct( self, accession_data_dct, accession_pid_dct, images_lst ):
+    #     """ Returns dct of filename keys to data-dct of accession-number and pid.
+    #         Called by: make_image_lists() """
+    #     filename_to_data_dct = {}
+    #     for image_filename in images_lst:
+    #         extension_idx = image_filename.rfind( '.' )
+    #         if not ( '.tif' in image_filename[extension_idx:].lower() or '.jpg' in image_filename[extension_idx:].lower() ):  # removes a few non-image entries
+    #             logger.debug( 'in tasks.images.ImageLister.make_filename_to_data_dct(); skipping image_filename, `{}`'.format(image_filename) )
+    #             continue
+    #         else:
+    #             self._check_image_filename( image_filename, accession_data_dct, filename_to_data_dct )
+    #     logger.debug( 'in tasks.images.ImageLister.make_filename_to_data_dct(); filename_to_data_dct, `%s`' % pprint.pformat(filename_to_data_dct) )
+    #     return filename_to_data_dct
+
     def make_filename_to_data_dct( self, accession_data_dct, accession_pid_dct, images_lst ):
         """ Returns dct of filename keys to data-dct of accession-number and pid.
             Called by: make_image_lists() """
         filename_to_data_dct = {}
         for image_filename in images_lst:
             extension_idx = image_filename.rfind( '.' )
-            if not ( '.tif' in image_filename[extension_idx:].lower() or '.jpg' in image_filename[extension_idx:].lower() ):  # removes a few non-image entries
-                logger.debug( 'in tasks.images.ImageLister.make_filename_to_data_dct(); skipping image_filename, `{}`'.format(image_filename) )
-                continue
-            else:
-                self._check_image_filename( image_filename, accession_data_dct, filename_to_data_dct )
+            self._check_image_filename( image_filename, accession_data_dct, filename_to_data_dct, extension_idx, accession_pid_dct )
         logger.debug( 'in tasks.images.ImageLister.make_filename_to_data_dct(); filename_to_data_dct, `%s`' % pprint.pformat(filename_to_data_dct) )
         return filename_to_data_dct
 
-    def _check_image_filename( self, image_filename, accession_data_dct, filename_to_data_dct ):
+    # def _check_image_filename( self, image_filename, accession_data_dct, filename_to_data_dct, extension_idx, accession_pid_dct ):
+    #     """ Checks image_filename and variant against data['object_image_scan_filename'].
+    #         If found, adds filename_to_data_dct entry; otherwise logs skip.
+    #         Called by make_filename_to_data_dct() """
+    #     non_extension_filename = image_filename[0:extension_idx]
+    #     for ( accession_number_key, data_dct_value ) in accession_data_dct.items():
+    #         if image_filename == data_dct_value['object_image_scan_filename'] or non_extension_filename == data_dct_value['object_image_scan_filename']:
+    #             filename_to_data_dct[image_filename] = { 'accession_number': accession_number_key, 'pid': accession_pid_dct[accession_number_key] }
+    #         else:
+    #             logger.debug( 'in tasks.images.ImageLister._check_image_filename(); no data entry found on image_filename, `{image_filename}` or non_extension_filename, {non_extension_filename}'.format(image_filename=image_filename, non_extension_filename=non_extension_filename) )
+    #     return
+
+    def _check_image_filename( self, image_filename, accession_data_dct, filename_to_data_dct, extension_idx, accession_pid_dct ):
         """ Checks image_filename and variant against data['object_image_scan_filename'].
             If found, adds filename_to_data_dct entry; otherwise logs skip.
             Called by make_filename_to_data_dct() """
+        found = False
         non_extension_filename = image_filename[0:extension_idx]
         for ( accession_number_key, data_dct_value ) in accession_data_dct.items():
             if image_filename == data_dct_value['object_image_scan_filename'] or non_extension_filename == data_dct_value['object_image_scan_filename']:
                 filename_to_data_dct[image_filename] = { 'accession_number': accession_number_key, 'pid': accession_pid_dct[accession_number_key] }
-            else:
-                logger.debug( 'in tasks.images.ImageLister._check_image_filename(); no data entry found on image_filename, `{image_filename}` or non_extension_filename, {non_extension_filename}'.format(image_filename=image_filename, non_extension_filename=non_extension_filename) )
+                found = True
+        if found is False:
+             logger.debug( 'in tasks.images.ImageLister._check_image_filename(); no data entry found on image_filename, `{image_filename}` or non_extension_filename, {non_extension_filename}'.format(image_filename=image_filename, non_extension_filename=non_extension_filename) )
         return
 
     def get_api_data( self, pid ):
