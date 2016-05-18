@@ -1,9 +1,107 @@
 {
   "count_images": 500, 
-  "count_images_to_add": 465, 
-  "count_images_to_update": 35, 
-  "datetime": "2016-05-09 11:16:33.397500", 
+  "count_images_to_add": 16, 
+  "count_images_to_update": 484, 
+  "datetime": "2016-05-18 16:19:28.129417", 
   "lst_images_to_add": [
+    {
+      "Albers PR_0.160.tif": {
+        "accession_number": "PR 0.160", 
+        "pid": "bdr:300121"
+      }
+    }, 
+    {
+      "Anonymous PR_1981.1654.tif": {
+        "accession_number": "PR 1981.1654", 
+        "pid": "bdr:300130"
+      }
+    }, 
+    {
+      "Bravo PH_1987.9.1.tif": {
+        "accession_number": "PH 1987.9.1", 
+        "pid": "bdr:298799"
+      }
+    }, 
+    {
+      "Foglia PH_2014.4.1.jpg": {
+        "accession_number": "PH 2014.4.1", 
+        "pid": "bdr:405454"
+      }
+    }, 
+    {
+      "Foglia PH_2014.4.11.jpg": {
+        "accession_number": "PH 2014.4.11", 
+        "pid": "bdr:405456"
+      }
+    }, 
+    {
+      "Foglia PH_2014.4.12.jpg": {
+        "accession_number": "PH 2014.4.12", 
+        "pid": "bdr:405457"
+      }
+    }, 
+    {
+      "Foglia PH_2014.4.13.jpg": {
+        "accession_number": "PH 2014.4.13", 
+        "pid": "bdr:405458"
+      }
+    }, 
+    {
+      "Foglia PH_2014.4.2.jpg": {
+        "accession_number": "PH 2014.4.2", 
+        "pid": "bdr:405459"
+      }
+    }, 
+    {
+      "Foglia PH_2014.4.3.jpg": {
+        "accession_number": "PH 2014.4.3", 
+        "pid": "bdr:405460"
+      }
+    }, 
+    {
+      "Foglia PH_2014.4.4.jpg": {
+        "accession_number": "PH 2014.4.4", 
+        "pid": "bdr:405461"
+      }
+    }, 
+    {
+      "Foglia PH_2014.4.6.jpg": {
+        "accession_number": "PH 2014.4.6", 
+        "pid": "bdr:405463"
+      }
+    }, 
+    {
+      "Foglia PH_2014.4.7.jpg": {
+        "accession_number": "PH 2014.4.7", 
+        "pid": "bdr:405464"
+      }
+    }, 
+    {
+      "Jacobson PH_2015.4.1.jpg": {
+        "accession_number": "PH 2015.4.1", 
+        "pid": "bdr:405527"
+      }
+    }, 
+    {
+      "Jacobson PH_2015.4.2.jpg": {
+        "accession_number": "PH 2015.4.2", 
+        "pid": "bdr:405528"
+      }
+    }, 
+    {
+      "Johan PH_2012.4.jpg": {
+        "accession_number": "PH 2012.4", 
+        "pid": "bdr:298388"
+      }
+    }, 
+    {
+      "Mendez PR_0.486.6.tif": {
+        "accession_number": "PR 0.486.6", 
+        "pid": "bdr:301039"
+      }
+    }
+  ], 
+  "lst_images_to_update": [
     {
       "Abbott PH_1980.1533.tif": {
         "accession_number": "PH 1980.1533", 
@@ -56,6 +154,12 @@
       "Abbott PH_1983.1822.tif": {
         "accession_number": "PH 1983.1822", 
         "pid": "bdr:298751"
+      }
+    }, 
+    {
+      "Agam PR_1986.51.tif": {
+        "accession_number": "PR 1986.51", 
+        "pid": "bdr:148810"
       }
     }, 
     {
@@ -389,6 +493,12 @@
       }
     }, 
     {
+      "Bergman PR_1986.59.tif": {
+        "accession_number": "PR 1986.59", 
+        "pid": "bdr:148042"
+      }
+    }, 
+    {
       "Bernhard PH_2013.11.35.tif": {
         "accession_number": "PH 2013.11.35", 
         "pid": "bdr:348155"
@@ -617,6 +727,12 @@
       }
     }, 
     {
+      "Brodsky PR_1994.29.2.tif": {
+        "accession_number": "PR 1994.29.2", 
+        "pid": "bdr:300204"
+      }
+    }, 
+    {
       "Brodsky PR_1994.29.20.tif": {
         "accession_number": "PR 1994.29.20", 
         "pid": "bdr:300205"
@@ -662,6 +778,12 @@
       "Broodthaers PR_1983.1826.tif": {
         "accession_number": "D 1983.1826", 
         "pid": "bdr:298641"
+      }
+    }, 
+    {
+      "Buren DC_2011.2.a.tif": {
+        "accession_number": "DC 2011.2.a", 
+        "pid": "bdr:10994"
       }
     }, 
     {
@@ -794,6 +916,12 @@
       "Clergue PH_1990.29.9.tif": {
         "accession_number": "PH 1990.29.9", 
         "pid": "bdr:299111"
+      }
+    }, 
+    {
+      "Cohen PR_1981.1681.B.tif": {
+        "accession_number": "PR 1981.1681.B", 
+        "pid": "bdr:300280"
       }
     }, 
     {
@@ -1109,9 +1237,21 @@
       }
     }, 
     {
+      "Erwitt PH_1986.170.tif": {
+        "accession_number": "PH 1980.1516", 
+        "pid": "bdr:10904"
+      }
+    }, 
+    {
       "Erwitt PH_1986.171.tif": {
         "accession_number": "PH 1986.171", 
         "pid": "bdr:299194"
+      }
+    }, 
+    {
+      "Erwitt PH_1986.172.tif": {
+        "accession_number": "PH 1980.1526", 
+        "pid": "bdr:10912"
       }
     }, 
     {
@@ -1124,6 +1264,66 @@
       "Erwitt PH_1986.174.tif": {
         "accession_number": "PH 1986.174", 
         "pid": "bdr:299197"
+      }
+    }, 
+    {
+      "Erwitt PH_1986.175.tif": {
+        "accession_number": "PH 1986.175", 
+        "pid": "bdr:299198"
+      }
+    }, 
+    {
+      "Erwitt PH_1986.176.tif": {
+        "accession_number": "PH 1986.176", 
+        "pid": "bdr:299199"
+      }
+    }, 
+    {
+      "Erwitt PH_1986.177.tif": {
+        "accession_number": "PH 1986.177", 
+        "pid": "bdr:299200"
+      }
+    }, 
+    {
+      "Erwitt PH_1986.178.tif": {
+        "accession_number": "PH 1986.178", 
+        "pid": "bdr:299201"
+      }
+    }, 
+    {
+      "Erwitt PH_1986.179.tif": {
+        "accession_number": "PH 1986.179", 
+        "pid": "bdr:299202"
+      }
+    }, 
+    {
+      "Erwitt PH_1986.180.tif": {
+        "accession_number": "PH 1986.180", 
+        "pid": "bdr:299203"
+      }
+    }, 
+    {
+      "Erwitt PH_1986.181.tif": {
+        "accession_number": "PH 1980.1520", 
+        "pid": "bdr:10908"
+      }
+    }, 
+    {
+      "Erwitt PH_1986.182.tif": {
+        "accession_number": "PH 1986.182", 
+        "pid": "bdr:299205"
+      }
+    }, 
+    {
+      "Erwitt PH_1986.183.tif": {
+        "accession_number": "PH 1986.183", 
+        "pid": "bdr:299206"
+      }
+    }, 
+    {
+      "Erwitt PH_1986.184.tif": {
+        "accession_number": "PH 1986.184", 
+        "pid": "bdr:299207"
       }
     }, 
     {
@@ -1181,6 +1381,18 @@
       }
     }, 
     {
+      "Feser PH_2015.2.tif": {
+        "accession_number": "PH 2015.2", 
+        "pid": "bdr:405516"
+      }
+    }, 
+    {
+      "Fielding PH_2013.11.21.tif": {
+        "accession_number": "PH 2013.11.21", 
+        "pid": "bdr:348140"
+      }
+    }, 
+    {
       "Fleischner D_1995.11.tif": {
         "accession_number": "D 1995.11", 
         "pid": "bdr:298670"
@@ -1217,6 +1429,12 @@
       }
     }, 
     {
+      "Fortuny PR_0.427.tif": {
+        "accession_number": "PR 0.427", 
+        "pid": "bdr:149837"
+      }
+    }, 
+    {
       "Frank SC_1977.729.tif": {
         "accession_number": "SC 1977.729", 
         "pid": "bdr:298526"
@@ -1250,6 +1468,18 @@
       "Gavarni PR_1990.14.tif": {
         "accession_number": "PR 1990.14", 
         "pid": "bdr:300520"
+      }
+    }, 
+    {
+      "Giacometti PR_0.438.tif": {
+        "accession_number": "PR 0.438", 
+        "pid": "bdr:149536"
+      }
+    }, 
+    {
+      "Giacometti PR_0.439.tif": {
+        "accession_number": "PR 0.439", 
+        "pid": "bdr:149428"
       }
     }, 
     {
@@ -1373,6 +1603,12 @@
       }
     }, 
     {
+      "Goya PR_1942.506.tif": {
+        "accession_number": "PR 1942.506", 
+        "pid": "bdr:149803"
+      }
+    }, 
+    {
       "Goya PR_1942.527.tif": {
         "accession_number": "PR 1942.527", 
         "pid": "bdr:300547"
@@ -1382,6 +1618,12 @@
       "Goya PR_1942.536.tif": {
         "accession_number": "PR 1942.536", 
         "pid": "bdr:300548"
+      }
+    }, 
+    {
+      "Goya PR_1942.557.tif": {
+        "accession_number": "PR 1942.557", 
+        "pid": "bdr:149246"
       }
     }, 
     {
@@ -1592,6 +1834,12 @@
       "Javacheff PH_1995.15.3.tif": {
         "accession_number": "PH 1995.15.3", 
         "pid": "bdr:299087"
+      }
+    }, 
+    {
+      "Jeanneret PR_0.611.tif": {
+        "accession_number": "PR 0.611", 
+        "pid": "bdr:149277"
       }
     }, 
     {
@@ -2081,6 +2329,12 @@
       }
     }, 
     {
+      "Mangold PR_1993.15.1.tif": {
+        "accession_number": "PR 1993.15.1", 
+        "pid": "bdr:300965"
+      }
+    }, 
+    {
       "Mann PR_2010.1.22.tif": {
         "accession_number": "PR 2010.1.22", 
         "pid": "bdr:301647"
@@ -2102,6 +2356,12 @@
       "Marden PR_1985.1906.tif": {
         "accession_number": "PR 1985.1906", 
         "pid": "bdr:300985"
+      }
+    }, 
+    {
+      "Marisol PR_1985.1878.tif": {
+        "accession_number": "PR 1985.1878", 
+        "pid": "bdr:148005"
       }
     }, 
     {
@@ -2345,6 +2605,30 @@
       }
     }, 
     {
+      "Miro PR_0.426.tif": {
+        "accession_number": "PR 0.426", 
+        "pid": "bdr:148787"
+      }
+    }, 
+    {
+      "Miro PR_0.583.tif": {
+        "accession_number": "PR 0.583", 
+        "pid": "bdr:149761"
+      }
+    }, 
+    {
+      "Miro PR_0.946.tif": {
+        "accession_number": "PR 0.946", 
+        "pid": "bdr:200423"
+      }
+    }, 
+    {
+      "Miro PR_1955.423.tif": {
+        "accession_number": "PR 1955.423", 
+        "pid": "bdr:149187"
+      }
+    }, 
+    {
       "Miro PR_1981.9.A.tif": {
         "accession_number": "D 1981.9.A", 
         "pid": "bdr:298686"
@@ -2360,6 +2644,12 @@
       "Munro PR_1980.1316.tif": {
         "accession_number": "PR 1980.1316", 
         "pid": "bdr:301123"
+      }
+    }, 
+    {
+      "Munro PR_1980.1320.A.tif": {
+        "accession_number": "PR 1980.1320.A", 
+        "pid": "bdr:149164"
       }
     }, 
     {
@@ -2555,6 +2845,24 @@
       }
     }, 
     {
+      "Picasso PR_0.424.tif": {
+        "accession_number": "PR 0.424", 
+        "pid": "bdr:149161"
+      }
+    }, 
+    {
+      "Picasso PR_0.425.tif": {
+        "accession_number": "PR 0.425", 
+        "pid": "bdr:148701"
+      }
+    }, 
+    {
+      "Picasso PR_1954.321.tif": {
+        "accession_number": "PR 1954.321", 
+        "pid": "bdr:149735"
+      }
+    }, 
+    {
       "Pinney PH_2012.6.1.tif": {
         "accession_number": "PH 2012.6.1", 
         "pid": "bdr:298390"
@@ -2696,314 +3004,6 @@
       "Porter PH_1987.10.10.tif": {
         "accession_number": "PH 1987.10.10", 
         "pid": "bdr:299814"
-      }
-    }, 
-    {
-      "Porter PH_1987.7.10.tif": {
-        "accession_number": "PH 1987.7.10", 
-        "pid": "bdr:299808"
-      }
-    }, 
-    {
-      "Porter PH_1987.7.11.tif": {
-        "accession_number": "PH 1987.7.11", 
-        "pid": "bdr:299809"
-      }
-    }, 
-    {
-      "Porter PH_1987.8.10.tif": {
-        "accession_number": "PH 1987.8.10", 
-        "pid": "bdr:299810"
-      }
-    }, 
-    {
-      "Porter PH_1987.9.11.tif": {
-        "accession_number": "PH 1987.9.11", 
-        "pid": "bdr:299813"
-      }
-    }, 
-    {
-      "Pozzi PR_2010.1.27.tif": {
-        "accession_number": "PR 2010.1.27", 
-        "pid": "bdr:301652"
-      }
-    }, 
-    {
-      "Price PR_2010.1.38.tif": {
-        "accession_number": "PR 2010.1.38", 
-        "pid": "bdr:301663"
-      }
-    }, 
-    {
-      "Prince PH_2012.3.27.tif": {
-        "accession_number": "PH 2012.3.27", 
-        "pid": "bdr:298480"
-      }
-    }, 
-    {
-      "Prud'hon PR_1985.1924.B.2.tif": {
-        "accession_number": "PR 1985.1924.B.2", 
-        "pid": "bdr:301286"
-      }
-    }, 
-    {
-      "Puvis de Chavannes PR_1985.1924.A.4.tif": {
-        "accession_number": "PR 1985.1924.A.4", 
-        "pid": "bdr:301307"
-      }
-    }, 
-    {
-      "Rabinovich PR_2010.1.28.tif": {
-        "accession_number": "PR 2010.1.28", 
-        "pid": "bdr:301653"
-      }
-    }, 
-    {
-      "Rabkin D_2012.3.17.tif": {
-        "accession_number": "D 2012.3.17", 
-        "pid": "bdr:298451"
-      }
-    }, 
-    {
-      "Rabkin D_2012.3.18.tif": {
-        "accession_number": "D 2012.3.18", 
-        "pid": "bdr:298465"
-      }
-    }, 
-    {
-      "Rabkin D_2012.3.9.tif": {
-        "accession_number": "D 2012.3. 9", 
-        "pid": "bdr:298450"
-      }
-    }, 
-    {
-      "Rabkin PR_2010.1.29.tif": {
-        "accession_number": "PR 2010.1.29", 
-        "pid": "bdr:301654"
-      }
-    }, 
-    {
-      "Rabkin PR_2012.3.22.tif": {
-        "accession_number": "PR 2012.3.22", 
-        "pid": "bdr:298485"
-      }
-    }, 
-    {
-      "Rauschenberg PR_1977.1160.tif": {
-        "accession_number": "PR 1977.1160", 
-        "pid": "bdr:301295"
-      }
-    }
-  ], 
-  "lst_images_to_update": [
-    {
-      "Agam PR_1986.51.tif": {
-        "accession_number": "PR 1986.51", 
-        "pid": "bdr:148810"
-      }
-    }, 
-    {
-      "Bergman PR_1986.59.tif": {
-        "accession_number": "PR 1986.59", 
-        "pid": "bdr:148042"
-      }
-    }, 
-    {
-      "Brodsky PR_1994.29.2.tif": {
-        "accession_number": "PR 1994.29.2", 
-        "pid": "bdr:300204"
-      }
-    }, 
-    {
-      "Buren DC_2011.2.a.tif": {
-        "accession_number": "DC 2011.2.a", 
-        "pid": "bdr:10994"
-      }
-    }, 
-    {
-      "Cohen PR_1981.1681.B.tif": {
-        "accession_number": "PR 1981.1681.B", 
-        "pid": "bdr:300280"
-      }
-    }, 
-    {
-      "Erwitt PH_1986.170.tif": {
-        "accession_number": "PH 1980.1516", 
-        "pid": "bdr:10904"
-      }
-    }, 
-    {
-      "Erwitt PH_1986.172.tif": {
-        "accession_number": "PH 1980.1526", 
-        "pid": "bdr:10912"
-      }
-    }, 
-    {
-      "Erwitt PH_1986.175.tif": {
-        "accession_number": "PH 1986.175", 
-        "pid": "bdr:299198"
-      }
-    }, 
-    {
-      "Erwitt PH_1986.176.tif": {
-        "accession_number": "PH 1986.176", 
-        "pid": "bdr:299199"
-      }
-    }, 
-    {
-      "Erwitt PH_1986.177.tif": {
-        "accession_number": "PH 1986.177", 
-        "pid": "bdr:299200"
-      }
-    }, 
-    {
-      "Erwitt PH_1986.178.tif": {
-        "accession_number": "PH 1986.178", 
-        "pid": "bdr:299201"
-      }
-    }, 
-    {
-      "Erwitt PH_1986.179.tif": {
-        "accession_number": "PH 1986.179", 
-        "pid": "bdr:299202"
-      }
-    }, 
-    {
-      "Erwitt PH_1986.180.tif": {
-        "accession_number": "PH 1986.180", 
-        "pid": "bdr:299203"
-      }
-    }, 
-    {
-      "Erwitt PH_1986.181.tif": {
-        "accession_number": "PH 1980.1520", 
-        "pid": "bdr:10908"
-      }
-    }, 
-    {
-      "Erwitt PH_1986.182.tif": {
-        "accession_number": "PH 1986.182", 
-        "pid": "bdr:299205"
-      }
-    }, 
-    {
-      "Erwitt PH_1986.183.tif": {
-        "accession_number": "PH 1986.183", 
-        "pid": "bdr:299206"
-      }
-    }, 
-    {
-      "Erwitt PH_1986.184.tif": {
-        "accession_number": "PH 1986.184", 
-        "pid": "bdr:299207"
-      }
-    }, 
-    {
-      "Feser PH_2015.2.tif": {
-        "accession_number": "PH 2015.2", 
-        "pid": "bdr:405516"
-      }
-    }, 
-    {
-      "Fielding PH_2013.11.21.tif": {
-        "accession_number": "PH 2013.11.21", 
-        "pid": "bdr:348140"
-      }
-    }, 
-    {
-      "Fortuny PR_0.427.tif": {
-        "accession_number": "PR 0.427", 
-        "pid": "bdr:149837"
-      }
-    }, 
-    {
-      "Giacometti PR_0.438.tif": {
-        "accession_number": "PR 0.438", 
-        "pid": "bdr:149536"
-      }
-    }, 
-    {
-      "Giacometti PR_0.439.tif": {
-        "accession_number": "PR 0.439", 
-        "pid": "bdr:149428"
-      }
-    }, 
-    {
-      "Goya PR_1942.506.tif": {
-        "accession_number": "PR 1942.506", 
-        "pid": "bdr:149803"
-      }
-    }, 
-    {
-      "Goya PR_1942.557.tif": {
-        "accession_number": "PR 1942.557", 
-        "pid": "bdr:149246"
-      }
-    }, 
-    {
-      "Jeanneret PR_0.611.tif": {
-        "accession_number": "PR 0.611", 
-        "pid": "bdr:149277"
-      }
-    }, 
-    {
-      "Mangold PR_1993.15.1.tif": {
-        "accession_number": "PR 1993.15.1", 
-        "pid": "bdr:300965"
-      }
-    }, 
-    {
-      "Marisol PR_1985.1878.tif": {
-        "accession_number": "PR 1985.1878", 
-        "pid": "bdr:148005"
-      }
-    }, 
-    {
-      "Miro PR_0.426.tif": {
-        "accession_number": "PR 0.426", 
-        "pid": "bdr:148787"
-      }
-    }, 
-    {
-      "Miro PR_0.583.tif": {
-        "accession_number": "PR 0.583", 
-        "pid": "bdr:149761"
-      }
-    }, 
-    {
-      "Miro PR_0.946.tif": {
-        "accession_number": "PR 0.946", 
-        "pid": "bdr:200423"
-      }
-    }, 
-    {
-      "Miro PR_1955.423.tif": {
-        "accession_number": "PR 1955.423", 
-        "pid": "bdr:149187"
-      }
-    }, 
-    {
-      "Munro PR_1980.1320.A.tif": {
-        "accession_number": "PR 1980.1320.A", 
-        "pid": "bdr:149164"
-      }
-    }, 
-    {
-      "Picasso PR_0.424.tif": {
-        "accession_number": "PR 0.424", 
-        "pid": "bdr:149161"
-      }
-    }, 
-    {
-      "Picasso PR_0.425.tif": {
-        "accession_number": "PR 0.425", 
-        "pid": "bdr:148701"
-      }
-    }, 
-    {
-      "Picasso PR_1954.321.tif": {
-        "accession_number": "PR 1954.321", 
-        "pid": "bdr:149735"
       }
     }
   ]
