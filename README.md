@@ -250,17 +250,17 @@ code related to ingesting bell-gallery images into the bdr.
 ---
 
 - temp unusual-step A
-    - noticed I hadn't processed the 19 jpgs, that's because I hadn't included the .jpg files in the step producing the file `d__bell_images_listing.json`
-        - status: in process
-        - rerunning that after updating the filter.
-
-- temp unusual-step B
     - noticed the number of 'tif' files processed didn't match the original number of tif files.
         - see the 500 tif files from `data/g__images_to_process_temp_archive.json` vs the 615 tifs from `d__bell_images_listing.json`
-        - status: not yet done, may be a permissions issue, and possibly related to above step.
+        - may be a permissions issue
+        - status: in process
+
+- temp unusual-step B
+    - noticed I hadn't processed the 19 jpgs, that's because I hadn't included the .jpg files in the step running the script `utils/check_filenames_against_metadata.py`
+        - status: in process
+        - will rerun that after updating the filter, and after I check out the tif issue above.
 
 ---
-
 
 - update the custom-solr-index
     - prep list of pids from custom-index
