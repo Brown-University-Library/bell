@@ -150,16 +150,41 @@ class SourceDictMaker( object ):
         assert type(keys) == list, type(keys)
         return
 
+    # def __handle_single_element( self, data, the_key ):
+    #     ''' Stores either None or the single unicode value to the key.
+    #         Called by _makeDataDict() '''
+    #     return_val = None
+    #     if data[0].text:
+    #         if type( data[0].text ) == unicode:
+    #             return_val = data[0].text
+    #         else:
+    #             return_val = data[0].text.decode( 'utf-8', 'replace' )
+    #     return return_val
+
     def __handle_single_element( self, data, the_key ):
         ''' Stores either None or the single unicode value to the key.
             Called by _makeDataDict() '''
         return_val = None
         if data[0].text:
             if type( data[0].text ) == unicode:
-                return_val = data[0].text
+                return_val = data[0].text.strip()
             else:
-                return_val = data[0].text.decode( 'utf-8', 'replace' )
+                return_val = data[0].text.decode( 'utf-8', 'replace' ).strip()
         return return_val
+
+    # def __handle_multiple_elements( self, data, the_key ):
+    #     ''' Stores list of unicode values to the key.
+    #         Called by _makeDataDict() '''
+    #     d_list = []
+    #     for data_element in data:
+    #         if data_element.text:
+    #             if type( data_element.text ) == unicode:
+    #                 d_list.append( data_element.text )
+    #             else:
+    #                 d_list.append( data_element.text.decode('utf-8', 'replace') )
+    #         else:
+    #             d_list.append( None )
+    #     return d_list
 
     def __handle_multiple_elements( self, data, the_key ):
         ''' Stores list of unicode values to the key.
@@ -168,15 +193,16 @@ class SourceDictMaker( object ):
         for data_element in data:
             if data_element.text:
                 if type( data_element.text ) == unicode:
-                    d_list.append( data_element.text )
+                    d_list.append( data_element.text.strip() )
                 else:
-                    d_list.append( data_element.text.decode('utf-8', 'replace') )
+                    d_list.append( data_element.text.decode('utf-8', 'replace').strip() )
             else:
                 d_list.append( None )
         return d_list
 
     def _make_key_type_dict( self, result_list ):
-        ''' Determines. '''
+        ''' Determines whether value of given key should be a unicode-string or a list.
+            Called by convert_fmproxml_to_json() '''
         key_type_dict = {}
         for entry_dict in result_list:
           for (key,value) in entry_dict.items():
