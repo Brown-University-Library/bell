@@ -4,7 +4,7 @@ from __future__ import unicode_literals
 
 """ Creates a `data/g__images_to_process_CULLED.json` file, with a subset of the `data/g__images_to_process.json` info. """
 
-import json, logging, os, pprint
+import datetime, json, logging, os, pprint
 
 
 ## set up file logger
@@ -18,6 +18,7 @@ logger = logging.getLogger(__name__)
 ## constants
 NEW_IMAGE_LISTS_JSON_PATH = unicode( os.environ['BELL_TASKS_IMGS__IMAGES_TO_PROCESS_OUTPUT_PATH'] )
 OLD_IMAGE_LISTS_JSON_PATH = unicode( os.environ['BELL_ONEOFF__OLD_IMAGES_TO_PROCESS_OUTPUT_PATH'] )
+OUTPUT_JSON_PATH = unicode( os.environ['BELL_ONEOFF__CULLED_IMAGES_TO_PROCESS_OUTPUT_PATH'] )
 
 
 def cull_image_lists():
@@ -34,10 +35,10 @@ def cull_image_lists():
     images_already_processed = grab_old_data()
     ( preculled_images_to_add, preculled_images_to_update ) = grab_new_data()
     logger.debug( 'about to get new_images_to_add' )
-    new_images_to_add = cull_list( images_already_processed, preculled_images_to_add )
+    new_images_to_add = perform_cull( images_already_processed, preculled_images_to_add )
     logger.debug( 'about to get new_images_to_update' )
-    new_images_to_add = cull_list( images_already_processed, preculled_images_to_update )
-    write_file( new_images_to_add, new_images_to_update )
+    new_images_to_update = perform_cull( images_already_processed, preculled_images_to_update )
+    output_data( new_images_to_add, new_images_to_update )
     return
 
 
@@ -64,7 +65,7 @@ def grab_new_data():
     return ( preculled_images_to_add, preculled_images_to_update )
 
 
-def cull_list( images_already_processed, preculled_images ):
+def perform_cull( images_already_processed, preculled_images ):
     """ Returns list of images that does not include any images in `images_already_processed`.
         Called by cull_image_lists() """
     culled_images = []
@@ -77,6 +78,22 @@ def cull_list( images_already_processed, preculled_images ):
     logger.debug( 'returning `{}` culled images; skipping `{}` already-ingested images'.format(len(culled_images), len(skipped_preculled_entries)) )
     return culled_images
 
+
+def output_data( images_to_add, images_to_update ):
+    """ Saves json file.
+        Called by cull_image_lists() """
+    data = {
+        'datetime': unicode( datetime.datetime.now() ),
+        'count_images': 'irrelevant',
+        'count_images_processed': len( images_to_add ) + len( images_to_update ),
+        'count_images_to_add': len( images_to_add ),
+        'count_images_to_update': len( images_to_update ),
+        'lst_images_to_add': images_to_add,
+        'lst_images_to_update': images_to_update }
+    jsn = json.dumps( data, indent=2, sort_keys=True )
+    with open( OUTPUT_JSON_PATH, 'w' ) as f:
+        f.write( jsn )
+    return
 
 
 
