@@ -1,8 +1,8 @@
 {
-  "count_excluded": 1, 
-  "count_found": 627, 
-  "count_not_found": 8, 
-  "date_time": "2016-05-18 15:57:27.554335", 
+  "count_excluded": 2, 
+  "count_found": 635, 
+  "count_not_found": 0, 
+  "date_time": "2016-05-19 09:13:57.664523", 
   "found_lst": [
     "Abbott PH_1980.1533.tif", 
     "Abbott PH_1982.1697.1.tif", 
@@ -74,6 +74,7 @@
     "Bergman PR_1986.59.tif", 
     "Bernhard PH_2013.11.35.tif", 
     "Bissier PR_2009.1.tif", 
+    "Bleckner P_1986.105.tif", 
     "Boetti PR_1983.1829.tif", 
     "Bolotowsky PR_1981.1684.1.tif", 
     "Bolotowsky PR_1981.1684.2.tif", 
@@ -230,15 +231,20 @@
     "Fleischner PR_1990.33.3.tif", 
     "Fleischner PR_1990.33.4.tif", 
     "Fleischner PR_1990.33.5.tif", 
+    "Foglia PH_2008.2.jpg", 
     "Foglia PH_2014.4.1.jpg", 
+    "Foglia PH_2014.4.10.jpg", 
     "Foglia PH_2014.4.11.jpg", 
     "Foglia PH_2014.4.12.jpg", 
     "Foglia PH_2014.4.13.jpg", 
     "Foglia PH_2014.4.2.jpg", 
     "Foglia PH_2014.4.3.jpg", 
     "Foglia PH_2014.4.4.jpg", 
+    "Foglia PH_2014.4.5.jpg", 
     "Foglia PH_2014.4.6.jpg", 
     "Foglia PH_2014.4.7.jpg", 
+    "Foglia PH_2014.4.8.jpg", 
+    "Foglia PH_2014.4.9.jpg", 
     "Fortuny PR_0.427.tif", 
     "Frank SC_1977.729.tif", 
     "Galice PR_1980.1558.tif", 
@@ -497,6 +503,7 @@
     "Pistoletto SC_2012.3.39.A,B.tif", 
     "Ponti PH_1994.14.tif", 
     "Ponti PH_1994.15.tif", 
+    "Poons P_1976.0770.jpg", 
     "Porter PH_1984.1838.10.tif", 
     "Porter PH_1985.1876.7.tif", 
     "Porter PH_1986.149.tif", 
@@ -556,6 +563,7 @@
     "Schrager PH_2014.13.6.tif", 
     "Schrager PH_2014.13.8.tif", 
     "Scott PR_1962.411.tif", 
+    "Scully D_2003.3.jpg", 
     "Seawright PR_2010.1.33.tif", 
     "Silverstein PR_2010.1.34.tif", 
     "Simon PH_2014.5.tif", 
@@ -632,14 +640,5 @@
     "Zorn PR_1971.709.tif", 
     "Zorn PR_1971.713.tif"
   ], 
-  "not_found_lst": [
-    "Bleckner P_1986.105", 
-    "Foglia PH_2008.2.jpg", 
-    "Foglia PH_2014.4.10.jpg", 
-    "Foglia PH_2014.4.5.jpg", 
-    "Foglia PH_2014.4.8.jpg", 
-    "Foglia PH_2014.4.9.jpg", 
-    "Poons P_1976.0770.jpg", 
-    "Scully D_2003.jpg"
-  ]
+  "not_found_lst": []
 }

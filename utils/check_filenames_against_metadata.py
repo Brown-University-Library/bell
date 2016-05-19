@@ -35,7 +35,7 @@ class Checker( object ):
         """ Checks filenames against metadata.
             Called by __main__ """
         ( metadata_dct, filenames_dct ) = self.loadup()
-        filenames_subset = self.filter_filenames( filenames_dct, ['.105', '.jpg', '.tif'] )  # from manual inspection of d__bell_images_listing.json
+        filenames_subset = self.filter_filenames( filenames_dct, ['.jpg', '.tif'] )  # from manual inspection of d__bell_images_listing.json
         count_all_images = filenames_dct['count_filelist']  # count of all files in the image-directory
         count_excluded = count_all_images - len( filenames_subset )  # ignores non-image files like 'example.db'
         metadata_subset_dct = self.filter_metadata( metadata_dct )
