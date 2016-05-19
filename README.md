@@ -193,6 +193,7 @@ code related to ingesting bell-gallery images into the bdr.
     - status: done 2016-04-29; shows c. 160 accession-numbers without pids
     - status: done again 2016-05-09 after metadata-only ingest; shows, appropriately, no accession-numbers without pids.
     - status: done again 2016-05-19 after new-files found; shows 4 accession numbers without pids.
+    - status: done again 2016-05-19 after metadata-only ingest; shows, appropriately, no accession-numbers without pids.
 
 - make metadata-only list
     - tasks/metadata.run_metadata_only_lister()
@@ -203,6 +204,7 @@ code related to ingesting bell-gallery images into the bdr.
 
     - end result: `f__metadata_only_accession_numbers.json`
     - status: done 2016-04-29
+              redone 2016-05-19 after new-files found
 
 - create new metadata objects
     - tasks/metadata.run_enqueue_create_metadata_only_jobs()
@@ -215,7 +217,9 @@ code related to ingesting bell-gallery images into the bdr.
     - after creates, confirm a re-run of `foundation/acc_num_to_pid.py` results in zero non-pid matches.
         - note that this re-run will update, as it should, `e__accession_number_to_pid_dict.json` -- the dict of accession-numbers-to-pids.
     - status: done 2016-05-06
-    - rerun status of `foundation/acc_num_to_pid.py`: done 2016-05-09 -- now, appropriately, shows no accession-numbers without bdr pids.
+    - reran status of `foundation/acc_num_to_pid.py`: done 2016-05-09 -- now, appropriately, shows no accession-numbers without bdr pids.
+    - done again 2016-05-19 after newly-found additions
+    - reran status of `foundation/acc_num_to_pid.py`: done 2016-05-19 -- now, appropriately, shows no accession-numbers without bdr pids.
 
 - make list of images to process
     - tasks/images.ImageLister.make_image_lists()
