@@ -17,6 +17,7 @@ code related to ingesting bell-gallery images into the bdr.
         - redone 2016-04-18 after J.C. metadata-imagefile matching
         - redone 2016-04-26 after J.C. metadata-imagefile matching
         - redone 2016-04-28 after J.C. metadata-imagefile matching
+        - redone 2016-05-19 after J.C. work on newly-found non-matching files
 
 - get access to image-directory
     - check desktop access
