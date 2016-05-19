@@ -181,8 +181,9 @@ code related to ingesting bell-gallery images into the bdr.
                 [list end]
 
         - 2016-04-28, reran file; all good; emailed J.C.
+        - 2016-05-19, reran file based on newly-found files, all good.
 
-    - status: done 2016-04-28.
+    - status: done 2016-05-19.
 
 - match metadata accession-numbers to pid #1
     - foundation/acc_num_to_pid.py
