@@ -221,8 +221,6 @@ code related to ingesting bell-gallery images into the bdr.
     - done again 2016-05-19 after newly-found additions
     - reran status of `foundation/acc_num_to_pid.py`: done 2016-05-19 -- now, appropriately, shows no accession-numbers without bdr pids.
 
-
-
 - make image-filename to data dct
     - produces a dct and then json file like:
 
@@ -240,7 +238,8 @@ code related to ingesting bell-gallery images into the bdr.
             >>> images.run_make_image_filename_dct()
 
     - end result: `fg__images_filename_dct.json`
-
+        - note that at the bottom of that file are any files that were excluded from the filename-dct.
+    - status: done, 2016-05-19.
 
 
 - make list of images to process
@@ -254,6 +253,16 @@ code related to ingesting bell-gallery images into the bdr.
     - produces a file containing both a list of images to add, and a list of images to update
     - end result: `g_images_to_process.json`
     - status: done: 2016-05-09
+    - status: redone 2016-05-19
+
+---
+
+temp unusual step...
+
+- cull the lists of images-to-add and images-to-update by removing the images that were processed (those in `g__images_to_process_temp_archive.json`).
+    - status: in process
+
+---
 
 - add new images
     - tasks/images.run_enqueue_add_image_jobs()
@@ -263,7 +272,6 @@ code related to ingesting bell-gallery images into the bdr.
             >>> images.run_enqueue_add_image_jobs()
 
     - for adding individual images, if necessary: tasks/images.run_add_image( filename_dct )
-    - note from last big ingest: `many iterations; permissions issues; Meyerowitz fixes; apostrophe-in-filename handling.`
     - status: done: 2016-05-12
 
 - add updated images
@@ -277,21 +285,6 @@ code related to ingesting bell-gallery images into the bdr.
     - status: done
         - images updated: 2016-05-16
         - old TIFF datastreams deleted: 2016-05-17
-
----
-
-- temp unusual-step A
-    - noticed the number of 'tif' files processed didn't match the original number of tif files.
-        - see the 500 tif files from `data/g__images_to_process_temp_archive.json` vs the 615 tifs from `d__bell_images_listing.json`
-        - may be a permissions issue
-        - status: in process
-
-- temp unusual-step B
-    - noticed I hadn't processed the 19 jpgs, that's because I hadn't included the .jpg files in the step running the script `utils/check_filenames_against_metadata.py`
-        - status: in process
-        - will rerun that after updating the filter, and after I check out the tif issue above.
-
----
 
 - update the custom-solr-index
     - prep list of pids from custom-index
