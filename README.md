@@ -221,6 +221,28 @@ code related to ingesting bell-gallery images into the bdr.
     - done again 2016-05-19 after newly-found additions
     - reran status of `foundation/acc_num_to_pid.py`: done 2016-05-19 -- now, appropriately, shows no accession-numbers without bdr pids.
 
+
+
+- make image-filename to data dct
+    - produces a dct and then json file like:
+
+            {
+            u'Zorn PR_1971.705.tif': {u'accession_number': u'PR 1971.705',
+                                      u'pid': u'bdr:301594'},
+            u'Zorn PR_1971.709.tif': {u'accession_number': u'PR 1971.709',
+                                      u'pid': u'bdr:301595'}
+            }
+
+    - script: tasks/images.run_make_image_filename_dct()
+    - to run (from `bell_code` directory)...
+
+            >>> from tasks import images
+            >>> images.run_make_image_filename_dct()
+
+    - end result: `fg__images_filename_dct.json`
+
+
+
 - make list of images to process
     - tasks/images.ImageLister.make_image_lists()
 

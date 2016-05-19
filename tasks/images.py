@@ -14,6 +14,90 @@ q = rq.Queue( queue_name, connection=redis.Redis() )
 r = redis.StrictRedis( host='localhost', port=6379, db=0 )
 
 
+
+class ImageDctMaker( object ):
+    """ Creats a dct, and then json file, of image-filename to accession-number and pid info.
+        Example:
+            {
+            u'Zorn PR_1971.705.tif': {u'accession_number': u'PR 1971.705',
+                                      u'pid': u'bdr:301594'},
+            u'Zorn PR_1971.709.tif': {u'accession_number': u'PR 1971.709',
+                                      u'pid': u'bdr:301595'}
+            } """
+
+    def __init__( self ):
+        self.IMAGE_LIST_PATH = unicode( os.environ['BELL_TASKS_IMGS__IMAGES_LIST_PATH'] )
+        self.DATA_DCT_PATH = unicode( os.environ['BELL_TASKS_IMGS__ACCESSION_NUMBER_TO_DATA_DICT_PATH'] )
+        self.PID_DCT_PATH = unicode( os.environ['BELL_TASKS_IMGS__ACCESSION_NUMBER_TO_PID_DICT_PATH'] )
+        self.IMAGES_FILENAME_DCT_JSON_OUTPUT_PATH = unicode( os.environ['BELL_TASKS_IMGS__IMAGES_FILENAME_DCT_JSON_OUTPUT_PATH'] )
+
+    def make_json_file( self ):
+        """ Manages creation of dct and then json file.
+            Called manually. """
+        ( images_lst, accession_data_dct, accession_pid_dct ) = self.setup()
+        filename_to_data_dct = self.make_filename_to_data_dct( images_lst, accession_data_dct, accession_pid_dct )
+        self.output_listing( filename_to_data_dct )
+        return
+
+    def setup( self ):
+        """ Sets initial vars.
+            Called by make_json_file() """
+        with open( self.IMAGE_LIST_PATH ) as f:
+            dct = json.loads( f.read() )
+        images_lst = dct['filelist']
+        logger.debug( 'in tasks.images.ImageDctMaker.setup(); len(images_lst), `{}`'.format(len(images_lst)) )
+        with open( self.DATA_DCT_PATH ) as f2:
+            dct2 = json.loads( f2.read() )
+        accession_data_dct = dct2['items']
+        with open( self.PID_DCT_PATH ) as f3:
+            dct3 = json.loads( f3.read() )
+        accession_pid_dct = dct3['final_accession_pid_dict']
+        return ( images_lst, accession_data_dct, accession_pid_dct )
+
+    def make_filename_to_data_dct( self, images_lst, accession_data_dct, accession_pid_dct ):
+        """ Returns dct of filename keys to data-dct of accession-number and pid.
+            Called by: make_image_lists() """
+        filename_to_data_dct = {}
+        for image_filename in images_lst:
+            extension_idx = image_filename.rfind( '.' )
+            self._check_image_filename( image_filename, accession_data_dct, filename_to_data_dct, extension_idx, accession_pid_dct )
+        logger.debug( 'in tasks.images.ImageLister.make_filename_to_data_dct(); filename_to_data_dct, `%s`' % pprint.pformat(filename_to_data_dct) )
+        return filename_to_data_dct
+
+    def _check_image_filename( self, image_filename, accession_data_dct, filename_to_data_dct, extension_idx, accession_pid_dct ):
+        """ Checks image_filename and variant against data['object_image_scan_filename'].
+            If found, adds filename_to_data_dct entry; otherwise logs skip.
+            Called by make_filename_to_data_dct() """
+        found = False
+        non_extension_filename = image_filename[0:extension_idx]
+        for ( accession_number_key, data_dct_value ) in accession_data_dct.items():
+            if image_filename == data_dct_value['object_image_scan_filename'] or non_extension_filename == data_dct_value['object_image_scan_filename']:
+                filename_to_data_dct[image_filename] = { 'accession_number': accession_number_key, 'pid': accession_pid_dct[accession_number_key] }
+                found = True
+        if found is False:
+             logger.debug( 'in tasks.images.ImageLister._check_image_filename(); no data entry found on image_filename, `{image_filename}` or non_extension_filename, {non_extension_filename}'.format(image_filename=image_filename, non_extension_filename=non_extension_filename) )
+        return
+
+    def output_listing( self, dct ):
+        """ Saves json file.
+            Called by make_image_lists() """
+        # data = {
+        #     'datetime': unicode( datetime.datetime.now() ),
+        #     'count_images': len( images_to_add ) + len( images_to_update ),
+        #     'count_images_to_add': len( images_to_add ),
+        #     'count_images_to_update': len( images_to_update ),
+        #     'lst_images_to_add': images_to_add,
+        #     'lst_images_to_update': images_to_update }
+        jsn = json.dumps( dct, indent=2, sort_keys=True )
+        with open( self.IMAGES_FILENAME_DCT_JSON_OUTPUT_PATH, 'w' ) as f:
+            f.write( jsn )
+        return
+
+    # end class ImageDctMaker()
+
+
+
+
 class ImageLister( object ):
     """ Lists images that need to be added, and those that need to be updated. """
 
@@ -295,6 +379,13 @@ class ImageAdder( object ):
 ## runners
 
 logger = bell_logger.setup_logger()
+
+def run_make_image_filename_dct():
+    """ Runner for ImageDctMaker.make_json_file()
+        Called manually. """
+    mkr = ImageDctMaker()
+    mkr.make_json_file()
+    return
 
 def run_make_image_lists():
     """ Runner for make_image_lists()

@@ -1,8 +1,8 @@
 {
   "count_images": 500, 
-  "count_images_to_add": 16, 
-  "count_images_to_update": 484, 
-  "datetime": "2016-05-18 16:19:28.129417", 
+  "count_images_to_add": 22, 
+  "count_images_to_update": 478, 
+  "datetime": "2016-05-19 09:54:13.406287", 
   "lst_images_to_add": [
     {
       "Albers PR_0.160.tif": {
@@ -17,15 +17,33 @@
       }
     }, 
     {
+      "Bleckner P_1986.105.tif": {
+        "accession_number": "P 1986.105", 
+        "pid": "bdr:298575"
+      }
+    }, 
+    {
       "Bravo PH_1987.9.1.tif": {
         "accession_number": "PH 1987.9.1", 
         "pid": "bdr:298799"
       }
     }, 
     {
+      "Foglia PH_2008.2.jpg": {
+        "accession_number": "PH 2008.2", 
+        "pid": "bdr:299294"
+      }
+    }, 
+    {
       "Foglia PH_2014.4.1.jpg": {
         "accession_number": "PH 2014.4.1", 
         "pid": "bdr:405454"
+      }
+    }, 
+    {
+      "Foglia PH_2014.4.10.jpg": {
+        "accession_number": "PH 2014.4.10", 
+        "pid": "bdr:405455"
       }
     }, 
     {
@@ -65,6 +83,12 @@
       }
     }, 
     {
+      "Foglia PH_2014.4.5.jpg": {
+        "accession_number": "PH 2014.4.5", 
+        "pid": "bdr:405462"
+      }
+    }, 
+    {
       "Foglia PH_2014.4.6.jpg": {
         "accession_number": "PH 2014.4.6", 
         "pid": "bdr:405463"
@@ -74,6 +98,18 @@
       "Foglia PH_2014.4.7.jpg": {
         "accession_number": "PH 2014.4.7", 
         "pid": "bdr:405464"
+      }
+    }, 
+    {
+      "Foglia PH_2014.4.8.jpg": {
+        "accession_number": "PH 2014.4.8", 
+        "pid": "bdr:405465"
+      }
+    }, 
+    {
+      "Foglia PH_2014.4.9.jpg": {
+        "accession_number": "PH 2014.4.9", 
+        "pid": "bdr:405466"
       }
     }, 
     {
@@ -2953,6 +2989,12 @@
       }
     }, 
     {
+      "Poons P_1976.0770.jpg": {
+        "accession_number": "P 1976.0770", 
+        "pid": "bdr:200420"
+      }
+    }, 
+    {
       "Porter PH_1984.1838.10.tif": {
         "accession_number": "PH 1984.1838.10", 
         "pid": "bdr:299822"
@@ -2962,48 +3004,6 @@
       "Porter PH_1985.1876.7.tif": {
         "accession_number": "PH 1985.1876.7", 
         "pid": "bdr:299831"
-      }
-    }, 
-    {
-      "Porter PH_1986.149.tif": {
-        "accession_number": "PH 1986.149", 
-        "pid": "bdr:299816"
-      }
-    }, 
-    {
-      "Porter PH_1986.150.tif": {
-        "accession_number": "PH 1986.150", 
-        "pid": "bdr:299817"
-      }
-    }, 
-    {
-      "Porter PH_1986.151.tif": {
-        "accession_number": "PH 1986.151", 
-        "pid": "bdr:299818"
-      }
-    }, 
-    {
-      "Porter PH_1986.152.tif": {
-        "accession_number": "PH 1986.152", 
-        "pid": "bdr:299819"
-      }
-    }, 
-    {
-      "Porter PH_1986.153.tif": {
-        "accession_number": "PH 1986.153", 
-        "pid": "bdr:299820"
-      }
-    }, 
-    {
-      "Porter PH_1986.154.tif": {
-        "accession_number": "PH 1986.154", 
-        "pid": "bdr:299821"
-      }
-    }, 
-    {
-      "Porter PH_1987.10.10.tif": {
-        "accession_number": "PH 1987.10.10", 
-        "pid": "bdr:299814"
       }
     }
   ]
