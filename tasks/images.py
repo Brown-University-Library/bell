@@ -30,13 +30,14 @@ class ImageDctMaker( object ):
         self.DATA_DCT_PATH = unicode( os.environ['BELL_TASKS_IMGS__ACCESSION_NUMBER_TO_DATA_DICT_PATH'] )
         self.PID_DCT_PATH = unicode( os.environ['BELL_TASKS_IMGS__ACCESSION_NUMBER_TO_PID_DICT_PATH'] )
         self.IMAGES_FILENAME_DCT_JSON_OUTPUT_PATH = unicode( os.environ['BELL_TASKS_IMGS__IMAGES_FILENAME_DCT_JSON_OUTPUT_PATH'] )
+        self.files_excluded = []
 
     def make_json_file( self ):
         """ Manages creation of dct and then json file.
             Called manually. """
         ( images_lst, accession_data_dct, accession_pid_dct ) = self.setup()
         filename_to_data_dct = self.make_filename_to_data_dct( images_lst, accession_data_dct, accession_pid_dct )
-        self.output_listing( filename_to_data_dct )
+        self.output_listing( filename_to_data_dct, images_lst )
         return
 
     def setup( self ):
@@ -75,20 +76,20 @@ class ImageDctMaker( object ):
                 filename_to_data_dct[image_filename] = { 'accession_number': accession_number_key, 'pid': accession_pid_dct[accession_number_key] }
                 found = True
         if found is False:
-             logger.debug( 'in tasks.images.ImageLister._check_image_filename(); no data entry found on image_filename, `{image_filename}` or non_extension_filename, {non_extension_filename}'.format(image_filename=image_filename, non_extension_filename=non_extension_filename) )
+            self.files_excluded.append( image_filename )
+            logger.debug( 'in tasks.images.ImageLister._check_image_filename(); no data entry found on image_filename, `{image_filename}` or non_extension_filename, {non_extension_filename}'.format(image_filename=image_filename, non_extension_filename=non_extension_filename) )
         return
 
-    def output_listing( self, dct ):
+    def output_listing( self, filename_to_data_dct, images_lst ):
         """ Saves json file.
             Called by make_image_lists() """
-        # data = {
-        #     'datetime': unicode( datetime.datetime.now() ),
-        #     'count_images': len( images_to_add ) + len( images_to_update ),
-        #     'count_images_to_add': len( images_to_add ),
-        #     'count_images_to_update': len( images_to_update ),
-        #     'lst_images_to_add': images_to_add,
-        #     'lst_images_to_update': images_to_update }
-        jsn = json.dumps( dct, indent=2, sort_keys=True )
+        data = {
+            'datetime': unicode( datetime.datetime.now() ),
+            'count_dir_images': len( images_lst ),
+            'count_dct_images': len( filename_to_data_dct.keys() ),
+            'files_excluded': self.files_excluded,
+            'filename_to_data_dct': filename_to_data_dct }
+        jsn = json.dumps( data, indent=2, sort_keys=True )
         with open( self.IMAGES_FILENAME_DCT_JSON_OUTPUT_PATH, 'w' ) as f:
             f.write( jsn )
         return
