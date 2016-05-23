@@ -260,7 +260,8 @@ code related to ingesting bell-gallery images into the bdr.
 temp unusual step...
 
 - cull the lists of images-to-add and images-to-update by removing the images that were processed (those in `g__images_to_process_temp_archive.json`).
-    - status: in process
+    - end result: `data/g_images_to_process_CULLED.json`
+    - status: cull-list completed 2016-05-19
 
 ---
 
@@ -272,7 +273,10 @@ temp unusual step...
             >>> images.run_enqueue_add_image_jobs()
 
     - for adding individual images, if necessary: tasks/images.run_add_image( filename_dct )
-    - status: done: 2016-05-12
+    - status:
+        - done: 2016-05-12
+        - to be redone...
+
 
 - add updated images
     - tasks/images.run_enqueue_add_image_jobs()
@@ -285,6 +289,7 @@ temp unusual step...
     - status: done
         - images updated: 2016-05-16
         - old TIFF datastreams deleted: 2016-05-17
+        - to be redone...
 
 - update the custom-solr-index
     - prep list of pids from custom-index
