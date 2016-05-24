@@ -351,7 +351,8 @@ class ImageAdder( object ):
     def _create_jp2_from_jpg( self, source_filepath, destination_filepath ):
         """ Creates jp2 after first converting jpg to tif (due to server limitation).
             Called by create_jp2() """
-        cleaned_source_filepath = source_filepath.replace( ' ', '\ ' )
+        # cleaned_source_filepath = source_filepath.replace( ' ', '\ ' )
+        cleaned_source_filepath = source_filepath  # graphicsmagic doesn't need spaces escaped
         self.logger.debug( 'in tasks.images.ImageAdder._create_jp2_from_jpg(); cleaned_source_filepath, %s' % cleaned_source_filepath )
         tif_destination_filepath = destination_filepath[0:-4] + '.tif'
         self.logger.debug( 'in tasks.images.ImageAdder._create_jp2_from_jpg(); tif_destination_filepath, %s' % tif_destination_filepath )
