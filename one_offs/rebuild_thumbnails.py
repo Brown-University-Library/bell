@@ -16,7 +16,7 @@ class ThumbnailRebuilder( object ):
     ## get pids ##
 
     def get_pid_list( self, bell_collection_pid, solr_root_url ):
-        """ Returns list of pids for giving collection-pid. """
+        """ Returns list of pids for given collection-pid. """
         doc_list = self._run_studio_solr_query( bell_collection_pid, solr_root_url )
         pid_list = self._build_pidlist( doc_list )
         return pid_list

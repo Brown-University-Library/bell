@@ -275,7 +275,8 @@ temp unusual step...
     - for adding individual images, if necessary: tasks/images.run_add_image( filename_dct )
     - status:
         - done: 2016-05-12
-        - to be redone...
+        - extra tifs redone: 2016-05-23
+        - jpg code fixed and redone: 2016-05-25
 
 
 - add updated images
@@ -289,20 +290,19 @@ temp unusual step...
     - status: done
         - images updated: 2016-05-16
         - old TIFF datastreams deleted: 2016-05-17
-        - to be redone...
 
 - update the custom-solr-index
     - prep list of pids from custom-index
         - tasks/indexer.run_make_pids_from_custom_index()
         - end result: `h__pids_from_custom_index_list.json`
-        - status:
+        - status: in-process
     - prep pids-to-delete list
-        - tasks/indexer.run_make_deletes_list()
+        - tasks/indexer.run_make_delete_pids_list()
         - end result: `i__custom_index_delete_pids.json`
         - review that list
         - status:
     - prep pids-to-update list
-        - tasks/indexer.run_make_deletes_list()
+        - tasks/indexer.run_make_update_pids_list()
         - adds pid to accession-number-to-data-dct data.
         - end result: `j__custom_index_update_data_list.json`
         - status:
