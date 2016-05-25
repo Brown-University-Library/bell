@@ -6,120 +6,12 @@
   "datetime": "2016-05-19 16:06:20.379898",
   "lst_images_to_add": [
     {
-      "Foglia PH_2008.2.jpg": {
-        "accession_number": "PH 2008.2",
-        "pid": "bdr:299294"
-      }
-    },
-    {
-      "Foglia PH_2014.4.1.jpg": {
-        "accession_number": "PH 2014.4.1",
-        "pid": "bdr:405454"
-      }
-    },
-    {
-      "Foglia PH_2014.4.10.jpg": {
-        "accession_number": "PH 2014.4.10",
-        "pid": "bdr:405455"
-      }
-    },
-    {
-      "Foglia PH_2014.4.11.jpg": {
-        "accession_number": "PH 2014.4.11",
-        "pid": "bdr:405456"
-      }
-    },
-    {
-      "Foglia PH_2014.4.12.jpg": {
-        "accession_number": "PH 2014.4.12",
-        "pid": "bdr:405457"
-      }
-    },
-    {
-      "Foglia PH_2014.4.13.jpg": {
-        "accession_number": "PH 2014.4.13",
-        "pid": "bdr:405458"
-      }
-    },
-    {
-      "Foglia PH_2014.4.2.jpg": {
-        "accession_number": "PH 2014.4.2",
-        "pid": "bdr:405459"
-      }
-    },
-    {
-      "Foglia PH_2014.4.3.jpg": {
-        "accession_number": "PH 2014.4.3",
-        "pid": "bdr:405460"
-      }
-    },
-    {
-      "Foglia PH_2014.4.4.jpg": {
-        "accession_number": "PH 2014.4.4",
-        "pid": "bdr:405461"
-      }
-    },
-    {
-      "Foglia PH_2014.4.5.jpg": {
-        "accession_number": "PH 2014.4.5",
-        "pid": "bdr:405462"
-      }
-    },
-    {
-      "Foglia PH_2014.4.6.jpg": {
-        "accession_number": "PH 2014.4.6",
-        "pid": "bdr:405463"
-      }
-    },
-    {
-      "Foglia PH_2014.4.7.jpg": {
-        "accession_number": "PH 2014.4.7",
-        "pid": "bdr:405464"
-      }
-    },
-    {
-      "Foglia PH_2014.4.8.jpg": {
-        "accession_number": "PH 2014.4.8",
-        "pid": "bdr:405465"
-      }
-    },
-    {
-      "Foglia PH_2014.4.9.jpg": {
-        "accession_number": "PH 2014.4.9",
-        "pid": "bdr:405466"
-      }
-    },
-    {
-      "Jacobson PH_2015.4.1.jpg": {
-        "accession_number": "PH 2015.4.1",
-        "pid": "bdr:405527"
-      }
-    },
-    {
-      "Jacobson PH_2015.4.2.jpg": {
-        "accession_number": "PH 2015.4.2",
-        "pid": "bdr:405528"
-      }
-    },
-    {
-      "Johan PH_2012.4.jpg": {
-        "accession_number": "PH 2012.4",
-        "pid": "bdr:298388"
-      }
-    },
-    {
-      "Scully D_2003.3.jpg": {
-        "accession_number": "D 2003.3",
-        "pid": "bdr:298709"
+      "Bravo PH_1987.9.1.tif": {
+        "accession_number": "PH 1987.9.1",
+        "pid": "bdr:298799"
       }
     }
   ],
   "lst_images_to_update": [
-    {
-      "Poons P_1976.0770.jpg": {
-        "accession_number": "P 1976.0770",
-        "pid": "bdr:200420"
-      }
-    }
   ]
 }
