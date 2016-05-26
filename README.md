@@ -305,7 +305,7 @@ temp unusual step...
         - tasks/indexer.run_make_update_pids_list()
         - adds pid to accession-number-to-data-dct data.
         - end result: `j__custom_index_update_data_list.json`
-        - status:
+        - status: done, 2016-05-26
     - run updates
         - tasks/indexer.run_enqueue_index_jobs()
         - end result: `k__entries_updated_tracker.json`
