@@ -521,8 +521,8 @@ class CustomIndexUpdater( object ):
 
 logger = bell_logger.setup_logger()
 
-def run_make_pids_from_custom_index():
-    """ Saves pids from custom-index to `h__pids_from_custom_index_list.json`.
+def run_make_pids_for_custom_index():
+    """ Saves pids for custom-index to `h__pids_from_custom_index_list.json`.
         Called manually per readme.md """
     logger.debug( 'in tasks.indexer.run_make_pids_from_custom_index(); starting' )
     cip_lstr = CustomIndexPidsLister( logger )

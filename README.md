@@ -293,14 +293,14 @@ temp unusual step...
 
 - update the custom-solr-index
     - prep list of pids from custom-index
-        - tasks/indexer.run_make_pids_from_custom_index()
+        - tasks/indexer.run_make_pids_for_custom_index()
         - end result: `h__pids_from_custom_index_list.json`
         - status: done: 2016-05-26
     - prep pids-to-delete list
         - tasks/indexer.run_make_delete_pids_list()
         - end result: `i__custom_index_delete_pids.json`
         - review that list
-        - status:
+        - status: done 2016-05-26
     - prep pids-to-update list
         - tasks/indexer.run_make_update_pids_list()
         - adds pid to accession-number-to-data-dct data.
