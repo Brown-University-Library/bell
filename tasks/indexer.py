@@ -22,7 +22,7 @@ class CustomIndexPidsLister( object ):
     def __init__( self, logger=None ):
         self.logger = logger
         self.BELL_CUSTOM_IDX_ROOT_URL = unicode( os.environ['BELL_TASKS_IDXR__BELL_CUSTOM_IDX_ROOT_URL'] )
-        self.OUTPUT_PATH = unicode( os.environ['BELL_TASKS_IDXR__CUSTOM_IDX_DELETES_PIDS_JSON_PATH'] )
+        self.OUTPUT_PATH = unicode( os.environ['BELL_TASKS_IDXR__CUSTOM_IDX_PIDS_JSON_PATH'] )
 
     def grab_custom_index_pids( self ):
         """ Manages calls to create `h__pids_from_custom_index_list.json`.
