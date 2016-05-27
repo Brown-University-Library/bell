@@ -309,12 +309,15 @@ temp unusual step...
     - run updates
         - tasks/indexer.run_enqueue_index_jobs()
         - end result: `k__entries_updated_tracker.json`
-        - status:
-    - run deletes -- maybe, check w/J.C.
+        - status: done! 2016-05-26
+    - run deletes
         - tasks/indexer.run_delete_pids()
         - end result: `l__pids_deleted_tracker.json`
+        - 2016-05-26 note: not sure what this step was; there is no function 'indexer.run_delete_pids()'
+            - I think this is a TODO. I spot-checked some of the entries in i__custom_index_delete_pids.json, and they're not in the [custom bell solr index](http://library.brown.edu/search/solr_pub/bell/?q=*:*&wt=json). So, this may have referred to planned code to delete old pids from **fedora**. For example, one of the entries in that delete_pids list is 'bdr:299542'. That [still appears in the bdr](https://repository.library.brown.edu/studio/item/bdr:299542/), but not the custom bell solr index. A search on that title shows that the new record, with [pid 'bdr:650784' is in the bdr](https://repository.library.brown.edu/studio/search/?utf8=✓&q=Untitled+%5BSaint+and+Child+and+Crucifixion+%5D), and that pid _is_, appropriately in the updated custom bell gallery solr index.
+            - Note: usually when an image is added to a metadata-only record, a new pid is not created. New pids can be created when the bell 'accession-number' changes -- and a handful do regularly change with each ingestion, because of bell staff corrections.
 
 - let Bell-J.C. & CIS-J.O. know when done
-    - status:
+    - status: done, 2016-05-26
 
 ---
