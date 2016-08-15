@@ -321,3 +321,20 @@ temp unusual step...
     - status: done, 2016-05-26
 
 ---
+
+### 2016-August project ###
+
+Some api url calls for reference...
+
+_(no indent=true available)_
+
+- [search api for item](https://repository.library.brown.edu/api/search/?q=pid:%22bdr:10876%22)
+- [search api for collection](https://repository.library.brown.edu/api/search/?q=rel_is_member_of_ssim:%22bdr:10870%22)
+- [search api on name](https://repository.library.brown.edu/api/search/?q=name:%22Rivera,%20Diego%22)
+- [search api on pid and name](https://repository.library.brown.edu/api/search/?q=pid:%22bdr:10876%22&fq=name:%22Rivera,%20Diego%22)
+- [collection and name (goal)](https://repository.library.brown.edu/api/search/?q=rel_is_member_of_ssim:%22bdr:10870%22&fq=name:%22Rivera,%20Diego%22)
+- [collection and name wildcard (goal)](https://repository.library.brown.edu/api/search/?q=rel_is_member_of_ssim:%22bdr:10870%22&fq=name:%22Rivera*%22)
+
+---
+
+---
