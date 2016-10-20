@@ -311,7 +311,7 @@ temp unusual step...
         - end result: `k__entries_updated_tracker.json`
         - status: done! 2016-05-26
     - run deletes
-        - tasks/indexer.run_delete_pids()
+        - tasks/indexer.run_solr_deletions()
         - end result: `l__solr_pids_deleted_tracker.json`
         - 2016-05-26 note: not sure what this step was; there is no function 'indexer.run_delete_pids()'
             - I think this is a TODO. I spot-checked some of the entries in i__custom_index_delete_pids.json, and they're not in the [custom bell solr index](http://library.brown.edu/search/solr_pub/bell/?q=*:*&wt=json). So, this may have referred to planned code to delete old pids from **fedora**. For example, one of the entries in that delete_pids list is 'bdr:299542'. That [still appears in the bdr](https://repository.library.brown.edu/studio/item/bdr:299542/), but not the custom bell solr index. A search on that title shows that the new record, with [pid 'bdr:650784' is in the bdr](https://repository.library.brown.edu/studio/search/?utf8=✓&q=Untitled+%5BSaint+and+Child+and+Crucifixion+%5D), and that pid _is_, appropriately in the updated custom bell gallery solr index.

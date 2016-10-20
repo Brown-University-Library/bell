@@ -519,17 +519,43 @@ class CustomIndexUpdater( object ):
 
 class CustomIndexDeleter( object ):
     """ Handles removing enries from custom solr index.
-        Data-source: data/i__custom_index_delete_pids.json. """
+        Data-source: custom_index_delete_pids.json
+        Outputs to: solr_pids_deleted_tracker.json """
 
     def __init__( self, logger=None ):
         self.logger = logger
-        self.SOURCE_DATA_JSON_PATH = unicode( os.environ['BELL_TASKS_IDXR__CUSTOM_IDX_DELETES_PIDS_JSON_PATH'] )
+        self.PIDS_TO_DELETE_SOURCE_DATA_JSON_PATH = unicode( os.environ['BELL_TASKS_IDXR__CUSTOM_IDX_DELETES_PIDS_JSON_PATH'] )
         self.CUSTOM_INDEX_SOLR_URL_ROOT = unicode( os.environ['BELL_TASKS_IDXR__CUSTOM_INDEX_SOLR_URL_ROOT'] )
         self.TRACKER_JSON_PATH = unicode( os.environ['BELL_TASKS_IDXR__CUSTOM_INDEX_DELETER_TRACKER_JSON_PATH'] )
 
     def delete_target_custom_solr_pids( self ):
         ## load pids to be deleted
+        with open( self.PIDS_TO_DELETE_SOURCE_DATA_JSON_PATH ) as f:
+            deletion_pid_lst = json.loads( f.read() )
         ## run deletion loop, tracking along way
+        for pid in deletion_pid_lst:
+            solr = Solr( self.CUSTOM_INDEX_SOLR_URL_ROOT )
+            response = solr.delete_by_query( 'pid:"%s"' % pid, commit=True )
+            response_status = response.status
+            self.update_tracker( pid, response_status )
+            if not response_status == 200:
+                logger.error( 'custom-solr delete problem-response for pid `{pid}`: ```{response}```'.format(pid=pid, resp=response_status) )
+            1/0  # break for testing
+        return
+
+    def update_tracker( self, pid, delete_result ):
+        """ Stores result to json file.
+            Not thread-safe - redis would be good for this.
+            Called by delete_target_custom_solr_pids() """
+        try:
+            with open( self.TRACKER_JSON_PATH ) as f:
+                dct = json.loads( f.read() )
+        except:
+            dct = {}
+        dct[pid] = { 'datetime': unicode(datetime.datetime.now()), 'delete_result': delete_result }
+        jsn = json.dumps( dct, indent=2, sort_keys=True )
+        with open( self.TRACKER_JSON_PATH, 'w' ) as f:
+            f.write( jsn )
         return
 
     # end class CustomIndexUpdater
