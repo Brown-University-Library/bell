@@ -527,6 +527,11 @@ class CustomIndexDeleter( object ):
         self.CUSTOM_INDEX_SOLR_URL_ROOT = unicode( os.environ['BELL_TASKS_IDXR__CUSTOM_INDEX_SOLR_URL_ROOT'] )
         self.TRACKER_JSON_PATH = unicode( os.environ['BELL_TASKS_IDXR__CUSTOM_INDEX_DELETER_TRACKER_JSON_PATH'] )
 
+    def delete_target_custom_solr_pids( self ):
+        ## load pids to be deleted
+        ## run deletion loop, tracking along way
+        return
+
     # end class CustomIndexUpdater
 
 
@@ -579,3 +584,11 @@ def run_update_custom_index_entry( accession_number, data_dct, pid ):
     logger.debug( 'in tasks.indexer.run_update_custom_index_entry(); done' )
     return
 
+def run_solr_deletions():
+    """ Deletes pids marked for deletion.
+        Called manually per readme.md """
+    logger.debug( 'in tasks.indexer.runs_solr_deletions(); starting' )
+    deleter = CustomIndexDeleter( logger )
+    deleter.delete_target_custom_solr_pids()
+    logger.debug( 'in tasks.indexer.runs_solr_deletions(); done' )
+    return
