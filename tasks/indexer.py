@@ -174,7 +174,7 @@ class UpdatePidsLister( object ):
 
 
 class CustomIndexUpdater( object ):
-    """ Handles updating custom solr index.
+    """ Handles updating custom solr index for additions and updates.
         TODO: move the metadata-helpers into a different data-prep class. """
 
     def __init__( self, logger=None ):
@@ -513,6 +513,19 @@ class CustomIndexUpdater( object ):
           for entry in list_value:
             new_list.append( '' ) if (entry == None) else new_list.append( entry )
         return new_list
+
+    # end class CustomIndexUpdater
+
+
+class CustomIndexDeleter( object ):
+    """ Handles removing enries from custom solr index.
+        Data-source: data/i__custom_index_delete_pids.json. """
+
+    def __init__( self, logger=None ):
+        self.logger = logger
+        self.SOURCE_DATA_JSON_PATH = unicode( os.environ['BELL_TASKS_IDXR__CUSTOM_IDX_DELETES_PIDS_JSON_PATH'] )
+        self.CUSTOM_INDEX_SOLR_URL_ROOT = unicode( os.environ['BELL_TASKS_IDXR__CUSTOM_INDEX_SOLR_URL_ROOT'] )
+        self.TRACKER_JSON_PATH = unicode( os.environ['BELL_TASKS_IDXR__CUSTOM_INDEX_DELETER_TRACKER_JSON_PATH'] )
 
     # end class CustomIndexUpdater
 
