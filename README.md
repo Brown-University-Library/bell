@@ -316,6 +316,10 @@ temp unusual step...
         - 2016-05-26 note: not sure what this step was; there is no function 'indexer.run_delete_pids()'
             - I think this is a TODO. I spot-checked some of the entries in i__custom_index_delete_pids.json, and they're not in the [custom bell solr index](http://library.brown.edu/search/solr_pub/bell/?q=*:*&wt=json). So, this may have referred to planned code to delete old pids from **fedora**. For example, one of the entries in that delete_pids list is 'bdr:299542'. That [still appears in the bdr](https://repository.library.brown.edu/studio/item/bdr:299542/), but not the custom bell solr index. A search on that title shows that the new record, with [pid 'bdr:650784' is in the bdr](https://repository.library.brown.edu/studio/search/?utf8=✓&q=Untitled+%5BSaint+and+Child+and+Crucifixion+%5D), and that pid _is_, appropriately in the updated custom bell gallery solr index.
             - Note: usually when an image is added to a metadata-only record, a new pid is not created. New pids can be created when the bell 'accession-number' changes -- and a handful do regularly change with each ingestion, because of bell staff corrections.
+        - 2016-Oct-20: in response to J.C. recent emails, realized indexer deletes not done. TODO.
+
+- delete old bell items from fedora
+    - 2016-Oct-20: in response to J.C. recent emails, should write code to delete non-source-data entries from fedora. TODO.
 
 - let Bell-J.C. & CIS-J.O. know when done
     - status: done, 2016-05-26
