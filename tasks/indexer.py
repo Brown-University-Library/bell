@@ -540,7 +540,6 @@ class CustomIndexDeleter( object ):
             self.update_tracker( pid, response_status )
             if not response_status == 200:
                 logger.error( 'custom-solr delete problem-response for pid `{pid}`: ```{response}```'.format(pid=pid, resp=response_status) )
-            1/0  # break for testing
         return
 
     def update_tracker( self, pid, delete_result ):
