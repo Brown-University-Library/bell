@@ -326,9 +326,7 @@ temp unusual step...
 
 ---
 
-### 2016-August project ###
-
-Some api url calls for reference...
+### Some bdr-api url calls for reference...
 
 _(no indent=true available)_
 
@@ -338,6 +336,14 @@ _(no indent=true available)_
 - [search api on pid and name](https://repository.library.brown.edu/api/search/?q=pid:%22bdr:10876%22&fq=name:%22Rivera,%20Diego%22)
 - [collection and name (goal)](https://repository.library.brown.edu/api/search/?q=rel_is_member_of_ssim:%22bdr:10870%22&fq=name:%22Rivera,%20Diego%22)
 - [collection and name wildcard (goal)](https://repository.library.brown.edu/api/search/?q=rel_is_member_of_ssim:%22bdr:10870%22&fq=name:%22Rivera*%22)
+
+---
+
+### Some solr-pub calls for reference...
+
+- [get list of pids](https://library.brown.edu/search/solr_pub/bell/?q=*:*&fl=pid&wt=json&indent=2&start=0&rows=10000)
+- [search accession-number](https://library.brown.edu/search/solr_pub/bell/?q=PH%201998.24&wt=json&indent=2)
+- [search pid](https://library.brown.edu/search/solr_pub/bell/?q=%22bdr:299010%22&wt=json&indent=2)
 
 ---
 
