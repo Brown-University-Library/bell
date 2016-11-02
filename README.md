@@ -321,9 +321,23 @@ temp unusual step...
 
 - delete old bell items from fedora
     - 2016-Oct-20: in response to J.C. recent emails, should write code to delete non-source-data entries from fedora. TODO.
+    - steps:
+        - validate that the original-data count matches the custom-solr doc-count.
+            - `cleanup.run_validate_counts()`
+            - status: done, 2016-Nov-01
+        - validate that all original-data accession-numbers are in the bell custom solr-index.
+            - `cleanup.run_validate_accession_numbers()`
+            - status: in-process
+        - validate that all original-data pids are in the bell custom solr-index.
+        - validate that all original-data pids are in the bdr.
+        - make list of valid bdr pids.
+        - get complete list of fedora bdr pids.
+        - make list of bdr pids to delete.
+        - run deletion.
 
 - let Bell-J.C. & CIS-J.O. know when done
-    - status: done, 2016-05-26
+    - old status: done, 2016-05-26
+    - status: TODO
 
 ---
 
