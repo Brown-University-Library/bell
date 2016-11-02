@@ -74,6 +74,21 @@ class CustomSolrValidator( object ):
         logger.debug( 'validity, `{}`'.format(validity) )
         return validity
 
+    def validate_pids( self ):
+        """ Confirm all original-data pids are in the bell custom solr-index.
+            Called manually per README. """
+        solr_pid_list = self.make_solr_pid_list()
+        accession_to_pid_dct = self.get_accession_to_pid_dct()
+        validity = True
+        for (accession_number, pid) in accession_to_pid_dct.items():
+            try:
+                assert pid in solr_pid_list
+            except Exception as e:
+                validity = False
+                logger.error( 'pid, `{}` not found'.format(pid) )
+        logger.debug( 'validity, `{}`'.format(validity) )
+        return validity
+
     ## helpers ##
 
     def get_accession_to_pid_dct( self ):
@@ -99,6 +114,21 @@ class CustomSolrValidator( object ):
         # logger.debug( 'solr_accession_number_list, ```{}```'.format(pprint.pformat(solr_accession_number_list)) )
         return solr_accession_number_list
 
+    def make_solr_pid_list( self ):
+        """ Returns list of pids from bell custom solr.
+            Called by validate_pids() """
+        solr_pid_list = []
+        r = requests.get( self.bell_custom_solr_pids_url )
+        response_dct = r.json()
+        entries = response_dct['response']['docs']
+        for entry_dct in entries:
+            ( key_label, val_pid ) = entry_dct.items()[0]  # there's only one
+            solr_pid_list.append( val_pid )
+        solr_pid_list = sorted( solr_pid_list )
+        logger.debug( 'count solr_pid_list, `{}`'.format(len(solr_pid_list)) )
+        # logger.debug( 'solr_pid_list, ```{}```'.format(pprint.pformat(solr_pid_list)) )
+        return solr_pid_list
+
     # end class CustomSolrValidator()
 
 
@@ -113,5 +143,8 @@ def run_validate_solr_accession_numbers():
     v = CustomSolrValidator()
     v.validate_accession_numbers()
 
+def run_validate_solr_pids():
+    v = CustomSolrValidator()
+    v.validate_pids()
 
 ## EOF
