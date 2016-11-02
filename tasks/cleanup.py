@@ -137,19 +137,24 @@ class BdrDeleter( object ):
 
     def __init__( self ):
         self.SOURCE_ORIGINAL_DATA_JSON_PATH = os.environ.get( 'BELL_ANTP__OUTPUT_JSON_PATH' )
+        self.COLLECTION_API_URL = os.environ.get( 'BELL_TASKS_CLNR__COLLECTION_API_URL' )
 
     def make_pids_to_delete( self ):
         """ Saves list of pids to delete from the BDR.
             Called manuall per README. """
+        logger.debug( 'starting make_pids_to_delete()' )
+        # get source and bdr pids
         source_pids = self.prepare_source_pids()
-        pass
-
+        existing_bdr_pids = self.prepare_bdr_pids()
+        # intersect lists
+        # save pids to be deleted
+        return
 
     ## helpers ##
 
     def prepare_source_pids( self ):
         """ Returns accession_to_pid_dct.
-            Called by validate_counts(), validate_accession_numbers() """
+            Called by make_pids_to_delete() """
         with open( self.SOURCE_ORIGINAL_DATA_JSON_PATH ) as f:
             source_dct = json.loads( f.read() )
         accession_to_pid_dct = source_dct['final_accession_pid_dict']
@@ -158,8 +163,27 @@ class BdrDeleter( object ):
             source_pids.append( value_pid )
         source_pids = sorted( source_pids )
         logger.debug( 'count source_pids, `{}`'.format(len(source_pids)) )
-        logger.debug( 'source_pids, ```{}```'.format(pprint.pformat(source_pids)) )
+        logger.debug( 'source_pids (first 3), ```{}```'.format(pprint.pformat(source_pids[0:3])) )
         return source_pids
+
+    def prepare_bdr_pids( self ):
+        """ Returns list of bdr pids associated with the bell collection.
+            Called by make_pids_to_delete() """
+        logger.debug( 'starting prepare_bdr_pids()' )
+        bdr_pids = []
+        r = requests.get( self.COLLECTION_API_URL )
+        dct = r.json()
+        logger.debug( 'stated count, `{}`'.format(dct['count']) )
+        for entry_dct in dct['items']['docs']:
+            ( pid_label_key, pid_value ) = entry_dct.items()[0]  # just one
+            bdr_pids.append( pid_value )
+        bdr_pids = sorted( bdr_pids )
+        logger.debug( 'bdr_pids count, `{}`'.format(len(bdr_pids)) )
+        return bdr_pids
+
+
+
+
 
     # end class BdrDeleter()
 
