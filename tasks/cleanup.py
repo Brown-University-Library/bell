@@ -53,5 +53,12 @@ class Validator( object ):
 
 
 
+    # end class Validator()
 
-    # end class OldPidFinder()
+
+### convenience runners ###
+
+
+def run_validate_counts():
+    v = Validator()
+    v.validate_counts()
