@@ -132,6 +132,38 @@ class CustomSolrValidator( object ):
     # end class CustomSolrValidator()
 
 
+class BdrDeleter( object ):
+    """ Manages BDR deletions. """
+
+    def __init__( self ):
+        self.SOURCE_ORIGINAL_DATA_JSON_PATH = os.environ.get( 'BELL_ANTP__OUTPUT_JSON_PATH' )
+
+    def make_pids_to_delete( self ):
+        """ Saves list of pids to delete from the BDR.
+            Called manuall per README. """
+        source_pids = self.prepare_source_pids()
+        pass
+
+
+    ## helpers ##
+
+    def prepare_source_pids( self ):
+        """ Returns accession_to_pid_dct.
+            Called by validate_counts(), validate_accession_numbers() """
+        with open( self.SOURCE_ORIGINAL_DATA_JSON_PATH ) as f:
+            source_dct = json.loads( f.read() )
+        accession_to_pid_dct = source_dct['final_accession_pid_dict']
+        source_pids = []
+        for ( key_accession_number, value_pid ) in accession_to_pid_dct.items():
+            source_pids.append( value_pid )
+        source_pids = sorted( source_pids )
+        logger.debug( 'count source_pids, `{}`'.format(len(source_pids)) )
+        logger.debug( 'source_pids, ```{}```'.format(pprint.pformat(source_pids)) )
+        return source_pids
+
+    # end class BdrDeleter()
+
+
 ## convenience runners ##
 
 
@@ -146,5 +178,10 @@ def run_validate_solr_accession_numbers():
 def run_validate_solr_pids():
     v = CustomSolrValidator()
     v.validate_pids()
+
+def run_make_bdr_pids_to_delete():
+    deleter = BdrDeleter()
+    deleter.make_pids_to_delete()
+
 
 ## EOF

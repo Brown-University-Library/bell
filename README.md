@@ -330,13 +330,15 @@ temp unusual step...
             - status: done, 2016-Nov-02
         - validate that all original-data pids are in the bell custom solr-index.
             - `cleanup.run_validate_solr_pids()`
-            - status: in process
-
-        - validate that all original-data pids are in the bdr.
-        - make list of valid bdr pids.
-        - get complete list of fedora bdr pids.
+            - status: done, 2016-Nov-02
         - make list of bdr pids to delete.
+            - `cleanup.run_make_bdr_pids_to_delete()`
+            - end result: `m__bdr_delete_pids.json`
+            - status: in-process
+
         - run deletion.
+        - validate that all original-data pids are in the bdr.
+        - validate that all original-data accession-numbers are in the bdr.
 
 - let Bell-J.C. & CIS-J.O. know when done
     - old status: done, 2016-05-26
