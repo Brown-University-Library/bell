@@ -37,7 +37,8 @@ class Validator( object ):
         self.bell_custom_solr_accession_numbers_url = 'https://library.brown.edu/search/solr_pub/bell/?q=*:*&fl=accession_number_original&wt=json&indent=2&start=0&rows=10000'
 
     def validate_counts( self ):
-        """ Makes pid list from `e__accession_number_to_pid_dict.json` """
+        """ Confirms count of entries in `e__accession_number_to_pid_dict.json`
+                match the count of entries in the bell custom solr-index. """
         with open( self.SOURCE_ORIGINAL_DATA_JSON_PATH ) as f:
             source_dct = json.loads( f.read() )
         accession_to_pid_dct = source_dct['final_accession_pid_dict']
@@ -48,7 +49,9 @@ class Validator( object ):
         solr_count = response_dct['response']['numFound']
         logger.debug( 'solr_count, `{}`'.format(solr_count) )
         assert original_data_count == solr_count
-        return
+        return True
+
+
 
 
     # end class OldPidFinder()
