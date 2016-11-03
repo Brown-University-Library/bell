@@ -336,7 +336,7 @@ temp unusual step...
             - end result: `m__bdr_delete_pids.json`
             - status: done, 2016-Mov-03
         - run deletion.
-            - `from tasks import cleanup; cleanup.run_delete_old_bdr_bell_pids()`
+            - `from tasks import cleanup; cleanup.run_delete_single_pid_from_bdr()`
             - end result: `n__bdr_entries_deleted_tracker.json`
             - status: in-process
 
