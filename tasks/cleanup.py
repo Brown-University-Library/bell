@@ -24,7 +24,7 @@ from __future__ import unicode_literals
         - run solr validation
     """
 
-import json, logging, os, pprint, time
+import json, logging, os, pprint, sets, time
 import requests
 
 logging.basicConfig(
@@ -149,7 +149,8 @@ class BdrDeleter( object ):
         source_pids = self.prepare_source_pids()
         existing_bdr_pids = self.prepare_bdr_pids()
         # intersect lists
-        logger.debug( 'ready to intersect lists' )
+        ( source_pids_not_in_bdr, bdr_pids_not_in_source ) = self.intersect_pids( source_pids, existing_bdr_pids )
+        logger.debug( 'ready to save output' )
         # save pids to be deleted
         return
 
@@ -182,6 +183,19 @@ class BdrDeleter( object ):
         bdr_pids = sorted( bdr_pids )
         logger.debug( 'len(bdr_pids), `{}`'.format(len(bdr_pids)) )
         return bdr_pids
+
+    def intersect_pids( self, source_pids, existing_bdr_pids):
+        """ Runs set work.
+            Called by make_pids_to_delete() """
+        source_pids_not_in_bdr = list( sets.Set(source_pids) - sets.Set(existing_bdr_pids) )
+        bdr_pids_not_in_source = list( sets.Set(existing_bdr_pids) - sets.Set(source_pids) )
+        logger.debug( 'source_pids_not_in_bdr, {}'.format(source_pids_not_in_bdr) )
+        logger.debug( 'bdr_pids_not_in_source, {}'.format(bdr_pids_not_in_source) )
+        if len( source_pids_not_in_bdr ) > 0:
+            raise Exception( 'ERROR: source pids found that are not in the BDR. Investigate.' )
+        return ( source_pids_not_in_bdr, bdr_pids_not_in_source )
+
+    ## sub-helpers ##
 
     def get_total_count( self ):
         """ Gets count of bdr pids for bell collection.
@@ -221,6 +235,8 @@ class BdrDeleter( object ):
             'wt': 'json', 'indent': '2' }
         return params
 
+
+
     # end class BdrDeleter()
 
 
@@ -242,6 +258,21 @@ def run_validate_solr_pids():
 def run_make_bdr_pids_to_delete():
     deleter = BdrDeleter()
     deleter.make_pids_to_delete()
+
+
+
+
+    # def _intersect_keys( self, rapid_keys, easya_keys):
+    #     """ Runs set work.
+    #         Called by update_production_table() """
+    #     rapid_not_in_easya = list( sets.Set(rapid_keys) - sets.Set(easya_keys) )
+    #     easya_not_in_rapid = list( sets.Set(easya_keys) - sets.Set(rapid_keys) )
+    #     log.debug( 'rapid_not_in_easya, {}'.format(rapid_not_in_easya) )
+    #     log.debug( 'easya_not_in_rapid, {}'.format(easya_not_in_rapid) )
+    #     return ( rapid_not_in_easya, easya_not_in_rapid )
+
+
+
 
 
 ## EOF
