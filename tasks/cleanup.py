@@ -24,7 +24,7 @@ from __future__ import unicode_literals
         - run solr validation
     """
 
-import json, logging, os, pprint
+import json, logging, os, pprint, time
 import requests
 
 logging.basicConfig(
@@ -147,7 +147,7 @@ class BdrDeleter( object ):
         source_pids = self.prepare_source_pids()
         existing_bdr_pids = self.prepare_bdr_pids()
         # intersect lists
-        log.debug( 'ready to intersect lists' )
+        logger.debug( 'ready to intersect lists' )
         # save pids to be deleted
         return
 
@@ -171,12 +171,16 @@ class BdrDeleter( object ):
         """ Returns list of bdr pids associated with the bell collection.
             Called by make_pids_to_delete() """
         logger.debug( 'starting prepare_bdr_pids()' )
-        ( bdr_pids, start, rows, total_count ) = ( [], 0, 500, self.get_total_count )
+        ( bdr_pids, start, rows, total_count ) = ( [], 0, 500, self.get_total_count() )
         while start <= total_count:
             queried_pids = self.query_bdr_solr( start, rows )
             for pid in queried_pids:
                 bdr_pids.append( pid )
             start += 500
+            logger.debug( 'type(start), `{}`'.format(type(start)) )
+            logger.debug( 'type(total_count), `{}`'.format(type(total_count)) )
+            logger.debug( 'start, `{}`'.format(start) )
+            logger.debug( 'total_count, `{}`'.format(total_count) )
         bdr_pids = sorted( bdr_pids )
         logger.debug( 'bdr_pids count, `{}`'.format(len(bdr_pids)) )
         return bdr_pids
@@ -190,22 +194,24 @@ class BdrDeleter( object ):
             }
         r = requests.get( self.SEARCH_API_URL, params=params )
         dct = r.json()
-        count = dct['response']['numFound']
-        log.debug( 'count, `{}`'.format(count) )
+        count = int( dct['response']['numFound'] )
+        logger.debug( 'count, `{}`'.format(count) )
         return count
 
     def query_bdr_solr( self, start, rows ):
         """ Querys bdr searche api.
             Called by helper prepare_bdr_pids() """
+        logger.debug( 'start, `{}`'.format(start) )
+        time.sleep( 1 )
         queried_pids = []
         params = {
             'q': 'rel_is_member_of_ssim:"bdr:10870"',
             'fl': 'pid', 'start': start, 'rows': rows,
-            'wt': 'json', 'indent': '2'
-            }
+            'wt': 'json', 'indent': '2' }
         r = requests.get( self.SEARCH_API_URL, params=params )
         dct = r.json()
-        for ( label_key, pid_value ) in dct['response']['docs']:
+        for entry in dct['response']['docs']:
+            ( label_key, pid_value ) = entry.items()[0]  # entry example: `{ "pid": "bdr:650881" }`
             queried_pids.append( pid_value )
         return queried_pids
 
