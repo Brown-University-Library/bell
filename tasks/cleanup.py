@@ -167,5 +167,9 @@ def run_make_bdr_pids_to_delete():
     deleter = BdrDeleter()
     deleter.make_pids_to_delete()
 
+def run_delete_pid_from_bdr( pid ):
+    deleter = BdrDeleter()
+    deleter.delete_pid_via_bdr_item_api( pid )
+
 
 ## EOF
