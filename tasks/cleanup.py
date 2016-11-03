@@ -29,6 +29,7 @@ import requests
 
 logging.basicConfig(
     level=logging.DEBUG,
+    filename='{}/bell.log'.format( os.environ['BELL_LOG_DIR'] ),
     format='[%(asctime)s] %(levelname)s [%(module)s-%(funcName)s()::%(lineno)d] %(message)s',
     datefmt='%d/%b/%Y %H:%M:%S' )
 logger = logging.getLogger(__name__)
@@ -179,7 +180,7 @@ class BdrDeleter( object ):
                 bdr_pids.append( pid )
             start += 500
         bdr_pids = sorted( bdr_pids )
-        logger.debug( 'bdr_pids count, `{}`'.format(len(bdr_pids)) )
+        logger.debug( 'len(bdr_pids), `{}`'.format(len(bdr_pids)) )
         return bdr_pids
 
     def get_total_count( self ):
@@ -192,7 +193,7 @@ class BdrDeleter( object ):
         r = requests.get( self.SEARCH_API_URL, params=params )
         dct = r.json()
         count = int( dct['response']['numFound'] )
-        logger.debug( 'count, `{}`'.format(count) )
+        logger.debug( 'solr numFound, `{}`'.format(count) )
         return count
 
     def query_bdr_solr( self, start, rows ):
