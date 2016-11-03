@@ -178,10 +178,6 @@ class BdrDeleter( object ):
             for pid in queried_pids:
                 bdr_pids.append( pid )
             start += 500
-            logger.debug( 'type(start), `{}`'.format(type(start)) )
-            logger.debug( 'type(total_count), `{}`'.format(type(total_count)) )
-            logger.debug( 'start, `{}`'.format(start) )
-            logger.debug( 'total_count, `{}`'.format(total_count) )
         bdr_pids = sorted( bdr_pids )
         logger.debug( 'bdr_pids count, `{}`'.format(len(bdr_pids)) )
         return bdr_pids
@@ -205,16 +201,24 @@ class BdrDeleter( object ):
         logger.debug( 'start, `{}`'.format(start) )
         time.sleep( 1 )
         queried_pids = []
-        params = {
-            'q': 'rel_is_member_of_ssim:"{}"'.format( self.BELL_COLLECTION_ID ),
-            'fl': 'pid', 'start': start, 'rows': rows,
-            'wt': 'json', 'indent': '2' }
+        params = self.prep_looping_params( start, rows )
         r = requests.get( self.SEARCH_API_URL, params=params )
         dct = r.json()
         for entry in dct['response']['docs']:
             ( label_key, pid_value ) = entry.items()[0]  # entry example: `{ "pid": "bdr:650881" }`
             queried_pids.append( pid_value )
         return queried_pids
+
+    def prep_looping_params( self, start, rows ):
+        """ Build param dct.
+            Called by helper query_bdr_solr. """
+        params = {
+            'q': 'rel_is_member_of_ssim:"{}"'.format( self.BELL_COLLECTION_ID ),
+            'fl': 'pid',
+            'start': start,
+            'rows': rows,
+            'wt': 'json', 'indent': '2' }
+        return params
 
     # end class BdrDeleter()
 
