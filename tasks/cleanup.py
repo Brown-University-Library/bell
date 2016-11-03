@@ -137,7 +137,7 @@ class BdrDeleter( object ):
 
     def __init__( self ):
         self.SOURCE_ORIGINAL_DATA_JSON_PATH = os.environ.get( 'BELL_ANTP__OUTPUT_JSON_PATH' )
-        self.COLLECTION_API_URL = os.environ.get( 'BELL_TASKS_CLNR__COLLECTION_API_URL' )
+        self.SEARCH_API_URL = os.environ.get( 'BELL_TASKS_CLNR__SEARCH_API_URL' )
 
     def make_pids_to_delete( self ):
         """ Saves list of pids to delete from the BDR.
@@ -147,6 +147,7 @@ class BdrDeleter( object ):
         source_pids = self.prepare_source_pids()
         existing_bdr_pids = self.prepare_bdr_pids()
         # intersect lists
+        log.debug( 'ready to intersect lists' )
         # save pids to be deleted
         return
 
@@ -170,20 +171,43 @@ class BdrDeleter( object ):
         """ Returns list of bdr pids associated with the bell collection.
             Called by make_pids_to_delete() """
         logger.debug( 'starting prepare_bdr_pids()' )
-        bdr_pids = []
-        r = requests.get( self.COLLECTION_API_URL )
-        dct = r.json()
-        logger.debug( 'stated count, `{}`'.format(dct['count']) )
-        for entry_dct in dct['items']['docs']:
-            ( pid_label_key, pid_value ) = entry_dct.items()[0]  # just one
-            bdr_pids.append( pid_value )
+        ( bdr_pids, start, rows, total_count ) = ( [], 0, 500, self.get_total_count )
+        while start <= total_count:
+            queried_pids = self.query_bdr_solr( start, rows )
+            for pid in queried_pids:
+                bdr_pids.append( pid )
+            start += 500
         bdr_pids = sorted( bdr_pids )
         logger.debug( 'bdr_pids count, `{}`'.format(len(bdr_pids)) )
         return bdr_pids
 
+    def get_total_count( self ):
+        """ Gets count of bdr pids for bell collection.
+            Called by helper prepare_bdr_pids() """
+        params = {
+            'q': 'rel_is_member_of_ssim:"bdr:10870"',
+            'wt': 'json', 'indent': '2', 'rows': '0'
+            }
+        r = requests.get( self.SEARCH_API_URL, params=params )
+        dct = r.json()
+        count = dct['response']['numFound']
+        log.debug( 'count, `{}`'.format(count) )
+        return count
 
-
-
+    def query_bdr_solr( self, start, rows ):
+        """ Querys bdr searche api.
+            Called by helper prepare_bdr_pids() """
+        queried_pids = []
+        params = {
+            'q': 'rel_is_member_of_ssim:"bdr:10870"',
+            'fl': 'pid', 'start': start, 'rows': rows,
+            'wt': 'json', 'indent': '2'
+            }
+        r = requests.get( self.SEARCH_API_URL, params=params )
+        dct = r.json()
+        for ( label_key, pid_value ) in dct['response']['docs']:
+            queried_pids.append( pid_value )
+        return queried_pids
 
     # end class BdrDeleter()
 
