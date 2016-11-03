@@ -334,11 +334,19 @@ temp unusual step...
         - make list of bdr pids to delete.
             - `from tasks import cleanup; cleanup.run_make_bdr_pids_to_delete()`
             - end result: `m__bdr_delete_pids.json`
+            - status: done, 2016-Mov-03
+        - run deletion.
+            - `from tasks import cleanup; cleanup.run_delete_old_bdr_bell_pids()`
+            - end result: `n__bdr_entries_deleted_tracker.json`
             - status: in-process
 
-        - run deletion.
-        - validate that all original-data pids are in the bdr.
-        - validate that all original-data accession-numbers are in the bdr.
+- run bdr validation
+    - validate that all original-data pids are in the bdr.
+    - validate that all original-data accession-numbers are in the bdr.
+
+- run solr validation
+    - validate that all original-data pids are in the the custom solr index.
+    - validate that all original-data accession-numbers are in the custom solr index.
 
 - let Bell-J.C. & CIS-J.O. know when done
     - old status: done, 2016-05-26
