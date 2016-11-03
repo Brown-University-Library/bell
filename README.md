@@ -323,16 +323,16 @@ temp unusual step...
     - 2016-Oct-20: in response to J.C. recent emails, should write code to delete non-source-data entries from fedora. TODO.
     - steps:
         - validate that the original-data count matches the custom-solr doc-count.
-            - `cleanup.run_validate_solr_counts()`
+            - `from tasks import cleanup; cleanup.run_validate_solr_counts()`
             - status: done, 2016-Nov-01
         - validate that all original-data accession-numbers are in the bell custom solr-index.
-            - `cleanup.run_validate_solr_accession_numbers()`
+            - `from tasks import cleanup; cleanup.run_validate_solr_accession_numbers()`
             - status: done, 2016-Nov-02
         - validate that all original-data pids are in the bell custom solr-index.
-            - `cleanup.run_validate_solr_pids()`
+            - `from tasks import cleanup; cleanup.run_validate_solr_pids()`
             - status: done, 2016-Nov-02
         - make list of bdr pids to delete.
-            - `cleanup.run_make_bdr_pids_to_delete()`
+            - `from tasks import cleanup; cleanup.run_make_bdr_pids_to_delete()`
             - end result: `m__bdr_delete_pids.json`
             - status: in-process
 
