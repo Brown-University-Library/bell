@@ -136,8 +136,9 @@ class BdrDeleter( object ):
     """ Manages BDR deletions. """
 
     def __init__( self ):
-        self.SOURCE_ORIGINAL_DATA_JSON_PATH = os.environ.get( 'BELL_ANTP__OUTPUT_JSON_PATH' )
-        self.SEARCH_API_URL = os.environ.get( 'BELL_TASKS_CLNR__SEARCH_API_URL' )
+        self.SOURCE_ORIGINAL_DATA_JSON_PATH = os.environ['BELL_ANTP__OUTPUT_JSON_PATH']
+        self.SEARCH_API_URL = os.environ['BELL_TASKS_CLNR__SEARCH_API_URL']
+        self.BELL_COLLECTION_ID = os.environ['BELL_TASKS_CLNR__BELL_COLLECTION_ID']
 
     def make_pids_to_delete( self ):
         """ Saves list of pids to delete from the BDR.
@@ -189,7 +190,7 @@ class BdrDeleter( object ):
         """ Gets count of bdr pids for bell collection.
             Called by helper prepare_bdr_pids() """
         params = {
-            'q': 'rel_is_member_of_ssim:"bdr:10870"',
+            'q': 'rel_is_member_of_ssim:"{}"'.format( self.BELL_COLLECTION_ID ),
             'wt': 'json', 'indent': '2', 'rows': '0'
             }
         r = requests.get( self.SEARCH_API_URL, params=params )
@@ -205,7 +206,7 @@ class BdrDeleter( object ):
         time.sleep( 1 )
         queried_pids = []
         params = {
-            'q': 'rel_is_member_of_ssim:"bdr:10870"',
+            'q': 'rel_is_member_of_ssim:"{}"'.format( self.BELL_COLLECTION_ID ),
             'fl': 'pid', 'start': start, 'rows': rows,
             'wt': 'json', 'indent': '2' }
         r = requests.get( self.SEARCH_API_URL, params=params )
