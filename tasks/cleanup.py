@@ -28,6 +28,11 @@ class BdrDeleter( object ):
         self.PIDS_TO_DELETE_SAVE_PATH = os.environ['BELL_TASKS_CLNR__PIDS_TO_DELETE_SAVE_PATH']
         self.SEARCH_API_URL = os.environ['BELL_TASKS_CLNR__SEARCH_API_URL']
         self.BELL_COLLECTION_ID = os.environ['BELL_TASKS_CLNR__BELL_COLLECTION_ID']
+        self.BELL_ITEM_API_URL = os.environ['BELL_TASKS_CLNR__AUTH_API_URL']
+        self.BELL_ITEM_API_IDENTITY = os.environ['BELL_TASKS_CLNR__AUTH_API_IDENTITY']
+        self.BELL_ITEM_API_AUTHCODE = os.environ['BELL_TASKS_CLNR__AUTH_API_KEY']
+
+    ## called by convenience runners ##
 
     def make_pids_to_delete( self ):
         """ Saves list of pids to delete from the BDR.
@@ -40,7 +45,22 @@ class BdrDeleter( object ):
         ( source_pids_not_in_bdr, bdr_pids_not_in_source ) = self.intersect_pids( source_pids, existing_bdr_pids )
         logger.debug( 'ready to save output' )
         # save pids to be deleted
-        self.output_list( bdr_pids_not_in_source )
+        self.output_pids_to_delet_list( bdr_pids_not_in_source )
+        return
+
+    def delete_pid_via_bdr_item_api( self, pid ):
+        """ Hits item-api to delete item from bdr. """
+        payload = {
+            'pid': pid,
+            'identity': self.BELL_ITEM_API_IDENTITY,
+            'authorization_code': self.BELL_ITEM_API_AUTHCODE }
+        print '- item_api_url, `{}`'.format( self.BELL_ITEM_API_URL )
+        print '- identity, `{}`'.format( self.BELL_ITEM_API_IDENTITY )
+        print '- authcode, `{}`'.format( self.BELL_ITEM_API_AUTHCODE )
+        r = requests.delete( self.BELL_ITEM_API_URL, data=payload, verify=False )
+        self.logger.debug( 'deletion pid, `{pid}`; r.status_code, `{code}`'.format(pid=pid, code=r.status_code) )
+        self.logger.debug( 'deletion pid, `{pid}`; r.content, ```{content}```'.format(pid=pid, content=r.content.decode('utf-8')) )
+        self.track_bdr_deletion( pid, status_code )
         return
 
     ## helpers ##
@@ -84,13 +104,18 @@ class BdrDeleter( object ):
             raise Exception( 'ERROR: source pids found that are not in the BDR. Investigate.' )
         return ( source_pids_not_in_bdr, bdr_pids_not_in_source )
 
-    def output_list( self, pid_list ):
+    def output_pids_to_delet_list( self, pid_list ):
         """ Saves json file.
             Called by grab_bdr_pids() """
         jsn = json.dumps( pid_list, indent=2, sort_keys=True )
         with open( self.PIDS_TO_DELETE_SAVE_PATH, 'w' ) as f:
             f.write( jsn )
         return
+
+    def update_bdr_deletion_tracker( self, pid, status ):
+        """ Tracks bdr deletions.
+            Called by delete_pid_via_bdr_item_api() """
+        return 'foo'
 
     ## sub-helpers ##
 
