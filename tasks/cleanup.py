@@ -138,6 +138,7 @@ class BdrDeleter( object ):
 
     def __init__( self ):
         self.SOURCE_ORIGINAL_DATA_JSON_PATH = os.environ['BELL_ANTP__OUTPUT_JSON_PATH']
+        self.PIDS_TO_DELETE_SAVE_PATH = os.environ['BELL_TASKS_CLNR__PIDS_TO_DELETE_SAVE_PATH']
         self.SEARCH_API_URL = os.environ['BELL_TASKS_CLNR__SEARCH_API_URL']
         self.BELL_COLLECTION_ID = os.environ['BELL_TASKS_CLNR__BELL_COLLECTION_ID']
 
@@ -152,6 +153,7 @@ class BdrDeleter( object ):
         ( source_pids_not_in_bdr, bdr_pids_not_in_source ) = self.intersect_pids( source_pids, existing_bdr_pids )
         logger.debug( 'ready to save output' )
         # save pids to be deleted
+        self.output_list( bdr_pids_not_in_source )
         return
 
     ## helpers ##
@@ -194,6 +196,14 @@ class BdrDeleter( object ):
         if len( source_pids_not_in_bdr ) > 0:
             raise Exception( 'ERROR: source pids found that are not in the BDR. Investigate.' )
         return ( source_pids_not_in_bdr, bdr_pids_not_in_source )
+
+    def output_list( self, pid_list ):
+        """ Saves json file.
+            Called by grab_bdr_pids() """
+        jsn = json.dumps( pid_list, indent=2, sort_keys=True )
+        with open( self.PIDS_TO_DELETE_SAVE_PATH, 'w' ) as f:
+            f.write( jsn )
+        return
 
     ## sub-helpers ##
 
