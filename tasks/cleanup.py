@@ -2,13 +2,13 @@
 
 from __future__ import unicode_literals
 
-""" Removes old files from bell custom solr index and fedora.
+""" Removes old files from bell custom solr index (eventually) and fedora.
     Old files are defined as bell bdr items that have accession-numbers
         which are no longer valid accession-numbers according to
         the most recent full data dump. (see `e__accession_number_to_pid_dict.json`)
-    TODO: consider moving the solr-deletion code from indexer to here. """
+    TODO: move the solr-deletion code from indexer to here. """
 
-import json, logging, os, pprint, sets, time
+import datetime, json, logging, os, pprint, sets, time
 import requests
 
 logging.basicConfig(
@@ -26,6 +26,7 @@ class BdrDeleter( object ):
     def __init__( self ):
         self.SOURCE_ORIGINAL_DATA_JSON_PATH = os.environ['BELL_ANTP__OUTPUT_JSON_PATH']
         self.PIDS_TO_DELETE_SAVE_PATH = os.environ['BELL_TASKS_CLNR__PIDS_TO_DELETE_SAVE_PATH']
+        self.DELETED_PIDS_TRACKER_PATH = os.environ['BELL_TASKS_CLNR__DELETED_PIDS_TRACKER_PATH']
         self.SEARCH_API_URL = os.environ['BELL_TASKS_CLNR__SEARCH_API_URL']
         self.BELL_COLLECTION_ID = os.environ['BELL_TASKS_CLNR__BELL_COLLECTION_ID']
         self.BELL_ITEM_API_URL = os.environ['BELL_TASKS_CLNR__AUTH_API_URL']
@@ -115,7 +116,15 @@ class BdrDeleter( object ):
     def update_bdr_deletion_tracker( self, pid, status ):
         """ Tracks bdr deletions.
             Called by delete_pid_via_bdr_item_api() """
-        return 'foo'
+        with open( self.DELETED_PIDS_TRACKER_PATH ) as f:
+            dct = json.loads( f.read() )
+        if pid not in dct.keys():
+            dct[pid] = []
+        entry = { 'datetime': unicode( datetime.datetime.now() ), 'response_status_code': status }
+        dct[pid].append( entry )
+        with open( self.DELETED_PIDS_TRACKER_PATH, 'w' ) as f:
+            f.write( json.dumps(dct, sort_keys=True, indent=2) )
+        return
 
     ## sub-helpers ##
 
