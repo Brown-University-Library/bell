@@ -334,11 +334,11 @@ temp unusual step...
         - make list of bdr pids to delete.
             - `from tasks import cleanup; cleanup.run_make_bdr_pids_to_delete()`
             - end result: `m__bdr_delete_pids.json`
-            - status: done, 2016-Mov-03
+            - status: done, 2016-Nov-03
         - run deletion.
             - `from tasks import cleanup; cleanup.run_delete_single_pid_from_bdr( pid )`
             - end result: `n__bdr_entries_deleted_tracker.json`
-            - status: in-process
+            - status: most done weeks ago, did last four from emailing J.C. 2016-Nov-29
 
 - run bdr validation
     - validate that all original-data pids are in the bdr.
