@@ -366,7 +366,7 @@ temp unusual step...
 
 - reported issue...
 
-    - [CIS webiste Schrager search](https://www.brown.edu/campus-life/arts/bell-gallery/collection/advanced-search/results) contains 10 items with 4 duplicates
+    - [CIS webiste Schrager search](https://www.brown.edu/campus-life/arts/bell-gallery/collection?quick=schrager) contains 10 items with 4 duplicates
 
         - The 4 duplicate CIS images appear to have accession numbers that are not currently valid (perhaps they were in the past).
         - I'm guessing that the internal index that the CIS website uses did not remove the old entries when it added the new ones.
@@ -375,6 +375,7 @@ temp unusual step...
 
         - odd, internally I have the correct Jacobson metadata for the two Jacobson images -- I cannot see how incorrect metadata was applied
         - emailing J.C. about this and CIS issue 24 feb 2017.
+        - I did pass on the correct info to the bell-custom-solr index!
 
 ---
 
