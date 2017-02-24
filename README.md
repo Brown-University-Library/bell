@@ -350,7 +350,6 @@ temp unusual step...
 
 - let Bell-J.C. & CIS-J.O. know when done
     - old status: done, 2016-05-26
-    - status: TODO
 
 - TODO update future flow...
     - run initial bdr validation
@@ -358,6 +357,24 @@ temp unusual step...
     - run rest of bdr validation
     - update solr index
     - run solr validation
+
+---
+
+### feb 2017 J.C. followup ###
+
+- J.C. question originally from jan 12, 2017
+
+- reported issue...
+
+    - [CIS webiste Schrager search](https://www.brown.edu/campus-life/arts/bell-gallery/collection/advanced-search/results) contains 10 items with 4 duplicates
+
+        - The 4 duplicate CIS images appear to have accession numbers that are not currently valid (perhaps they were in the past).
+        - I'm guessing that the internal index that the CIS website uses did not remove the old entries when it added the new ones.
+
+    - [BDR Schrager search](https://repository.library.brown.edu/studio/search/?search_field=&q=schrager+%22bell+gallery%22) contains 8 works, 6 by Schrager and 2 containing metadata for duplicate Schrager's and images from another artist Bill Jacobson
+
+        - odd, internally I have the correct Jacobson metadata for the two Jacobson images -- I cannot see how incorrect metadata was applied
+        - emailing J.C. about this and CIS issue 24 feb 2017.
 
 ---
 
