@@ -58,7 +58,7 @@ def run_metadata_only_lister():
 
 
 class MetadataCreator( object ):
-    """ Handles metadata-related tasks. """
+    """ Handles metadata-creation related tasks. """
 
     def __init__( self, logger ):
         self.logger = logger
@@ -141,19 +141,6 @@ class MetadataCreator( object ):
         return_tuple = ( file_obj, param_string )
         return return_tuple
 
-    # def perform_post( self, params, file_obj ):
-    #     """ Hits api w/post. Returns pid.
-    #         Called by create_metadata_only_object() """
-    #     files = { 'bell_item.json': file_obj }
-    #     time.sleep( .5 )
-    #     r = requests.post( self.API_URL, data=params, files=files )
-    #     file_obj.close()
-    #     self.logger.debug( 'in metadata.MetadataCreator.perform_post(); r.status_code, %s' % r.status_code )
-    #     response_data = json.loads( r.content.decode('utf-8') )
-    #     self.logger.debug( 'in metadata.MetadataCreator.perform_post(); response_data, %s' % pprint.pformat(response_data) )
-    #     pid = response_data['pid']
-    #     return pid
-
     def perform_post( self, params, file_obj ):
         """ Hits api w/post. Returns pid.
             Called by create_metadata_only_object() """
@@ -192,6 +179,38 @@ class MetadataCreator( object ):
     # end class MetadataCreator
 
 
+class MetadataUpdator( object ):
+    """ Handles metadata-creation related tasks.
+        TODO: once this is part of the regular production, refactor relevant functions with MetadataCreator(). """
+
+    def __init__( self ):
+        self.SOURCE_FULL_JSON_METADATA_PATH = unicode( os.environ['BELL_TASKS_META__FULL_JSON_METADATA_PATH'] )
+        self.API_URL = unicode( os.environ['BELL_TASKS_META__AUTH_API_URL'] )
+        self.API_IDENTITY = unicode( os.environ['BELL_TASKS_META__AUTH_API_IDENTITY'] )
+        self.API_KEY = unicode( os.environ['BELL_TASKS_META__AUTH_API_KEY'] )
+        self.MODS_SCHEMA_PATH = unicode( os.environ['BELL_TASKS_META__MODS_XSD_PATH'] )
+        self.OWNING_COLLECTION = unicode( os.environ['BELL_TASKS_META__OWNING_COLLECTION_PID'] )
+        self.TRACKER_PATH = unicode( os.environ['BELL_TASKS_META__TRACKER_JSON_PATH'] )
+
+    def update_object_metadata( self, accession_number, pid ):
+        """ Gathers source metadata, prepares call to item-api, calls it, confirms update, tracks result.
+            Called manually for now by one_offs.update_metadata_object.py """
+        logger.debug( 'starting' )
+        1/0
+        params = self.set_basic_params()
+        item_dct = self.grab_item_dct( accession_number )
+        params['ir'] = self.make_ir_params( item_dct )
+        params['mods'] = self.make_mods_params( item_dct )
+        ( file_obj, param_string ) = self.prep_content_datastream( item_dct )
+        params['content_streams'] = param_string
+        self.logger.debug( 'in metadata.MetadataCreator.create_metadata_only_object(); params, %s' % pprint.pformat(params) )
+        pid = self.perform_post( params, file_obj )  # perform_post() closes the file
+        self.track_progress( accession_number, pid )
+        return
+
+    # end class MetadataUpdator
+
+
 ## runners ##
 
 logger = bell_logger.setup_logger()
@@ -216,7 +235,7 @@ def run_enqueue_create_metadata_only_jobs():
 
 def run_create_metadata_only_object( accession_number ):
     """ Runner for create_metadata_only_object()
-        Called by queued job triggered by... """
+        Called by job enqueued by run_enqueue_create_metadata_only_jobs() """
     m = MetadataCreator( logger )
     m.create_metadata_only_object( accession_number )
     return
