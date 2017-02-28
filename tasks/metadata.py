@@ -198,19 +198,75 @@ class MetadataUpdater( object ):
         """ Gathers source metadata, prepares call to item-api, calls it, confirms update, tracks result.
             Called manually for now by one_offs.update_metadata_object.py """
         logger.debug( 'starting updater' )
-        1/0
         params = self.set_basic_params()
         item_dct = self.grab_item_dct( accession_number )
         params['ir'] = self.make_ir_params( item_dct )
         params['mods'] = self.make_mods_params( item_dct )
         ( file_obj, param_string ) = self.prep_content_datastream( item_dct )
         params['content_streams'] = param_string
-        self.logger.debug( 'in metadata.MetadataCreator.create_metadata_only_object(); params, %s' % pprint.pformat(params) )
-        pid = self.perform_post( params, file_obj )  # perform_post() closes the file
-        self.track_progress( accession_number, pid )
+        logger.debug( 'params before post, ```{}```'.format(pprint.pformat(params)) )
+        # pid = self.perform_post( params, file_obj )  # perform_post() closes the file
+        # self.track_progress( accession_number, pid )
         return
 
-    # end class MetadataUpdator
+    def set_basic_params( self ):
+        """ Sets forthright params.
+            Called by update_object_metadata() """
+        params = {
+            'identity': self.API_IDENTITY,
+            'authorization_code': self.API_KEY,
+            'additional_rights': 'BDR_PUBLIC#discover,display+Bell Gallery#discover,display,modify,delete',
+            'rels': json.dumps( {'owning_collection': self.OWNING_COLLECTION} )
+            }
+        logger.debug( 'initial params, ```{}```'.format(pprint.pformat(params)) )
+        return params
+
+    def grab_item_dct( self, accession_number ):
+        """ Loads data for given accession_number.
+            Called by update_object_metadata() """
+        with open( self.SOURCE_FULL_JSON_METADATA_PATH ) as f:
+            metadata_dct = json.loads( f.read() )
+        items = metadata_dct['items']
+        item_dct = items[ accession_number ]
+        logger.debug( 'item_dct, ```{}```'.format(pprint.pformat(item_dct)) )
+        return item_dct
+
+    def make_ir_params( self, item_dct ):
+        """ Returns json of ir params.
+            Called by update_object_metadata() NOTE: ir-collection-id in rels -- NOTE: go xml route."""
+        ir_param = { 'parameters': {'depositor_name': 'Bell Gallery'} }
+        logger.debug( 'ir_param, ```{}```'.format(pprint.pformat(ir_param)) )
+        jsn = json.dumps( ir_param )
+        return jsn
+
+    def make_mods_params( self, item_dct ):
+        """ Returns json if mods params.
+            Called by update_object_metadata() """
+        mb = mods_builder.ModsBuilder()
+        return_type = 'return_string'  # or 'return_object'
+        mods_xml_dct = mb.build_mods_object( item_dct, self.MODS_SCHEMA_PATH, return_type )
+        logger.debug( 'mods_xml_dct, ```{}```'.format(pprint.pformat(mods_xml_dct)) )
+        mods_xml = mods_xml_dct['data']
+        mods_param = { 'xml_data': mods_xml }
+        logger.debug( 'mods_param, ```{}```'.format(pprint.pformat(mods_param)) )
+        jsn = json.dumps( mods_param )
+        return jsn
+
+    def prep_content_datastream( self, item_dct ):
+        """ Returns file-like object containing the item_dct.
+            Called by create_metadata_only_object() """
+        jsn = json.dumps( item_dct )
+        file_obj = filelike.join( [SIO(jsn)] )  # this file_obj works with requests; vanilla StringIO didn't
+        param_string = json.dumps( [{
+            'dsID': 'bell_metadata',
+            'file_name': 'bell_item.json',
+            'mimetype': 'application/javascript'
+            }] )
+        return_tuple = ( file_obj, param_string )
+        logger.debug( 'return_tuple, ```{}```'.format(pprint.pformat(return_tuple)) )
+        return return_tuple
+
+    # end class MetadataUpdater()
 
 
 ## runners ##
