@@ -4,14 +4,18 @@ from __future__ import unicode_literals
 
 """ Builds mods for item-api param. """
 
+import logging
 import envoy, eulxml
 from bdrxml import irMetadata, mods, rels, rights
-from bell_code import bell_logger
+# from bell_code import bell_logger
+from bell_code.utils import logger_setup
 from lxml import etree
 from lxml.etree import XMLSyntaxError
 
 
-logger = bell_logger.setup_logger()
+# logger = bell_logger.setup_logger()
+logger = logging.getLogger( 'bell_logger' )
+logger_setup.check_log_handler()
 
 
 class ModsBuilder( object ):
@@ -161,6 +165,7 @@ class ModsBuilder( object ):
             message = '- in BellModsMaker._validate_mods(); error is, %s' % unicode(repr(e))
             logger.error( message )
             logger.error( 'problematic mods_xml, ```{}```'.format(mods_xml) )
+            logger.error( 'mods_schema_path, ```{}```'.format(mods_schema_path) )
             raise Exception( message )
         return True
 
