@@ -4,13 +4,15 @@ from __future__ import unicode_literals
 
 """ Handles metadata-related tasks. """
 
-import datetime, json, os, pprint, sys, time
+import datetime, json, os, logging, pprint, sys, time
 from StringIO import StringIO as SIO
 import filelike, redis, requests, rq
-from bell_code import bell_logger
-from bell_code.utils import mods_builder
+# from bell_code import bell_logger
+from bell_code.utils import logger_setup, mods_builder
 
 
+logger = logging.getLogger( 'bell_logger' )
+logger_setup.check_log_handler()
 queue_name = unicode( os.environ.get('BELL_QUEUE_NAME') )
 q = rq.Queue( queue_name, connection=redis.Redis() )
 r = redis.StrictRedis( host='localhost', port=6379, db=0 )
@@ -179,7 +181,7 @@ class MetadataCreator( object ):
     # end class MetadataCreator
 
 
-class MetadataUpdator( object ):
+class MetadataUpdater( object ):
     """ Handles metadata-creation related tasks.
         TODO: once this is part of the regular production, refactor relevant functions with MetadataCreator(). """
 
@@ -195,7 +197,7 @@ class MetadataUpdator( object ):
     def update_object_metadata( self, accession_number, pid ):
         """ Gathers source metadata, prepares call to item-api, calls it, confirms update, tracks result.
             Called manually for now by one_offs.update_metadata_object.py """
-        logger.debug( 'starting' )
+        logger.debug( 'starting updater' )
         1/0
         params = self.set_basic_params()
         item_dct = self.grab_item_dct( accession_number )
@@ -213,7 +215,7 @@ class MetadataUpdator( object ):
 
 ## runners ##
 
-logger = bell_logger.setup_logger()
+# logger = bell_logger.setup_logger()
 
 def run_enqueue_create_metadata_only_jobs():
     """ Prepares list of accession numbers and enqueues jobs.
