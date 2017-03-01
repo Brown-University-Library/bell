@@ -205,7 +205,7 @@ class MetadataUpdater( object ):
         ( file_obj, param_string ) = self.prep_content_datastream( item_dct )
         params['content_streams'] = param_string
         logger.debug( 'params before post, ```{}```'.format(pprint.pformat(params)) )
-        # pid = self.perform_post( params, file_obj )  # perform_post() closes the file
+        self.perform_update( params, file_obj )  # perform_update() closes the file
         # self.track_progress( accession_number, pid )
         return
 
@@ -254,7 +254,7 @@ class MetadataUpdater( object ):
 
     def prep_content_datastream( self, item_dct ):
         """ Returns file-like object containing the item_dct.
-            Called by create_metadata_only_object() """
+            Called by update_object_metadata() """
         jsn = json.dumps( item_dct )
         file_obj = filelike.join( [SIO(jsn)] )  # this file_obj works with requests; vanilla StringIO didn't
         param_string = json.dumps( [{
@@ -265,6 +265,30 @@ class MetadataUpdater( object ):
         return_tuple = ( file_obj, param_string )
         logger.debug( 'return_tuple, ```{}```'.format(pprint.pformat(return_tuple)) )
         return return_tuple
+
+    def perform_update( self, params, file_obj ):
+        """ Hits api w/patch?
+            Called by update_object_metadata() """
+        logger.debug( 'api-url, ```{}```'.format(self.API_URL) )
+        files = { 'bell_item.json': file_obj }
+        time.sleep( .5 )
+        try:
+            # r = requests.patch( self.API_URL, data=params, files=files, verify=False )
+            1/0
+            pass
+        except Exception as e:
+            self._handle_update_exception( e, file_obj )
+        file_obj.close()
+        logger.debug( 'r.status_code, `{status_code}`; r.content, ```{content}```'.format(status_code=r.status_code, content=r.content.decode('utf-8', 'replace')) )
+        response_data = json.loads( r.content.decode('utf-8') )
+        pid = response_data['pid']
+        return pid
+
+    def _handle_update_exception( self, e, file_obj ):
+        logger.error( 'exception hitting update-api, ```{}```'.format(unicode(repr(e))) )
+        file_obj.close()
+        raise Exception( 'failure on metadata.MetadataCreator.perform_update()' )
+        return
 
     # end class MetadataUpdater()
 
