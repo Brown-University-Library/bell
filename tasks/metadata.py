@@ -217,6 +217,7 @@ class MetadataUpdater( object ):
             'pid': pid,
             'identity': self.API_IDENTITY,
             'authorization_code': self.API_KEY,
+            'owner_id': self.API_IDENTITY,  # may switch this in future
             'additional_rights': 'BDR_PUBLIC#discover,display+Bell Gallery#discover,display,modify,delete',
             'rels': json.dumps( {'owning_collection': self.OWNING_COLLECTION} )
             }
