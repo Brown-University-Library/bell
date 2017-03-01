@@ -4,7 +4,7 @@ from __future__ import unicode_literals
 
 """ Builds mods for item-api param. """
 
-import logging
+import json, logging, os
 import envoy, eulxml
 from bdrxml import irMetadata, mods, rels, rights
 # from bell_code import bell_logger
@@ -13,7 +13,6 @@ from lxml import etree
 from lxml.etree import XMLSyntaxError
 
 
-# logger = bell_logger.setup_logger()
 logger = logging.getLogger( 'bell_logger' )
 logger_setup.check_log_handler()
 
@@ -157,16 +156,16 @@ class ModsBuilder( object ):
 
     def _validate_mods( self, mods_xml, mods_schema_path ):
         """ Validates mods_xml string. """
-        schema_object = self.__make_schema_object( mods_schema_path )
-        parser = etree.XMLParser( schema=schema_object )
-        try:
-            doc = etree.fromstring( mods_xml, parser )
-        except XMLSyntaxError as e:
-            message = '- in BellModsMaker._validate_mods(); error is, %s' % unicode(repr(e))
-            logger.error( message )
-            logger.error( 'problematic mods_xml, ```{}```'.format(mods_xml) )
-            logger.error( 'mods_schema_path, ```{}```'.format(mods_schema_path) )
-            raise Exception( message )
+        # schema_object = self.__make_schema_object( mods_schema_path )
+        # parser = etree.XMLParser( schema=schema_object )
+        # try:
+        #     doc = etree.fromstring( mods_xml, parser )
+        # except XMLSyntaxError as e:
+        #     message = '- in BellModsMaker._validate_mods(); error is, %s' % unicode(repr(e))
+        #     logger.error( message )
+        #     logger.error( 'problematic mods_xml, ```{}```'.format(mods_xml) )
+        #     logger.error( 'mods_schema_path, ```{}```'.format(mods_schema_path) )
+        #     raise Exception( message )
         return True
 
     def __make_schema_object( self, mods_schema_path ):
@@ -175,6 +174,7 @@ class ModsBuilder( object ):
         with open( mods_schema_path, 'r' ) as f:
             schema_string = f.read()
         schema_ustring = schema_string.decode( 'utf-8', 'replace' )
+        logger.debug( 'schema_string, ```{}```'.format(schema_string) )
         schema_root = etree.XML( schema_ustring.encode( 'utf-8', 'replace') )  # "Unicode strings with encoding declaration are not supported."
         try:
             schema_object = etree.XMLSchema( schema_root )
@@ -182,6 +182,7 @@ class ModsBuilder( object ):
             message = '- in BellModsMaker.__make_schema_object(); mods_schema_path is, %s; schema_ustring is, %s; type(schema_root) is, %s; and error is, %s' % ( mods_schema_path, schema_ustring, unicode(repr(type(schema_root))), unicode(repr(e)) )
             logger.error( message )
             raise Exception( message )
+        logger.debug( 'schema object seems ok' )
         return schema_object
 
     # end class ModsBuilder()
