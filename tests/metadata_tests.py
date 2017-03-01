@@ -63,7 +63,7 @@ class ModsBuilder_Test(unittest.TestCase):
         """ Tests xml agains xsd. """
         mb = mods_builder.ModsBuilder()
         self.assertEquals(
-            'foo', mb._validate_xml( self.finished_xml, self.MODS_SCHEMA_PATH )
+            'foo', mb._validate_mods( self.finished_xml, self.MODS_SCHEMA_PATH )
             )
 
     # end class ModsBuilder_Test
