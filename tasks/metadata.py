@@ -198,7 +198,7 @@ class MetadataUpdater( object ):
         """ Gathers source metadata, prepares call to item-api, calls it, confirms update, tracks result.
             Called manually for now by one_offs.update_metadata_object.py """
         logger.debug( 'starting updater' )
-        params = self.set_basic_params()
+        params = self.set_basic_params( pid )
         item_dct = self.grab_item_dct( accession_number )
         params['ir'] = self.make_ir_params( item_dct )
         params['mods'] = self.make_mods_params( item_dct )
@@ -209,10 +209,11 @@ class MetadataUpdater( object ):
         # self.track_progress( accession_number, pid )
         return
 
-    def set_basic_params( self ):
+    def set_basic_params( self, pid ):
         """ Sets forthright params.
             Called by update_object_metadata() """
         params = {
+            'pid': pid,
             'identity': self.API_IDENTITY,
             'authorization_code': self.API_KEY,
             'additional_rights': 'BDR_PUBLIC#discover,display+Bell Gallery#discover,display,modify,delete',
@@ -273,8 +274,7 @@ class MetadataUpdater( object ):
         files = { 'bell_item.json': file_obj }
         time.sleep( .5 )
         try:
-            # r = requests.patch( self.API_URL, data=params, files=files, verify=False )
-            1/0
+            r = requests.put( self.API_URL, data=params, files=files, verify=False )
             pass
         except Exception as e:
             self._handle_update_exception( e, file_obj )
