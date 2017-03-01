@@ -4,7 +4,7 @@ from __future__ import unicode_literals
 
 """ Configures logger if needed. """
 
-import json, logging, os
+import json, logging, logging.config, os
 
 
 def check_log_handler():
