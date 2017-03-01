@@ -202,8 +202,8 @@ class MetadataUpdater( object ):
         item_dct = self.grab_item_dct( accession_number )
         params['ir'] = self.make_ir_params( item_dct )
         params['mods'] = self.make_mods_params( item_dct )
-        ( file_obj, param_string ) = self.prep_content_datastream( item_dct )
-        params['content_streams'] = param_string
+        # ( file_obj, param_string ) = self.prep_content_datastream( item_dct )
+        # params['content_streams'] = param_string
         logger.debug( 'params before post, ```{}```'.format(pprint.pformat(params)) )
         self.perform_update( params, file_obj )  # perform_update() closes the file
         # self.track_progress( accession_number, pid )
