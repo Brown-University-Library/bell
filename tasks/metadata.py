@@ -269,23 +269,6 @@ class MetadataUpdater( object ):
         logger.debug( 'return_tuple, ```{}```'.format(pprint.pformat(return_tuple)) )
         return return_tuple
 
-    # def perform_update( self, params, file_obj ):
-    #     """ Hits api w/patch?
-    #         Called by update_object_metadata() """
-    #     logger.debug( 'api-url, ```{}```'.format(self.API_URL) )
-    #     files = { 'bell_item.json': file_obj }
-    #     time.sleep( .5 )
-    #     try:
-    #         r = requests.put( self.API_URL, data=params, files=files, verify=False )
-    #         pass
-    #     except Exception as e:
-    #         self._handle_update_exception( e, file_obj )
-    #     file_obj.close()
-    #     logger.debug( 'r.status_code, `{status_code}`; r.content, ```{content}```'.format(status_code=r.status_code, content=r.content.decode('utf-8', 'replace')) )
-    #     response_data = json.loads( r.content.decode('utf-8') )
-    #     pid = response_data['pid']
-    #     return pid
-
     def perform_update( self, params ):
         """ Hits api w/patch?
             Called by update_object_metadata() """
@@ -298,8 +281,8 @@ class MetadataUpdater( object ):
             self._handle_update_exception( e )
         logger.debug( 'r.status_code, `{status_code}`; r.content, ```{content}```'.format(status_code=r.status_code, content=r.content.decode('utf-8', 'replace')) )
         response_data = json.loads( r.content.decode('utf-8') )
-        pid = response_data['pid']
-        return pid
+        result = response_data['response']['status']
+        return result
 
     # def _handle_update_exception( self, e, file_obj ):
     #     logger.error( 'exception hitting update-api, ```{}```'.format(unicode(repr(e))) )
