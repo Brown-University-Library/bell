@@ -232,7 +232,7 @@ class SourceDictMaker( object ):
             if entry['calc_accession_id']:  # handles a null entry
                 accession_number_dict[ entry['calc_accession_id'].strip() ] = entry
             else:
-                print '- entry, `%s`' % entry
+                print( '- entry, `%s`' % entry )
         final_dict = {
           'count': len( accession_number_dict.items() ),
           'datetime': unicode( datetime.datetime.now() ),
@@ -250,10 +250,10 @@ class SourceDictMaker( object ):
 
     def _print_settings( self, FMPRO_XML_PATH, JSON_OUTPUT_PATH ):
         """ Outputs settings derived from environmental variables for development. """
-        print '- settings...'
-        print '- FMPRO_XML_PATH: %s' % FMPRO_XML_PATH
-        print '- JSON_OUTPUT_PATH: %s' % JSON_OUTPUT_PATH
-        print '---'
+        print('- settings...')
+        print('- FMPRO_XML_PATH: %s' % FMPRO_XML_PATH)
+        print('- JSON_OUTPUT_PATH: %s' % JSON_OUTPUT_PATH)
+        print('---')
         return
 
   # end class SourceDictMaker()
