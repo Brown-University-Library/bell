@@ -15,10 +15,9 @@ code related to ingesting bell-gallery images into the bdr.
 
 - get access to image-directory
     - check desktop access
-        - status: done 2016-03-26
-            - instructions to view images from desktop from March 17 worked
+        - status: done 2017-06-26
     - check dev `mount` access
-        - status: done 2016-03-26
+        - status: done 2017-06-26
 
 - convert raw filemaker-pro xml to json
     - foundation/acc_num_to_data.py
