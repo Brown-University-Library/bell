@@ -3,7 +3,7 @@
 from __future__ import unicode_literals
 
 import datetime, json, os, pprint
-import lxml, requests
+import lxml
 from lxml import etree
 
 
