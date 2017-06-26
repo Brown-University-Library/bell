@@ -27,41 +27,41 @@ class SourceDictMaker( object ):
         #Get data
         #Purpose: gets raw filemaker-pro xml unicode-string from gist
         unicode_xml_string = self._get_data( FMPRO_XML_PATH )
-        print '- data grabbed'
+        print( '- data grabbed' )
         #
         #Docify xml string
         #Purpose: converts unicode-string to <type 'lxml.etree._Element'>
         XML_DOC = self._docify_xml( unicode_xml_string)
-        print '- data doc-ified'
+        print( '- data doc-ified' )
         #
         #Make key list
         #Purpose: creates list of keys that will be used for each item-dict
         #Example returned data: [ 'object_id', 'object_title', 'object_date', etc. ]
         dict_keys = self._make_dict_keys( XML_DOC, self.NAMESPACE )
-        print '- list of keys created'
+        print( '- list of keys created' )
         #
         #Make list of doc-items
         #Purpose: creates list of xml-doc items
         xml_doc_rows = self._get_xml_doc_rows( XML_DOC, self.NAMESPACE )
-        print '- xml_doc_rows grabbed'
+        print( '- xml_doc_rows grabbed' )
         #
         #Make initial dict-list
         #Purpose: creates initial list of dict-items. For a given key, the value-type may vary by item.
         #Example returned data: [ {'artist_alias': 'abc', 'artist_birth_country_id': '123', etc.}, {etc.}, ... ]
         result_list = self._process_rows( xml_doc_rows, self.NAMESPACE, dict_keys )
-        print '- initial result_list generated'
+        print( '- initial result_list generated' )
         #
         #Make key-type dict
         #Purpose: creats dict of key-name:key-type; all data examined to see which keys should have list vs unicode-string values.
         #Example returned data: [  {'ARTISTS::calc_nationality': <type 'list'>, 'ARTISTS::use_alias_flag': <type 'unicode'>, etc.} ]
         key_type_dict = self._make_key_type_dict( result_list )
-        print '- key_type_dict created'
+        print( '- key_type_dict created' )
         #
         #Normalize dict-values
         #Purpose: creates final list of dict-items. For a given key, the value-type will _not_ vary by item.
         #Example returned data: [ {'artist_alias': ['abc'], 'artist_birth_country_id': ['123'], etc.}, {etc.}, ... ]
         result_list = self._normalize_value_types( key_type_dict, result_list )
-        print '- final result_list generated'
+        print( '- final result_list generated' )
         #
         #Dictify item-list
         #Purpose: creates accession-number to item-data-dict dictionary, adds count & datestamp
@@ -69,11 +69,11 @@ class SourceDictMaker( object ):
                               #   items:{ accnum_1:{artist:abc, title:def}, accnum_2:{etc.}, etc. }
                               # }
         dictified_data = self._dictify_data( result_list )
-        print '- final data dictified'
+        print( '- final data dictified' )
         #
         #Output json
         self._save_json( dictified_data, JSON_OUTPUT_PATH )
-        print '- json saved; processing done'
+        print( '- json saved; processing done' )
         return
 
     def _get_data( self, FMPRO_XML_PATH ):
