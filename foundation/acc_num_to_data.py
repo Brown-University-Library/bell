@@ -78,10 +78,9 @@ class SourceDictMaker( object ):
 
     def _get_data( self, FMPRO_XML_PATH ):
         """ Reads and returns source filemaker pro xml. """
-        with open( FMPRO_XML_PATH ) as f:
-          utf8_xml = f.read()
-        unicode_data = utf8_xml.decode( 'utf-8' )
-        assert type(unicode_data) == unicode
+        with open( FMPRO_XML_PATH, 'rt' ) as f:
+          unicode_data = f.read()
+        assert type(unicode_data) == str
         return unicode_data
 
     def _docify_xml( self, unicode_xml_string):
@@ -98,7 +97,7 @@ class SourceDictMaker( object ):
         elements = XML_DOC.xpath( xpath, namespaces=(NAMESPACE) )
         dict_keys = []
         for e in elements:
-          dict_keys.append( e.attrib['NAME'].decode('utf-8', 'replace') )
+          dict_keys.append( e.attrib['NAME'] )
         assert type(dict_keys) == list, type(dict_keys)
         return dict_keys
 
@@ -150,41 +149,16 @@ class SourceDictMaker( object ):
         assert type(keys) == list, type(keys)
         return
 
-    # def __handle_single_element( self, data, the_key ):
-    #     ''' Stores either None or the single unicode value to the key.
-    #         Called by _makeDataDict() '''
-    #     return_val = None
-    #     if data[0].text:
-    #         if type( data[0].text ) == unicode:
-    #             return_val = data[0].text
-    #         else:
-    #             return_val = data[0].text.decode( 'utf-8', 'replace' )
-    #     return return_val
-
     def __handle_single_element( self, data, the_key ):
         ''' Stores either None or the single unicode value to the key.
             Called by _makeDataDict() '''
         return_val = None
         if data[0].text:
-            if type( data[0].text ) == unicode:
+            if type( data[0].text ) == str:
                 return_val = data[0].text.strip()
             else:
                 return_val = data[0].text.decode( 'utf-8', 'replace' ).strip()
         return return_val
-
-    # def __handle_multiple_elements( self, data, the_key ):
-    #     ''' Stores list of unicode values to the key.
-    #         Called by _makeDataDict() '''
-    #     d_list = []
-    #     for data_element in data:
-    #         if data_element.text:
-    #             if type( data_element.text ) == unicode:
-    #                 d_list.append( data_element.text )
-    #             else:
-    #                 d_list.append( data_element.text.decode('utf-8', 'replace') )
-    #         else:
-    #             d_list.append( None )
-    #     return d_list
 
     def __handle_multiple_elements( self, data, the_key ):
         ''' Stores list of unicode values to the key.
@@ -192,7 +166,7 @@ class SourceDictMaker( object ):
         d_list = []
         for data_element in data:
             if data_element.text:
-                if type( data_element.text ) == unicode:
+                if type( data_element.text ) == str:
                     d_list.append( data_element.text.strip() )
                 else:
                     d_list.append( data_element.text.decode('utf-8', 'replace').strip() )
@@ -202,12 +176,13 @@ class SourceDictMaker( object ):
 
     def _make_key_type_dict( self, result_list ):
         ''' Determines whether value of given key should be a unicode-string or a list.
-            Called by convert_fmproxml_to_json() '''
+            Called by convert_fmproxml_to_json()
+            TODO: look into this more. '''
         key_type_dict = {}
         for entry_dict in result_list:
           for (key,value) in entry_dict.items():
             if not key in key_type_dict.keys():
-              key_type_dict[key] = unicode
+              key_type_dict[key] = str
               # print 'key_type_dict now...'; pprint.pprint( key_type_dict )
             if type(value) == list and len(value) > 0:
               key_type_dict[key] = list
@@ -220,7 +195,7 @@ class SourceDictMaker( object ):
         for entry_dict in result_list:
           assert len( entry_dict.keys() ) == 36
           for key, val in entry_dict.items():
-            if key_type_dict[key] == list and ( type(val) == unicode or val == None ) :
+            if key_type_dict[key] == list and ( type(val) == str or val == None ) :
               entry_dict[key] = [ val ]
           updated_result_list.append( entry_dict )
         return updated_result_list
@@ -235,17 +210,15 @@ class SourceDictMaker( object ):
                 print( '- entry, `%s`' % entry )
         final_dict = {
           'count': len( accession_number_dict.items() ),
-          'datetime': unicode( datetime.datetime.now() ),
+          'datetime': str( datetime.datetime.now() ),
           'items': accession_number_dict }
         return final_dict
 
     def _save_json( self, result_list, JSON_OUTPUT_PATH ):
         ''' Saves the list of item-dicts to .json file. '''
         json_string = json.dumps( result_list, indent=2, sort_keys=True )
-        assert type(json_string) == str, type(json_string)
-        f = open( JSON_OUTPUT_PATH, 'w+' )
-        f.write( json_string )
-        f.close()
+        with open( JSON_OUTPUT_PATH, 'wt' ) as f:
+            f.write( json_string )
         return
 
     def _print_settings( self, FMPRO_XML_PATH, JSON_OUTPUT_PATH ):
