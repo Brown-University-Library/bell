@@ -9,15 +9,9 @@ code related to ingesting bell-gallery images into the bdr.
     - metadata should be for _all_ the records
     - from having all the metadata, the code can determine what image-&-metadata additions to make, what metadata-only additions to make, and make corrections to existing bdr metadata
     - status:
-        - done 2016-03-28
-        - metadata file from November only contained a few records; J.C. emailed for new file
-        - git it, good added it to repo
+        - done; added to git 2017-06-26
             - `a__all_data_raw.xml`
             - `b__all_data_formatted.xml`
-        - redone 2016-04-18 after J.C. metadata-imagefile matching
-        - redone 2016-04-26 after J.C. metadata-imagefile matching
-        - redone 2016-04-28 after J.C. metadata-imagefile matching
-        - redone 2016-05-19 after J.C. work on newly-found non-matching files
 
 - get access to image-directory
     - check desktop access
