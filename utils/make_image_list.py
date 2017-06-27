@@ -1,24 +1,23 @@
-# -*- coding: utf-8 -*-
-
-from __future__ import unicode_literals
-
 """
 Produces a listing of all images in given folder.
 Saves to json.
 """
 
 import datetime, glob, json, os, pprint
-import logging.handlers
-from bell_code import bell_logger
-
-logger = bell_logger.setup_logger()
+import logging
 
 
-class ImageLister( object ):
+logger = logging.getLogger(__name__)
+logging.basicConfig(level=logging.DEBUG,
+                    format='[%(asctime)s] %(levelname)s [%(module)s-%(funcName)s()::%(lineno)d] %(message)s',
+                    datefmt='%d/%b/%Y %H:%M:%S')
+
+
+class ImageLister:
 
     def __init__( self ):
-        self.DIRECTORY_PATH = unicode( os.environ['BELL_UTILS__IMAGE_DIRECTORY_PATH'] )
-        self.OUTPUT_PATH = unicode( os.environ['BELL_UTILS__IMAGE_DIRECTORY_JSON_PATH'] )
+        self.DIRECTORY_PATH = os.environ['BELL_UTILS__IMAGE_DIRECTORY_PATH']
+        self.OUTPUT_PATH = os.environ['BELL_UTILS__IMAGE_DIRECTORY_JSON_PATH']
 
     def list_images( self ):
         """ Produces a json list of image file-names. """
@@ -33,14 +32,17 @@ class ImageLister( object ):
     def make_file_list( self ):
         """ Returns sorted filelist.
             Called by list_images() """
+        logger.debug('DIRECTORY_PATH: %s' % self.DIRECTORY_PATH)
         initial_list = glob.glob( self.DIRECTORY_PATH + '/*' )  # includes any directories
+        logger.debug( 'initial_list: %s' % initial_list )
         non_dir_list = [value for value in initial_list if os.path.isfile(value) == True]
+        logger.debug( 'non_dir_list: %s' % non_dir_list )
         filenames = []
         for path in non_dir_list:
             parts = path.split( '/' )
             filename = parts[-1]
             filenames.append( filename )
-        filenames.sort( key=unicode.lower )
+        filenames.sort( key=str.lower )
         logger.debug( 'in one_offs.make_image_list.ImageLister.make_file_list(); filenames, `%s`' % pprint.pformat(filenames) )
         return filenames
 
@@ -63,7 +65,7 @@ class ImageLister( object ):
             Called by list_images() """
         directory_info_dict =  {
             'count_filelist': len( non_dir_list ),
-            'date_time': unicode( datetime.datetime.now() ),
+            'date_time': str( datetime.datetime.now() ),
             'directory_path': self.DIRECTORY_PATH,
             'extension_types': extension_types,
             'filelist': non_dir_list, }
