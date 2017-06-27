@@ -390,4 +390,11 @@ _(no indent=true available)_
 
 ---
 
+### TODOs...
+
+- modernize logging
+- re-architecting settings -- perhaps `prep_env_settings.sh`, `dev_env_settings.sh`, `prod_env_settings.sh`
+
+---
+
 ---
