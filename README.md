@@ -29,11 +29,7 @@ code related to ingesting bell-gallery images into the bdr.
     - utils/make_image_list.py
     - end result: `d__bell_images_listing.json`
     - status:
-        - done 2016-04-11
-        - redone 2016-04-18 after J.C. updated metadata and images
-        - redone 2016-04-26 after J.C. updated metadata and images
-        - redone 2016-04-28 after J.C. metadata-imagefile matching
-        - redone 2016-05-19 after J.C. work on newly-found non-matching files
+        - done 2017-06-27
 
 - compare imagefile-filenames to metadata-filenames
     - utils/check_filenames_against_metadata.py
