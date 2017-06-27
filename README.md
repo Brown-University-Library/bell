@@ -39,6 +39,8 @@ code related to ingesting bell-gallery images into the bdr.
 
             ...with the appropriate suffixes from the d__bell_images_listing - 'extension_types'
 
+        - NOTE: code _will_ count as a 'find' an image-filename ending in, say, '.tif', even if, in c__accession_number....json, the filename does _not_ contain that extension.
+
     - end result: `data/d2__images_metadata_comparison.json` -- work through any not-matched files with J.C. before proceeding.
     - work:
         - emailed J.C. list of non-matches 2016-04-11
