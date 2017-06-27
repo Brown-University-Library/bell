@@ -1,35 +1,23 @@
-# -*- coding: utf-8 -*-
-
-from __future__ import unicode_literals
-
 """
 Checks filenames against metadata.
 - checks stripped file-filename against stripped metadata-filename.
 - checks the stripped file-filename with and without its extension against the stripped metadata-filename.
 """
-
 import datetime, glob, json, os, pprint
-import logging.handlers
-from bell_code import bell_logger
+import logging
 
-logger = bell_logger.setup_logger()
+logger = logging.getLogger(__name__)
+logging.basicConfig(level=logging.DEBUG,
+                    format='[%(asctime)s] %(levelname)s [%(module)s-%(funcName)s()::%(lineno)d] %(message)s',
+                    datefmt='%d/%b/%Y %H:%M:%S')
 
 
-class Checker( object ):
+class Checker:
 
     def __init__( self ):
-        self.METADATA_PATH = unicode( os.environ['BELL_UTILS__JSON_METADATA_PATH'] )
-        self.FILENAMES_PATH = unicode( os.environ['BELL_UTILS__JSON_FILENAMES_PATH'] )
-        self.OUTPUT_PATH = unicode( os.environ['BELL_UTILS__JSON_IMAGE_METADATA_COMPARE_PATH'] )
-
-    # def check_filenames( self ):
-    #     """ Checks filenames against metadata.
-    #         Called by __main__ """
-    #     ( metadata_dct, filenames_dct ) = self.loadup()
-    #     filenames_subset = self.filter_filenames( filenames_dct, ['.105', '.jpg', '.tif'] )  # from manual inspection of d__bell_images_listing.json
-    #     metadata_subset_dct = self.filter_metadata( metadata_dct )
-    #     compare_dct = self.compare( filenames_subset, metadata_subset_dct )
-    #     return
+        self.METADATA_PATH = os.environ['BELL_UTILS__JSON_METADATA_PATH']
+        self.FILENAMES_PATH = os.environ['BELL_UTILS__JSON_FILENAMES_PATH']
+        self.OUTPUT_PATH = os.environ['BELL_UTILS__JSON_IMAGE_METADATA_COMPARE_PATH']
 
     def check_filenames( self ):
         """ Checks filenames against metadata.
@@ -93,24 +81,9 @@ class Checker( object ):
             else:
                 count_not_found += 1
                 not_found_lst.append( filename )
-        compare_dct = { 'count_found': count_found, 'count_not_found': count_not_found, 'found_lst': found_lst, 'not_found_lst': not_found_lst, 'count_excluded': count_excluded, 'date_time': unicode(datetime.datetime.now()) }
+        compare_dct = { 'count_found': count_found, 'count_not_found': count_not_found, 'found_lst': found_lst, 'not_found_lst': not_found_lst, 'count_excluded': count_excluded, 'date_time': str(datetime.datetime.now()) }
         logger.debug( 'in utils.check_filenames_against_metadata.Checker.compare(); compare_dct, `%s`' % pprint.pformat(compare_dct) )
         return compare_dct
-
-    # def compare( self, filenames_subset, metadata_subset_dct ):
-    #     """ Runs comparison.
-    #         Called by check_filenames() """
-    #     ( count_found, count_not_found, found_lst, not_found_lst, metadata_filenames ) = ( 0, 0, [], [], metadata_subset_dct.keys() )
-    #     for filename in filenames_subset:
-    #         if (filename in metadata_filenames) or (filename[ : filename.rfind('.') ] in metadata_filenames):
-    #             count_found += 1
-    #             found_lst.append( filename )
-    #         else:
-    #             count_not_found += 1
-    #             not_found_lst.append( filename )
-    #     compare_dct = { 'count_found': count_found, 'count_not_found': count_not_found, 'found_lst': found_lst, 'not_found_lst': not_found_lst }
-    #     logger.debug( 'in utils.check_filenames_against_metadata.Checker.compare(); compare_dct, `%s`' % pprint.pformat(compare_dct) )
-    #     return compare_dct
 
     def output_listing( self, compare_dict ):
         """ Saves json file.
