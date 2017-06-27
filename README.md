@@ -23,7 +23,7 @@ code related to ingesting bell-gallery images into the bdr.
     - foundation/acc_num_to_data.py
     - end result: `c__accession_number_to_data_dict.json`
     - status:
-        - done done 2017-06-26
+        - done 2017-06-26
 
 - run script to get list of files in the images-to-ingest directory
     - utils/make_image_list.py
