@@ -1,13 +1,9 @@
-# -*- coding: utf-8 -*-
-
-from __future__ import unicode_literals
-
 import datetime, json, os, pprint
 import lxml
 from lxml import etree
 
 
-class SourceDictMaker( object ):
+class SourceDictMaker:
     """ Handles creation of an accession_number-to-item-info dict, saved as a json file.
         Purpose: This is one of the essential files that should exist before doing almost any bell processing.
                  It converts the raw filemaker-pro xml into json data for easy processing and viewing.
@@ -238,8 +234,8 @@ if __name__ == '__main__':
     """ Assumes env is activated.
         ( 'ANTD' used as a namespace prefix for this 'acc_num_to_data.py' file. ) """
     # pprint.pprint( os.environ.__dict__ )
-    FMPRO_XML_PATH=os.environ['BELL_ANTD__FMPRO_XML_PATH']
-    JSON_OUTPUT_PATH=os.environ['BELL_ANTD__JSON_OUTPUT_PATH']
+    FMPRO_XML_PATH = os.environ['BELL_ANTD__FMPRO_XML_PATH']
+    JSON_OUTPUT_PATH = os.environ['BELL_ANTD__JSON_OUTPUT_PATH']
     maker = SourceDictMaker()
     maker._print_settings(
         FMPRO_XML_PATH, JSON_OUTPUT_PATH )
