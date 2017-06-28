@@ -76,16 +76,16 @@ class PidFinder:
     def __query_solr( self, i, bdr_collection_pid, solr_root_url ):
         """ Queries solr for iterating start-row.
             Returns results dict.
-            Called by self._run_studio_solr_query() """
+            Called by self._run_studio_solr_query()
+            TODO: see if accession_number_original & identifier should still be in fl param."""
         new_start = i * 500  # for solr start=i parameter (cool, eh?)
         params = {
             'q': 'rel_is_member_of_ssim:"%s"' % bdr_collection_pid,
             'fl': 'pid,accession_number_original,identifier,mods_id_bell_accession_number_ssim,primary_title',
             'rows': 500, 'start': new_start, 'wt': 'json' }
-        r = requests.get( solr_root_url, params=params, verify=False )
+        r = requests.get(solr_root_url, params=params)
         logger.info( 'in __query_solr(); r.url, %s' % r.url )
         data_dict = json.loads( r.content.decode('utf-8', 'replace') )
-        time.sleep( .1 )
         # logger.info( 'in __query_solr(); data_dict, %s' % pprint.pformat(data_dict) )
         return data_dict
 
@@ -97,7 +97,7 @@ class PidFinder:
             try:
                 accession_number = solr_doc['mods_id_bell_accession_number_ssim'][0]  # accession-numbers are in solr as a single-item list
                 solr_accnum_pid_dict[accession_number] = pid
-            except:
+            except KeyError:
                 solr_accnum_pid_dict['errors'].append( pid )
                 print('-- missing accession-number in expected solr `mods_id_bell_accession_number_ssim` field --'); pprint.pprint( solr_doc ); print('--')
         logger.info( 'in _make_solr_accnum_to_pid_dict(); errors, %s' % sorted(solr_accnum_pid_dict['errors']) )
@@ -162,8 +162,6 @@ class PidFinder:
         return
 
     # end class PidFinder()
-
-
 
 
 if __name__ == '__main__':
