@@ -43,134 +43,81 @@ code related to ingesting bell-gallery images into the bdr.
 
     - end result: `data/d2__images_metadata_comparison.json` -- work through any not-matched files with J.C. before proceeding.
     - work:
-        - emailed J.C. list of non-matches 2016-04-11
-        - 558 image-directory filenames were found in the metadata
-        - 69 image-directory filenames were not found in the metadata:
+        - emailed J.C. list of non-matches 2017-06-28
+        - 38 image-directory filenames were found in the metadata
+        - 67 image-directory filenames were not found in the metadata:
 
                 [start]
-                'Abbott PH_1980.1533.tif',
-                'Abbott PH_1982.1689.10.tif',
-                'Abbott PH_1982.1697.1.tif',
-                'Abbott PH_1982.1697.2.tif',
-                'Abbott PH_1982.1697.7.tif',
-                'Abbott PH_1982.1697.9.tif',
-                'Abbott PH_1983.1822.tif',
-                'Agam PR_1986.51.tif',
-                'Albers DC_2011.3.a.tif',
-                'Albers PR_0.160.tif',
-                'Alechinsky P_1996.127.tif',
-                'Andre PR_2012.3.43.tif',
-                'Anonymous PH_1994.13.tif',
-                'Anonymous PR_1981.1654.tif',
-                'Anonymous PR_2001.8.11.tif',
-                'Bergman PR_1986.59.tif',
-                'Bosworth PH_2007.46.1.A,B.tif',
-                'Bosworth PH_2007.46.2.A,B.tif',
-                'Bosworth PH_2007.46.3.A-C.tif',
-                'Bosworth PH_2007.46.4.A-C.tif',
-                'Bosworth PH_2007.46.5.A-C.tif',
-                'Bosworth PH_2007.46.6.A-C.tif',
-                'Bosworth PH_2007.46.7.A-C.tif',
-                'Bosworth PH_2007.46.8.A-C.tif',
-                'Cohen PR_1980.1681.B.tif',
-                'Coughlin PR_1986.56.tif',
-                'Delaney PR_1986.47.tif',
-                'Delaune PR_2001.8.8.tif',
-                'Evans PH_2014.10.tif',
-                'Evans PH_2014.11.tif',
-                'Gibson PH_1987.7.7.tif',
-                'Gibson PH_2011.4.2 copy.tif',
-                'Gibson PH_2011.4.3 copy.tif',
-                'Gibson PH_2012.1.1 copy.tif',
-                'Gibson PH_2012.1.2 copy.tif',
-                'Goodyear PR_2010.1.12 copy.tif',
-                'Goodyear PR_2010.1.12.tif',
-                'Goya PR_00.387 copy.tif',
-                'Goya PR_00.389 copy.tif',
-                'Goya PR_00.390 copy.tif',
-                'Hepworth PR_1981.1679.I.tif',
-                'Hepworth PR_1981.1679.J.tif',
-                'Hockey PR_1980.1323.tif',
-                'Jones PR_1981.1675.B.tif',
-                'Kaneda PR_2012.3.34.tif',
-                'Lemieux PR_2007.25.tif',
-                'Luster PH_2005.3.tif',
-                'Luster PH_2005.4.tif',
-                'Luster PH_2005.5.tif',
-                'Luster PH_2005.6.tif',
-                'Manet PR_0.606 copy.tif',
-                'Mense PR_0.742 copy.tif',
-                'Miro PR_0.426.tif',
-                'Miro PR_1981.9.A.tif',
-                'Newman PR_2011.5.tif',
-                'Olitski SC_1990.39.A-E.tif',
-                'Paolozzi PR_1987.21.tif',
-                'Picasso PR_0.381.tif',
-                'Picasso PR_0.382.tif',
-                'Rugendas D_2001.8.3.tif',
-                'Starn PH_2014.14.A-D.tif',
-                'Starn PH_2014.15.A,B.tif',
-                'Sultan PH_2000.5.11.tif',
-                'Ulreich PR_1986.25.tif',
-                'Ulreich PR_1986.26.tif',
-                'Ulreich PR_1986.27.tif',
-                'Ulreich PR_1986.28.tif',
-                'Van Ostade PR_1946.117.tif',
-                'Zorn PR_1942.506.tif'
-                [end]
-        - per J.C.'s instructions, removed 2 unneeded files from image-folder:
-            - Delaune PR_2001.8.8.tif
-            - Goodyear PR_2010.1.12 copy.tif
-        - ...and added 3 new files to the image-folder:
-            - Abbott PH_1982.1698.10.tif
-            - Cohen PR_1981.1681.B.tif
-            - Goya PR_1942.506.tif
-        - 2016-04-18, emailed J.C. new list of non-matches
-
-                [start]
-                'Abbott PH_1982.1689.10.tif',
-                'Abbott PH_1982.1697.7.tif',
-                'Andre PR_2012.3.43.tif',
-                'Anonymous PH_1994.13.tif',
-                'Baskin PR_2005.2 copy.tif',
-                'Cohen PR_1980.1681.B.tif',
-                'Gibson PH_1987.7.7.tif',
-                'Gibson PH_2011.4.2.tif',
-                'Gibson PH_2011.4.3.tif',
-                'Gibson PH_2012.1.1.tif',
-                'Gibson PH_2012.1.2.tif',
-                'Goya PR_00.387.tif',
-                'Goya PR_00.389 copy.tif',
-                'Goya PR_00.390.tif',
-                'Jones PR_1981.1675.B.tif',
-                'Manet PR_0.606.tif',
-                'Mense PR_0.742.tif',
-                'Newman PR_2011.5.tif',
-                'Olitski SC_1990.39.A-E.tif',
-                'Starn PH_2014.14.A-D.tif',
-                'Starn PH_2014.15.A,B.tif',
-                'Ulreich PR_1986.25.tif',
-                'Ulreich PR_1986.26.tif',
-                'Ulreich PR_1986.27.tif',
-                'Ulreich PR_1986.28.tif',
-                'Zorn PR_1942.506.tif'
+                "Bing PH_2015.11.1.tif",
+                "Bing PH_2015.11.2.tif",
+                "Bing PH_2015.11.4.tif",
+                "Bing PH_2015.11.5.tif",
+                "Bosworth PH_2007.46.A,B.tif",
+                "Freed PH_2015.11.10.tif",
+                "Freed PH_2015.11.11.tif",
+                "Freed PH_2015.11.12.tif",
+                "Freed PH_2015.11.13.tif",
+                "Freed PH_2015.11.14.tif",
+                "Freed PH_2015.11.15.tif",
+                "Freed PH_2015.11.16.tif",
+                "Freed PH_2015.11.17.tif",
+                "Freed PH_2015.11.18.tif",
+                "Freed PH_2015.11.19.tif",
+                "Freed PH_2015.11.20.tif",
+                "Freed PH_2015.11.21.tif",
+                "Freed PH_2015.11.22.tif",
+                "Freed PH_2015.11.23.tif",
+                "Freed PH_2015.11.24.tif",
+                "Freed PH_2015.11.25.tif",
+                "Freed PH_2015.11.26.tif",
+                "Freed PH_2015.11.6.tif",
+                "Freed PH_2015.11.7.tif",
+                "Freed PH_2015.11.8.tif",
+                "Freed PH_2015.11.9.tif",
+                "Leibling PH_2001.1.10.tif",
+                "Leibling PH_2001.1.2.tif",
+                "Leibling PH_2001.1.3.tif",
+                "Leibling PH_2001.1.4.tif",
+                "Leibling PH_2001.1.5.tif",
+                "Leibling PH_2001.1.6.tif",
+                "Leibling PH_2001.1.7.tif",
+                "Leibling PH_2001.1.8.tif",
+                "Leibling PH_2001.1.9.tif",
+                "Leilbing PH_2001.1.1.tif",
+                "Meiselas PH_2006.12.1.tif",
+                "Meiselas PH_2006.12.10.tif",
+                "Meiselas PH_2006.12.11.tif",
+                "Meiselas PH_2006.12.12.tif",
+                "Meiselas PH_2006.12.13.tif",
+                "Meiselas PH_2006.12.14.tif",
+                "Meiselas PH_2006.12.15.tif",
+                "Meiselas PH_2006.12.16.tif",
+                "Meiselas PH_2006.12.17.tif",
+                "Meiselas PH_2006.12.18.tif",
+                "Meiselas PH_2006.12.19.tif",
+                "Meiselas PH_2006.12.2.tif",
+                "Meiselas PH_2006.12.20.tif",
+                "Meiselas PH_2006.12.3.tif",
+                "Meiselas PH_2006.12.4.tif",
+                "Meiselas PH_2006.12.5.tif",
+                "Meiselas PH_2006.12.6.tif",
+                "Meiselas PH_2006.12.7.tif",
+                "Meiselas PH_2006.12.8.tif",
+                "Meiselas PH_2006.12.9.tif",
+                "Meyerowitz PH_2015.11.49.tif",
+                "Meyerowitz PH_2015.11.50.tif",
+                "Meyerowitz PH_2015.11.51.tif",
+                "Meyerowitz PH_2015.11.52.tif",
+                "Meyerowitz PH_2015.11.53.tif",
+                "Meyerowitz PH_2015.11.54.tif",
+                "Meyerowitz PH_2015.11.55.tif",
+                "Meyerowitz PH_2015.11.56.tif",
+                "Meyerowitz PH_2015.11.57.tif",
+                "Newman PH_2013.7.3.tif",
+                "Newman PH_2013.7.4.tif"
                 [end]
 
-        - 2016-04-26, emailed J.C. new list of non-matches, and in email listed the specific differences
-
-                [list start]
-                'Gibson PH_1987.7.7.tif'
-                'Starn PH_2014.15.A,B.tif'
-                'Ulreich PR_1986.25.tif'
-                'Ulreich PR_1986.26.tif'
-                'Ulreich PR_1986.27.tif'
-                'Ulreich PR_1986.28.tif'
-                [list end]
-
-        - 2016-04-28, reran file; all good; emailed J.C.
-        - 2016-05-19, reran file based on newly-found files, all good.
-
-    - status: done 2016-05-19.
+    - status: in-process.
 
 - match metadata accession-numbers to pid #1
     - foundation/acc_num_to_pid.py
