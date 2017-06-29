@@ -31,6 +31,7 @@ code related to ingesting bell-gallery images into the bdr.
     - end result: `d__bell_images_listing.json`
     - status:
         - done 2017-06-27
+        - redone 2017-06-29 with J.C.'s corrections
 
 - compare imagefile-filenames to metadata-filenames
     - utils/check_filenames_against_metadata.py
