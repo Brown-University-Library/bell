@@ -12,8 +12,6 @@ logging.basicConfig(level=logging.DEBUG,
                     format='[%(asctime)s] %(levelname)s [%(module)s-%(funcName)s()::%(lineno)d] %(message)s',
                     datefmt='%d/%b/%Y %H:%M:%S',
                     filename=LOG_FILENAME)
-queue_name = os.environ.get('BELL_QUEUE_NAME')
-q = rq.Queue( queue_name, connection=redis.Redis() )
 
 
 class MetadataOnlyLister( object ):
@@ -60,15 +58,18 @@ def run_metadata_only_lister():
 class MetadataCreator( object ):
     """ Handles metadata-creation related tasks. """
 
-    def __init__( self, logger ):
+    def __init__( self, env, logger ):
         self.logger = logger
         self.SOURCE_FULL_JSON_METADATA_PATH = os.environ['BELL_TASKS_META__FULL_JSON_METADATA_PATH']
-        self.API_URL = os.environ['BELL_TASKS_META__AUTH_API_URL']
-        self.API_IDENTITY = os.environ['BELL_TASKS_META__AUTH_API_IDENTITY']
-        self.API_KEY = os.environ['BELL_TASKS_META__AUTH_API_KEY']
         self.MODS_SCHEMA_PATH = os.environ['BELL_TASKS_META__MODS_XSD_PATH']
-        self.OWNING_COLLECTION = os.environ['BELL_TASKS_META__OWNING_COLLECTION_PID']
         self.TRACKER_PATH = os.environ['BELL_TASKS_META__TRACKER_JSON_PATH']
+        if env == 'prod':
+            pass
+        else:
+            self.API_URL = os.environ['BELL_TASKS_META__DEV_AUTH_API_URL']
+            self.API_IDENTITY = os.environ['BELL_TASKS_META__DEV_AUTH_API_IDENTITY']
+            self.API_KEY = os.environ['BELL_TASKS_META__DEV_AUTH_API_KEY']
+            self.OWNING_COLLECTION = os.environ['BELL_TASKS_META__DEV_OWNING_COLLECTION_PID']
 
     def create_metadata_only_object( self, accession_number ):
         """ Gathers source metadata, prepares call to item-api, calls it, and confirms creation.
@@ -292,10 +293,12 @@ class MetadataUpdater( object ):
 
 ## runners ##
 
-def run_enqueue_create_metadata_only_jobs():
+def run_enqueue_create_metadata_only_jobs(env='dev'):
     """ Prepares list of accession numbers and enqueues jobs.
         Called manually. """
     METADATA_ONLY_JSON = os.environ['BELL_TASKS_META__METADATA_ONLY_ACCNUMS_JSON_PATH']
+    queue_name = os.environ['BELL_QUEUE_NAME']
+    q = rq.Queue( queue_name, connection=redis.Redis() )
     with open( METADATA_ONLY_JSON ) as f:
         dct = json.loads( f.read() )
     accession_numbers = dct['accession_numbers']
@@ -306,14 +309,15 @@ def run_enqueue_create_metadata_only_jobs():
             break
         q.enqueue_call(
           func='bell_code.tasks.metadata.run_create_metadata_only_object',
-          kwargs={ 'accession_number': accession_number },
+          kwargs={ 'env': env, 'accession_number': accession_number },
           timeout=600 )
     print('done')
     return
 
-def run_create_metadata_only_object( accession_number ):
+def run_create_metadata_only_object( env, accession_number ):
     """ Runner for create_metadata_only_object()
         Called by job enqueued by run_enqueue_create_metadata_only_jobs() """
-    m = MetadataCreator( logger )
+    m = MetadataCreator( env, logger )
     m.create_metadata_only_object( accession_number )
     return
+
