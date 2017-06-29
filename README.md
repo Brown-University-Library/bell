@@ -124,10 +124,7 @@ code related to ingesting bell-gallery images into the bdr.
     - end result: `e__accession_number_to_pid_dict.json` file containing a dict of accession-numbers-to-pids.
     - accession-numbers without pids imply creation of a new metadata-only object (which may gain an associated image later)
     - accession-numbers with pids imply checking to see if fedora metadata needs to be updated
-    - status: done 2016-04-29; shows c. 160 accession-numbers without pids
-    - status: done again 2016-05-09 after metadata-only ingest; shows, appropriately, no accession-numbers without pids.
-    - status: done again 2016-05-19 after new-files found; shows 4 accession numbers without pids.
-    - status: done again 2016-05-19 after metadata-only ingest; shows, appropriately, no accession-numbers without pids.
+    - status: done 2017-06-28; shows 97 accession-numbers without pids
 
 - make metadata-only list
     - tasks/metadata.run_metadata_only_lister()
