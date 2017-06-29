@@ -1,29 +1,25 @@
-# -*- coding: utf-8 -*-
-
-from __future__ import unicode_literals
-
 """ Handles metadata-related tasks. """
-
 import datetime, json, os, logging, pprint, sys, time
-from StringIO import StringIO as SIO
-import filelike, redis, requests, rq
-# from bell_code import bell_logger
-from bell_code.utils import logger_setup, mods_builder
+#from StringIO import StringIO as SIO
+#import filelike, redis, requests, rq
+import redis, requests, rq
+#from bell_code.utils import mods_builder
 
 
-logger = logging.getLogger( 'bell_logger' )
-logger_setup.check_log_handler()
-queue_name = unicode( os.environ.get('BELL_QUEUE_NAME') )
+logger = logging.getLogger(__name__)
+logging.basicConfig(level=logging.DEBUG,
+                    format='[%(asctime)s] %(levelname)s [%(module)s-%(funcName)s()::%(lineno)d] %(message)s',
+                    datefmt='%d/%b/%Y %H:%M:%S')
+queue_name = os.environ.get('BELL_QUEUE_NAME')
 q = rq.Queue( queue_name, connection=redis.Redis() )
-r = redis.StrictRedis( host='localhost', port=6379, db=0 )
 
 
 class MetadataOnlyLister( object ):
     """ Creates json file of accession numbers for which new metatdata-only objects will be created. """
 
     def __init__( self ):
-        self.PID_JSON_PATH = unicode( os.environ['BELL_TASKS_META__PID_DICT_JSON_PATH'] )
-        self.OUTPUT_PATH = unicode( os.environ['BELL_TASKS_META__METADATA_ONLY_ACCNUMS_JSON_PATH'] )
+        self.PID_JSON_PATH = os.environ['BELL_TASKS_META__PID_DICT_JSON_PATH']
+        self.OUTPUT_PATH = os.environ['BELL_TASKS_META__METADATA_ONLY_ACCNUMS_JSON_PATH']
 
     def list_metadata_only_accession_numbers( self ):
         """ Saves a json list of accession_numbers.
@@ -37,7 +33,7 @@ class MetadataOnlyLister( object ):
             if pid == None and not accession_number == "null":
                 lst_to_queue.append( accession_number.strip() )
         data = {
-            'datetime': unicode( datetime.datetime.now() ), 'count': len( lst_to_queue ), 'accession_numbers': lst_to_queue }
+            'datetime': str( datetime.datetime.now() ), 'count': len( lst_to_queue ), 'accession_numbers': lst_to_queue }
         self.output_listing( data )
 
     def output_listing( self, data ):
@@ -64,13 +60,13 @@ class MetadataCreator( object ):
 
     def __init__( self, logger ):
         self.logger = logger
-        self.SOURCE_FULL_JSON_METADATA_PATH = unicode( os.environ['BELL_TASKS_META__FULL_JSON_METADATA_PATH'] )
-        self.API_URL = unicode( os.environ['BELL_TASKS_META__AUTH_API_URL'] )
-        self.API_IDENTITY = unicode( os.environ['BELL_TASKS_META__AUTH_API_IDENTITY'] )
-        self.API_KEY = unicode( os.environ['BELL_TASKS_META__AUTH_API_KEY'] )
-        self.MODS_SCHEMA_PATH = unicode( os.environ['BELL_TASKS_META__MODS_XSD_PATH'] )
-        self.OWNING_COLLECTION = unicode( os.environ['BELL_TASKS_META__OWNING_COLLECTION_PID'] )
-        self.TRACKER_PATH = unicode( os.environ['BELL_TASKS_META__TRACKER_JSON_PATH'] )
+        self.SOURCE_FULL_JSON_METADATA_PATH = os.environ['BELL_TASKS_META__FULL_JSON_METADATA_PATH']
+        self.API_URL = os.environ['BELL_TASKS_META__AUTH_API_URL']
+        self.API_IDENTITY = os.environ['BELL_TASKS_META__AUTH_API_IDENTITY']
+        self.API_KEY = os.environ['BELL_TASKS_META__AUTH_API_KEY']
+        self.MODS_SCHEMA_PATH = os.environ['BELL_TASKS_META__MODS_XSD_PATH']
+        self.OWNING_COLLECTION = os.environ['BELL_TASKS_META__OWNING_COLLECTION_PID']
+        self.TRACKER_PATH = os.environ['BELL_TASKS_META__TRACKER_JSON_PATH']
 
     def create_metadata_only_object( self, accession_number ):
         """ Gathers source metadata, prepares call to item-api, calls it, and confirms creation.
@@ -159,7 +155,7 @@ class MetadataCreator( object ):
         return pid
 
     def _handle_post_exception( self, e, file_obj ):
-        self.logger.error( 'in metadata.MetadataCreator.perform_post(); exception, ```{}```'.format(unicode(repr(e))) )
+        self.logger.error( 'in metadata.MetadataCreator.perform_post(); exception, ```{}```'.format(repr(e)) )
         file_obj.close()
         raise Exception( 'failure on metadata.MetadataCreator.perform_post()' )
         return
@@ -186,13 +182,13 @@ class MetadataUpdater( object ):
         TODO: once this is part of the regular production, refactor relevant functions with MetadataCreator(). """
 
     def __init__( self ):
-        self.SOURCE_FULL_JSON_METADATA_PATH = unicode( os.environ['BELL_TASKS_META__FULL_JSON_METADATA_PATH'] )
-        self.API_URL = unicode( os.environ['BELL_TASKS_META__AUTH_API_URL'] )
-        self.API_IDENTITY = unicode( os.environ['BELL_TASKS_META__AUTH_API_IDENTITY'] )
-        self.API_KEY = unicode( os.environ['BELL_TASKS_META__AUTH_API_KEY'] )
-        self.MODS_SCHEMA_PATH = unicode( os.environ['BELL_TASKS_META__MODS_XSD_PATH'] )
-        self.OWNING_COLLECTION = unicode( os.environ['BELL_TASKS_META__OWNING_COLLECTION_PID'] )
-        self.TRACKER_PATH = unicode( os.environ['BELL_TASKS_META__TRACKER_JSON_PATH'] )
+        self.SOURCE_FULL_JSON_METADATA_PATH = os.environ['BELL_TASKS_META__FULL_JSON_METADATA_PATH']
+        self.API_URL = os.environ['BELL_TASKS_META__AUTH_API_URL']
+        self.API_IDENTITY = os.environ['BELL_TASKS_META__AUTH_API_IDENTITY']
+        self.API_KEY = os.environ['BELL_TASKS_META__AUTH_API_KEY']
+        self.MODS_SCHEMA_PATH = os.environ['BELL_TASKS_META__MODS_XSD_PATH']
+        self.OWNING_COLLECTION = os.environ['BELL_TASKS_META__OWNING_COLLECTION_PID']
+        self.TRACKER_PATH = os.environ['BELL_TASKS_META__TRACKER_JSON_PATH']
 
     def update_object_metadata( self, accession_number, pid ):
         """ Gathers source metadata, prepares call to item-api, calls it, confirms update, tracks result.
@@ -284,14 +280,8 @@ class MetadataUpdater( object ):
         result = response_data['response']['status']
         return result
 
-    # def _handle_update_exception( self, e, file_obj ):
-    #     logger.error( 'exception hitting update-api, ```{}```'.format(unicode(repr(e))) )
-    #     file_obj.close()
-    #     raise Exception( 'failure on metadata.MetadataCreator.perform_update()' )
-    #     return
-
     def _handle_update_exception( self, e ):
-        logger.error( 'exception hitting update-api, ```{}```'.format(unicode(repr(e))) )
+        logger.error( 'exception hitting update-api, ```{}```'.format(repr(e)) )
         raise Exception( 'failure on metadata.MetadataCreator.perform_update()' )
         return
 
@@ -300,12 +290,10 @@ class MetadataUpdater( object ):
 
 ## runners ##
 
-# logger = bell_logger.setup_logger()
-
 def run_enqueue_create_metadata_only_jobs():
     """ Prepares list of accession numbers and enqueues jobs.
         Called manually. """
-    METADATA_ONLY_JSON = unicode( os.environ['BELL_TASKS_META__METADATA_ONLY_ACCNUMS_JSON_PATH'] )
+    METADATA_ONLY_JSON = os.environ['BELL_TASKS_META__METADATA_ONLY_ACCNUMS_JSON_PATH']
     with open( METADATA_ONLY_JSON ) as f:
         dct = json.loads( f.read() )
     accession_numbers = dct['accession_numbers']
