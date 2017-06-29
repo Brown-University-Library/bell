@@ -1,8 +1,8 @@
 {
   "count_excluded": 0,
-  "count_found": 104,
-  "count_not_found": 1,
-  "date_time": "2017-06-29 15:11:20.904878",
+  "count_found": 105,
+  "count_not_found": 0,
+  "date_time": "2017-06-29 15:17:35.759591",
   "found_lst": [
     "Bing PH_2015.11.1.tif",
     "Bing PH_2015.11.2.tif",
@@ -31,6 +31,7 @@
     "Freed PH_2015.11.7.tif",
     "Freed PH_2015.11.8.tif",
     "Freed PH_2015.11.9.tif",
+    "Leibling PH_2001.1.1.tif",
     "Leibling PH_2001.1.10.tif",
     "Leibling PH_2001.1.2.tif",
     "Leibling PH_2001.1.3.tif",
@@ -109,7 +110,5 @@
     "Newman PH_2013.17.9.tif",
     "Sadeler PR_0.452.jpg"
   ],
-  "not_found_lst": [
-    "Leilbing PH_2001.1.1.tif"
-  ]
+  "not_found_lst": []
 }
