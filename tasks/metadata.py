@@ -6,10 +6,12 @@ import redis, requests, rq
 #from bell_code.utils import mods_builder
 
 
+LOG_FILENAME = os.environ['BELL_LOG_FILENAME']
 logger = logging.getLogger(__name__)
 logging.basicConfig(level=logging.DEBUG,
                     format='[%(asctime)s] %(levelname)s [%(module)s-%(funcName)s()::%(lineno)d] %(message)s',
-                    datefmt='%d/%b/%Y %H:%M:%S')
+                    datefmt='%d/%b/%Y %H:%M:%S',
+                    filename=LOG_FILENAME)
 queue_name = os.environ.get('BELL_QUEUE_NAME')
 q = rq.Queue( queue_name, connection=redis.Redis() )
 
@@ -298,14 +300,15 @@ def run_enqueue_create_metadata_only_jobs():
         dct = json.loads( f.read() )
     accession_numbers = dct['accession_numbers']
     for (i, accession_number) in enumerate( accession_numbers ):
-        print 'i is, `%s`' % i
+        print('i is, `%s`' % i)
+        #TODO: check this break
         if i+1 > 500:
             break
         q.enqueue_call(
           func='bell_code.tasks.metadata.run_create_metadata_only_object',
           kwargs={ 'accession_number': accession_number },
           timeout=600 )
-    print 'done'
+    print('done')
     return
 
 def run_create_metadata_only_object( accession_number ):
