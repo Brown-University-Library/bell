@@ -134,8 +134,7 @@ code related to ingesting bell-gallery images into the bdr.
             >>> metadata.run_metadata_only_lister()
 
     - end result: `f__metadata_only_accession_numbers.json`
-    - status: done 2016-04-29
-              redone 2016-05-19 after new-files found
+    - status: done 2017-06-29
 
 - create new metadata objects
     - tasks/metadata.run_enqueue_create_metadata_only_jobs()
