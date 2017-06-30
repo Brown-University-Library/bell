@@ -154,8 +154,10 @@ class MetadataCreator( object ):
         file_obj.close()
         self.logger.debug( 'in metadata.MetadataCreator.perform_post(); r.status_code, `{status_code}`; r.content, ```{content}```'.format(status_code=r.status_code, content=r.content.decode('utf-8', 'replace')) )
         response_data = json.loads( r.content.decode('utf-8') )
-        pid = response_data['pid']
-        return pid
+        # pid = response_data['pid']
+        # return pid
+        result = response_data['response']['status']
+        return result
 
     def _handle_post_exception( self, e, file_obj ):
         self.logger.error( 'in metadata.MetadataCreator.perform_post(); exception, ```{}```'.format(repr(e)) )
