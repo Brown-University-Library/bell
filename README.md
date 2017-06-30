@@ -85,6 +85,7 @@ code related to ingesting bell-gallery images into the bdr.
 
     - after creates, confirm a re-run of `foundation/acc_num_to_pid.py` results in zero non-pid matches.
         - note that this re-run will update, as it should, `e__accession_number_to_pid_dict.json` -- the dict of accession-numbers-to-pids.
+    - status: in-process
     - status: done 2016-05-06
     - reran status of `foundation/acc_num_to_pid.py`: done 2016-05-09 -- now, appropriately, shows no accession-numbers without bdr pids.
     - done again 2016-05-19 after newly-found additions
@@ -274,6 +275,8 @@ _(no indent=true available)_
 
 - modernize logging
 - re-architecting settings -- perhaps `prep_env_settings.sh`, `dev_env_settings.sh`, `prod_env_settings.sh`
+- add to init.d rq-worker start-stop-status script
+- consider validating mods before sending it to api (tho api does validate it )
 
 ---
 
