@@ -63,6 +63,7 @@ class MetadataCreator( object ):
         self.SOURCE_FULL_JSON_METADATA_PATH = os.environ['BELL_TASKS_META__FULL_JSON_METADATA_PATH']
         self.MODS_SCHEMA_PATH = os.environ['BELL_TASKS_META__MODS_XSD_PATH']
         self.TRACKER_PATH = os.environ['BELL_TASKS_META__TRACKER_JSON_PATH']
+        self.COLLECTION_ID = os.environ['BELL_TASKS_META__COLLECTION_ID']
         if env == 'prod':
             pass
         else:
@@ -112,7 +113,7 @@ class MetadataCreator( object ):
     def make_ir_params( self, item_dct ):
         """ Returns json of ir params.
             Called by create_metadata_only_object() NOTE: ir-collection-id in rels -- NOTE: go xml route."""
-        ir_param = { 'parameters': {'depositor_name': 'Bell Gallery'} }
+        ir_param = { 'parameters': {'depositor_name': 'Bell Gallery', 'ir_collection_id': self.COLLECTION_ID} }
         self.logger.debug( 'in metadata.MetadataCreator.make_ir_params(); ir_param, %s' % pprint.pformat(ir_param) )
         jsn = json.dumps( ir_param )
         return jsn
@@ -306,11 +307,11 @@ def run_enqueue_create_metadata_only_jobs(env='dev'):
     accession_numbers = dct['accession_numbers']
     for (i, accession_number) in enumerate( accession_numbers ):
         print('i is, `%s`' % i)
-        #TODO: check this break
-        if i+1 > 500:
+        #for testing, just create 1 or 2 jobs
+        if i+1 > 2:
             break
         q.enqueue_call(
-          func='bell_code.tasks.metadata.run_create_metadata_only_object',
+          func='tasks.metadata.run_create_metadata_only_object',
           kwargs={ 'env': env, 'accession_number': accession_number },
           timeout=600 )
     print('done')
