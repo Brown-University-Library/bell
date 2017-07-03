@@ -309,8 +309,8 @@ def run_enqueue_create_metadata_only_jobs(env='dev'):
     for (i, accession_number) in enumerate( accession_numbers ):
         print('i is, `%s`' % i)
         #for testing, just create 1 or 2 jobs
-        if i+1 > 2:
-            break
+        #if i+1 > 2:
+        #    break
         q.enqueue_call(
           func='tasks.metadata.run_create_metadata_only_object',
           kwargs={ 'env': env, 'accession_number': accession_number },

@@ -1,7 +1,4 @@
 # -*- coding: utf-8 -*-
-
-from __future__ import unicode_literals
-
 """ Outputs failed-queue jobs for given queue. """
 
 import os, pprint

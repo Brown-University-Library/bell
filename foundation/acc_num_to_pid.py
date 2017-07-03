@@ -16,14 +16,17 @@ class PidFinder:
                  needs to create or update bdr data.
         if __name__... at bottom indicates how to run this script. """
 
-    def __init__(self):
-        pass
+    def __init__(self, env='dev'):
+        self.bell_dict_json_path = os.environ['BELL_ANTP__BELL_DICT_JSON_PATH']  # file of dict of bell-accession-number to metadata
+        self.output_json_path = os.environ['BELL_ANTP__OUTPUT_JSON_PATH']
+        if env == 'prod':
+            self.bdr_collection_pid = os.environ['BELL_ANTP__PROD_COLLECTION_PID']
+            self.solr_root_url = os.environ['BELL_ANTP__PROD_SOLR_ROOT']
+        else:
+            self.bdr_collection_pid = os.environ['BELL_ANTP__DEV_COLLECTION_PID']
+            self.solr_root_url = os.environ['BELL_ANTP__DEV_SOLR_ROOT']
 
-    def make_dict( self,
-        bdr_collection_pid,
-        bell_dict_json_path,
-        solr_root_url,
-        output_json_path ):
+    def create_acc_num_to_pid_map( self ):
         """ CONTROLLER.
             - Calls repo solr (500 rows at a time) to get all bell items
             - Creates an accession-number-to-pid dict from above
@@ -33,7 +36,7 @@ class PidFinder:
         #Run studio-solr query
         #Purpose: get raw child-pids data from _solr_, along with accession-number data
         #Example returned data: [ {pid:bdr123, identifier:[acc_num_a,other_num_b], mods_id_bell_accession_number_ssim:None_or_acc_num_a}, etc. ]
-        solr_query_docs = self._run_studio_solr_query( bdr_collection_pid, solr_root_url )
+        solr_query_docs = self._run_studio_solr_query( self.bdr_collection_pid, self.solr_root_url )
         print('- _run_studio_solr_query() done')
         #
         #Parse solr-results to accession_number:pid dict
@@ -45,7 +48,7 @@ class PidFinder:
         #Get _bell_ accession numbers
         #Purpose: create list of bell accession numbers from _bell_ data
         #Example returned data: [ 'acc_num_1', 'acc_num_2', etc. ]
-        bell_source_accession_numbers = self._load_bell_accession_numbers( bell_dict_json_path )
+        bell_source_accession_numbers = self._load_bell_accession_numbers( self.bell_dict_json_path )
         print('- _load_bell_accession_numbers() done')
         #
         #Make final accession-number dict
@@ -55,7 +58,7 @@ class PidFinder:
         print('- _make_final_accession_number_dict() done')
         #
         #Output json
-        self._output_json( final_accession_dict, output_json_path )
+        self._output_json( final_accession_dict, self.output_json_path )
         print('- _output_json() done; all processing done')
         return
 
@@ -152,27 +155,27 @@ class PidFinder:
                 count_pids += 1
         return { 'count_items': count_items, 'count_pids': count_pids, 'count_null': count_null }
 
-    def _print_settings( self, bdr_collection_pid, bell_dict_json_path, solr_root_url, output_json_path ):
+    def _print_settings( self ):
         """ Prints variable values that are also sent to main controller function. """
-        print('- bdr_collection_pid: %s' % bdr_collection_pid)
-        print('- bell_dict_json_path: %s' % bell_dict_json_path)
-        print('- solr_root_url: %s' % solr_root_url)
-        print('- output_json_path: %s' % output_json_path)
+        print('- bdr_collection_pid: %s' % self.bdr_collection_pid)
+        print('- bell_dict_json_path: %s' % self.bell_dict_json_path)
+        print('- solr_root_url: %s' % self.solr_root_url)
+        print('- output_json_path: %s' % self.output_json_path)
         print('---')
         return
 
     # end class PidFinder()
 
 
+## runners ##
+
+def run_create_acc_num_to_pid_map(env='dev'):
+    pid_finder = PidFinder(env)
+    pid_finder._print_settings()
+    pid_finder.create_acc_num_to_pid_map()
+
+
 if __name__ == '__main__':
     """ Assumes env is activated.
         ( 'ANTP' used as a namespace prefix for this 'acc_num_to_pid.py' file. ) """
-    bdr_collection_pid = os.environ['BELL_ANTP__COLLECTION_PID']
-    bell_dict_json_path = os.environ['BELL_ANTP__BELL_DICT_JSON_PATH']  # file of dict of bell-accession-number to metadata
-    solr_root_url = os.environ['BELL_ANTP__SOLR_ROOT']
-    output_json_path = os.environ['BELL_ANTP__OUTPUT_JSON_PATH']
-    pid_finder = PidFinder()
-    pid_finder._print_settings(
-        bdr_collection_pid, bell_dict_json_path, solr_root_url, output_json_path )
-    pid_finder.make_dict(
-        bdr_collection_pid, bell_dict_json_path, solr_root_url, output_json_path )
+    run_create_acc_num_to_pid_map()
