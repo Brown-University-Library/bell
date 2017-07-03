@@ -3,7 +3,7 @@ import datetime, json, os, logging, pprint, sys, time
 #from StringIO import StringIO as SIO
 #import filelike, redis, requests, rq
 import redis, requests, rq
-#from bell_code.utils import mods_builder
+from utils import mods_builder
 
 
 LOG_FILENAME = os.environ['BELL_LOG_FILENAME']

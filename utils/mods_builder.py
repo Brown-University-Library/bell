@@ -1,20 +1,17 @@
-# -*- coding: utf-8 -*-
-
-from __future__ import unicode_literals
-
 """ Builds mods for item-api param. """
-
 import json, logging, os
-import envoy, eulxml
+import eulxml
 from bdrxml import irMetadata, mods, rels, rights
-# from bell_code import bell_logger
-from bell_code.utils import logger_setup
 from lxml import etree
 from lxml.etree import XMLSyntaxError
 
 
-logger = logging.getLogger( 'bell_logger' )
-logger_setup.check_log_handler()
+LOG_FILENAME = os.environ['BELL_LOG_FILENAME']
+logger = logging.getLogger(__name__)
+logging.basicConfig(level=logging.DEBUG,
+                    format='[%(asctime)s] %(levelname)s [%(module)s-%(funcName)s()::%(lineno)d] %(message)s',
+                    datefmt='%d/%b/%Y %H:%M:%S',
+                    filename=LOG_FILENAME)
 
 
 class ModsBuilder( object ):
@@ -37,7 +34,7 @@ class ModsBuilder( object ):
             return { 'data': mods_xml, 'accession_number': self.accession_number }
         else:
             mods_object = eulxml.xmlmap.load_xmlobject_from_string( mods_xml, mods.Mods )  # eulfedora.server.Repository compatible
-            assert unicode(repr(type(mods_object))) == u"<class 'bdrxml.mods.Mods'>", unicode(repr(type(mods_object)))
+            assert str(type(mods_object)) == "<class 'bdrxml.mods.Mods'>", str(type(mods_object))
             return { 'data': mods_object, 'accession_number': self.accession_number }
 
     ## HELPER FUNCTIONS ##
@@ -151,7 +148,7 @@ class ModsBuilder( object ):
             String replacements in previous version no longer needed since new mods-initialization via bdrxml. """
         doc = etree.ElementTree( self.mods )
         mods_string = etree.tostring( doc, pretty_print=True ).decode( 'utf-8', 'replace' )
-        assert type(mods_string) == unicode
+        assert type(mods_string) == str
         return mods_string
 
     def _validate_mods( self, mods_xml, mods_schema_path ):
@@ -179,7 +176,7 @@ class ModsBuilder( object ):
         try:
             schema_object = etree.XMLSchema( schema_root )
         except Exception as e:
-            message = '- in BellModsMaker.__make_schema_object(); mods_schema_path is, %s; schema_ustring is, %s; type(schema_root) is, %s; and error is, %s' % ( mods_schema_path, schema_ustring, unicode(repr(type(schema_root))), unicode(repr(e)) )
+            message = '- in BellModsMaker.__make_schema_object(); mods_schema_path is, %s; schema_ustring is, %s; type(schema_root) is, %s; and error is, %s' % ( mods_schema_path, schema_ustring, repr(type(schema_root)), repr(e) )
             logger.error( message )
             raise Exception( message )
         logger.debug( 'schema object seems ok' )
