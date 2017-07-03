@@ -94,8 +94,8 @@ class MetadataCreator( object ):
             'identity': self.API_IDENTITY,
             'authorization_code': self.API_KEY,
             'additional_rights': 'BDR_PUBLIC#discover,display+Bell Gallery#discover,display,modify,delete',
-            'rels': json.dumps( {'owning_collection': self.OWNING_COLLECTION} )
-            # 'content_model': 'CommonMetadataDO'
+            'rels': json.dumps( {'owning_collection': self.OWNING_COLLECTION} ),
+            'content_model': 'CommonMetadataDO'
             }
         return params
 
