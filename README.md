@@ -57,8 +57,9 @@ code related to ingesting bell-gallery images into the bdr.
     - accession-numbers without pids imply creation of a new metadata-only object (which may gain an associated image later)
     - accession-numbers with pids imply checking to see if fedora metadata needs to be updated
     - status:
-        - done 2017-06-28; shows 97 accession-numbers without pids
+        - run 2017-06-28; shows 97 accession-numbers without pids
         - rerun 2017-06-29 after new metadata file from J.C.; shows 97 accession-numbers without pids (one changed pid from previous list)
+        - done 2017-07-03 -- no acession numbers without pids.
 
 - make metadata-only list
     - tasks/metadata.run_metadata_only_lister()
@@ -69,8 +70,9 @@ code related to ingesting bell-gallery images into the bdr.
 
     - end result: `f__metadata_only_accession_numbers.json`
     - status:
-        - done 2017-06-29
+        - run 2017-06-29
         - rerun 2017-06-29 after new metadata file from J.C.
+        - rerun 2017-07-03 -- now shows, appropriately, none
 
 - create new metadata objects
     - tasks/metadata.run_enqueue_create_metadata_only_jobs()
@@ -85,11 +87,8 @@ code related to ingesting bell-gallery images into the bdr.
 
     - after creates, confirm a re-run of `foundation/acc_num_to_pid.py` results in zero non-pid matches.
         - note that this re-run will update, as it should, `e__accession_number_to_pid_dict.json` -- the dict of accession-numbers-to-pids.
-    - status: in-process
-    - status: done 2016-05-06
-    - reran status of `foundation/acc_num_to_pid.py`: done 2016-05-09 -- now, appropriately, shows no accession-numbers without bdr pids.
-    - done again 2016-05-19 after newly-found additions
-    - reran status of `foundation/acc_num_to_pid.py`: done 2016-05-19 -- now, appropriately, shows no accession-numbers without bdr pids.
+    - status: done 2017-07-03
+        - also reran prep scripts to confirm that all accession-numbers have bdr pids
 
 - make image-filename to data dct
     - produces a dct and then json file like:
@@ -277,6 +276,8 @@ _(no indent=true available)_
 - re-architecting settings -- perhaps `prep_env_settings.sh`, `dev_env_settings.sh`, `prod_env_settings.sh`
 - add to init.d rq-worker start-stop-status script
 - consider validating mods before sending it to api (tho api does validate it )
+- investigate indexing of metadata-only objects; specifically, object_type is 'undetermined' instead of 'CommonMetadata'
+    - note: rels_content_model_ssim is now correct.
 
 ---
 
