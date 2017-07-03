@@ -1,5 +1,5 @@
 """ Handles metadata-related tasks. """
-import datetime, json, os, logging, pprint, sys, time
+import datetime, io, json, os, logging, pprint, sys, time
 #from StringIO import StringIO as SIO
 #import filelike, redis, requests, rq
 import redis, requests, rq
@@ -134,7 +134,7 @@ class MetadataCreator( object ):
         """ Returns file-like object containing the item_dct.
             Called by create_metadata_only_object() """
         jsn = json.dumps( item_dct )
-        file_obj = filelike.join( [SIO(jsn)] )  # this file_obj works with requests; vanilla StringIO didn't
+        file_obj = io.BytesIO(jsn.encode('utf8'))
         param_string = json.dumps( [{
             'dsID': 'bell_metadata',
             'file_name': 'bell_item.json',
@@ -149,7 +149,7 @@ class MetadataCreator( object ):
         files = { 'bell_item.json': file_obj }
         time.sleep( .5 )
         try:
-            r = requests.post( self.API_URL, data=params, files=files, verify=False )
+            r = requests.post( self.API_URL, data=params, files=files )
         except Exception as e:
             self._handle_post_exception( e, file_obj )
         file_obj.close()
@@ -261,7 +261,7 @@ class MetadataUpdater( object ):
         """ Returns file-like object containing the item_dct.
             Called by update_object_metadata() """
         jsn = json.dumps( item_dct )
-        file_obj = filelike.join( [SIO(jsn)] )  # this file_obj works with requests; vanilla StringIO didn't
+        file_obj = io.BytesIO(jsn.encode('utf8'))
         param_string = json.dumps( [{
             'dsID': 'bell_metadata',
             'file_name': 'bell_item.json',
