@@ -65,7 +65,10 @@ class MetadataCreator( object ):
         self.TRACKER_PATH = os.environ['BELL_TASKS_META__TRACKER_JSON_PATH']
         self.COLLECTION_ID = os.environ['BELL_TASKS_META__COLLECTION_ID']
         if env == 'prod':
-            pass
+            self.API_URL = os.environ['BELL_TASKS_META__PROD_AUTH_API_URL']
+            self.API_IDENTITY = os.environ['BELL_TASKS_META__PROD_AUTH_API_IDENTITY']
+            self.API_KEY = os.environ['BELL_TASKS_META__PROD_AUTH_API_KEY']
+            self.OWNING_COLLECTION = os.environ['BELL_TASKS_META__PROD_OWNING_COLLECTION_PID']
         else:
             self.API_URL = os.environ['BELL_TASKS_META__DEV_AUTH_API_URL']
             self.API_IDENTITY = os.environ['BELL_TASKS_META__DEV_AUTH_API_IDENTITY']
