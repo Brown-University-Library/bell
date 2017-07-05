@@ -184,7 +184,7 @@ class ImageLister:
 class ImageAdder:
     """ Adds image to object. """
 
-    def __init__( self, logger ):
+    def __init__( self, env='dev', logger ):
         self.logger = logger
         self.MASTER_IMAGES_DIR_PATH = os.environ['BELL_TASKS_IMGS__MASTER_IMAGES_DIR_PATH']  # no trailing slash
         self.JP2_IMAGES_DIR_PATH = os.environ['BELL_TASKS_IMGS__JP2_IMAGES_DIR_PATH']  # no trailing slash
@@ -195,8 +195,6 @@ class ImageAdder:
         self.AUTH_API_URL = os.environ['BELL_TASKS_IMGS__AUTH_API_URL']
         self.AUTH_API_IDENTITY = os.environ['BELL_TASKS_IMGS__AUTH_API_IDENTITY']
         self.AUTH_API_KEY = os.environ['BELL_TASKS_IMGS__AUTH_API_KEY']
-        self.OVERWRITE_EXISTING_IMAGE = json.loads( os.environ['BELL_TASKS_IMGS__OVERWRITE_EXISTING_IMAGE'])
-        assert type( self.OVERWRITE_EXISTING_IMAGE ) == bool, type( self.OVERWRITE_EXISTING_IMAGE )
 
     def add_image( self, filename_dct ):
         """ Manages: creates jp2, hits api, & cleans up.
@@ -206,7 +204,7 @@ class ImageAdder:
         ( source_filepath, destination_filepath, master_filename_encoded, jp2_filename ) = self.create_temp_filenames( image_filename )
         self.create_jp2( source_filepath, destination_filepath )
         pid = filename_dct[image_filename]['pid']
-        params = self.prep_params( master_filename_encoded, jp2_filename, pid, self.OVERWRITE_EXISTING_IMAGE )
+        params = self.prep_params( master_filename_encoded, jp2_filename, pid )
         resp = self.hit_api( params )
         self.track_response( resp )
         os.remove( destination_filepath )
@@ -275,12 +273,13 @@ class ImageAdder:
         os.remove( tif_destination_filepath )
         return
 
-    def prep_params( self, master_filename_encoded, jp2_filename, pid, overwrite ):
+    def prep_params( self, master_filename_encoded, jp2_filename, pid ):
         """ Sets params.
             Called by add_image() """
         params = { 'pid': pid, 'identity': self.AUTH_API_IDENTITY, 'authorization_code': self.AUTH_API_KEY }
-        if overwrite == True:
-            params['overwrite_content'] = 'yes'
+        #Note: we used to check a setting for whether or not to send this param, but seems like we can just
+        #   always send it.
+        params['overwrite_content'] = 'yes'
         master_url = '%s/%s' % ( self.MASTER_IMAGES_DIR_URL, master_filename_encoded )
         jp2_url = '%s/%s' % ( self.JP2_IMAGES_DIR_URL, jp2_filename )
         params['content_streams'] = json.dumps([
@@ -295,7 +294,7 @@ class ImageAdder:
             Called by add_image() """
         try:
             self.logger.info( 'in tasks.images.ImageAdder.hit_api(); url, `%s`; identity, `%s`; pid, `%s`' % (self.AUTH_API_URL, params['identity'], params['pid']) )
-            r = requests.put( self.AUTH_API_URL, data=params, verify=False )
+            r = requests.put( self.AUTH_API_URL, data=params )
             return r
         except Exception as e:
             err = unicode(repr(e))
@@ -333,7 +332,7 @@ def run_make_image_lists():
     return
 
 
-def run_enqueue_add_image_jobs():
+def run_enqueue_add_image_jobs(env='dev'):
     """ Grabs list of images-to-add and enqueues jobs.
         Called manually.
         Suggestion: run on ingestion-server. """
@@ -343,11 +342,11 @@ def run_enqueue_add_image_jobs():
     images_to_add = dct['lst_images_to_add']  # each lst entry is like: { "Agam PR_1981.1694.tif": {"accession_number": "PR 1981.1694", "pid": "bdr:300120"} }
     for (i, filename_dct) in enumerate( images_to_add ):
         print('i is, `%s`' % i)
-        if i+1 > 1000:
+        if i+1 > 1:
             break
         q.enqueue_call(
-            func='bell_code.tasks.images.run_add_image',
-            kwargs={ 'filename_dct': filename_dct },
+            func='tasks.images.run_add_image',
+            kwargs={ 'env': env, 'filename_dct': filename_dct },
             timeout=600 )
     print('done')
     return
@@ -371,10 +370,11 @@ def run_enqueue_update_image_jobs():
     print('done')
     return
 
-def run_add_image( filename_dct ):
+def run_add_image( env='dev', filename_dct ):
     """ Runner for add_image()
         Called manually as per readme.
         Suggestion: run on ingestion-server. """
-    adder = ImageAdder( logger )
+    adder = ImageAdder( env, logger )
     adder.add_image( filename_dct )
     return
+
