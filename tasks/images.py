@@ -105,53 +105,61 @@ class ImageLister:
     def __init__( self ):
         self.IMAGES_FILENAME_DCT_JSON_PATH = os.environ['BELL_TASKS_IMGS__IMAGES_FILENAME_DCT_JSON_OUTPUT_PATH']
         self.IMAGES_TO_PROCESS_OUTPUT_PATH = os.environ['BELL_TASKS_IMGS__IMAGES_TO_PROCESS_OUTPUT_PATH']
-        self.API_URL = os.environ['BELL_TASKS_IMGS__API_ROOT_URL']
+        #only running against PROD, since it's read-only and wouldn't really work against dev.
+        self.PROD_API_URL = os.environ['BELL_TASKS_IMGS__PROD_API_ROOT_URL']
+        self.images_to_add = []
+        self.images_to_update = []
 
     def make_image_lists( self ):
         """ Saves, in one json file, two lists of accession_numbers, one for images to be added, and one for images to be updated.
             Called manuallly per readme. """
         logger.debug( 'in tasks.images.ImageLister.make_image_lists(); starting' )
-        ( filename_to_data_dct, images_to_add, images_to_update ) = self.setup()
+        filename_to_data_dct = self.setup()
         for ( i, image_filename ) in enumerate(sorted( filename_to_data_dct.keys()) ):
             ( pid, accession_number ) = ( filename_to_data_dct[image_filename]['pid'], filename_to_data_dct[image_filename]['accession_number'] )
             api_dct = self.get_api_data( pid )
-            self.check_api_data( api_dct, image_filename, pid, accession_number, images_to_add, images_to_update )
+            self.check_api_data( api_dct, image_filename, pid, accession_number )
+            print(i)
             if i+1 >= 1000:
                 break
-        self.output_listing( images_to_add, images_to_update, filename_to_data_dct )
+        self.output_listing( self.images_to_add, self.images_to_update, filename_to_data_dct )
         return
 
     def setup( self ):
         """ Sets initial vars.
             Called by make_image_lists() """
-        ( images_to_add, images_to_update ) = ( [], [] )
-        with open( self.IMAGES_FILENAME_DCT_JSON_PATH ) as f:
+        with open( self.IMAGES_FILENAME_DCT_JSON_PATH, encoding='utf8' ) as f:
             dct = json.loads( f.read() )
         filename_to_data_dct = dct['filename_to_data_dct']
-        return ( filename_to_data_dct, images_to_add, images_to_update )
+        return filename_to_data_dct
 
     def get_api_data( self, pid ):
         """ Makes api call.
             Called by make_image_lists() """
-        item_api_url = '%s/%s/' % ( self.API_URL, pid )
+        item_api_url = '%s/%s/' % ( self.PROD_API_URL, pid )
         logger.debug( 'in tasks.images.ImageLister.check_image(); item_api_url, %s' % item_api_url )
-        time.sleep( 2 )
-        r = requests.get( item_api_url, verify=False )
-        api_dct = r.json()
-        return api_dct
+        time.sleep( .3 )
+        r = requests.get( item_api_url )
+        if r.ok:
+            api_dct = r.json()
+            return api_dct
+        else:
+            msg = '%s - %s' % (r.status_code, r.text)
+            logger.error(msg)
+            raise Exception(msg)
 
-    def check_api_data( self, api_dct, image_filename, pid, accession_number, images_to_add, images_to_update ):
+    def check_api_data( self, api_dct, image_filename, pid, accession_number ):
         """ Looks up image-filename via public api; stores whether image exists or not.
             Called by make_image_lists() """
         image_already_ingested = True
-        if 'JP2' in api_dct['links']['content_datastreams'].keys() or  'jp2' in api_dct['rel_content_models_ssim']:
+        if 'JP2' in api_dct['links']['content_datastreams'].keys() or 'jp2' in api_dct['rel_content_models_ssim']:
             pass
         else:
             image_already_ingested = False
         if image_already_ingested:
-            images_to_update.append( {image_filename: {'pid': pid, 'accession_number': accession_number}} )
+            self.images_to_update.append( {image_filename: {'pid': pid, 'accession_number': accession_number}} )
         else:
-            images_to_add.append( {image_filename: {'pid': pid, 'accession_number': accession_number}} )
+            self.images_to_add.append( {image_filename: {'pid': pid, 'accession_number': accession_number}} )
         return
 
     def output_listing( self, images_to_add, images_to_update, filename_to_data_dct ):
