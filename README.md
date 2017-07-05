@@ -72,7 +72,7 @@ code related to ingesting bell-gallery images into the bdr.
     - status:
         - run 2017-06-29
         - rerun 2017-06-29 after new metadata file from J.C.
-        - rerun 2017-07-03 -- now shows, appropriately, none
+        - done: rerun 2017-07-03 -- now shows, appropriately, none
 
 - create new metadata objects
     - tasks/metadata.run_enqueue_create_metadata_only_jobs()
@@ -108,7 +108,7 @@ code related to ingesting bell-gallery images into the bdr.
 
     - end result: `fg__images_filename_dct.json`
         - note that at the bottom of that file are any files that were excluded from the filename-dct.
-    - status: done, 2016-05-19.
+    - status: done, 2017-07-05.
 
 
 - make list of images to process
