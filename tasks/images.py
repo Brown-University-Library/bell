@@ -1,20 +1,22 @@
 # -*- coding: utf-8 -*-
-
-from __future__ import unicode_literals
-
 """ Handles image-related tasks. """
-
-import datetime, json, os, pprint, sys, time, urllib
+import datetime, json, logging, os, pprint, sys, time, urllib
 import envoy, redis, requests, rq
-from bell_code import bell_logger
 
 
-queue_name = unicode( os.environ.get('BELL_QUEUE_NAME') )
+LOG_FILENAME = os.environ['BELL_LOG_FILENAME']
+logger = logging.getLogger(__name__)
+logging.basicConfig(level=logging.DEBUG,
+                    format='[%(asctime)s] %(levelname)s [%(module)s-%(funcName)s()::%(lineno)d] %(message)s',
+                    datefmt='%d/%b/%Y %H:%M:%S',
+                    filename=LOG_FILENAME)
+
+
+queue_name = os.environ.get('BELL_QUEUE_NAME')
 q = rq.Queue( queue_name, connection=redis.Redis() )
-r = redis.StrictRedis( host='localhost', port=6379, db=0 )
 
 
-class ImageDctMaker( object ):
+class ImageDctMaker:
     """ Creats a dct, and then json file, of image-filename to accession-number and pid info.
         Example:
             {
@@ -25,10 +27,10 @@ class ImageDctMaker( object ):
             } """
 
     def __init__( self ):
-        self.IMAGE_LIST_PATH = unicode( os.environ['BELL_TASKS_IMGS__IMAGES_LIST_PATH'] )
-        self.DATA_DCT_PATH = unicode( os.environ['BELL_TASKS_IMGS__ACCESSION_NUMBER_TO_DATA_DICT_PATH'] )
-        self.PID_DCT_PATH = unicode( os.environ['BELL_TASKS_IMGS__ACCESSION_NUMBER_TO_PID_DICT_PATH'] )
-        self.IMAGES_FILENAME_DCT_JSON_OUTPUT_PATH = unicode( os.environ['BELL_TASKS_IMGS__IMAGES_FILENAME_DCT_JSON_OUTPUT_PATH'] )
+        self.IMAGE_LIST_PATH = os.environ['BELL_TASKS_IMGS__IMAGES_LIST_PATH']
+        self.DATA_DCT_PATH = os.environ['BELL_TASKS_IMGS__ACCESSION_NUMBER_TO_DATA_DICT_PATH']
+        self.PID_DCT_PATH = os.environ['BELL_TASKS_IMGS__ACCESSION_NUMBER_TO_PID_DICT_PATH']
+        self.IMAGES_FILENAME_DCT_JSON_OUTPUT_PATH = os.environ['BELL_TASKS_IMGS__IMAGES_FILENAME_DCT_JSON_OUTPUT_PATH']
         self.files_excluded = []
 
     def make_json_file( self ):
@@ -84,26 +86,26 @@ class ImageDctMaker( object ):
         """ Saves json file.
             Called by make_image_lists() """
         data = {
-            'datetime': unicode( datetime.datetime.now() ),
+            'datetime': str( datetime.datetime.now() ),
             'count_dir_images': len( images_lst ),
             'count_dct_images': len( filename_to_data_dct.keys() ),
             'files_excluded': self.files_excluded,
             'filename_to_data_dct': filename_to_data_dct }
         jsn = json.dumps( data, indent=2, sort_keys=True )
-        with open( self.IMAGES_FILENAME_DCT_JSON_OUTPUT_PATH, 'w' ) as f:
+        with open( self.IMAGES_FILENAME_DCT_JSON_OUTPUT_PATH, 'wt', encoding='utf8' ) as f:
             f.write( jsn )
         return
 
     # end class ImageDctMaker()
 
 
-class ImageLister( object ):
+class ImageLister:
     """ Lists images that need to be added, and those that need to be updated. """
 
     def __init__( self ):
-        self.IMAGES_FILENAME_DCT_JSON_PATH = unicode( os.environ['BELL_TASKS_IMGS__IMAGES_FILENAME_DCT_JSON_OUTPUT_PATH'] )
-        self.IMAGES_TO_PROCESS_OUTPUT_PATH = unicode( os.environ['BELL_TASKS_IMGS__IMAGES_TO_PROCESS_OUTPUT_PATH'] )
-        self.API_URL = unicode( os.environ['BELL_TASKS_IMGS__API_ROOT_URL'] )
+        self.IMAGES_FILENAME_DCT_JSON_PATH = os.environ['BELL_TASKS_IMGS__IMAGES_FILENAME_DCT_JSON_OUTPUT_PATH']
+        self.IMAGES_TO_PROCESS_OUTPUT_PATH = os.environ['BELL_TASKS_IMGS__IMAGES_TO_PROCESS_OUTPUT_PATH']
+        self.API_URL = os.environ['BELL_TASKS_IMGS__API_ROOT_URL']
 
     def make_image_lists( self ):
         """ Saves, in one json file, two lists of accession_numbers, one for images to be added, and one for images to be updated.
@@ -156,7 +158,7 @@ class ImageLister( object ):
         """ Saves json file.
             Called by make_image_lists() """
         data = {
-            'datetime': unicode( datetime.datetime.now() ),
+            'datetime': str( datetime.datetime.now() ),
             'count_images': len( filename_to_data_dct.keys() ),  # number of images from ImageDctMaker()
             'count_images_processed': len( images_to_add ) + len( images_to_update ),  # should match above count
             'count_images_to_add': len( images_to_add ),
@@ -164,135 +166,28 @@ class ImageLister( object ):
             'lst_images_to_add': images_to_add,
             'lst_images_to_update': images_to_update }
         jsn = json.dumps( data, indent=2, sort_keys=True )
-        with open( self.IMAGES_TO_PROCESS_OUTPUT_PATH, 'w' ) as f:
+        with open( self.IMAGES_TO_PROCESS_OUTPUT_PATH, 'wt', encoding='utf8' ) as f:
             f.write( jsn )
         return
 
     # end class ImageLister
 
 
-# class ImageLister( object ):
-#     """ Lists images that need to be added, and those that need to be updated. """
-
-#     def __init__( self, logger ):
-#         self.logger = logger
-#         self.IMAGE_LIST_PATH = unicode( os.environ['BELL_TASKS_IMGS__IMAGES_LIST_PATH'] )
-#         self.IMAGES_TO_PROCESS_OUTPUT_PATH = unicode( os.environ['BELL_TASKS_IMGS__IMAGES_TO_PROCESS_OUTPUT_PATH'] )
-#         self.DATA_DCT_PATH = unicode( os.environ['BELL_TASKS_IMGS__ACCESSION_NUMBER_TO_DATA_DICT_PATH'] )
-#         self.PID_DCT_PATH = unicode( os.environ['BELL_TASKS_IMGS__ACCESSION_NUMBER_TO_PID_DICT_PATH'] )
-#         self.API_URL = unicode( os.environ['BELL_TASKS_IMGS__API_ROOT_URL'] )
-
-#     def make_image_lists( self ):
-#         """ Saves, in one json file, two lists of accession_numbers, one for images to be added, and one for images to be updated.
-#             Called manuallly per readme. """
-#         logger.debug( 'in tasks.images.ImageLister.make_image_lists(); starting' )
-#         ( accession_data_dct, accession_pid_dct, images_lst, images_to_add, images_to_update ) = self.setup()
-#         filename_to_data_dct = self.make_filename_to_data_dct( accession_data_dct, accession_pid_dct, images_lst )
-#         for ( i, image_filename ) in enumerate(sorted( filename_to_data_dct.keys()) ):
-#             ( pid, accession_number ) = ( filename_to_data_dct[image_filename]['pid'], filename_to_data_dct[image_filename]['accession_number'] )
-#             api_dct = self.get_api_data( pid )
-#             self.check_api_data( api_dct, image_filename, pid, accession_number, images_to_add, images_to_update )
-#             if i+1 >= 500:
-#                 break
-#         self.output_listing( images_to_add, images_to_update )
-#         return
-
-#     def setup( self ):
-#         """ Sets initial vars.
-#             Called by make_image_lists() """
-#         ( images_to_add, images_to_update, images_lst ) = ( [], [], [] )
-#         with open( self.IMAGE_LIST_PATH ) as f:
-#             dct = json.loads( f.read() )
-#         images_lst = dct['filelist']
-#         with open( self.DATA_DCT_PATH ) as f2:
-#             dct2 = json.loads( f2.read() )
-#         accession_data_dct = dct2['items']
-#         with open( self.PID_DCT_PATH ) as f3:
-#             dct3 = json.loads( f3.read() )
-#         accession_pid_dct = dct3['final_accession_pid_dict']
-#         return ( accession_data_dct, accession_pid_dct, images_lst, images_to_add, images_to_update )
-
-#     def make_filename_to_data_dct( self, accession_data_dct, accession_pid_dct, images_lst ):
-#         """ Returns dct of filename keys to data-dct of accession-number and pid.
-#             Called by: make_image_lists() """
-#         filename_to_data_dct = {}
-#         for image_filename in images_lst:
-#             extension_idx = image_filename.rfind( '.' )
-#             self._check_image_filename( image_filename, accession_data_dct, filename_to_data_dct, extension_idx, accession_pid_dct )
-#         logger.debug( 'in tasks.images.ImageLister.make_filename_to_data_dct(); filename_to_data_dct, `%s`' % pprint.pformat(filename_to_data_dct) )
-#         return filename_to_data_dct
-
-#     def _check_image_filename( self, image_filename, accession_data_dct, filename_to_data_dct, extension_idx, accession_pid_dct ):
-#         """ Checks image_filename and variant against data['object_image_scan_filename'].
-#             If found, adds filename_to_data_dct entry; otherwise logs skip.
-#             Called by make_filename_to_data_dct() """
-#         found = False
-#         non_extension_filename = image_filename[0:extension_idx]
-#         for ( accession_number_key, data_dct_value ) in accession_data_dct.items():
-#             if image_filename == data_dct_value['object_image_scan_filename'] or non_extension_filename == data_dct_value['object_image_scan_filename']:
-#                 filename_to_data_dct[image_filename] = { 'accession_number': accession_number_key, 'pid': accession_pid_dct[accession_number_key] }
-#                 found = True
-#         if found is False:
-#              logger.debug( 'in tasks.images.ImageLister._check_image_filename(); no data entry found on image_filename, `{image_filename}` or non_extension_filename, {non_extension_filename}'.format(image_filename=image_filename, non_extension_filename=non_extension_filename) )
-#         return
-
-#     def get_api_data( self, pid ):
-#         """ Makes api call.
-#             Called by make_image_lists() """
-#         item_api_url = '%s/%s/' % ( self.API_URL, pid )
-#         self.logger.debug( 'in tasks.images.ImageLister.check_image(); item_api_url, %s' % item_api_url )
-#         time.sleep( 2 )
-#         r = requests.get( item_api_url, verify=False )
-#         api_dct = r.json()
-#         return api_dct
-
-#     def check_api_data( self, api_dct, image_filename, pid, accession_number, images_to_add, images_to_update ):
-#         """ Looks up image-filename via public api; stores whether image exists or not.
-#             Called by make_image_lists() """
-#         image_already_ingested = True
-#         if 'JP2' in api_dct['links']['content_datastreams'].keys() or  'jp2' in api_dct['rel_content_models_ssim']:
-#             pass
-#         else:
-#             image_already_ingested = False
-#         if image_already_ingested:
-#             images_to_update.append( {image_filename: {'pid': pid, 'accession_number': accession_number}} )
-#         else:
-#             images_to_add.append( {image_filename: {'pid': pid, 'accession_number': accession_number}} )
-#         return
-
-#     def output_listing( self, images_to_add, images_to_update ):
-#         """ Saves json file.
-#             Called by make_image_lists() """
-#         data = {
-#             'datetime': unicode( datetime.datetime.now() ),
-#             'count_images': len( images_to_add ) + len( images_to_update ),
-#             'count_images_to_add': len( images_to_add ),
-#             'count_images_to_update': len( images_to_update ),
-#             'lst_images_to_add': images_to_add,
-#             'lst_images_to_update': images_to_update }
-#         jsn = json.dumps( data, indent=2, sort_keys=True )
-#         with open( self.IMAGES_TO_PROCESS_OUTPUT_PATH, 'w' ) as f:
-#             f.write( jsn )
-#         return
-
-#     # end class ImageLister
-
-
-class ImageAdder( object ):
+class ImageAdder:
     """ Adds image to object. """
 
     def __init__( self, logger ):
         self.logger = logger
-        self.MASTER_IMAGES_DIR_PATH = unicode( os.environ['BELL_TASKS_IMGS__MASTER_IMAGES_DIR_PATH'] )  # no trailing slash
-        self.JP2_IMAGES_DIR_PATH = unicode( os.environ['BELL_TASKS_IMGS__JP2_IMAGES_DIR_PATH'] )  # no trailing slash
-        self.KAKADU_COMMAND_PATH = unicode( os.environ['BELL_TASKS_IMGS__KAKADU_COMMAND_PATH'] )
-        self.CONVERT_COMMAND_PATH = unicode( os.environ['BELL_TASKS_IMGS__CONVERT_COMMAND_PATH'] )
-        self.MASTER_IMAGES_DIR_URL = unicode( os.environ['BELL_TASKS_IMGS__MASTER_IMAGES_DIR_URL'] )  # no trailing slash
-        self.JP2_IMAGES_DIR_URL = unicode( os.environ['BELL_TASKS_IMGS__JP2_IMAGES_DIR_URL'] )  # no trailing slash
-        self.AUTH_API_URL = unicode( os.environ['BELL_TASKS_IMGS__AUTH_API_URL'] )
-        self.AUTH_API_IDENTITY = unicode( os.environ['BELL_TASKS_IMGS__AUTH_API_IDENTITY'] )
-        self.AUTH_API_KEY = unicode( os.environ['BELL_TASKS_IMGS__AUTH_API_KEY'] )
-        self.OVERWRITE_EXISTING_IMAGE = json.loads( unicode( os.environ['BELL_TASKS_IMGS__OVERWRITE_EXISTING_IMAGE']) )
+        self.MASTER_IMAGES_DIR_PATH = os.environ['BELL_TASKS_IMGS__MASTER_IMAGES_DIR_PATH']  # no trailing slash
+        self.JP2_IMAGES_DIR_PATH = os.environ['BELL_TASKS_IMGS__JP2_IMAGES_DIR_PATH']  # no trailing slash
+        self.KAKADU_COMMAND_PATH = os.environ['BELL_TASKS_IMGS__KAKADU_COMMAND_PATH']
+        self.CONVERT_COMMAND_PATH = os.environ['BELL_TASKS_IMGS__CONVERT_COMMAND_PATH']
+        self.MASTER_IMAGES_DIR_URL = os.environ['BELL_TASKS_IMGS__MASTER_IMAGES_DIR_URL']  # no trailing slash
+        self.JP2_IMAGES_DIR_URL = os.environ['BELL_TASKS_IMGS__JP2_IMAGES_DIR_URL']  # no trailing slash
+        self.AUTH_API_URL = os.environ['BELL_TASKS_IMGS__AUTH_API_URL']
+        self.AUTH_API_IDENTITY = os.environ['BELL_TASKS_IMGS__AUTH_API_IDENTITY']
+        self.AUTH_API_KEY = os.environ['BELL_TASKS_IMGS__AUTH_API_KEY']
+        self.OVERWRITE_EXISTING_IMAGE = json.loads( os.environ['BELL_TASKS_IMGS__OVERWRITE_EXISTING_IMAGE'])
         assert type( self.OVERWRITE_EXISTING_IMAGE ) == bool, type( self.OVERWRITE_EXISTING_IMAGE )
 
     def add_image( self, filename_dct ):
@@ -343,6 +238,7 @@ class ImageAdder( object ):
             command_path=self.KAKADU_COMMAND_PATH, source_path=source_filepath2, destination_path=destination_filepath
             )
         self.logger.info( 'in tasks.images.ImageAdder._create_jp2_from_tif(); cmd, %s' % cmd )
+        #TODO replace envoy with subprocess? Check that same information is in output.
         r = envoy.run( cmd.encode('utf-8', 'replace') )  # envoy requires a non-unicode string
         self.logger.info( 'in tasks.images.ImageAdder._create_jp2_from_tif(); r.std_out, %s' % r.std_out )
         self.logger.info( 'in tasks.images.ImageAdder._create_jp2_from_tif(); r.std_err, %s' % r.std_err )
@@ -403,7 +299,7 @@ class ImageAdder( object ):
             Called by add_image() """
         resp_txt = resp.content.decode( 'utf-8' )
         self.logger.info( 'in tasks.images.ImageAdder.track_response(); resp_txt, `%s`; status_code, `%s`' % (resp_txt, resp.status_code) )
-        print 'resp_txt, `%s`' % resp_txt
+        print('resp_txt, `%s`' % resp_txt)
         if not resp.status_code == 200:
             raise Exception( 'Bad http status code detected.' )
         return
@@ -413,14 +309,13 @@ class ImageAdder( object ):
 
 ## runners
 
-logger = bell_logger.setup_logger()
-
 def run_make_image_filename_dct():
     """ Runner for ImageDctMaker.make_json_file()
         Called manually as per readme. """
     mkr = ImageDctMaker()
     mkr.make_json_file()
     return
+
 
 def run_make_image_lists():
     """ Runner for make_image_lists()
@@ -429,49 +324,43 @@ def run_make_image_lists():
     lister.make_image_lists()
     return
 
-# def run_make_image_lists():
-#     """ Runner for make_image_lists()
-#         Called manually as per readme """
-#     lister = ImageLister( logger )
-#     lister.make_image_lists()
-#     return
 
 def run_enqueue_add_image_jobs():
     """ Grabs list of images-to-add and enqueues jobs.
         Called manually.
         Suggestion: run on ingestion-server. """
-    IMAGES_TO_PROCESS_JSON_PATH = unicode( os.environ['BELL_TASKS_IMGS__IMAGES_TO_PROCESS_JSON_PATH'] )
+    IMAGES_TO_PROCESS_JSON_PATH = os.environ['BELL_TASKS_IMGS__IMAGES_TO_PROCESS_JSON_PATH']
     with open( IMAGES_TO_PROCESS_JSON_PATH ) as f:
         dct = json.loads( f.read() )
     images_to_add = dct['lst_images_to_add']  # each lst entry is like: { "Agam PR_1981.1694.tif": {"accession_number": "PR 1981.1694", "pid": "bdr:300120"} }
     for (i, filename_dct) in enumerate( images_to_add ):
-        print 'i is, `%s`' % i
+        print('i is, `%s`' % i)
         if i+1 > 1000:
             break
         q.enqueue_call(
             func='bell_code.tasks.images.run_add_image',
             kwargs={ 'filename_dct': filename_dct },
             timeout=600 )
-    print 'done'
+    print('done')
     return
 
 def run_enqueue_update_image_jobs():
     """ Grabs list of images-to-update and enqueues jobs.
         Called manually.
         Suggestion: run on ingestion-server. """
-    IMAGES_TO_PROCESS_JSON_PATH = unicode( os.environ['BELL_TASKS_IMGS__IMAGES_TO_PROCESS_JSON_PATH'] )
+    IMAGES_TO_PROCESS_JSON_PATH = os.environ['BELL_TASKS_IMGS__IMAGES_TO_PROCESS_JSON_PATH']
     with open( IMAGES_TO_PROCESS_JSON_PATH ) as f:
         dct = json.loads( f.read() )
     images_to_add = dct['lst_images_to_update']  # each lst entry is like: { "Agam PR_1981.1694.tif": {"accession_number": "PR 1981.1694", "pid": "bdr:300120"} }
     for (i, filename_dct) in enumerate( images_to_add ):
-        print 'i is, `%s`' % i
+        print('i is, `%s`' % i)
         if i+1 > 1000:
             break
         q.enqueue_call(
             func='bell_code.tasks.images.run_add_image',
             kwargs={ 'filename_dct': filename_dct },
             timeout=600 )
-    print 'done'
+    print('done')
     return
 
 def run_add_image( filename_dct ):
