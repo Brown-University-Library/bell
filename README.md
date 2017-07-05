@@ -121,18 +121,7 @@ code related to ingesting bell-gallery images into the bdr.
 
     - produces a file containing both a list of images to add, and a list of images to update
     - end result: `g_images_to_process.json`
-    - status: done: 2016-05-09
-    - status: redone 2016-05-19
-
----
-
-temp unusual step...
-
-- cull the lists of images-to-add and images-to-update by removing the images that were processed (those in `g__images_to_process_temp_archive.json`).
-    - end result: `data/g_images_to_process_CULLED.json`
-    - status: cull-list completed 2016-05-19
-
----
+    - status: done: 2017-07-05
 
 - add new images
     - tasks/images.run_enqueue_add_image_jobs()
@@ -142,11 +131,10 @@ temp unusual step...
             >>> images.run_enqueue_add_image_jobs()
 
     - for adding individual images, if necessary: tasks/images.run_add_image( filename_dct )
-    - status:
+    - status: IN-PROCESS
         - done: 2016-05-12
         - extra tifs redone: 2016-05-23
         - jpg code fixed and redone: 2016-05-25
-
 
 - add updated images
     - tasks/images.run_enqueue_add_image_jobs()
