@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 """ Handles image-related tasks. """
-import datetime, json, logging, os, pprint, sys, time, urllib
-import envoy, redis, requests, rq
+import datetime, json, logging, os, pprint, subprocess, sys, time, urllib
+import redis, requests, rq
 
 
 LOG_FILENAME = os.environ['BELL_LOG_FILENAME']
@@ -244,14 +244,14 @@ class ImageAdder:
         """ Creates jp2 directly.
             Called by create_jp2() """
         source_filepath2 = source_filepath.replace( "'", "\\'" )
-        cmd = '{command_path} -i "{source_path}" -o "{destination_path}" Creversible=yes -rate -,1,0.5,0.25 Clevels=12'.format(
-            command_path=self.KAKADU_COMMAND_PATH, source_path=source_filepath2, destination_path=destination_filepath
-            )
+        cmd = '%s -i "%s" -o "%s" Creversible=yes -rate -,1,0.5,0.25 Clevels=8 "Stiles={1024,1024}"' % (self.KAKADU_COMMAND_PATH, source_filepath2, destination_filepath)
         self.logger.info( 'in tasks.images.ImageAdder._create_jp2_from_tif(); cmd, %s' % cmd )
-        #TODO replace envoy with subprocess? Check that same information is in output.
-        r = envoy.run( cmd )
-        self.logger.info( 'in tasks.images.ImageAdder._create_jp2_from_tif(); r.std_out, %s' % r.std_out )
-        self.logger.info( 'in tasks.images.ImageAdder._create_jp2_from_tif(); r.std_err, %s' % r.std_err )
+        r = subprocess.run( cmd, shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE )
+        self.logger.info( 'in tasks.images.ImageAdder._create_jp2_from_tif(); r.stdout, %s' % r.stdout )
+        self.logger.info( 'in tasks.images.ImageAdder._create_jp2_from_tif(); r.stderr, %s' % r.stderr )
+        if len( r.stderr ) > 0:
+            raise Exception( 'Problem making intermediate .tif from .jpg' )
+        r.check_returncode() #this will raise a CalledProcessError if return code is non-zero
         return
 
     def _create_jp2_from_jpg( self, source_filepath, destination_filepath ):
@@ -265,15 +265,14 @@ class ImageAdder:
         cmd = '%s -compress None "%s" %s' % (
             self.CONVERT_COMMAND_PATH, cleaned_source_filepath, tif_destination_filepath )  # source-filepath quotes needed for filename containing spaces
         self.logger.debug( 'in tasks.images.ImageAdder._create_jp2_from_jpg(); cmd, %s' % cmd )
-        r = envoy.run( cmd )
-        self.logger.info( 'in tasks.images.ImageAdder._create_jp2_from_jpg(); r.std_out, %s; type(r.std_out), %s' % (r.std_out, type(r.std_out)) )
-        self.logger.info( 'in tasks.images.ImageAdder._create_jp2_from_jpg(); r.std_err, %s; type(r.std_err), %s' % (r.std_err, type(r.std_err)) )
-        if len( r.std_err ) > 0:
+        r = subprocess.run( cmd, shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE )
+        self.logger.info( 'in tasks.images.ImageAdder._create_jp2_from_jpg(); r.stdout, %s; type(r.stdout), %s' % (r.stdout, type(r.stdout)) )
+        self.logger.info( 'in tasks.images.ImageAdder._create_jp2_from_jpg(); r.stderr, %s; type(r.stderr), %s' % (r.stderr, type(r.stderr)) )
+        if len( r.stderr ) > 0:
             raise Exception( 'Problem making intermediate .tif from .jpg' )
+        r.check_returncode() #this will raise a CalledProcessError if return code is non-zero
         source_filepath = tif_destination_filepath
-        cmd = '%s -i "%s" -o "%s" -rate -,1,0.5,0.25 Creversible=yes Clevels=8 Stiles={1024,1024}' % (
-            self.KAKADU_COMMAND_PATH, source_filepath, destination_filepath )
-        r = envoy.run( cmd )
+        self._create_jp2_from_tif(source_filepath, destination_filepath)
         os.remove( tif_destination_filepath )
         return
 
@@ -346,7 +345,7 @@ def run_enqueue_add_image_jobs(env='dev'):
     images_to_add = dct['lst_images_to_add']  # each lst entry is like: { "Agam PR_1981.1694.tif": {"accession_number": "PR 1981.1694", "pid": "bdr:300120"} }
     for (i, filename_dct) in enumerate( images_to_add ):
         print('i is, `%s`' % i)
-        if i+1 > 1000:
+        if i+1 > 1:
             break
         q.enqueue_call(
             func='tasks.images.run_add_image',
