@@ -192,9 +192,14 @@ class ImageAdder:
         self.CONVERT_COMMAND_PATH = os.environ['BELL_TASKS_IMGS__CONVERT_COMMAND_PATH']
         self.MASTER_IMAGES_DIR_URL = os.environ['BELL_TASKS_IMGS__MASTER_IMAGES_DIR_URL']  # no trailing slash
         self.JP2_IMAGES_DIR_URL = os.environ['BELL_TASKS_IMGS__JP2_IMAGES_DIR_URL']  # no trailing slash
-        self.AUTH_API_URL = os.environ['BELL_TASKS_IMGS__AUTH_API_URL']
-        self.AUTH_API_IDENTITY = os.environ['BELL_TASKS_IMGS__AUTH_API_IDENTITY']
-        self.AUTH_API_KEY = os.environ['BELL_TASKS_IMGS__AUTH_API_KEY']
+        if env == 'prod':
+            self.AUTH_API_URL = os.environ['BELL_TASKS_IMGS__PROD_AUTH_API_URL']
+            self.AUTH_API_IDENTITY = os.environ['BELL_TASKS_IMGS__PROD_AUTH_API_IDENTITY']
+            self.AUTH_API_KEY = os.environ['BELL_TASKS_IMGS__PROD_AUTH_API_KEY']
+        else:
+            self.AUTH_API_URL = os.environ['BELL_TASKS_IMGS__DEV_AUTH_API_URL']
+            self.AUTH_API_IDENTITY = os.environ['BELL_TASKS_IMGS__DEV_AUTH_API_IDENTITY']
+            self.AUTH_API_KEY = os.environ['BELL_TASKS_IMGS__DEV_AUTH_API_KEY']
 
     def add_image( self, filename_dct ):
         """ Manages: creates jp2, hits api, & cleans up.
@@ -267,7 +272,7 @@ class ImageAdder:
         if len( r.std_err ) > 0:
             raise Exception( 'Problem making intermediate .tif from .jpg' )
         source_filepath = tif_destination_filepath
-        cmd = '%s -i "%s" -o "%s" Creversible=yes -rate -,1,0.5,0.25 Clevels=12' % (
+        cmd = '%s -i "%s" -o "%s" -rate -,1,0.5,0.25 Creversible=yes Clevels=8 Stiles={1024,1024}' % (
             self.KAKADU_COMMAND_PATH, source_filepath, destination_filepath )
         r = envoy.run( cmd.encode('utf-8', 'replace') )
         os.remove( tif_destination_filepath )
