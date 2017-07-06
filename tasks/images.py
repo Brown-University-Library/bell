@@ -184,7 +184,7 @@ class ImageLister:
 class ImageAdder:
     """ Adds image to object. """
 
-    def __init__( self, env='dev', logger ):
+    def __init__( self, logger, env='dev' ):
         self.logger = logger
         self.MASTER_IMAGES_DIR_PATH = os.environ['BELL_TASKS_IMGS__MASTER_IMAGES_DIR_PATH']  # no trailing slash
         self.JP2_IMAGES_DIR_PATH = os.environ['BELL_TASKS_IMGS__JP2_IMAGES_DIR_PATH']  # no trailing slash
@@ -205,7 +205,7 @@ class ImageAdder:
         """ Manages: creates jp2, hits api, & cleans up.
             Called by run_add_image() """
         logger.debug( 'in tasks.images.ImageAdder.add_image(); starting; filename_dct, `%s`' % pprint.pformat(filename_dct) )
-        image_filename = filename_dct.keys()[0]
+        image_filename = list(filename_dct.keys())[0]
         ( source_filepath, destination_filepath, master_filename_encoded, jp2_filename ) = self.create_temp_filenames( image_filename )
         self.create_jp2( source_filepath, destination_filepath )
         pid = filename_dct[image_filename]['pid']
@@ -220,8 +220,7 @@ class ImageAdder:
             Called by add_image()
             Note, master_filename_raw likely includes spaces and may include apostrophes,
               and self.MASTER_IMAGES_DIR_PATH may include spaces. """
-        master_filename_utf8 = master_filename_raw.encode( 'utf-8' )
-        master_filename_encoded = urllib.quote( master_filename_utf8 ).decode( 'utf-8' )  # used for api call
+        master_filename_encoded = urllib.parse.quote( master_filename_raw )  # used for api call
         source_filepath = '%s/%s' % ( self.MASTER_IMAGES_DIR_PATH, master_filename_raw )
         temp_jp2_filename = master_filename_raw.replace( ' ', '_' )
         temp_jp2_filename2 = temp_jp2_filename.replace( u"'", '_' )
@@ -250,7 +249,7 @@ class ImageAdder:
             )
         self.logger.info( 'in tasks.images.ImageAdder._create_jp2_from_tif(); cmd, %s' % cmd )
         #TODO replace envoy with subprocess? Check that same information is in output.
-        r = envoy.run( cmd.encode('utf-8', 'replace') )  # envoy requires a non-unicode string
+        r = envoy.run( cmd )
         self.logger.info( 'in tasks.images.ImageAdder._create_jp2_from_tif(); r.std_out, %s' % r.std_out )
         self.logger.info( 'in tasks.images.ImageAdder._create_jp2_from_tif(); r.std_err, %s' % r.std_err )
         return
@@ -366,7 +365,7 @@ def run_enqueue_update_image_jobs():
     images_to_add = dct['lst_images_to_update']  # each lst entry is like: { "Agam PR_1981.1694.tif": {"accession_number": "PR 1981.1694", "pid": "bdr:300120"} }
     for (i, filename_dct) in enumerate( images_to_add ):
         print('i is, `%s`' % i)
-        if i+1 > 1000:
+        if i+1 > 1:
             break
         q.enqueue_call(
             func='bell_code.tasks.images.run_add_image',
@@ -375,11 +374,11 @@ def run_enqueue_update_image_jobs():
     print('done')
     return
 
-def run_add_image( env='dev', filename_dct ):
+def run_add_image( filename_dct, env='dev' ):
     """ Runner for add_image()
         Called manually as per readme.
         Suggestion: run on ingestion-server. """
-    adder = ImageAdder( env, logger )
+    adder = ImageAdder( logger, env )
     adder.add_image( filename_dct )
     return
 

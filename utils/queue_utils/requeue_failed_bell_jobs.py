@@ -1,7 +1,4 @@
 # -*- coding: utf-8 -*-
-
-from __future__ import unicode_literals
-
 """ Requeues bell failed-queue jobs. """
 
 import os, sys
@@ -17,7 +14,7 @@ for job in failed_queue.jobs:
         continue
     else:
         print( 'function call: %s' % job.func_name )
-        action_val = raw_input( 'Action (use first letter from the following, default is nothing): [Nothing/Requeue/Delete] ' )
+        action_val = input( 'Action (use first letter from the following, default is nothing): [Nothing/Requeue/Delete] ' )
         if action_val.lower() == 'r':
             print('requeuing job...')
             failed_queue.requeue( job.id )
