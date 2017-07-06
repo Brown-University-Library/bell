@@ -265,7 +265,7 @@ class ImageAdder:
         cmd = '%s -compress None "%s" %s' % (
             self.CONVERT_COMMAND_PATH, cleaned_source_filepath, tif_destination_filepath )  # source-filepath quotes needed for filename containing spaces
         self.logger.debug( 'in tasks.images.ImageAdder._create_jp2_from_jpg(); cmd, %s' % cmd )
-        r = envoy.run( cmd.encode('utf-8', 'replace') )
+        r = envoy.run( cmd )
         self.logger.info( 'in tasks.images.ImageAdder._create_jp2_from_jpg(); r.std_out, %s; type(r.std_out), %s' % (r.std_out, type(r.std_out)) )
         self.logger.info( 'in tasks.images.ImageAdder._create_jp2_from_jpg(); r.std_err, %s; type(r.std_err), %s' % (r.std_err, type(r.std_err)) )
         if len( r.std_err ) > 0:
@@ -273,7 +273,7 @@ class ImageAdder:
         source_filepath = tif_destination_filepath
         cmd = '%s -i "%s" -o "%s" -rate -,1,0.5,0.25 Creversible=yes Clevels=8 Stiles={1024,1024}' % (
             self.KAKADU_COMMAND_PATH, source_filepath, destination_filepath )
-        r = envoy.run( cmd.encode('utf-8', 'replace') )
+        r = envoy.run( cmd )
         os.remove( tif_destination_filepath )
         return
 
@@ -346,7 +346,7 @@ def run_enqueue_add_image_jobs(env='dev'):
     images_to_add = dct['lst_images_to_add']  # each lst entry is like: { "Agam PR_1981.1694.tif": {"accession_number": "PR 1981.1694", "pid": "bdr:300120"} }
     for (i, filename_dct) in enumerate( images_to_add ):
         print('i is, `%s`' % i)
-        if i+1 > 1:
+        if i+1 > 1000:
             break
         q.enqueue_call(
             func='tasks.images.run_add_image',
