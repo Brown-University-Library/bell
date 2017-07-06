@@ -132,9 +132,7 @@ code related to ingesting bell-gallery images into the bdr.
 
     - for adding individual images, if necessary: tasks/images.run_add_image( filename_dct )
     - status: IN-PROCESS
-        - done: 2016-05-12
-        - extra tifs redone: 2016-05-23
-        - jpg code fixed and redone: 2016-05-25
+        - done: 2017-07-06
 
 - add updated images
     - tasks/images.run_enqueue_add_image_jobs()
@@ -144,9 +142,10 @@ code related to ingesting bell-gallery images into the bdr.
             >>> images.run_enqueue_update_image_jobs()
 
     - for adding individual images, if necessary: tasks/images.run_add_image( filename_dct )
-    - status: done
-        - images updated: 2016-05-16
-        - old TIFF datastreams deleted: 2016-05-17
+    - status: TODO NEXT
+        - old info...
+            - images updated: 2016-05-16
+            - old TIFF datastreams deleted: 2016-05-17
 
 - update the custom-solr-index
     - prep list of pids from custom-index
