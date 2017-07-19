@@ -1,6 +1,8 @@
 # -*- coding: utf-8 -*-
 """ Handles image-related tasks. """
 import datetime, json, logging, os, pprint, subprocess, sys, time, urllib
+import shutil
+import tempfile
 import redis, requests, rq
 
 
@@ -372,8 +374,8 @@ def run_enqueue_update_image_jobs(env='dev'):
     images_to_add = dct['lst_images_to_update']  # each lst entry is like: { "Agam PR_1981.1694.tif": {"accession_number": "PR 1981.1694", "pid": "bdr:300120"} }
     for (i, filename_dct) in enumerate( images_to_add ):
         print('i is, `%s`' % i)
-        if i+1 > 1:
-            break
+        #if i+1 > 1:
+        #    break
         q.enqueue_call(
             func='tasks.images.run_add_image',
             kwargs={ 'env': env, 'filename_dct': filename_dct },
