@@ -1,7 +1,13 @@
 {
   "count_filelist": 105,
-  "date_time": "2017-06-29 15:17:14.915988",
+  "date_time": "2017-07-19 16:04:34.572540",
   "directory_path": "/opt/local/scripts/bell_work_stuff/image_mnt/Bell Gallery Files/TO BDR June 2017/",
+  "discrepancies": {
+    "Luster PH_2005.3.tif": "unknown",
+    "Luster PH_2005.4.tif": "unknown",
+    "Luster PH_2005.5.tif": "unknown",
+    "Luster PH_2005.6.tif": "unknown"
+  },
   "extension_types": {
     ".jpg": 2,
     ".tif": 103

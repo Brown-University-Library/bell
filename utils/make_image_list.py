@@ -3,7 +3,8 @@ Produces a listing of all images in given folder.
 Saves to json.
 """
 
-import datetime, glob, json, os, pprint
+from collections import OrderedDict
+import datetime, glob, imghdr, json, os, pprint
 import logging
 
 
@@ -24,10 +25,26 @@ class ImageLister:
         logger.debug( 'in one_offs.make_image_list.ImageLister.list_images(); starting' )
         non_dir_list = self.make_file_list()
         extension_types = self.make_extension_types( non_dir_list )
-        directory_info_dict = self.build_response( non_dir_list, extension_types )
+        discrepancies = self._make_discrepancies_list( non_dir_list[:] )
+        directory_info_dict = self.build_response( non_dir_list, extension_types, discrepancies )
         self.output_listing( directory_info_dict )
         pprint.pprint( directory_info_dict )
         return directory_info_dict
+
+    def _make_discrepancies_list( self, filepaths ):
+        discrepancies = OrderedDict()
+        for f in filepaths:
+            imghdr_type = imghdr.what(os.path.join(self.DIRECTORY_PATH, f))
+            if 'tif' in f:
+                if imghdr_type != 'tiff':
+                    discrepancies[f] = imghdr_type or 'unknown'
+            elif 'jpeg' in f or 'jpg' in f:
+                if imghdr_type != 'jpeg':
+                    discrepancies[f] = imghdr_type or 'unknown'
+            else:
+                if not imghdr_type:
+                    discrepancies[f] = imghdr_type or 'unknown'
+        return discrepancies
 
     def make_file_list( self ):
         """ Returns sorted filelist.
@@ -60,13 +77,14 @@ class ImageLister:
         logger.debug( 'in one_offs.make_image_list.ImageLister.make_extension_types(); extension_types, `%s`' % pprint.pformat(extension_types) )
         return extension_types
 
-    def build_response( self, non_dir_list, extension_types ):
+    def build_response( self, non_dir_list, extension_types, discrepancies ):
         """ Returns directory-info-dict.
             Called by list_images() """
         directory_info_dict =  {
             'count_filelist': len( non_dir_list ),
             'date_time': str( datetime.datetime.now() ),
             'directory_path': self.DIRECTORY_PATH,
+            'discrepancies': discrepancies,
             'extension_types': extension_types,
             'filelist': non_dir_list, }
         logger.debug( 'in one_offs.make_image_list.ImageLister.build_response(); directory_info_dict, `%s`' % pprint.pformat(directory_info_dict) )
