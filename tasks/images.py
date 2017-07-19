@@ -235,7 +235,15 @@ class ImageAdder:
         """ Creates jp2.
             Called by add_image() """
         if 'tif' in source_filepath.split( '.' )[-1]:
-            self._create_jp2_from_tif( source_filepath, destination_filepath )
+            if ',' in source_filepath:
+                with open(source_filepath, 'rb') as original_tiff:
+                    with tempfile.NamedTemporaryFile(delete=True) as copy_of_tiff:
+                        shutil.copyfileobj( original_tiff, copy_of_tiff )
+                        copy_of_tiff.flush()
+                        os.fsync(copy_of_tiff.fileno())
+                        self._create_jp2_from_tif( copy_of_tiff.name, destination_filepath )
+            else:
+                self._create_jp2_from_tif( source_filepath, destination_filepath )
         elif 'jp' in source_filepath.split( '.' )[-1]:
             self._create_jp2_from_jpg( source_filepath, destination_filepath )
         return
@@ -250,7 +258,7 @@ class ImageAdder:
         self.logger.info( 'in tasks.images.ImageAdder._create_jp2_from_tif(); r.stdout, %s' % r.stdout )
         self.logger.info( 'in tasks.images.ImageAdder._create_jp2_from_tif(); r.stderr, %s' % r.stderr )
         if len( r.stderr ) > 0:
-            raise Exception( 'Problem making intermediate .tif from .jpg' )
+            raise Exception( 'Problem creating .jp2 from .tif' )
         r.check_returncode() #this will raise a CalledProcessError if return code is non-zero
         return
 
@@ -354,7 +362,7 @@ def run_enqueue_add_image_jobs(env='dev'):
     print('done')
     return
 
-def run_enqueue_update_image_jobs():
+def run_enqueue_update_image_jobs(env='dev'):
     """ Grabs list of images-to-update and enqueues jobs.
         Called manually.
         Suggestion: run on ingestion-server. """
@@ -367,8 +375,8 @@ def run_enqueue_update_image_jobs():
         if i+1 > 1:
             break
         q.enqueue_call(
-            func='bell_code.tasks.images.run_add_image',
-            kwargs={ 'filename_dct': filename_dct },
+            func='tasks.images.run_add_image',
+            kwargs={ 'env': env, 'filename_dct': filename_dct },
             timeout=600 )
     print('done')
     return
