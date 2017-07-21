@@ -143,8 +143,12 @@ code related to ingesting bell-gallery images into the bdr.
     - for adding individual images, if necessary: tasks/images.run_add_image( filename_dct )
     - status: done 2017-07-21
 
+- purge caches for updated images
+    - loris cache (info, source, derivatives)
+    - thumbnail in fedora & django cache
 
 - update the custom-solr-index
+    - 2017-07-21 WAITING FOR RESPONSE TO BIRKIN'S EMAIL ABOUT JSON FILE
     - prep list of pids from custom-index
         - tasks/indexer.run_make_pids_for_custom_index()
         - end result: `h__pids_from_custom_index_list.json`
@@ -185,6 +189,8 @@ code related to ingesting bell-gallery images into the bdr.
             - `from tasks import cleanup; cleanup.run_validate_solr_pids()`
             - status: done, 2016-Nov-02
         - make list of bdr pids to delete.
+            - NOTE: do the deletion accession number check as early as possible
+            - NOTE: check whether an object to delete has an image - just update the metadata?
             - `from tasks import cleanup; cleanup.run_make_bdr_pids_to_delete()`
             - end result: `m__bdr_delete_pids.json`
             - status: done, 2016-Nov-03

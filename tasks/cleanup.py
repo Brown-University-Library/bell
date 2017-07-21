@@ -1,19 +1,15 @@
-# -*- coding: utf-8 -*-
-
-from __future__ import unicode_literals
-
 """ Removes old files from bell custom solr index (eventually) and fedora.
     Old files are defined as bell bdr items that have accession-numbers
         which are no longer valid accession-numbers according to
         the most recent full data dump. (see `e__accession_number_to_pid_dict.json`)
     TODO: move the solr-deletion code from indexer to here. """
 
-import datetime, json, logging, os, pprint, sets, time
+import datetime, json, logging, os, pprint, time
 import requests
 
 logging.basicConfig(
     level=logging.DEBUG,
-    filename='{}/bell.log'.format( os.environ['BELL_LOG_DIR'] ),
+    filename=os.environ['BELL_LOG_FILENAME'],
     format='[%(asctime)s] %(levelname)s [%(module)s-%(funcName)s()::%(lineno)d] %(message)s',
     datefmt='%d/%b/%Y %H:%M:%S' )
 logger = logging.getLogger(__name__)
@@ -29,9 +25,9 @@ class BdrDeleter( object ):
         self.DELETED_PIDS_TRACKER_PATH = os.environ['BELL_TASKS_CLNR__DELETED_PIDS_TRACKER_PATH']
         self.SEARCH_API_URL = os.environ['BELL_TASKS_CLNR__SEARCH_API_URL']
         self.BELL_COLLECTION_ID = os.environ['BELL_TASKS_CLNR__BELL_COLLECTION_ID']
-        self.BELL_ITEM_API_URL = os.environ['BELL_TASKS_CLNR__AUTH_API_URL']
-        self.BELL_ITEM_API_IDENTITY = os.environ['BELL_TASKS_CLNR__AUTH_API_IDENTITY']
-        self.BELL_ITEM_API_AUTHCODE = os.environ['BELL_TASKS_CLNR__AUTH_API_KEY']
+        self.BELL_ITEM_API_URL = os.environ['BELL_TASKS_CLNR__PROD_AUTH_API_URL']
+        self.BELL_ITEM_API_IDENTITY = os.environ['BELL_TASKS_CLNR__PROD_AUTH_API_IDENTITY']
+        self.BELL_ITEM_API_AUTHCODE = os.environ['BELL_TASKS_CLNR__PROD_AUTH_API_KEY']
 
     ## called by convenience runners ##
 
@@ -55,10 +51,10 @@ class BdrDeleter( object ):
             'pid': pid,
             'identity': self.BELL_ITEM_API_IDENTITY,
             'authorization_code': self.BELL_ITEM_API_AUTHCODE }
-        print '- item_api_url, `{}`'.format( self.BELL_ITEM_API_URL )
-        print '- identity, `{}`'.format( self.BELL_ITEM_API_IDENTITY )
-        print '- authcode, `{}`'.format( self.BELL_ITEM_API_AUTHCODE )
-        r = requests.delete( self.BELL_ITEM_API_URL, data=payload, verify=False )
+        print('- item_api_url, `{}`'.format( self.BELL_ITEM_API_URL ))
+        print('- identity, `{}`'.format( self.BELL_ITEM_API_IDENTITY ))
+        print('- authcode, `{}`'.format( self.BELL_ITEM_API_AUTHCODE ))
+        r = requests.delete( self.BELL_ITEM_API_URL, data=payload )
         logger.debug( 'deletion pid, `{pid}`; r.status_code, `{code}`'.format(pid=pid, code=r.status_code) )
         logger.debug( 'deletion pid, `{pid}`; r.content, ```{content}```'.format(pid=pid, content=r.content.decode('utf-8')) )
         self.track_bdr_deletion( pid, r.status_code )
@@ -97,8 +93,8 @@ class BdrDeleter( object ):
     def intersect_pids( self, source_pids, existing_bdr_pids):
         """ Runs set work.
             Called by make_pids_to_delete() """
-        source_pids_not_in_bdr = list( sets.Set(source_pids) - sets.Set(existing_bdr_pids) )
-        bdr_pids_not_in_source = list( sets.Set(existing_bdr_pids) - sets.Set(source_pids) )
+        source_pids_not_in_bdr = list( set(source_pids) - set(existing_bdr_pids) )
+        bdr_pids_not_in_source = list( set(existing_bdr_pids) - set(source_pids) )
         logger.debug( 'source_pids_not_in_bdr, {}'.format(source_pids_not_in_bdr) )
         logger.debug( 'bdr_pids_not_in_source, {}'.format(bdr_pids_not_in_source) )
         if len( source_pids_not_in_bdr ) > 0:
@@ -120,7 +116,7 @@ class BdrDeleter( object ):
             dct = json.loads( f.read() )
         if pid not in dct.keys():
             dct[pid] = []
-        entry = { 'datetime': unicode( datetime.datetime.now() ), 'response_status_code': status }
+        entry = { 'datetime': str( datetime.datetime.now() ), 'response_status_code': status }
         dct[pid].append( entry )
         with open( self.DELETED_PIDS_TRACKER_PATH, 'w' ) as f:
             f.write( json.dumps(dct, sort_keys=True, indent=2) )
@@ -151,7 +147,7 @@ class BdrDeleter( object ):
         r = requests.get( self.SEARCH_API_URL, params=params )
         dct = r.json()
         for entry in dct['response']['docs']:
-            ( label_key, pid_value ) = entry.items()[0]  # entry example: `{ "pid": "bdr:650881" }`
+            ( label_key, pid_value ) = list(entry.items())[0]  # entry example: `{ "pid": "bdr:650881" }`
             queried_pids.append( pid_value )
         return queried_pids
 

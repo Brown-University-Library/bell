@@ -1,7 +1,3 @@
-# -*- coding: utf-8 -*-
-
-from __future__ import unicode_literals
-
 """ Prepares data for updating and deleting custom-index records.
     Executes custom-index changes as per readme.md """
 
@@ -154,7 +150,7 @@ class UpdatePidsLister( object ):
         for (i, key) in enumerate( sorted(accession_number_to_data_dct.keys()) ):
             if i + 1 > 70000:
                 break
-            print key
+            print(key)
             value_dct = accession_number_to_data_dct[key]
             pid = accession_number_to_pid_dct[key]
             value_dct['pid'] = pid
@@ -222,9 +218,9 @@ class CustomIndexUpdater( object ):
             if i + 1 > 70000:
                 break
             ( accession_number, data_dct ) = entry.items()[0]
-            print 'accession_number...'; print accession_number
+            print('accession_number...'); print(accession_number)
             q.enqueue_call(
-              func='bell_code.tasks.indexer.run_update_custom_index_entry',
+              func='tasks.indexer.run_update_custom_index_entry',
               kwargs={ 'accession_number': accession_number, 'data_dct': data_dct, 'pid': data_dct['pid'] },
               timeout=600 )
         return

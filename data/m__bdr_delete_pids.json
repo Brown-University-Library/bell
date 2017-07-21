@@ -1,67 +1,10 @@
 [
-  "bdr:405515", √
-  "bdr:299545", √
-  "bdr:299544", √
-  "bdr:298470", √ - new item, `bdr:650940`, has problem with jp2
-  "bdr:299546", √
-  "bdr:299541", √
-  "bdr:405518", √
-  "bdr:299543", √
-  "bdr:299542", √
-  "bdr:10996",  √
-  "bdr:298904", √ - new item, `bdr:650790` has problem with jp2
-  "bdr:10993",  √
-  "bdr:298905", √ - new item, `bdr:650790` has problem with jp2
-  "bdr:298919", √
-  "bdr:298918", √
-  "bdr:298620", √
-  "bdr:298911", √
-  "bdr:298910", √
-  "bdr:298913", √
-  "bdr:298912", √
-  "bdr:298915", √
-  "bdr:298914", √
-  "bdr:298917", √
-  "bdr:298916", √
-  "bdr:200389", √ (item still shows, but not in search)
-  "bdr:405529", √
-  "bdr:298520", (deleted after checking w/J.C.)
-  "bdr:405521", √
-  "bdr:405522", √
-  "bdr:405523", √
-  "bdr:405524", √
-  "bdr:299547", √
-  "bdr:405526", √
-  "bdr:298920", √
-  "bdr:405441", (deleted after checking w/J.C.)
-  "bdr:300984", √
-  "bdr:298528", (deleted after checking w/J.C.)
-  "bdr:10977",  (deleted after checking w/J.C.)
-  "bdr:298562", (deleted after checking w/J.C.)
-  "bdr:298909", √
-  "bdr:405535", √
-  "bdr:298921", √
-  "bdr:298908", √
-  "bdr:405534", √
-  "bdr:298923", √
-  "bdr:298619", (deleted after checking w/J.C.)
-  "bdr:298924", √
-  "bdr:405533", √
-  "bdr:298906", √ - new item, `bdr:650791`, has problem with jp2
-  "bdr:298907", √ - new item, `bdr:650791`, has problem with jp2
-  "bdr:298922", √
-  "bdr:405525", √
-  "bdr:299805", √
-  "bdr:299806", √
-  "bdr:299807", √
-  "bdr:300128", √ - new item, `bdr:650937`, has problem with jp2
-  "bdr:298925", √
-  "bdr:298537", √
-  "bdr:298536", √
-  "bdr:298535", √
-  "bdr:298534", √
-  "bdr:298533", √
-  "bdr:405532",
-  "bdr:405531", √
-  "bdr:405530"  √
+  "bdr:298562",
+  "bdr:148242",
+  "bdr:298599",
+  "bdr:298607",
+  "bdr:301371",
+  "bdr:316267",
+  "bdr:298571",
+  "bdr:316272"
 ]
