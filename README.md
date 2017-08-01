@@ -144,8 +144,8 @@ code related to ingesting bell-gallery images into the bdr.
     - status: done 2017-07-21
 
 - purge caches for updated images
-    - loris cache (info, source, derivatives)
-    - thumbnail in fedora & django cache
+    - loris cache (info, source, derivatives) - DONE 8/1/2017
+    - thumbnail in fedora & django cache - DONE 8/1/2017
 
 - update the custom-solr-index
     - 2017-07-21 WAITING FOR RESPONSE TO BIRKIN'S EMAIL ABOUT JSON FILE
