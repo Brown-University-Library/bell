@@ -163,7 +163,9 @@ code related to ingesting bell-gallery images into the bdr.
         - end result: j__solr_pids_list.json
         - note: i__x.json & h__x.json were files that are no longer needed
         - status: done 2017-08-04
-    - new next step b
+    - create solr data file
+        - tasks/indexer.run_create_solr_data()
+        - end result: k__data_for_solr.json
     - OLD -- TEMPORARY, FOR REFERENCE....
         - prep list of pids from custom-index
             - tasks/indexer.run_make_pids_for_custom_index()
