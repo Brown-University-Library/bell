@@ -14,104 +14,6 @@ logging.basicConfig(level=logging.DEBUG,
 
 queue_name = os.environ.get('BELL_QUEUE_NAME')
 q = rq.Queue( queue_name, connection=redis.Redis() )
-#r = redis.StrictRedis( host='localhost', port=6379, db=0 )
-
-
-#class CustomIndexPidsLister( object ):
-#    """ Prepares list of pids from custom-solr index. """
-#
-#    def __init__( self, logger=None ):
-#        self.logger = logger
-#        self.BELL_CUSTOM_IDX_ROOT_URL = unicode( os.environ['BELL_TASKS_IDXR__BELL_CUSTOM_IDX_ROOT_URL'] )
-#        self.OUTPUT_PATH = unicode( os.environ['BELL_TASKS_IDXR__CUSTOM_IDX_PIDS_JSON_PATH'] )
-#
-#    def grab_custom_index_pids( self ):
-#        """ Manages calls to create `h__pids_from_custom_index_list.json`.
-#            Called by runner as per readme.md """
-#        pids = self.grab_pids()
-#        self.output_list( pids )
-#
-#    def grab_pids( self ):
-#        """ Returns list of pids from custom-index.
-#            Called by grab_custom_index_pids() """
-#        params = {
-#            'q': '*:*', 'fl': 'pid', 'start': '0', 'rows': '70000', 'wt': 'json' }
-#        r = requests.get( self.BELL_CUSTOM_IDX_ROOT_URL, params=params, verify=False )
-#        self.logger.debug( 'in tasks.indexer.CustomIndexPidsLister.grab_pids(); r.url, `%s`' % r.url )
-#        dct = json.loads( r.content.decode('utf-8') )
-#        pid_dcts = dct['response']['docs']
-#        self.logger.debug( 'in tasks.indexer.CustomIndexPidsLister.grab_pids(); len(pid_dcts), `%s`' % len(pid_dcts) )
-#        self.logger.debug( 'in tasks.indexer.CustomIndexPidsLister.grab_pids(); pid_dcts[0]["pid"], `%s`' % pid_dcts[0]["pid"] )
-#        pids = []
-#        for pid_dct in pid_dcts:
-#            pids.append( pid_dct['pid'] )
-#        return sorted( pids )
-#
-#    def output_list( self, pid_list ):
-#        """ Saves json file.
-#            Called by grab_bdr_pids() """
-#        jsn = json.dumps( pid_list, indent=2, sort_keys=True )
-#        with open( self.OUTPUT_PATH, 'w' ) as f:
-#            f.write( jsn )
-#        return
-
-    # end class CustomIndexPidsLister
-
-
-#class DeletePidsLister( object ):
-#    """ Prepares lists of custom-solr items to be removed. """
-#
-#    def __init__( self, logger=None ):
-#        self.logger = logger
-#        self.BELL_SOURCE_DATA_JSON_PATH = unicode( os.environ['BELL_TASKS_IDXR__BELL_SOURCE_DATA_JSON_PATH'] )
-#        self.CUSTOM_IDX_PIDS_JSON_PATH = unicode( os.environ['BELL_TASKS_IDXR__CUSTOM_IDX_PIDS_JSON_PATH'] )
-#        self.OUTPUT_PATH = unicode( os.environ['BELL_TASKS_IDXR__CUSTOM_IDX_DELETES_PIDS_JSON_PATH'] )
-#
-#    def make_delete_pids_list( self ):
-#        """ Manages the creation of lists of pids to add/update, and to delete.
-#            Called by run_make_pids_from_bdr_list() """
-#        pids_from_xml_dump = self.make_xml_pids()
-#        pids_from_custom_index = self.grab_custom_index_pids()
-#        self.logger.debug( 'in tasks.indexer.UpdateAndDeletePidsLister.make_delete_pids_list(); len(pids_from_xml_dump), `%s`' % len(pids_from_xml_dump) )
-#        self.logger.debug( 'in tasks.indexer.UpdateAndDeletePidsLister.make_delete_pids_list(); len(pids_from_custom_index), `%s`' % len(pids_from_custom_index) )
-#        deletes = self.prepare_deletes( pids_from_xml_dump, pids_from_custom_index )
-#        self.output_list( deletes )
-#        return
-#
-#    def make_xml_pids( self ):
-#        """ Returns list of pids from bell-source-data.
-#            Called by make_delete_pids_list() """
-#        with open( self.BELL_SOURCE_DATA_JSON_PATH ) as f:
-#            dct = json.loads( f.read() )
-#        assert sorted( dct.keys() ) == [ 'count', 'datetime', 'final_accession_pid_dict' ], sorted( json_dict.keys() )
-#        assert dct['count']['count_null'] == 0  # not initially null, but is after re-running after ingestions
-#        pids_from_accession_numbers = dct['final_accession_pid_dict'].values()
-#        return sorted( pids_from_accession_numbers )
-#
-#    def grab_custom_index_pids( self ):
-#        """ Loads list of custom-index pids saved previously.
-#            Called by make_delete_pids_list() """
-#        with open( self.CUSTOM_IDX_PIDS_JSON_PATH ) as f:
-#            pids_from_custom_index = json.loads( f.read() )
-#        return pids_from_custom_index
-#
-#    def prepare_deletes( self, pids_from_xml_dump, pids_from_custom_index ):
-#        """ Runs set operations to make lists.
-#            Called by make_delete_pids_list() """
-#        deletes_set = set(pids_from_custom_index) - set(pids_from_xml_dump)
-#        self.logger.debug( 'in tasks.indexer.UpdateAndDeletePidsLister.prepare_deletes(); deletes_set, `%s`' % deletes_set )
-#        deletes_list = list( deletes_set )
-#        return deletes_list
-#
-#    def output_list( self, deletes ):
-#        """ Saves json file.
-#            Called by make_delete_pids_list() """
-#        jsn = json.dumps( deletes, indent=2, sort_keys=True )
-#        with open( self.OUTPUT_PATH, 'w' ) as f:
-#            f.write( jsn )
-#        return
-
-    # end class DeletePidsLister
 
 
 class SolrPidsLister:
@@ -563,25 +465,6 @@ class CustomIndexDeleter( object ):
 
 ## runners ##
 
-#logger = bell_logger.setup_logger()
-
-#def run_make_pids_for_custom_index():
-#    """ Saves pids for custom-index to `h__pids_from_custom_index_list.json`.
-#        Called manually per readme.md """
-#    logger.debug( 'in tasks.indexer.run_make_pids_from_custom_index(); starting' )
-#    cip_lstr = CustomIndexPidsLister( logger )
-#    cip_lstr.grab_custom_index_pids()
-#    logger.debug( 'in tasks.indexer.run_make_pids_from_custom_index(); done' )
-#    return
-
-#def run_make_delete_pids_list():
-#    """ Saves custom-index pids to be deleted to `i__custom_index_delete_pids.json`.
-#        Called manually per readme.md """
-#    logger.debug( 'in tasks.indexer.run_make_delete_pids_list(); starting' )
-#    del_lstr = DeletePidsLister( logger )
-#    del_lstr.make_delete_pids_list()
-#    logger.debug( 'in tasks.indexer.run_make_delete_pids_list(); done' )
-#    return
 
 def run_make_solr_pids_list():
     """ Saves custom-index pids to be created/updated to `j__solr_pids_list.json`.

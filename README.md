@@ -159,10 +159,10 @@ code related to ingesting bell-gallery images into the bdr.
         - delete everything in custom solr index
         - post new records
     - make solr pids list
-        - run_make_solr_pids_list()
-        - end result (if necessary): j__solr_pids_list.json
+        - tasks/indexer.run_make_solr_pids_list()
+        - end result: j__solr_pids_list.json
         - note: i__x.json & h__x.json were files that are no longer needed
-        - status: tbd
+        - status: done 2017-08-04
     - new next step b
     - OLD -- TEMPORARY, FOR REFERENCE....
         - prep list of pids from custom-index
