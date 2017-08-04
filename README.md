@@ -158,9 +158,10 @@ code related to ingesting bell-gallery images into the bdr.
         - build records to post to solr (in json file format so we could just send that to them in the future)
         - delete everything in custom solr index
         - post new records
-    - new next step a
-        - the code to run()
-        - end result (if necessary): the file_name.json
+    - make solr pids list
+        - run_make_solr_pids_list()
+        - end result (if necessary): j__solr_pids_list.json
+        - note: i__x.json & h__x.json were files that are no longer needed
         - status: tbd
     - new next step b
     - OLD -- TEMPORARY, FOR REFERENCE....
