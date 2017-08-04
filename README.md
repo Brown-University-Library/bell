@@ -134,6 +134,7 @@ code related to ingesting bell-gallery images into the bdr.
     - status: done 2017-07-06
 
 - TODO: make sure jpg images get an image/jpeg mimetype in Fedora
+    - add a code step that verifies the mimetype in Fedora
 
 - add updated images
     - tasks/images.run_enqueue_add_image_jobs()
@@ -151,6 +152,12 @@ code related to ingesting bell-gallery images into the bdr.
 
 - update the custom-solr-index
     - 2017-07-21 WAITING FOR RESPONSE TO BIRKIN'S EMAIL ABOUT JSON FILE
+    - 2017-08-04: looking at a different way of doing this:
+        - get access to all the custom metadata (based on accession number): c__accession_number_to_data_dict.json looks like it
+        - get all pids that match the accession number: e__accession_number_to_pid_dict.json looks like what we want
+        - build records to post to solr (in json file format so we could just send that to them in the future)
+        - delete everything in custom solr index
+        - post new records
     - prep list of pids from custom-index
         - tasks/indexer.run_make_pids_for_custom_index()
         - end result: `h__pids_from_custom_index_list.json`
@@ -211,6 +218,13 @@ code related to ingesting bell-gallery images into the bdr.
 
 - let Bell-J.C. & CIS-J.O. know when done
     - old status: done, 2016-05-26
+
+- TODO verify objects to delete, if they have images
+    - if an accession number changes, then we would see that as a new object
+    - then the old object (with the old accession number) would need to be deleted
+    - if that object to be deleted has an image, then we might lose the image, because she wouldn't send us the image if it wasn't updated.
+    - so, any items to delete with an image - check with her.
+    - and do this process before we even create any metadata objects.
 
 - TODO update future flow...
     - run initial bdr validation
