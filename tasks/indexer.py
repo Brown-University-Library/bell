@@ -128,14 +128,12 @@ class SolrDataBuilder:
     def update_custom_index_entry( self, accession_number, data_dct ):
         """ Manages prep & post of update custom index entry.
             Called by runner. """
-        time.sleep( .5 )
         metadata_solr_dict = self.build_metadata_only_solr_dict( data_dct )
-        #bdr_api_links_dict = self.grab_bdr_api_links_data( data_dct['pid'] )
-        #updated_solr_dict = self.add_image_metadata( metadata_solr_dict, bdr_api_links_dict )
-        #validity = self.validate_solr_dict( updated_solr_dict )
-        validity = True
+        bdr_api_links_dict = self.grab_bdr_api_links_data( data_dct['pid'] )
+        updated_solr_dict = self.add_image_metadata( metadata_solr_dict, bdr_api_links_dict )
+        validity = self.validate_solr_dict( updated_solr_dict )
         if validity:
-            return metadata_solr_dict
+            return updated_solr_dict
 
     def build_metadata_only_solr_dict( self, data_dct ):
         """ Builds dict-to-index using just basic item-dict data and pid; image-check handled in separate function.
@@ -156,13 +154,56 @@ class SolrDataBuilder:
         self.logger.debug( 'in tasks.indexer.CustomIndexUpdater.build_metadata_only_solr_dict(); solr_dict, `%s`' % pprint.pformat(solr_dict) )
         return solr_dict
 
+    def grab_bdr_api_links_data( self, pid ):
+        """ Grabs and returns link info from item-api json.
+            The links dict is used by tasks.indexer to add image info to the solr-metadata if needed.
+            Called by update_custom_index_entry() """
+        url = '%s/%s/' % ( self.BDR_PUBLIC_ITEM_API_URL_ROOT, pid )
+        self.logger.debug( 'url, `%s`' % url )
+        r = requests.get( url )
+        api_dict = r.json()
+        links_dict = api_dict['links']
+        self.logger.debug( 'links_dict, `%s`' % pprint.pformat(links_dict) )
+        return links_dict
+
+    def add_image_metadata( self, solr_dict, links_dict ):
+        """ Adds image metadata to dict-to-index.
+            Called by update_custom_index_entry() """
+        solr_dict['jp2_image_url'] = self._set_image_urls__get_jp2_url( links_dict )
+        solr_dict['master_image_url'] = self._set_image_urls__get_master_image_url( links_dict, solr_dict['jp2_image_url'] )
+        self.logger.debug( 'final solr_dict, `%s`' % pprint.pformat(solr_dict) )
+        return solr_dict
+
+    def validate_solr_dict( self, solr_dict ):
+        """ Returns True if checks pass; False otherwise.
+            Checks that required keys are present.
+            Checks that there are no None values.
+            Checks that any list values are not empty.
+            Checks that no members of a list value are of NoneType.
+            Called by update_custom_index_entry() """
+        try:
+            for required_key in self.REQUIRED_KEYS:
+                # self.logger.debug( 'in tasks.indexer.CustomIndexUpdater._validate_solr_dict(); required_key: %s' % required_key )
+                assert required_key in solr_dict.keys(), Exception( 'ERROR; missing required key: %s' % required_key )
+            for key,value in solr_dict.items():
+              assert value != None, Exception( 'ERROR; value is none for key: %s' % key )
+              if type(value) == list:
+                assert len(value) > 0, Exception( 'ERROR: key "%s" has a value of "%s", which is type-list, which is empty.' % ( key, value ) )
+                for element in value:
+                  assert element != None, Exception( 'ERROR: key "%s" has a value "%s", which is type-list, which contains a None element' % ( key, value ) )
+            self.logger.debug( 'is valid' )
+            return True
+        except Exception as e:
+            self.logger.error( 'exception is: %s' % unicode(repr(e)) )
+            return False
+
     def output_lst( self, lst ):
         """ Saves json file.
             Called by make_solr_pids_list() """
         jsn = json.dumps( lst, indent=2, sort_keys=True )
         filepath = os.path.join('data', 'k__data_for_solr.json')
-        with open( filepath, 'wb', encoding='utf8' ) as f:
-            f.write( jsn )
+        with open( filepath, 'wb' ) as f:
+            f.write( jsn.encode('utf8') )
         return
 
     ## metadata-only helpers ##
@@ -301,15 +342,11 @@ class SolrDataBuilder:
         if jp2_url == '':
             image_url = ''
         else:
+            #'MASTER' datastream is suppressed in the API, so we can't pull it out directly
             try:
-                image_url = links_dict['content_datastreams']['MASTER']  # don't think this is currently exposed
+                image_url = links_dict['content_datastreams']['TIFF']  # should handle some old items
             except:
                 pass
-            if not image_url:
-                try:
-                    image_url = links_dict['content_datastreams']['TIFF']  # should handle some old items
-                except:
-                    pass
             if not image_url:
                 try:
                     jp2_image_url = links_dict['content_datastreams']['JP2']  # default modern case: if JP2 exists, master is MASTER
@@ -317,7 +354,7 @@ class SolrDataBuilder:
                 except:
                     pass
             if not image_url:
-                self.logger.info( 'in tasks.indexer.CustomIndexUpdater._set_image_urls__get_master_image_url(); odd case, links_dict is `%s`, jp2_url is `%s`' % (pprint.pformat(links_dict), jp2_url) )
+                self.logger.info( 'odd case, links_dict is `%s`, jp2_url is `%s`' % (pprint.pformat(links_dict), jp2_url) )
                 image_url = ''
         return image_url
 

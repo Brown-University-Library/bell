@@ -150,6 +150,10 @@ code related to ingesting bell-gallery images into the bdr.
     - loris cache (info, source, derivatives) - DONE 8/1/2017
     - thumbnail in fedora & django cache - DONE 8/1/2017
 
+- TODO
+    - check all images have MASTER & JP2 datastreams (not TIFF, ...)
+    - check MASTER & JP2 headers: should have a filename, content type for JP2s, ... (HEAD request works for this)
+
 - update the custom-solr-index
     - 2017-07-21 WAITING FOR RESPONSE TO BIRKIN'S EMAIL ABOUT JSON FILE
     - 2017-08-04: looking at a different way of doing this:
@@ -161,11 +165,12 @@ code related to ingesting bell-gallery images into the bdr.
     - make solr pids list
         - tasks/indexer.run_make_solr_pids_list()
         - end result: j__solr_pids_list.json
-        - note: i__x.json & h__x.json were files that are no longer needed
+        - note: h__x.json & i__x.json were files that are no longer needed
         - status: done 2017-08-04
     - create solr data file
         - tasks/indexer.run_create_solr_data()
         - end result: k__data_for_solr.json
+        - status: done 2017-08-07
     - OLD -- TEMPORARY, FOR REFERENCE....
         - prep list of pids from custom-index
             - tasks/indexer.run_make_pids_for_custom_index()
