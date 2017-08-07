@@ -774,6 +774,10 @@ class CustomIndexDeleter( object ):
     # end class CustomIndexUpdater
 
 
+def update_solr_core():
+    pass
+
+
 ## runners ##
 
 

@@ -150,18 +150,7 @@ code related to ingesting bell-gallery images into the bdr.
     - loris cache (info, source, derivatives) - DONE 8/1/2017
     - thumbnail in fedora & django cache - DONE 8/1/2017
 
-- TODO
-    - check all images have MASTER & JP2 datastreams (not TIFF, ...)
-    - check MASTER & JP2 headers: should have a filename, content type for JP2s, ... (HEAD request works for this)
-
 - update the custom-solr-index
-    - 2017-07-21 WAITING FOR RESPONSE TO BIRKIN'S EMAIL ABOUT JSON FILE
-    - 2017-08-04: looking at a different way of doing this:
-        - get access to all the custom metadata (based on accession number): c__accession_number_to_data_dict.json looks like it
-        - get all pids that match the accession number: e__accession_number_to_pid_dict.json looks like what we want
-        - build records to post to solr (in json file format so we could just send that to them in the future)
-        - delete everything in custom solr index
-        - post new records
     - make solr pids list
         - tasks/indexer.run_make_solr_pids_list()
         - end result: j__solr_pids_list.json
@@ -171,6 +160,8 @@ code related to ingesting bell-gallery images into the bdr.
         - tasks/indexer.run_create_solr_data()
         - end result: k__data_for_solr.json
         - status: done 2017-08-07
+    - delete & post records to solr
+        - tasks/indexer.run_update_solr_core()
     - OLD -- TEMPORARY, FOR REFERENCE....
         - prep list of pids from custom-index
             - tasks/indexer.run_make_pids_for_custom_index()
@@ -298,6 +289,9 @@ _(no indent=true available)_
 - consider validating mods before sending it to api (tho api does validate it )
 - investigate indexing of metadata-only objects; specifically, object_type is 'undetermined' instead of 'CommonMetadata'
     - note: rels_content_model_ssim is now correct.
+- Normalization
+    - check all images have MASTER & JP2 datastreams (not TIFF, ...)
+    - check MASTER & JP2 headers: should have a filename, content type for JP2s, ... (HEAD request works for this)
 
 ---
 
