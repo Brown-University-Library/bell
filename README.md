@@ -150,12 +150,25 @@ code related to ingesting bell-gallery images into the bdr.
     - loris cache (info, source, derivatives) - DONE 8/1/2017
     - thumbnail in fedora & django cache - DONE 8/1/2017
 
-- TODO verify objects to delete, if they have images
-    - if an accession number changes, then we would see that as a new object
-    - then the old object (with the old accession number) would need to be deleted
-    - if that object to be deleted has an image, then we might lose the image, because she wouldn't send us the image if it wasn't updated.
-    - so, any items to delete with an image - check with her.
-    - and do this process before we even create any metadata objects.
+- delete old bell items from fedora
+    - steps:
+        - make list of bdr pids to delete.
+            - NOTE: do the deletion accession number check as early as possible
+            - NOTE: check whether an object to delete has an image - just update the metadata?
+            - `from tasks import cleanup; cleanup.run_make_bdr_pids_to_delete()`
+            - end result: `m__bdr_delete_pids.json`
+        - manually verify -- with J.C. -- objects to delete, if they have images.
+            - explanation
+                - if an accession number changes, then we would see that as a new object
+                - then the old object (with the old accession number) would need to be deleted
+                - if that object to be deleted has an image, then we might lose the image, because she wouldn't send us the image if it wasn't updated.
+                - so, any items to delete with an image - check with her.
+            - end result: `m__bdr_delete_pids.json` -- WITH NOTES
+            - status: 2017-Aug-09, in process -- bjd will follow-up with J.C.
+        - manually run deletion.
+            - `from tasks import cleanup; cleanup.run_delete_single_pid_from_bdr( pid )`
+            - end result: `n__bdr_entries_deleted_tracker.json`
+            - old status: 2016-Nov-29: most done weeks ago, did last four from emailing J.C.
 
 - update the custom-solr-index
     - make solr pids list
@@ -170,26 +183,13 @@ code related to ingesting bell-gallery images into the bdr.
     - delete & post records to solr
         - tasks/indexer.update_solr_core()
 
-- delete old bell items from fedora
-    - steps:
-        - make list of bdr pids to delete.
-            - NOTE: do the deletion accession number check as early as possible
-            - NOTE: check whether an object to delete has an image - just update the metadata?
-            - `from tasks import cleanup; cleanup.run_make_bdr_pids_to_delete()`
-            - end result: `m__bdr_delete_pids.json`
-            - status: need to follow-up with J.C. 2017-Aug-09
-        - run deletion.
-            - `from tasks import cleanup; cleanup.run_delete_single_pid_from_bdr( pid )`
-            - end result: `n__bdr_entries_deleted_tracker.json`
-            - status: most done weeks ago, did last four from emailing J.C. 2016-Nov-29
-
 - run bdr validation
-    - validate that all original-data pids are in the bdr.
-    - validate that all original-data accession-numbers are in the bdr.
+    - TODO: delete this step if there isn't anything really worth checking.
+    - validate that all original-data pids are in the bdr -- I (bjd) don't think this is necessary, since the data file `e__accession_number_to_pid_dict.json` covers this.
+    - validate that all original-data accession-numbers are in the bdr -- I (bjd) don't think this is necessary, since the data file `e__accession_number_to_pid_dict.json` covers this.
 
 - run solr validation
-    - validate that all original-data pids are in the the custom solr index.
-    - validate that all original-data accession-numbers are in the custom solr index.
+    - TODO: delete this step; I (bjd) don't think it's needed now that we're creating the solr data in a simpler way.
 
 - let Bell-J.C. & CIS-J.O. know when done
     - old status: done, 2016-05-26
