@@ -20,8 +20,6 @@ class BdrDeleter( object ):
     """ Manages BDR deletions. """
 
     def __init__( self ):
-        self.SOURCE_ORIGINAL_DATA_JSON_PATH = os.environ['BELL_ANTP__OUTPUT_JSON_PATH']
-        self.PIDS_TO_DELETE_SAVE_PATH = os.environ['BELL_TASKS_CLNR__PIDS_TO_DELETE_SAVE_PATH']
         self.DELETED_PIDS_TRACKER_PATH = os.environ['BELL_TASKS_CLNR__DELETED_PIDS_TRACKER_PATH']
         self.SEARCH_API_URL = os.environ['BELL_TASKS_CLNR__SEARCH_API_URL']
         self.BELL_COLLECTION_ID = os.environ['BELL_TASKS_CLNR__BELL_COLLECTION_ID']
@@ -42,7 +40,7 @@ class BdrDeleter( object ):
         ( source_pids_not_in_bdr, bdr_pids_not_in_source ) = self.intersect_pids( source_pids, existing_bdr_pids )
         logger.debug( 'ready to save output' )
         # save pids to be deleted
-        self.output_pids_to_delet_list( bdr_pids_not_in_source )
+        self.output_pids_to_delete_list( bdr_pids_not_in_source )
         return
 
     def delete_pid_via_bdr_item_api( self, pid ):
@@ -65,7 +63,7 @@ class BdrDeleter( object ):
     def prepare_source_pids( self ):
         """ Returns accession_to_pid_dct.
             Called by make_pids_to_delete() """
-        with open( self.SOURCE_ORIGINAL_DATA_JSON_PATH ) as f:
+        with open( os.path.join('data', 'e__accession_number_to_pid_dict.json') ) as f:
             source_dct = json.loads( f.read() )
         accession_to_pid_dct = source_dct['final_accession_pid_dict']
         source_pids = []
@@ -101,11 +99,12 @@ class BdrDeleter( object ):
             raise Exception( 'ERROR: source pids found that are not in the BDR. Investigate.' )
         return ( source_pids_not_in_bdr, bdr_pids_not_in_source )
 
-    def output_pids_to_delet_list( self, pid_list ):
+    def output_pids_to_delete_list( self, pid_list ):
         """ Saves json file.
             Called by grab_bdr_pids() """
-        jsn = json.dumps( pid_list, indent=2, sort_keys=True )
-        with open( self.PIDS_TO_DELETE_SAVE_PATH, 'w' ) as f:
+        data = {'datetime': str(datetime.datetime.now()), 'pids_to_delete': sorted(pid_list)}
+        jsn = json.dumps( data, indent=2, sort_keys=True )
+        with open( os.path.join('data', 'm__bdr_delete_pids.json'), 'wt' ) as f:
             f.write( jsn )
         return
 
@@ -138,7 +137,7 @@ class BdrDeleter( object ):
         return count
 
     def query_bdr_solr( self, start, rows ):
-        """ Querys bdr searche api.
+        """ Querys bdr search api.
             Called by helper prepare_bdr_pids() """
         logger.debug( 'start, `{}`'.format(start) )
         time.sleep( 1 )
