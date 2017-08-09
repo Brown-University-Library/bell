@@ -148,7 +148,11 @@ class BdrDeleter( object ):
         dct = r.json()
         for entry in dct['response']['docs']:
             #entry: {'pid': 'bdr:123', 'rel_object_type_ssi': 'jp2'}
-            queried_pids[entry['pid']] = entry['rel_object_type_ssi']
+            d = {'object_type': entry['rel_object_type_ssi'],
+                 'accession number': entry['mods_id_bell_accession_number_ssim'][0],
+                 'title': entry.get('primary_title', ''),
+                 'url': 'https://repository.library.brown.edu/studio/item/%s/' % entry['pid']}
+            queried_pids[entry['pid']] = d
         return queried_pids
 
     def prep_looping_params( self, start, rows ):
@@ -156,7 +160,7 @@ class BdrDeleter( object ):
             Called by helper query_bdr_solr. """
         params = {
             'q': 'rel_is_member_of_ssim:"{}"'.format( self.BELL_COLLECTION_ID ),
-            'fl': 'pid,rel_object_type_ssi',
+            'fl': 'pid,rel_object_type_ssi,mods_id_bell_accession_number_ssim,primary_title',
             'start': start,
             'rows': rows,
             'wt': 'json', 'indent': '2' }

@@ -253,6 +253,7 @@ _(no indent=true available)_
 - consider validating mods before sending it to api (tho api does validate it )
 - investigate indexing of metadata-only objects; specifically, object_type is 'undetermined' instead of 'CommonMetadata'
     - note: rels_content_model_ssim is now correct.
+- look into updating BDR metadata if Bell metadata has changed
 - Normalization
     - check all images have MASTER & JP2 datastreams (not TIFF, ...)
     - check MASTER & JP2 headers: should have a filename, content type for JP2s, ... (HEAD request works for this)
