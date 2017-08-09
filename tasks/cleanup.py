@@ -34,13 +34,16 @@ class BdrDeleter( object ):
             Called manuall per README. """
         logger.debug( 'starting make_pids_to_delete()' )
         # get source and bdr pids
-        source_pids = self.prepare_source_pids()
-        existing_bdr_pids = self.prepare_bdr_pids()
+        source_pids = self.prepare_source_pids() #simple list
+        existing_bdr_pids = self.prepare_bdr_pids() #dict of information for all Bell pids in the BDR
         # intersect lists
-        ( source_pids_not_in_bdr, bdr_pids_not_in_source ) = self.intersect_pids( source_pids, existing_bdr_pids )
+        ( source_pids_not_in_bdr, bdr_pids_not_in_source ) = self.intersect_pids( source_pids, list(existing_bdr_pids.keys()) )
         logger.debug( 'ready to save output' )
+        delete_pids_info = {}
+        for pid in bdr_pids_not_in_source:
+            delete_pids_info[pid] = existing_bdr_pids[pid]
         # save pids to be deleted
-        self.output_pids_to_delete_list( bdr_pids_not_in_source )
+        self.output_pids_to_delete_list( delete_pids_info )
         return
 
     def delete_pid_via_bdr_item_api( self, pid ):
@@ -78,13 +81,11 @@ class BdrDeleter( object ):
         """ Returns list of bdr pids associated with the bell collection.
             Called by make_pids_to_delete() """
         logger.debug( 'starting prepare_bdr_pids()' )
-        ( bdr_pids, start, rows, total_count ) = ( [], 0, 500, self.get_total_count() )
+        ( bdr_pids, start, rows, total_count ) = ( {}, 0, 500, self.get_total_count() )
         while start <= total_count:
             queried_pids = self.query_bdr_solr( start, rows )
-            for pid in queried_pids:
-                bdr_pids.append( pid )
+            bdr_pids.update( queried_pids )
             start += 500
-        bdr_pids = sorted( bdr_pids )
         logger.debug( 'len(bdr_pids), `{}`'.format(len(bdr_pids)) )
         return bdr_pids
 
@@ -99,10 +100,10 @@ class BdrDeleter( object ):
             raise Exception( 'ERROR: source pids found that are not in the BDR. Investigate.' )
         return ( source_pids_not_in_bdr, bdr_pids_not_in_source )
 
-    def output_pids_to_delete_list( self, pid_list ):
+    def output_pids_to_delete_list( self, pids_info ):
         """ Saves json file.
             Called by grab_bdr_pids() """
-        data = {'datetime': str(datetime.datetime.now()), 'pids_to_delete': sorted(pid_list)}
+        data = {'datetime': str(datetime.datetime.now()), 'pids_to_delete': pids_info}
         jsn = json.dumps( data, indent=2, sort_keys=True )
         with open( os.path.join('data', 'm__bdr_delete_pids.json'), 'wt' ) as f:
             f.write( jsn )
@@ -141,13 +142,13 @@ class BdrDeleter( object ):
             Called by helper prepare_bdr_pids() """
         logger.debug( 'start, `{}`'.format(start) )
         time.sleep( 1 )
-        queried_pids = []
+        queried_pids = {}
         params = self.prep_looping_params( start, rows )
         r = requests.get( self.SEARCH_API_URL, params=params )
         dct = r.json()
         for entry in dct['response']['docs']:
-            ( label_key, pid_value ) = list(entry.items())[0]  # entry example: `{ "pid": "bdr:650881" }`
-            queried_pids.append( pid_value )
+            #entry: {'pid': 'bdr:123', 'rel_object_type_ssi': 'jp2'}
+            queried_pids[entry['pid']] = entry['rel_object_type_ssi']
         return queried_pids
 
     def prep_looping_params( self, start, rows ):
@@ -155,7 +156,7 @@ class BdrDeleter( object ):
             Called by helper query_bdr_solr. """
         params = {
             'q': 'rel_is_member_of_ssim:"{}"'.format( self.BELL_COLLECTION_ID ),
-            'fl': 'pid',
+            'fl': 'pid,rel_object_type_ssi',
             'start': start,
             'rows': rows,
             'wt': 'json', 'indent': '2' }
