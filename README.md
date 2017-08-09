@@ -150,6 +150,13 @@ code related to ingesting bell-gallery images into the bdr.
     - loris cache (info, source, derivatives) - DONE 8/1/2017
     - thumbnail in fedora & django cache - DONE 8/1/2017
 
+- TODO verify objects to delete, if they have images
+    - if an accession number changes, then we would see that as a new object
+    - then the old object (with the old accession number) would need to be deleted
+    - if that object to be deleted has an image, then we might lose the image, because she wouldn't send us the image if it wasn't updated.
+    - so, any items to delete with an image - check with her.
+    - and do this process before we even create any metadata objects.
+
 - update the custom-solr-index
     - make solr pids list
         - tasks/indexer.run_make_solr_pids_list()
@@ -164,14 +171,13 @@ code related to ingesting bell-gallery images into the bdr.
         - tasks/indexer.update_solr_core()
 
 - delete old bell items from fedora
-    - 2016-Oct-20: in response to J.C. recent emails, should write code to delete non-source-data entries from fedora. TODO.
     - steps:
         - make list of bdr pids to delete.
             - NOTE: do the deletion accession number check as early as possible
             - NOTE: check whether an object to delete has an image - just update the metadata?
             - `from tasks import cleanup; cleanup.run_make_bdr_pids_to_delete()`
             - end result: `m__bdr_delete_pids.json`
-            - status: TODO: add accession_number, title, and url to items to delete.
+            - status: need to follow-up with J.C. 2017-Aug-09
         - run deletion.
             - `from tasks import cleanup; cleanup.run_delete_single_pid_from_bdr( pid )`
             - end result: `n__bdr_entries_deleted_tracker.json`
@@ -187,13 +193,6 @@ code related to ingesting bell-gallery images into the bdr.
 
 - let Bell-J.C. & CIS-J.O. know when done
     - old status: done, 2016-05-26
-
-- TODO verify objects to delete, if they have images
-    - if an accession number changes, then we would see that as a new object
-    - then the old object (with the old accession number) would need to be deleted
-    - if that object to be deleted has an image, then we might lose the image, because she wouldn't send us the image if it wasn't updated.
-    - so, any items to delete with an image - check with her.
-    - and do this process before we even create any metadata objects.
 
 - TODO update future flow...
     - run initial bdr validation
