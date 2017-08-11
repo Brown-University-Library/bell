@@ -5,6 +5,8 @@ code related to ingesting bell-gallery images into the bdr.
 
 ### normal ingest flow ###
 
+- TODOs at the bottom - investigate before processing another batch.
+
 - get metadata
     - metadata should be for _all_ the records
     - from having all the metadata, the code can determine what image-&-metadata additions to make, what metadata-only additions to make, and make corrections to existing bdr metadata
@@ -187,13 +189,6 @@ code related to ingesting bell-gallery images into the bdr.
 - let Bell-J.C. & CIS-J.O. know when done
     - old status: done, 2016-05-26
 
-- TODO update future flow...
-    - run initial bdr validation
-    - run bdr cleanup
-    - run rest of bdr validation
-    - update solr index
-    - run solr validation
-
 ---
 
 ### feb 2017 J.C. followup ###
@@ -239,12 +234,9 @@ _(no indent=true available)_
 
 ### TODOs...
 
-- modernize logging
-- re-architecting settings -- perhaps `prep_env_settings.sh`, `dev_env_settings.sh`, `prod_env_settings.sh`
-- add to init.d rq-worker start-stop-status script
+- switch paths in data/ to explicit relative paths, instead of settings
 - consider validating mods before sending it to api (tho api does validate it )
 - investigate indexing of metadata-only objects; specifically, object_type is 'undetermined' instead of 'CommonMetadata'
-    - note: rels_content_model_ssim is now correct.
 - look into updating BDR metadata if Bell metadata has changed
 - Normalization
     - check all images have MASTER & JP2 datastreams (not TIFF, ...)
