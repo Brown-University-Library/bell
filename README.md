@@ -163,12 +163,12 @@ code related to ingesting bell-gallery images into the bdr.
                 - then the old object (with the old accession number) would need to be deleted
                 - if that object to be deleted has an image, then we might lose the image, because she wouldn't send us the image if it wasn't updated.
                 - so, any items to delete with an image - check with her.
-            - end result: `m__bdr_delete_pids.json` -- WITH NOTES
-            - status: 2017-Aug-09, in process -- bjd will follow-up with J.C.
+            - status: 2017-Aug-10, J.C. said OK to delete them all.
         - manually run deletion.
             - `from tasks import cleanup; cleanup.run_delete_single_pid_from_bdr( pid )`
             - end result: `n__bdr_entries_deleted_tracker.json`
-            - old status: 2016-Nov-29: most done weeks ago, did last four from emailing J.C.
+            - status: 2017-Aug-11: done
+            - TODO: script a check against the API to make sure we get a 404 (after cache expires).
 
 - update the custom-solr-index
     - make solr pids list
@@ -182,14 +182,6 @@ code related to ingesting bell-gallery images into the bdr.
         - status: done 2017-08-07
     - delete & post records to solr
         - tasks/indexer.update_solr_core()
-
-- run bdr validation
-    - TODO: delete this step if there isn't anything really worth checking.
-    - validate that all original-data pids are in the bdr -- I (bjd) don't think this is necessary, since the data file `e__accession_number_to_pid_dict.json` covers this.
-    - validate that all original-data accession-numbers are in the bdr -- I (bjd) don't think this is necessary, since the data file `e__accession_number_to_pid_dict.json` covers this.
-
-- run solr validation
-    - TODO: delete this step; I (bjd) don't think it's needed now that we're creating the solr data in a simpler way.
 
 - let Bell-J.C. & CIS-J.O. know when done
     - old status: done, 2016-05-26

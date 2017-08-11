@@ -47,7 +47,9 @@ class BdrDeleter( object ):
         return
 
     def delete_pid_via_bdr_item_api( self, pid ):
-        """ Hits item-api to delete item from bdr. """
+        """ Hits item-api to delete item from bdr.
+        TODO: make this environment-aware so we can run against dev if desired.
+        """
         payload = {
             'pid': pid,
             'identity': self.BELL_ITEM_API_IDENTITY,
