@@ -182,6 +182,7 @@ code related to ingesting bell-gallery images into the bdr.
         - status: done 2017-08-07
     - delete & post records to solr
         - tasks/indexer.update_solr_core()
+        - status: done 2017-08-11
 
 - let Bell-J.C. & CIS-J.O. know when done
     - old status: done, 2016-05-26
