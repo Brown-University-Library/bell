@@ -77,6 +77,7 @@ code related to ingesting bell-gallery images into the bdr.
         - done: rerun 2017-07-03 -- now shows, appropriately, none
 
 - create new metadata objects
+    - TODO: update to use new-style BDR API params (eg. 'additional_rights' has to be in the 'rights' parameter, not at the top level)
     - tasks/metadata.run_enqueue_create_metadata_only_jobs()
 
     - to run (from `bell_code` directory)...
