@@ -2,10 +2,14 @@
 
 code related to ingesting bell-gallery images into the bdr.
 
+---
+
 ### code architecture/layout ###
 
 - code for tasks below - goes in tasks/
 - one-off scripts go in one_offs/
+
+---
 
 ### normal ingest flow ###
 
