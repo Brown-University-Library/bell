@@ -26,8 +26,7 @@ code related to ingesting bell-gallery images into the bdr.
     - why: makes it easy to see the source fields, and if necessary check source xml
     - tasks/format_xml_file.py
     - end result: `b__all_data_formatted.xml`
-    - status:
-        - in process
+    - status: done 2018-05-10
 
 - get access to image-directory
     - check desktop access
@@ -230,6 +229,7 @@ _(no indent=true available)_
 
 ### TODOs...
 
+- low-importance interesting idea -- create a script to check file-access dates to determine old-unused code.
 - switch paths in data/ to explicit relative paths, instead of settings
 - consider validating mods before sending it to api (tho api does validate it )
 - investigate indexing of metadata-only objects; specifically, object_type is 'undetermined' instead of 'CommonMetadata'
