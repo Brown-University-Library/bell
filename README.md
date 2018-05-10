@@ -2,6 +2,10 @@
 
 code related to ingesting bell-gallery images into the bdr.
 
+### code architecture/layout ###
+
+- code for tasks below - goes in tasks/
+- one-off scripts go in one_offs/
 
 ### normal ingest flow ###
 
@@ -223,6 +227,8 @@ _(no indent=true available)_
 - Normalization
     - check all images have MASTER & JP2 datastreams (not TIFF, ...)
     - check MASTER & JP2 headers: should have a filename, content type for JP2s, ... (HEAD request works for this)
+- review one_off scripts and get rid of least-necessary scripts
+- get rid of any utils/ files that we haven't used
 
 ---
 
