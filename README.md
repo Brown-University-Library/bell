@@ -230,6 +230,8 @@ _(no indent=true available)_
 
 ### TODOs...
 
+- review tests and edit or delete those not used.
+    - consider incorporating test-run into README flow.
 - low-importance interesting idea -- create a script to check file-access dates to determine old-unused code.
 - switch paths in data/ to explicit relative paths, instead of settings
 - consider validating mods before sending it to api (tho api does validate it )
