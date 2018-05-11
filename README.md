@@ -36,7 +36,7 @@ code related to ingesting bell-gallery images into the bdr.
         - status: done 2018-05-11
 
 - convert raw filemaker-pro xml to json
-    - foundation/acc_num_to_data.py
+    - tasks/acc_num_to_data.py
     - end result: `c__accession_number_to_data_dict.json`
     - status:
         - done 2017-06-26
