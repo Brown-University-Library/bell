@@ -1,6 +1,7 @@
 import datetime, json, os, pprint
 import lxml
 from lxml import etree
+from bell_utils import DATA_DIR
 
 
 class SourceDictMaker:
@@ -203,7 +204,7 @@ class SourceDictMaker:
             if entry['calc_accession_id']:  # handles a null entry
                 accession_number_dict[ entry['calc_accession_id'].strip() ] = entry
             else:
-                print( '- entry, `%s`' % entry )
+                print(f'- NO ACCESSION NUMBER FOR THIS RECORD - CHECK ON IT!\n`{entry}`')
         final_dict = {
           'count': len( accession_number_dict.items() ),
           'datetime': str( datetime.datetime.now() ),
@@ -231,13 +232,12 @@ class SourceDictMaker:
 
 
 if __name__ == '__main__':
-    """ Assumes env is activated.
-        ( 'ANTD' used as a namespace prefix for this 'acc_num_to_data.py' file. ) """
-    # pprint.pprint( os.environ.__dict__ )
-    FMPRO_XML_PATH = os.environ['BELL_ANTD__FMPRO_XML_PATH']
-    JSON_OUTPUT_PATH = os.environ['BELL_ANTD__JSON_OUTPUT_PATH']
+    """ Assumes env is activated. """
+    FMPRO_XML_PATH = os.path.join(DATA_DIR, 'b__all_data_formatted.xml')
+    JSON_OUTPUT_PATH = os.path.join(DATA_DIR, 'c__accession_number_to_data_dict.json')
     maker = SourceDictMaker()
     maker._print_settings(
         FMPRO_XML_PATH, JSON_OUTPUT_PATH )
     maker.convert_fmproxml_to_json(
         FMPRO_XML_PATH, JSON_OUTPUT_PATH )
+
