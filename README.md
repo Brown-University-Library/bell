@@ -43,11 +43,10 @@ code related to ingesting bell-gallery images into the bdr.
             - emailed J.C. w/question about 1 missing accession-number
 
 - run script to get list of files in the images-to-ingest directory
-    - utils/make_image_list.py
+    - tasks/make_image_list.py
     - end result: `d__bell_images_listing.json`
     - status:
-        - done 2017-06-27
-        - redone 2017-06-29 with J.C.'s corrections
+        - IN_PROCESS 2018-May-11
 
 - compare imagefile-filenames to metadata-filenames
     - utils/check_filenames_against_metadata.py
@@ -68,7 +67,7 @@ code related to ingesting bell-gallery images into the bdr.
     - status: idone 2017-06-29.
 
 - match metadata accession-numbers to pid #1
-    - foundation/acc_num_to_pid.py
+    - tasks/acc_num_to_pid.py
     - end result: `e__accession_number_to_pid_dict.json` file containing a dict of accession-numbers-to-pids.
     - accession-numbers without pids imply creation of a new metadata-only object (which may gain an associated image later)
     - accession-numbers with pids imply checking to see if fedora metadata needs to be updated
