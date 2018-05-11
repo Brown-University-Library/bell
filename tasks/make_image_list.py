@@ -6,6 +6,7 @@ Saves to json.
 from collections import OrderedDict
 import datetime, glob, imghdr, json, os, pprint
 import logging
+from bell_utils import DATA_DIR
 
 
 logger = logging.getLogger(__name__)
@@ -18,7 +19,7 @@ class ImageLister:
 
     def __init__( self ):
         self.DIRECTORY_PATH = os.environ['BELL_UTILS__IMAGE_DIRECTORY_PATH']
-        self.OUTPUT_PATH = os.environ['BELL_UTILS__IMAGE_DIRECTORY_JSON_PATH']
+        self.OUTPUT_PATH = os.path.join(DATA_DIR, 'd__bell_images_listing.json')
 
     def list_images( self ):
         """ Produces a json list of image file-names. """
@@ -83,7 +84,7 @@ class ImageLister:
         directory_info_dict =  {
             'count_filelist': len( non_dir_list ),
             'date_time': str( datetime.datetime.now() ),
-            'directory_path': self.DIRECTORY_PATH,
+            'directory_path': 'TBD', #TODO
             'discrepancies': discrepancies,
             'extension_types': extension_types,
             'filelist': non_dir_list, }
