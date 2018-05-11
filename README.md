@@ -39,8 +39,8 @@ code related to ingesting bell-gallery images into the bdr.
     - tasks/acc_num_to_data.py
     - end result: `c__accession_number_to_data_dict.json`
     - status:
-        - done 2017-06-26
-        - redone 2017-06-29 with J.C.'s corrections
+        - IN_PROCESS 2018-May-11
+            - emailed J.C. w/question about 1 missing accession-number
 
 - run script to get list of files in the images-to-ingest directory
     - utils/make_image_list.py
