@@ -39,14 +39,12 @@ code related to ingesting bell-gallery images into the bdr.
     - tasks/acc_num_to_data.py
     - end result: `c__accession_number_to_data_dict.json`
     - status:
-        - IN_PROCESS 2018-May-11
-            - emailed J.C. w/question about 1 missing accession-number
+        - DONE 2018-May-12
 
 - run script to get list of files in the images-to-ingest directory
     - tasks/make_image_list.py
-    - end result: `d__bell_images_listing.json`
-    - status:
-        - IN_PROCESS 2018-May-11
+    - end result: `d1__bell_images_listing.json`
+    - status: DONE 2018-May-14
 
 - compare imagefile-filenames to metadata-filenames
     - utils/check_filenames_against_metadata.py
