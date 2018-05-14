@@ -47,22 +47,21 @@ code related to ingesting bell-gallery images into the bdr.
     - status: DONE 2018-May-14
 
 - compare imagefile-filenames to metadata-filenames
-    - utils/check_filenames_against_metadata.py
+    - tasks/check_filenames_against_metadata.py
         - NOTE: update the line:
 
                 filenames_subset = self.filter_filenames( filenames_dct, [ '.22', '.tif', '.tiff' ] )  # from manual inspection of d__bell_images_listing.json
 
-            ...with the appropriate suffixes from the d__bell_images_listing - 'extension_types'
+            ...with the appropriate suffixes from the d1__bell_images_listing.json - 'extension_types'
 
         - NOTE: code _will_ count as a 'find' an image-filename ending in, say, '.tif', even if, in c__accession_number....json, the filename does _not_ contain that extension.
 
     - end result: `data/d2__images_metadata_comparison.json` -- work through any not-matched files with J.C. before proceeding.
-    - work:
-        - emailed J.C. list of non-matches 2017-06-28
-        - 38 image-directory filenames were found in the metadata
-        - 67 image-directory filenames were not found in the metadata.
-        - got a new file from J.C., reran matching and after one manual imgage filename corection are all set.
-    - status: idone 2017-06-29.
+    - status:
+        IN-PROCESS 2018-05-14
+        - will J.C. list of non-matches
+        - 122 image-directory filenames _were_ found in the metadata
+        - 14 image-directory filenames were not found in the metadata.
 
 - match metadata accession-numbers to pid #1
     - tasks/acc_num_to_pid.py
