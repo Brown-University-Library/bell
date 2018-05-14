@@ -5,6 +5,7 @@ Checks filenames against metadata.
 """
 import datetime, glob, json, os, pprint
 import logging
+from bell_utils import DATA_DIR
 
 logger = logging.getLogger(__name__)
 logging.basicConfig(level=logging.DEBUG,
@@ -15,9 +16,9 @@ logging.basicConfig(level=logging.DEBUG,
 class Checker:
 
     def __init__( self ):
-        self.METADATA_PATH = os.environ['BELL_UTILS__JSON_METADATA_PATH']
-        self.FILENAMES_PATH = os.environ['BELL_UTILS__JSON_FILENAMES_PATH']
-        self.OUTPUT_PATH = os.environ['BELL_UTILS__JSON_IMAGE_METADATA_COMPARE_PATH']
+        self.METADATA_PATH = os.path.join(DATA_DIR, 'c__accession_number_to_data_dict.json')
+        self.FILENAMES_PATH = os.path.join(DATA_DIR, 'd1__bell_images_listing.json')
+        self.OUTPUT_PATH = os.path.join(DATA_DIR, 'd2__images_metadata_comparison.json')
 
     def check_filenames( self ):
         """ Checks filenames against metadata.
@@ -96,7 +97,7 @@ class Checker:
     # end class Checker
 
 
-
 if __name__ == '__main__':
     checker = Checker()
     checker.check_filenames()
+
