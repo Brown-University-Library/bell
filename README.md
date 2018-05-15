@@ -19,21 +19,21 @@ code related to ingesting bell-gallery images into the bdr.
     - metadata should be for _all_ the records
     - from having all the metadata, the code can determine what image-&-metadata additions to make, what metadata-only additions to make, and make corrections to existing bdr metadata
     - status:
-        - DONE; added to git 2018-05-10
+        - DONE; added to git 2018-May-10
             - `a__all_data_raw.xml`
 
 - format metadata
     - why: makes it easy to see the source fields, and if necessary check source xml
     - tasks/format_xml_file.py
     - end result: `b__all_data_formatted.xml`
-    - status: DONE 2018-05-10
+    - status: DONE 2018-May-10
 
 - get access to image-directory
     - check dev `mount` access
         - notes:
             - the specific mount directory changes each run, so check that our symlink is correct.
             - the share path is in a settings comment.
-        - status: DONE 2018-05-11
+        - status: DONE 2018-May-11
 
 - convert raw filemaker-pro xml to json
     - tasks/acc_num_to_data.py
@@ -58,11 +58,11 @@ code related to ingesting bell-gallery images into the bdr.
 
     - end result: `data/d2__images_metadata_comparison.json` -- work through any not-matched files with J.C. before proceeding.
     - status:
-        IN-PROCESS 2018-05-14
-        - 2018-05-14 - emailed J.C. list of non-matches
+        IN-PROCESS 2018-May-14
+        - 2018-May-14 - emailed J.C. list of non-matches
         - 122 image-directory filenames _were_ found in the metadata
         - 14 image-directory filenames were not found in the metadata.
-        - 2018-05-15 - emailed J.C. explanation of remaining non-matches.
+        - 2018-May-15 - emailed J.C. explanation of remaining non-matches.
 
 - match metadata accession-numbers to pid #1
     - tasks/acc_num_to_pid.py
