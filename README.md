@@ -63,6 +63,7 @@ code related to ingesting bell-gallery images into the bdr.
         - 122 image-directory filenames _were_ found in the metadata
         - 14 image-directory filenames were not found in the metadata.
         - 2018-May-15 - emailed J.C. explanation of remaining non-matches.
+        - 2018-May-16 - emailed J.C. request for correct-metadata format.
 
 - match metadata accession-numbers to pid #1
     - tasks/acc_num_to_pid.py
@@ -73,6 +74,10 @@ code related to ingesting bell-gallery images into the bdr.
         - run 2017-06-28; shows 97 accession-numbers without pids
         - rerun 2017-06-29 after new metadata file from J.C.; shows 97 accession-numbers without pids (one changed pid from previous list)
         - done 2017-07-03 -- no acession numbers without pids.
+
+
+NOTE, NEW STEP HERE -- we'll apply check-for-deletions logic here -- so that we can check with J.C. right away.
+
 
 - make metadata-only list
     - tasks/metadata.run_metadata_only_lister()
