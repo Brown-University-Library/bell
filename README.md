@@ -20,14 +20,14 @@ code related to ingesting bell-gallery images into the bdr.
         - NOTE: we need the FileMaker exported format 'FMPXMLRESULT'. (Occasionally we have mistakenly received a different format.)
     - from having all the metadata, the code can determine what image-&-metadata additions to make, what metadata-only additions to make, and make corrections to existing bdr metadata
     - status:
-        - DONE; added to git 2018-May-10
+        - DONE; added to git 2018-May-10; re-added new data 2018-May-17.
             - `a__all_data_raw.xml`
 
 - format metadata
     - why: makes it easy to see the source fields, and if necessary check source xml
     - tasks/format_xml_file.py
     - end result: `b__all_data_formatted.xml`
-    - status: DONE 2018-May-10
+    - status: DONE 2018-May-10; re-added new data 2018-May-17.
 
 - get access to image-directory
     - check dev `mount` access
