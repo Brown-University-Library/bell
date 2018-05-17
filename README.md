@@ -17,6 +17,7 @@ code related to ingesting bell-gallery images into the bdr.
 
 - get metadata
     - metadata should be for _all_ the records
+        - NOTE: we need the FileMaker exported format 'FMPXMLRESULT'. (Occasionally we have mistakenly received a different format.)
     - from having all the metadata, the code can determine what image-&-metadata additions to make, what metadata-only additions to make, and make corrections to existing bdr metadata
     - status:
         - DONE; added to git 2018-May-10
