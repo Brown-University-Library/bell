@@ -40,12 +40,12 @@ code related to ingesting bell-gallery images into the bdr.
     - tasks/acc_num_to_data.py
     - end result: `c__accession_number_to_data_dict.json`
     - status:
-        - DONE 2018-May-12
+        - DONE 2018-May-12; re-done w/new data 2018-May-17.
 
 - run script to get list of files in the images-to-ingest directory
     - tasks/make_image_list.py
     - end result: `d1__bell_images_listing.json`
-    - status: DONE 2018-May-14
+    - status: DONE 2018-May-14; re-done since i thought some filenames were changed, but not, no problem - 2018-May-17.
 
 - compare imagefile-filenames to metadata-filenames
     - tasks/check_filenames_against_metadata.py
