@@ -1,8 +1,8 @@
 {
   "count_excluded": 0,
-  "count_found": 122,
-  "count_not_found": 14,
-  "date_time": "2018-05-14 13:25:30.946562",
+  "count_found": 135,
+  "count_not_found": 1,
+  "date_time": "2018-05-17 10:14:24.863493",
   "found_lst": [
     "Becker PH_2018.3.1.jpg",
     "Becker PH_2018.3.2.jpg",
@@ -24,6 +24,7 @@
     "Castellana PH_2018.2.5.jpg",
     "Castellana PH_2018.2.6.jpg",
     "Castellana PH_2018.2.7.jpg",
+    "Castellana PH_2018.2.8.jpg",
     "Citret PH_2017.13.106.tif",
     "Citret PH_2017.13.108.tif",
     "Citret PH_2017.13.109.tif",
@@ -58,6 +59,16 @@
     "Iturbide PH_2017.6.3.tif",
     "Jordan PH.2017.4.2.jpg",
     "Jordan PH_2017.4.1jpg.jpg",
+    "Liebling PH_2001.1.1.tif",
+    "Liebling PH_2001.1.10.tif",
+    "Liebling PH_2001.1.2.tif",
+    "Liebling PH_2001.1.3.tif",
+    "Liebling PH_2001.1.4.tif",
+    "Liebling PH_2001.1.5.tif",
+    "Liebling PH_2001.1.6.tif",
+    "Liebling PH_2001.1.7.tif",
+    "Liebling PH_2001.1.8.tif",
+    "Liebling PH_2001.1.9.tif",
     "Lipton D_2017.12.1.tif",
     "Lipton D_2017.8.tif",
     "Lyon PH_2015.11.27.tif",
@@ -108,6 +119,7 @@
     "Quigley PH_2017.13.11.tif",
     "Quigley PH_2017.13.3.tif",
     "Quigley PH_2017.13.4.tif",
+    "Quigley PH_2017.13.5.tif",
     "Quigley PH_2017.13.6.tif",
     "Rothstein PH_2017.13.136.tif",
     "Rothstein PH_2017.13.138.tif",
@@ -120,6 +132,7 @@
     "Stoumen PH_2017.13.97.tif",
     "Stoumen PH_2017.13.98.tif",
     "Stoumen PH_2017.13.99.tif",
+    "Sugimoto PH_2016.6.2.jpg",
     "Witt PH_2016.9.2.tif",
     "Witt PH_2016.9.3.tif",
     "Witt PH_2016.9.4.tif",
@@ -128,19 +141,6 @@
     "Witt PH_2016.9.7.tif"
   ],
   "not_found_lst": [
-    "Castellana PH_2018.2.8.jpg",
-    "Liebling PH_2001.1.1.tif",
-    "Liebling PH_2001.1.10.tif",
-    "Liebling PH_2001.1.2.tif",
-    "Liebling PH_2001.1.3.tif",
-    "Liebling PH_2001.1.4.tif",
-    "Liebling PH_2001.1.5.tif",
-    "Liebling PH_2001.1.6.tif",
-    "Liebling PH_2001.1.7.tif",
-    "Liebling PH_2001.1.8.tif",
-    "Liebling PH_2001.1.9.tif",
-    "Quigley PH_2017.13.5.tif",
-    "Sugimoto PH_2016.6.1.jpg",
-    "Sugimoto PH_2016.6.2.jpg"
+    "Sugimoto PH_2016.6.1.jpg"
   ]
 }
