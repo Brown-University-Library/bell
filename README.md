@@ -59,12 +59,13 @@ code related to ingesting bell-gallery images into the bdr.
 
     - end result: `data/d2__images_metadata_comparison.json` -- work through any not-matched files with J.C. before proceeding.
     - status:
-        IN-PROCESS 2018-May-14
+        IN-PROCESS 2018-May-17
         - 2018-May-14 - emailed J.C. list of non-matches
         - 122 image-directory filenames _were_ found in the metadata
         - 14 image-directory filenames were not found in the metadata.
         - 2018-May-15 - emailed J.C. explanation of remaining non-matches.
         - 2018-May-16 - emailed J.C. request for correct-metadata format.
+        - 2018-May-17 - emailed J.C. explanation of remaining single non-match.
 
 - match metadata accession-numbers to pid #1
     - tasks/acc_num_to_pid.py
