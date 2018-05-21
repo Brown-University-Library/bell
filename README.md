@@ -59,7 +59,7 @@ code related to ingesting bell-gallery images into the bdr.
 
     - end result: `data/d2__images_metadata_comparison.json` -- work through any not-matched files with J.C. before proceeding.
     - status:
-        IN-PROCESS 2018-May-17
+        DONE 2018-May-21
         - 2018-May-14 - emailed J.C. list of non-matches
         - 122 image-directory filenames _were_ found in the metadata
         - 14 image-directory filenames were not found in the metadata.
