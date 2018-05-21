@@ -20,14 +20,14 @@ code related to ingesting bell-gallery images into the bdr.
         - NOTE: we need the FileMaker exported format 'FMPXMLRESULT'. (Occasionally we have mistakenly received a different format.)
     - from having all the metadata, the code can determine what image-&-metadata additions to make, what metadata-only additions to make, and make corrections to existing bdr metadata
     - status:
-        - DONE; added to git 2018-May-10; re-added new data 2018-May-17.
+        - DONE; added to git 2018-May-10; re-added new data 2018-May-17; re-added new data 2018-May-21.
             - `a__all_data_raw.xml`
 
 - format metadata
     - why: makes it easy to see the source fields, and if necessary check source xml
     - tasks/format_xml_file.py
     - end result: `b__all_data_formatted.xml`
-    - status: DONE 2018-May-10; re-added new data 2018-May-17.
+    - status: DONE 2018-May-10; re-added new data 2018-May-17; re-added new data 2018-May-21.
 
 - get access to image-directory
     - check dev `mount` access
@@ -40,12 +40,12 @@ code related to ingesting bell-gallery images into the bdr.
     - tasks/acc_num_to_data.py
     - end result: `c__accession_number_to_data_dict.json`
     - status:
-        - DONE 2018-May-12; re-done w/new data 2018-May-17.
+        - DONE 2018-May-12; re-done w/new data 2018-May-17; re-done w/new data 2018-May-21.
 
 - run script to get list of files in the images-to-ingest directory
     - tasks/make_image_list.py
     - end result: `d1__bell_images_listing.json`
-    - status: DONE 2018-May-14; re-done since i thought some filenames were changed, but not, no problem - 2018-May-17.
+    - status: DONE 2018-May-14; re-done since i thought some filenames were changed, but not, no problem - 2018-May-17; re-done w/new metadata 2018-May-21.
 
 - compare imagefile-filenames to metadata-filenames
     - tasks/check_filenames_against_metadata.py
@@ -66,6 +66,7 @@ code related to ingesting bell-gallery images into the bdr.
         - 2018-May-15 - emailed J.C. explanation of remaining non-matches.
         - 2018-May-16 - emailed J.C. request for correct-metadata format.
         - 2018-May-17 - emailed J.C. explanation of remaining single non-match.
+        - 2018-May-21 - all image-directory filenames now found.
 
 - match metadata accession-numbers to pid #1
     - tasks/acc_num_to_pid.py
