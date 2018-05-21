@@ -1,8 +1,8 @@
 {
   "count_excluded": 0,
-  "count_found": 135,
-  "count_not_found": 1,
-  "date_time": "2018-05-17 10:14:24.863493",
+  "count_found": 136,
+  "count_not_found": 0,
+  "date_time": "2018-05-21 14:09:34.843250",
   "found_lst": [
     "Becker PH_2018.3.1.jpg",
     "Becker PH_2018.3.2.jpg",
@@ -132,6 +132,7 @@
     "Stoumen PH_2017.13.97.tif",
     "Stoumen PH_2017.13.98.tif",
     "Stoumen PH_2017.13.99.tif",
+    "Sugimoto PH_2016.6.1.jpg",
     "Sugimoto PH_2016.6.2.jpg",
     "Witt PH_2016.9.2.tif",
     "Witt PH_2016.9.3.tif",
@@ -140,7 +141,5 @@
     "Witt PH_2016.9.6.tif",
     "Witt PH_2016.9.7.tif"
   ],
-  "not_found_lst": [
-    "Sugimoto PH_2016.6.1.jpg"
-  ]
+  "not_found_lst": []
 }
