@@ -73,11 +73,9 @@ code related to ingesting bell-gallery images into the bdr.
     - end result: `e__accession_number_to_pid_dict.json` file containing a dict of accession-numbers-to-pids.
     - accession-numbers without pids imply creation of a new metadata-only object (which may gain an associated image later)
     - accession-numbers with pids imply checking to see if fedora metadata needs to be updated
-    - status:
-        - run 2017-06-28; shows 97 accession-numbers without pids
-        - rerun 2017-06-29 after new metadata file from J.C.; shows 97 accession-numbers without pids (one changed pid from previous list)
-        - done 2017-07-03 -- no acession numbers without pids.
-
+    - note, after metadata-only objects are created, this will be re-run until the `count_null` is zero.
+    - status: IN-PROCESS
+        - run 2018-May-21; shows 220 accession-numbers without pids
 
 NOTE, NEW STEP HERE -- we'll apply check-for-deletions logic here -- so that we can check with J.C. right away.
 
@@ -235,6 +233,8 @@ _(no indent=true available)_
 
 ### TODOs...
 
+- switch `'utf-8', 'replace'` to `'utf-8'`
+- in `acc_num_to_pid.py`, change function names that indicate solr is being hit, to names that indicate that bdr-search-api is being hit.
 - review tests and edit or delete those not used.
     - consider incorporating test-run into README flow.
 - low-importance interesting idea -- create a script to check file-access dates to determine old-unused code.
