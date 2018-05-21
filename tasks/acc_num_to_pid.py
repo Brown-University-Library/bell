@@ -1,6 +1,7 @@
 import datetime, json, os, pprint, sys, time
 import logging
 import requests
+from bell_utils import DATA_DIR
 
 
 logger = logging.getLogger(__name__)
@@ -17,8 +18,8 @@ class PidFinder:
         if __name__... at bottom indicates how to run this script. """
 
     def __init__(self, env='dev'):
-        self.bell_dict_json_path = os.environ['BELL_ANTP__BELL_DICT_JSON_PATH']  # file of dict of bell-accession-number to metadata
-        self.output_json_path = os.environ['BELL_ANTP__OUTPUT_JSON_PATH']
+        self.bell_dict_json_path = os.path.join(DATA_DIR, 'c__accession_number_to_data_dict.json')
+        self.output_json_path = os.path.join(DATA_DIR, 'e__accession_number_to_pid_dict.json')
         if env == 'prod':
             self.bdr_collection_pid = os.environ['BELL_ANTP__PROD_COLLECTION_PID']
             self.solr_root_url = os.environ['BELL_ANTP__PROD_SOLR_ROOT']
@@ -88,7 +89,7 @@ class PidFinder:
             'rows': 500, 'start': new_start, 'wt': 'json' }
         r = requests.get(solr_root_url, params=params)
         logger.info( 'in __query_solr(); r.url, %s' % r.url )
-        data_dict = json.loads( r.content.decode('utf-8', 'replace') )
+        data_dict = json.loads( r.content.decode('utf-8') )
         # logger.info( 'in __query_solr(); data_dict, %s' % pprint.pformat(data_dict) )
         return data_dict
 
@@ -169,7 +170,7 @@ class PidFinder:
 
 ## runners ##
 
-def run_create_acc_num_to_pid_map(env='dev'):
+def run_create_acc_num_to_pid_map(env='prod'):
     pid_finder = PidFinder(env)
     pid_finder._print_settings()
     pid_finder.create_acc_num_to_pid_map()
