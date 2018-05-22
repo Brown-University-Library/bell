@@ -6,6 +6,7 @@
 
 import datetime, json, logging, os, pprint, time
 import requests
+from tasks.bell_utils import DATA_DIR
 
 logging.basicConfig(
     level=logging.DEBUG,
@@ -16,11 +17,11 @@ logger = logging.getLogger(__name__)
 logger.info( 'cleanup started' )
 
 
-class BdrDeleter( object ):
+class BdrDeleter:
     """ Manages BDR deletions. """
 
     def __init__( self ):
-        self.DELETED_PIDS_TRACKER_PATH = os.environ['BELL_TASKS_CLNR__DELETED_PIDS_TRACKER_PATH']
+        self.DELETED_PIDS_TRACKER_PATH = os.path.join(DATA_DIR, 'n__bdr_entries_deleted_tracker.json')
         self.SEARCH_API_URL = os.environ['BELL_TASKS_CLNR__SEARCH_API_URL']
         self.BELL_COLLECTION_ID = os.environ['BELL_TASKS_CLNR__BELL_COLLECTION_ID']
         self.BELL_ITEM_API_URL = os.environ['BELL_TASKS_CLNR__PROD_AUTH_API_URL']
@@ -73,7 +74,8 @@ class BdrDeleter( object ):
         accession_to_pid_dct = source_dct['final_accession_pid_dict']
         source_pids = []
         for ( key_accession_number, value_pid ) in accession_to_pid_dct.items():
-            source_pids.append( value_pid )
+            if value_pid:
+                source_pids.append( value_pid )
         source_pids = sorted( source_pids )
         logger.debug( 'count source_pids, `{}`'.format(len(source_pids)) )
         logger.debug( 'source_pids (first 3), ```{}```'.format(pprint.pformat(source_pids[0:3])) )
@@ -107,7 +109,7 @@ class BdrDeleter( object ):
             Called by grab_bdr_pids() """
         data = {'datetime': str(datetime.datetime.now()), 'pids_to_delete': pids_info}
         jsn = json.dumps( data, indent=2, sort_keys=True )
-        with open( os.path.join('data', 'm__bdr_delete_pids.json'), 'wt' ) as f:
+        with open( os.path.join('data', 'e2__bdr_pids_to_delete.json'), 'wt' ) as f:
             f.write( jsn )
         return
 

@@ -1,0 +1,137 @@
+{
+  "datetime": "2018-05-22 10:17:12.971883",
+  "pids_to_delete": {
+    "bdr:148076": {
+      "accession number": "P 1982.4.A",
+      "object_type": "jp2",
+      "title": "Green's Mine",
+      "url": "https://repository.library.brown.edu/studio/item/bdr:148076/"
+    },
+    "bdr:149443": {
+      "accession number": "P 1982.3.A",
+      "object_type": "jp2",
+      "title": "Bimini",
+      "url": "https://repository.library.brown.edu/studio/item/bdr:149443/"
+    },
+    "bdr:200431": {
+      "accession number": "P 1982.0019",
+      "object_type": "jp2",
+      "title": "Waterloo",
+      "url": "https://repository.library.brown.edu/studio/item/bdr:200431/"
+    },
+    "bdr:298569": {
+      "accession number": "P 1978.0335",
+      "object_type": "jp2",
+      "title": "Carrot Mountain",
+      "url": "https://repository.library.brown.edu/studio/item/bdr:298569/"
+    },
+    "bdr:298570": {
+      "accession number": "P 1978.1285",
+      "object_type": "jp2",
+      "title": "Tuscan Air",
+      "url": "https://repository.library.brown.edu/studio/item/bdr:298570/"
+    },
+    "bdr:298572": {
+      "accession number": "P 1973.3266",
+      "object_type": "jp2",
+      "title": "Early Hour",
+      "url": "https://repository.library.brown.edu/studio/item/bdr:298572/"
+    },
+    "bdr:298598": {
+      "accession number": "P 1979.1.A",
+      "object_type": "jp2",
+      "title": "First Trent",
+      "url": "https://repository.library.brown.edu/studio/item/bdr:298598/"
+    },
+    "bdr:298600": {
+      "accession number": "P 1980.1.A",
+      "object_type": "jp2",
+      "title": "Second Trent",
+      "url": "https://repository.library.brown.edu/studio/item/bdr:298600/"
+    },
+    "bdr:298601": {
+      "accession number": "P 1981.2.A",
+      "object_type": "jp2",
+      "title": "Lament of Absalom-2",
+      "url": "https://repository.library.brown.edu/studio/item/bdr:298601/"
+    },
+    "bdr:298602": {
+      "accession number": "P 1983.2.A",
+      "object_type": "jp2",
+      "title": "Fifth Front",
+      "url": "https://repository.library.brown.edu/studio/item/bdr:298602/"
+    },
+    "bdr:298604": {
+      "accession number": "P 1981.4.A",
+      "object_type": "jp2",
+      "title": "First Love-19",
+      "url": "https://repository.library.brown.edu/studio/item/bdr:298604/"
+    },
+    "bdr:298605": {
+      "accession number": "P 2001.7",
+      "object_type": "jp2",
+      "title": "Radical Love 16",
+      "url": "https://repository.library.brown.edu/studio/item/bdr:298605/"
+    },
+    "bdr:298606": {
+      "accession number": "P 1981.0280",
+      "object_type": "jp2",
+      "title": "Beauty Mouth 13",
+      "url": "https://repository.library.brown.edu/studio/item/bdr:298606/"
+    },
+    "bdr:300049": {
+      "accession number": "PH 1993. 81",
+      "object_type": "jp2",
+      "title": "524. Roma - Monte Palatino - Ruvine del Palazzo di Settimo Severo (iv Secolo)",
+      "url": "https://repository.library.brown.edu/studio/item/bdr:300049/"
+    },
+    "bdr:316273": {
+      "accession number": "PA 2006.13",
+      "object_type": "undetermined",
+      "title": "Lines of Sight",
+      "url": "https://repository.library.brown.edu/studio/item/bdr:316273/"
+    },
+    "bdr:316276": {
+      "accession number": "PA 2010.8",
+      "object_type": "undetermined",
+      "title": "ground",
+      "url": "https://repository.library.brown.edu/studio/item/bdr:316276/"
+    },
+    "bdr:316277": {
+      "accession number": "PA 2010.9",
+      "object_type": "undetermined",
+      "title": "Advice from a Former Student",
+      "url": "https://repository.library.brown.edu/studio/item/bdr:316277/"
+    },
+    "bdr:316280": {
+      "accession number": "PA 2011.8",
+      "object_type": "undetermined",
+      "title": "P-131317",
+      "url": "https://repository.library.brown.edu/studio/item/bdr:316280/"
+    },
+    "bdr:316281": {
+      "accession number": "PA 2011.9",
+      "object_type": "undetermined",
+      "title": "Intertwine",
+      "url": "https://repository.library.brown.edu/studio/item/bdr:316281/"
+    },
+    "bdr:734325": {
+      "accession number": "2017.5.2",
+      "object_type": "undetermined",
+      "title": "Untitled (man smoking)",
+      "url": "https://repository.library.brown.edu/studio/item/bdr:734325/"
+    },
+    "bdr:734377": {
+      "accession number": "PH 2017.5.1",
+      "object_type": "undetermined",
+      "title": "Untitled (woman touching man's face)",
+      "url": "https://repository.library.brown.edu/studio/item/bdr:734377/"
+    },
+    "bdr:734394": {
+      "accession number": "SC 2016.6.a,b",
+      "object_type": "undetermined",
+      "title": "Untitled (custom tables)",
+      "url": "https://repository.library.brown.edu/studio/item/bdr:734394/"
+    }
+  }
+}
