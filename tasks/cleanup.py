@@ -107,7 +107,7 @@ class BdrDeleter:
     def output_pids_to_delete_list( self, pids_info ):
         """ Saves json file.
             Called by grab_bdr_pids() """
-        data = {'datetime': str(datetime.datetime.now()), 'pids_to_delete': pids_info}
+        data = {'datetime': str(datetime.datetime.now()), 'count': len(pids_info), 'pids_to_delete': pids_info}
         jsn = json.dumps( data, indent=2, sort_keys=True )
         with open( os.path.join('data', 'e2__bdr_pids_to_delete.json'), 'wt' ) as f:
             f.write( jsn )
