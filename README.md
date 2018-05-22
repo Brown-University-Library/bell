@@ -77,8 +77,24 @@ code related to ingesting bell-gallery images into the bdr.
     - status: IN-PROCESS
         - run 2018-May-21; shows 220 accession-numbers without pids
 
-NOTE, NEW STEP HERE -- we'll apply check-for-deletions logic here -- so that we can check with J.C. right away.
-
+- check for, confirm, and delete old bell items from fedora
+    - steps:
+        - make list of bdr pids to delete.
+            - NOTE: check whether an object to delete has an image - just update the metadata?
+            - `from tasks import cleanup; cleanup.run_make_bdr_pids_to_delete()`
+            - end result: `e2__bdr_pids_to_delete.json`
+        - manually verify -- with J.C. -- objects to delete, if they have images.
+            - explanation
+                - if an accession number changes, then we would see that as a new object
+                - then the old object (with the old accession number) would need to be deleted
+                - if that object to be deleted has an image, then we might lose the image, because she wouldn't send us the image if it wasn't updated.
+                - so, any items to delete with an image - check with her.
+            - status: 2018-May-22, IN-PROCESS -- will email J.C. re the 22 found.
+        - manually run deletion.
+            - `from tasks import cleanup; cleanup.run_delete_single_pid_from_bdr( pid )`
+            - end result: `n__bdr_entries_deleted_tracker.json`
+            - status: 2017-Aug-11: done
+            - TODO: script a check against the API to make sure we get a 404 (after cache expires).
 
 - make metadata-only list
     - tasks/metadata.run_metadata_only_lister()
@@ -170,25 +186,6 @@ NOTE, NEW STEP HERE -- we'll apply check-for-deletions logic here -- so that we 
     - loris cache (info, source, derivatives) - DONE 8/1/2017
     - thumbnail in fedora & django cache - DONE 8/1/2017
 
-- delete old bell items from fedora
-    - steps:
-        - make list of bdr pids to delete.
-            - NOTE: do the deletion accession number check as early as possible
-            - NOTE: check whether an object to delete has an image - just update the metadata?
-            - `from tasks import cleanup; cleanup.run_make_bdr_pids_to_delete()`
-            - end result: `m__bdr_delete_pids.json`
-        - manually verify -- with J.C. -- objects to delete, if they have images.
-            - explanation
-                - if an accession number changes, then we would see that as a new object
-                - then the old object (with the old accession number) would need to be deleted
-                - if that object to be deleted has an image, then we might lose the image, because she wouldn't send us the image if it wasn't updated.
-                - so, any items to delete with an image - check with her.
-            - status: 2017-Aug-10, J.C. said OK to delete them all.
-        - manually run deletion.
-            - `from tasks import cleanup; cleanup.run_delete_single_pid_from_bdr( pid )`
-            - end result: `n__bdr_entries_deleted_tracker.json`
-            - status: 2017-Aug-11: done
-            - TODO: script a check against the API to make sure we get a 404 (after cache expires).
 
 - update the custom-solr-index
     - make solr pids list
