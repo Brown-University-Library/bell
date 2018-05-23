@@ -1,6 +1,6 @@
 {
-  "count": 22,
-  "datetime": "2018-05-22 10:28:24.813985",
+  "count": 21,
+  "datetime": "2018-05-23 15:37:46.103550",
   "pids_to_delete": {
     "bdr:148076": {
       "accession number": "P 1982.4.A",
@@ -79,12 +79,6 @@
       "object_type": "jp2",
       "title": "Beauty Mouth 13",
       "url": "https://repository.library.brown.edu/studio/item/bdr:298606/"
-    },
-    "bdr:300049": {
-      "accession number": "PH 1993. 81",
-      "object_type": "jp2",
-      "title": "524. Roma - Monte Palatino - Ruvine del Palazzo di Settimo Severo (iv Secolo)",
-      "url": "https://repository.library.brown.edu/studio/item/bdr:300049/"
     },
     "bdr:316273": {
       "accession number": "PA 2006.13",

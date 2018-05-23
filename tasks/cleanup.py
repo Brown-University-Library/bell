@@ -69,7 +69,7 @@ class BdrDeleter:
     def prepare_source_pids( self ):
         """ Returns accession_to_pid_dct.
             Called by make_pids_to_delete() """
-        with open( os.path.join('data', 'e__accession_number_to_pid_dict.json') ) as f:
+        with open( os.path.join('data', 'e1__accession_number_to_pid_dict.json') ) as f:
             source_dct = json.loads( f.read() )
         accession_to_pid_dct = source_dct['final_accession_pid_dict']
         source_pids = []

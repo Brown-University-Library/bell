@@ -19,7 +19,7 @@ class PidFinder:
 
     def __init__(self, env='dev'):
         self.bell_dict_json_path = os.path.join(DATA_DIR, 'c__accession_number_to_data_dict.json')
-        self.output_json_path = os.path.join(DATA_DIR, 'e__accession_number_to_pid_dict.json')
+        self.output_json_path = os.path.join(DATA_DIR, 'e1__accession_number_to_pid_dict.json')
         if env == 'prod':
             self.bdr_collection_pid = os.environ['BELL_ANTP__PROD_COLLECTION_PID']
             self.solr_root_url = os.environ['BELL_ANTP__PROD_SOLR_ROOT']
