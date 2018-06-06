@@ -15,5 +15,113 @@
       "datetime": "2018-06-06 15:56:23.351736",
       "response_status_code": 200
     }
+  ],
+  "bdr:298569": [
+    {
+      "datetime": "2018-06-06 15:59:48.598350",
+      "response_status_code": 200
+    }
+  ],
+  "bdr:298570": [
+    {
+      "datetime": "2018-06-06 16:00:03.060133",
+      "response_status_code": 200
+    }
+  ],
+  "bdr:298572": [
+    {
+      "datetime": "2018-06-06 16:00:21.781751",
+      "response_status_code": 200
+    }
+  ],
+  "bdr:298598": [
+    {
+      "datetime": "2018-06-06 16:00:34.693412",
+      "response_status_code": 200
+    }
+  ],
+  "bdr:298600": [
+    {
+      "datetime": "2018-06-06 16:00:45.572334",
+      "response_status_code": 200
+    }
+  ],
+  "bdr:298601": [
+    {
+      "datetime": "2018-06-06 16:00:56.954869",
+      "response_status_code": 200
+    }
+  ],
+  "bdr:298602": [
+    {
+      "datetime": "2018-06-06 16:01:07.390103",
+      "response_status_code": 200
+    }
+  ],
+  "bdr:298604": [
+    {
+      "datetime": "2018-06-06 16:01:30.140859",
+      "response_status_code": 200
+    }
+  ],
+  "bdr:298605": [
+    {
+      "datetime": "2018-06-06 16:01:47.265479",
+      "response_status_code": 200
+    }
+  ],
+  "bdr:298606": [
+    {
+      "datetime": "2018-06-06 16:02:06.958952",
+      "response_status_code": 200
+    }
+  ],
+  "bdr:316273": [
+    {
+      "datetime": "2018-06-06 16:02:19.894570",
+      "response_status_code": 200
+    }
+  ],
+  "bdr:316276": [
+    {
+      "datetime": "2018-06-06 16:02:56.214084",
+      "response_status_code": 200
+    }
+  ],
+  "bdr:316277": [
+    {
+      "datetime": "2018-06-06 16:03:10.887042",
+      "response_status_code": 200
+    }
+  ],
+  "bdr:316280": [
+    {
+      "datetime": "2018-06-06 16:03:28.714956",
+      "response_status_code": 200
+    }
+  ],
+  "bdr:316281": [
+    {
+      "datetime": "2018-06-06 16:03:41.264187",
+      "response_status_code": 200
+    }
+  ],
+  "bdr:734325": [
+    {
+      "datetime": "2018-06-06 16:04:05.182214",
+      "response_status_code": 200
+    }
+  ],
+  "bdr:734377": [
+    {
+      "datetime": "2018-06-06 16:04:20.066635",
+      "response_status_code": 200
+    }
+  ],
+  "bdr:734394": [
+    {
+      "datetime": "2018-06-06 16:04:32.929510",
+      "response_status_code": 200
+    }
   ]
 }
