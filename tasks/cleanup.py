@@ -21,7 +21,7 @@ class BdrDeleter:
     """ Manages BDR deletions. """
 
     def __init__( self ):
-        self.DELETED_PIDS_TRACKER_PATH = os.path.join(DATA_DIR, 'n__bdr_entries_deleted_tracker.json')
+        self.DELETED_PIDS_TRACKER_PATH = os.path.join(DATA_DIR, 'e3__bdr_entries_deleted_tracker.json')
         self.SEARCH_API_URL = os.environ['BELL_TASKS_CLNR__SEARCH_API_URL']
         self.BELL_COLLECTION_ID = os.environ['BELL_TASKS_CLNR__BELL_COLLECTION_ID']
         self.BELL_ITEM_API_URL = os.environ['BELL_TASKS_CLNR__PROD_AUTH_API_URL']

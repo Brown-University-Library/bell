@@ -8,5 +8,12 @@
       "datetime": "2018-06-06 15:46:07.960181",
       "response_status_code": 200
     }
+  ],
+  "bdr:149443": "deleted - tracker reference was not yet updated",
+  "bdr:200431": [
+    {
+      "datetime": "2018-06-06 15:56:23.351736",
+      "response_status_code": 200
+    }
   ]
 }
