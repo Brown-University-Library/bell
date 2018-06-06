@@ -99,7 +99,6 @@ code related to ingesting bell-gallery images into the bdr.
             - `from tasks import cleanup; cleanup.run_delete_single_pid_from_bdr( pid )`
             - end result: `e3__bdr_entries_deleted_tracker.json`
             - status: 2018-Jun-06: IN_PROCESS
-            - TODO: script a check against the API to make sure we get a 404 (after cache expires).
 
 - make metadata-only list
     - tasks/metadata.run_metadata_only_lister()
