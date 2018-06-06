@@ -94,6 +94,8 @@ code related to ingesting bell-gallery images into the bdr.
                 - emailed J.C. re the 22 found.
                 - essential result: we updated one bdr object's accession-number to preserve bdr image history
         - manually run deletion.
+            - NOTE: when beginning this process, manually cleanup the `n__bdr_entries_deleted_tracker.json` file (DON'T DELETE) to `{}`.
+                - This is because each individual deletion updates this status-dict.
             - `from tasks import cleanup; cleanup.run_delete_single_pid_from_bdr( pid )`
             - end result: `n__bdr_entries_deleted_tracker.json`
             - status: 2018-Jun-06: IN_PROCESS
