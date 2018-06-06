@@ -233,7 +233,6 @@ _(no indent=true available)_
 
 ### TODOs...
 
-- B.C. will do a one-off check to ensure object-types of 'undetermined' do not, in fact, have image-datastreams. DONE 2018-May-22.
 - switch ```'utf-8', 'replace'``` to ```'utf-8'```
 - in `acc_num_to_pid.py`, change function names that indicate solr is being hit, to names that indicate that bdr-search-api is being hit.
 - review tests and edit or delete those not used.
