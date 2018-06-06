@@ -90,12 +90,13 @@ code related to ingesting bell-gallery images into the bdr.
                 - then the old object (with the old accession number) would need to be deleted
                 - if that object to be deleted has an image, then we might lose the image, because she wouldn't send us the image if it wasn't updated.
                 - so, any items to delete with an image - check with her.
-            - status: 2018-May-22, IN-PROCESS
+            - status: 2018-May-22, DONE
                 - emailed J.C. re the 22 found.
+                - essential result: we updated one bdr object's accession-number to preserve bdr image history
         - manually run deletion.
             - `from tasks import cleanup; cleanup.run_delete_single_pid_from_bdr( pid )`
             - end result: `n__bdr_entries_deleted_tracker.json`
-            - status: 2017-Aug-11: done
+            - status: 2018-Jun-06: IN_PROCESS
             - TODO: script a check against the API to make sure we get a 404 (after cache expires).
 
 - make metadata-only list
@@ -232,7 +233,7 @@ _(no indent=true available)_
 
 ### TODOs...
 
-- B.C. will do a one-off check to ensure object-types of 'undetermined' do not, in fact, have image-datastreams.
+- B.C. will do a one-off check to ensure object-types of 'undetermined' do not, in fact, have image-datastreams. DONE 2018-May-22.
 - switch ```'utf-8', 'replace'``` to ```'utf-8'```
 - in `acc_num_to_pid.py`, change function names that indicate solr is being hit, to names that indicate that bdr-search-api is being hit.
 - review tests and edit or delete those not used.
