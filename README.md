@@ -98,7 +98,7 @@ code related to ingesting bell-gallery images into the bdr.
                 - This is because each individual deletion updates this status-dict.
             - `from tasks import cleanup; cleanup.run_delete_single_pid_from_bdr( pid )`
             - end result: `e3__bdr_entries_deleted_tracker.json`
-            - status: 2018-Jun-06: IN_PROCESS
+            - status: 2018-Jun-06: DONE
 
 - make metadata-only list
     - tasks/metadata.run_metadata_only_lister()
