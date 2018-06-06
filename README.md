@@ -222,15 +222,6 @@ _(no indent=true available)_
 
 ---
 
-### Some solr-pub calls for reference...
-
-- [get list of pids](https://library.brown.edu/search/solr_pub/bell/?q=*:*&fl=pid&wt=json&indent=2&start=0&rows=10000)
-- [get list of accession-numbers](https://library.brown.edu/search/solr_pub/bell/?q=*:*&fl=accession_number_original&wt=json&indent=2&start=0&rows=10000)
-- [search accession-number](https://library.brown.edu/search/solr_pub/bell/?q=PH%201998.24&wt=json&indent=2)
-- [search pid](https://library.brown.edu/search/solr_pub/bell/?q=%22bdr:299010%22&wt=json&indent=2)
-
----
-
 ### TODOs...
 
 - switch ```'utf-8', 'replace'``` to ```'utf-8'```
