@@ -70,12 +70,13 @@ code related to ingesting bell-gallery images into the bdr.
 
 - match metadata accession-numbers to pid #1
     - tasks/acc_num_to_pid.py
-    - end result: `e__accession_number_to_pid_dict.json` file containing a dict of accession-numbers-to-pids.
+    - end result: `e1__accession_number_to_pid_dict.json` file containing a dict of accession-numbers-to-pids.
     - accession-numbers without pids imply creation of a new metadata-only object (which may gain an associated image later)
     - accession-numbers with pids imply checking to see if fedora metadata needs to be updated
     - note, after metadata-only objects are created, this will be re-run until the `count_null` is zero.
     - status: IN-PROCESS
         - run 2018-May-21; shows 220 accession-numbers without pids
+        - run 2018-May-23 after updating 1 bdr object's accession number; shows 219 accession-numbers without pids
 
 - check for, confirm, and delete old bell items from fedora
     - steps:
@@ -89,7 +90,8 @@ code related to ingesting bell-gallery images into the bdr.
                 - then the old object (with the old accession number) would need to be deleted
                 - if that object to be deleted has an image, then we might lose the image, because she wouldn't send us the image if it wasn't updated.
                 - so, any items to delete with an image - check with her.
-            - status: 2018-May-22, IN-PROCESS -- will email J.C. re the 22 found.
+            - status: 2018-May-22, IN-PROCESS
+                - emailed J.C. re the 22 found.
         - manually run deletion.
             - `from tasks import cleanup; cleanup.run_delete_single_pid_from_bdr( pid )`
             - end result: `n__bdr_entries_deleted_tracker.json`
@@ -230,7 +232,8 @@ _(no indent=true available)_
 
 ### TODOs...
 
-- switch `'utf-8', 'replace'` to `'utf-8'`
+- B.C. will do a one-off check to ensure object-types of 'undetermined' do not, in fact, have image-datastreams.
+- switch ```'utf-8', 'replace'``` to ```'utf-8'```
 - in `acc_num_to_pid.py`, change function names that indicate solr is being hit, to names that indicate that bdr-search-api is being hit.
 - review tests and edit or delete those not used.
     - consider incorporating test-run into README flow.
