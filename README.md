@@ -113,9 +113,7 @@ code related to ingesting bell-gallery images into the bdr.
 
     - end result: `f__metadata_only_accession_numbers.json`
     - status:
-        - run 2017-06-29
-        - rerun 2017-06-29 after new metadata file from J.C.
-        - done: rerun 2017-07-03 -- now shows, appropriately, none
+        - run 2018-Jun-07
 
 - create new metadata objects
     - TODO: update to use new-style BDR API params (eg. 'additional_rights' has to be in the 'rights' parameter, not at the top level)
@@ -131,8 +129,8 @@ code related to ingesting bell-gallery images into the bdr.
 
     - after creates, confirm a re-run of `foundation/acc_num_to_pid.py` results in zero non-pid matches.
         - note that this re-run will update, as it should, `e__accession_number_to_pid_dict.json` -- the dict of accession-numbers-to-pids.
-    - status: done 2017-07-03
-        - also reran prep scripts to confirm that all accession-numbers have bdr pids
+    - status: IN-PROCESS 2018-June-07
+        - 2017 note: also reran prep scripts to confirm that all accession-numbers have bdr pids
 
 - make image-filename to data dct
     - produces a dct and then json file like:
