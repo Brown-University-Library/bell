@@ -4,6 +4,7 @@ import datetime, io, json, os, logging, pprint, sys, time
 #import filelike, redis, requests, rq
 import redis, requests, rq
 from utils import mods_builder
+from tasks.bell_utils import DATA_DIR
 
 
 LOG_FILENAME = os.environ['BELL_LOG_FILENAME']
@@ -14,17 +15,17 @@ logging.basicConfig(level=logging.DEBUG,
                     filename=LOG_FILENAME)
 
 
-class MetadataOnlyLister( object ):
+class MetadataOnlyLister:
     """ Creates json file of accession numbers for which new metatdata-only objects will be created. """
 
     def __init__( self ):
-        self.PID_JSON_PATH = os.environ['BELL_TASKS_META__PID_DICT_JSON_PATH']
-        self.OUTPUT_PATH = os.environ['BELL_TASKS_META__METADATA_ONLY_ACCNUMS_JSON_PATH']
+        self.PID_JSON_PATH = os.path.join(DATA_DIR, 'e1__accession_number_to_pid_dict.json')
+        self.OUTPUT_PATH = os.path.join(DATA_DIR, 'f__metadata_only_accession_numbers.json')
 
     def list_metadata_only_accession_numbers( self ):
         """ Saves a json list of accession_numbers.
             Called manuallly per readme. """
-        logger.debug( 'in utils.make_metadata_only_list.MetadataOnlyLister.list_metadata_only_accession_numbers(); starting' )
+        logger.debug( 'starting' )
         with open( self.PID_JSON_PATH ) as f:
             dct = json.loads( f.read() )
         dct_lst = sorted( dct['final_accession_pid_dict'].items() )
