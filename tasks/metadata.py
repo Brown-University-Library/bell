@@ -99,7 +99,7 @@ class MetadataCreator( object ):
         params = {
             'identity': self.API_IDENTITY,
             'authorization_code': self.API_KEY,
-            'additional_rights': 'BDR_PUBLIC#discover,display+Bell Gallery#discover,display,modify,delete',
+            'rights': json.dumps({'parameters': {'additional_rights': 'BDR_PUBLIC#discover,display+Bell Gallery#discover,display,modify,delete'}}),
             'rels': json.dumps( {'owning_collection': self.OWNING_COLLECTION} ),
             'content_model': 'CommonMetadataDO'
             }
@@ -224,7 +224,7 @@ class MetadataUpdater( object ):
             'identity': self.API_IDENTITY,
             'authorization_code': self.API_KEY,
             'owner_id': self.API_IDENTITY,  # may switch this in future
-            'additional_rights': 'BDR_PUBLIC#discover,display+Bell Gallery#discover,display,modify,delete',
+            'rights': json.dumps({'parameters': {'additional_rights': 'BDR_PUBLIC#discover,display+Bell Gallery#discover,display,modify,delete'}}),
             'rels': json.dumps( {'owning_collection': self.OWNING_COLLECTION} )
             }
         logger.debug( 'initial params, ```{}```'.format(pprint.pformat(params)) )
@@ -300,24 +300,27 @@ class MetadataUpdater( object ):
 
 ## runners ##
 
-def run_enqueue_create_metadata_only_jobs(env='dev'):
+def run_create_metadata_only_objects(env='dev'):
     """ Prepares list of accession numbers and enqueues jobs.
         Called manually. """
-    METADATA_ONLY_JSON = os.environ['BELL_TASKS_META__METADATA_ONLY_ACCNUMS_JSON_PATH']
-    queue_name = os.environ['BELL_QUEUE_NAME']
-    q = rq.Queue( queue_name, connection=redis.Redis() )
+    METADATA_ONLY_JSON = os.path.join(DATA_DIR, 'f__metadata_only_accession_numbers.json')
+    #queue_name = os.environ['BELL_QUEUE_NAME']
+    #q = rq.Queue( queue_name, connection=redis.Redis() )
     with open( METADATA_ONLY_JSON ) as f:
         dct = json.loads( f.read() )
     accession_numbers = dct['accession_numbers']
-    for (i, accession_number) in enumerate( accession_numbers ):
-        print('i is, `%s`' % i)
+    #for (i, accession_number) in enumerate( accession_numbers ):
+    for i, accession_number in enumerate(accession_numbers[:2]):
+        print(f'{i}: {accession_number}')
         #for testing, just create 1 or 2 jobs
         #if i+1 > 2:
         #    break
-        q.enqueue_call(
-          func='tasks.metadata.run_create_metadata_only_object',
-          kwargs={ 'env': env, 'accession_number': accession_number },
-          timeout=600 )
+        m = MetadataCreator( env, logger )
+        m.create_metadata_only_object( accession_number )
+        #q.enqueue_call(
+        #  func='tasks.metadata.run_create_metadata_only_object',
+        #  kwargs={ 'env': env, 'accession_number': accession_number },
+        #  timeout=600 )
     print('done')
     return
 
