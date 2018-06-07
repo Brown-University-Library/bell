@@ -104,6 +104,7 @@ code related to ingesting bell-gallery images into the bdr.
             - status: 2018-Jun-06: DONE
 
 - make metadata-only list
+    - note: this creates metadata-only objects, some of which may be updated in a later step to also have image-datastreams.
     - tasks/metadata.run_metadata_only_lister()
     - to run (from `bell_code` directory)...
 
