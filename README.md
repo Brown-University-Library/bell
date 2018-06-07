@@ -79,6 +79,9 @@ code related to ingesting bell-gallery images into the bdr.
         - run 2018-May-23 after updating 1 bdr object's accession number; shows 219 accession-numbers without pids
 
 - check for, confirm, and delete old bell items from fedora
+    - note: this step is being done here because:
+        - we wanted to check with J.C. as early as possible re any images that we may need to check (this is the last interactive step with J.C. so it's nice having it here, early in the process, close to the previous image-checking steps).
+        - we need the data created in the previous step: `match metadata accession-numbers to pid`
     - steps:
         - make list of bdr pids to delete.
             - NOTE: check whether an object to delete has an image - just update the metadata?
