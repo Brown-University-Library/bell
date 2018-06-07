@@ -16,7 +16,9 @@ logging.basicConfig(level=logging.DEBUG,
 
 
 class MetadataOnlyLister:
-    """ Creates json file of accession numbers for which new metatdata-only objects will be created. """
+    """ Creates json file of accession numbers for which new metatdata-only objects will be created.
+    Note: these metadata-only objects could get images later - we're just starting with the metadata.
+    """
 
     def __init__( self ):
         self.PID_JSON_PATH = os.path.join(DATA_DIR, 'e1__accession_number_to_pid_dict.json')
