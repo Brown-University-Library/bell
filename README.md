@@ -116,8 +116,8 @@ code related to ingesting bell-gallery images into the bdr.
         - run 2018-Jun-07
 
 - create new metadata objects
+    - note: first manually clean out the file `f2__metadata_obj_tracker.js` by replacing the old data with `{}`
     - tasks/metadata.run_create_metadata_only_objects()
-
     - to run (from `bell_code` directory)...
 
             >>> from tasks import metadata
