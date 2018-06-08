@@ -129,8 +129,9 @@ code related to ingesting bell-gallery images into the bdr.
     - tracker result: `f2__metadata_obj_tracker.json`
     - after creates, confirm a re-run of `foundation/acc_num_to_pid.py` results in zero non-pid matches.
         - note that this re-run will update, as it should, `e__accession_number_to_pid_dict.json` -- the dict of accession-numbers-to-pids.
-    - status: IN-PROCESS 2018-June-07
-        - 2017 note: also reran prep scripts to confirm that all accession-numbers have bdr pids
+    - status:
+        - new-metadata-objects-created - DONE 2018-June-08.
+        - `acc_num_to_pid.py` re-run - NOT yet done.
 
 - make image-filename to data dct
     - produces a dct and then json file like:
