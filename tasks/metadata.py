@@ -22,7 +22,7 @@ class MetadataOnlyLister:
 
     def __init__( self ):
         self.PID_JSON_PATH = os.path.join(DATA_DIR, 'e1__accession_number_to_pid_dict.json')
-        self.OUTPUT_PATH = os.path.join(DATA_DIR, 'f__metadata_only_accession_numbers.json')
+        self.OUTPUT_PATH = os.path.join(DATA_DIR, 'f1__metadata_only_accession_numbers.json')
 
     def list_metadata_only_accession_numbers( self ):
         """ Saves a json list of accession_numbers.
@@ -65,7 +65,7 @@ class MetadataCreator( object ):
         self.logger = logger
         self.SOURCE_FULL_JSON_METADATA_PATH = os.environ['BELL_TASKS_META__FULL_JSON_METADATA_PATH']
         self.MODS_SCHEMA_PATH = os.environ['BELL_TASKS_META__MODS_XSD_PATH']
-        self.TRACKER_PATH = os.environ['BELL_TASKS_META__TRACKER_JSON_PATH']
+        self.TRACKER_PATH = os.path.join(DATA_DIR, 'f2__metadata_obj_tracker.json')
         self.COLLECTION_ID = os.environ['BELL_TASKS_META__COLLECTION_ID']
         if env == 'prod':
             self.API_URL = os.environ['BELL_TASKS_META__PROD_AUTH_API_URL']
@@ -198,7 +198,7 @@ class MetadataUpdater( object ):
         self.API_KEY = os.environ['BELL_TASKS_META__AUTH_API_KEY']
         self.MODS_SCHEMA_PATH = os.environ['BELL_TASKS_META__MODS_XSD_PATH']
         self.OWNING_COLLECTION = os.environ['BELL_TASKS_META__OWNING_COLLECTION_PID']
-        self.TRACKER_PATH = os.environ['BELL_TASKS_META__TRACKER_JSON_PATH']
+        self.TRACKER_PATH = os.path.join(DATA_DIR, 'f2__metadata_obj_tracker.json')
 
     def update_object_metadata( self, accession_number, pid ):
         """ Gathers source metadata, prepares call to item-api, calls it, confirms update, tracks result.
@@ -303,7 +303,7 @@ class MetadataUpdater( object ):
 def run_create_metadata_only_objects(env='dev'):
     """ Prepares list of accession numbers and enqueues jobs.
         Called manually. """
-    METADATA_ONLY_JSON = os.path.join(DATA_DIR, 'f__metadata_only_accession_numbers.json')
+    METADATA_ONLY_JSON = os.path.join(DATA_DIR, 'f1__metadata_only_accession_numbers.json')
     #queue_name = os.environ['BELL_QUEUE_NAME']
     #q = rq.Queue( queue_name, connection=redis.Redis() )
     with open( METADATA_ONLY_JSON ) as f:
@@ -324,10 +324,10 @@ def run_create_metadata_only_objects(env='dev'):
     print('done')
     return
 
-def run_create_metadata_only_object( env, accession_number ):
-    """ Runner for create_metadata_only_object()
-        Called by job enqueued by run_enqueue_create_metadata_only_jobs() """
-    m = MetadataCreator( env, logger )
-    m.create_metadata_only_object( accession_number )
-    return
+#def run_create_metadata_only_object( env, accession_number ):
+#    """ Runner for create_metadata_only_object()
+#        Called by job enqueued by run_enqueue_create_metadata_only_jobs() """
+#    m = MetadataCreator( env, logger )
+#    m.create_metadata_only_object( accession_number )
+#    return
 
