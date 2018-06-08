@@ -15,6 +15,10 @@ logging.basicConfig(level=logging.DEBUG,
                     filename=LOG_FILENAME)
 
 
+METADATA_ONLY_JSON = os.path.join(DATA_DIR, 'f1__metadata_only_accession_numbers.json')
+TRACKER_PATH = os.path.join(DATA_DIR, 'f2__metadata_obj_tracker.json')
+
+
 class MetadataOnlyLister:
     """ Creates json file of accession numbers for which new metatdata-only objects will be created.
     Note: these metadata-only objects could get images later - we're just starting with the metadata.
@@ -65,7 +69,6 @@ class MetadataCreator( object ):
         self.logger = logger
         self.SOURCE_FULL_JSON_METADATA_PATH = os.environ['BELL_TASKS_META__FULL_JSON_METADATA_PATH']
         self.MODS_SCHEMA_PATH = os.environ['BELL_TASKS_META__MODS_XSD_PATH']
-        self.TRACKER_PATH = os.path.join(DATA_DIR, 'f2__metadata_obj_tracker.json')
         self.COLLECTION_ID = os.environ['BELL_TASKS_META__COLLECTION_ID']
         if env == 'prod':
             self.API_URL = os.environ['BELL_TASKS_META__PROD_AUTH_API_URL']
@@ -81,7 +84,7 @@ class MetadataCreator( object ):
     def create_metadata_only_object( self, accession_number ):
         """ Gathers source metadata, prepares call to item-api, calls it, and confirms creation.
             Called by run_create_metadata_only_object() """
-        self.logger.debug( 'in metadata.MetadataCreator.create_metadata_only_object(); starting' )
+        self.logger.debug( 'starting' )
         params = self.set_basic_params()
         item_dct = self.grab_item_dct( accession_number )
         params['ir'] = self.make_ir_params( item_dct )
@@ -175,12 +178,12 @@ class MetadataCreator( object ):
             TODO: log progress to redis hash.
             Called by create_metadata_only_object() """
         try:
-            with open( self.TRACKER_PATH ) as f:
+            with open( TRACKER_PATH ) as f:
                 dct = json.loads( f.read() )
         except ( IOError, ValueError ):
             dct = {}
         dct[accession_number] = pid
-        with open( self.TRACKER_PATH, 'w' ) as f:
+        with open( TRACKER_PATH, 'w' ) as f:
             f.write( json.dumps(dct, indent=2, sort_keys=True) )
         return
 
@@ -198,7 +201,6 @@ class MetadataUpdater( object ):
         self.API_KEY = os.environ['BELL_TASKS_META__AUTH_API_KEY']
         self.MODS_SCHEMA_PATH = os.environ['BELL_TASKS_META__MODS_XSD_PATH']
         self.OWNING_COLLECTION = os.environ['BELL_TASKS_META__OWNING_COLLECTION_PID']
-        self.TRACKER_PATH = os.path.join(DATA_DIR, 'f2__metadata_obj_tracker.json')
 
     def update_object_metadata( self, accession_number, pid ):
         """ Gathers source metadata, prepares call to item-api, calls it, confirms update, tracks result.
@@ -303,24 +305,19 @@ class MetadataUpdater( object ):
 def run_create_metadata_only_objects(env='dev'):
     """ Prepares list of accession numbers and enqueues jobs.
         Called manually. """
-    METADATA_ONLY_JSON = os.path.join(DATA_DIR, 'f1__metadata_only_accession_numbers.json')
-    #queue_name = os.environ['BELL_QUEUE_NAME']
-    #q = rq.Queue( queue_name, connection=redis.Redis() )
     with open( METADATA_ONLY_JSON ) as f:
         dct = json.loads( f.read() )
+    with open( TRACKER_PATH, 'rb' ) as f:
+        tracker_data = f.read().decode('utf8')
+        processed_accession_numbers = json.loads(tracker_data).keys()
     accession_numbers = dct['accession_numbers']
-    #for (i, accession_number) in enumerate( accession_numbers ):
     for i, accession_number in enumerate(accession_numbers[:2]):
         print(f'{i}: {accession_number}')
-        #for testing, just create 1 or 2 jobs
-        #if i+1 > 2:
-        #    break
+        if accession_number in processed_accession_numbers:
+            print(f'  {accession_number} already processed - skipping')
+            continue
         m = MetadataCreator( env, logger )
         m.create_metadata_only_object( accession_number )
-        #q.enqueue_call(
-        #  func='tasks.metadata.run_create_metadata_only_object',
-        #  kwargs={ 'env': env, 'accession_number': accession_number },
-        #  timeout=600 )
     print('done')
     return
 
