@@ -111,22 +111,22 @@ code related to ingesting bell-gallery images into the bdr.
             >>> from tasks import metadata
             >>> metadata.run_metadata_only_lister()
 
-    - end result: `f__metadata_only_accession_numbers.json`
+    - end result: `f1__metadata_only_accession_numbers.json`
     - status:
         - run 2018-Jun-07
 
 - create new metadata objects
-    - TODO: update to use new-style BDR API params (eg. 'additional_rights' has to be in the 'rights' parameter, not at the top level)
-    - tasks/metadata.run_enqueue_create_metadata_only_jobs()
+    - tasks/metadata.run_create_metadata_only_objects()
 
     - to run (from `bell_code` directory)...
 
             >>> from tasks import metadata
-            >>> metadata.run_enqueue_create_metadata_only_jobs()
+            >>> metadata.run_create_metadata_only_objects()
 
     - to confirm that object is in fedora:
             https://api_search/?q=mods_id_bell_accession_number_ssim:the%20accession_number
 
+    - tracker result: `f2__metadata_obj_tracker.json`
     - after creates, confirm a re-run of `foundation/acc_num_to_pid.py` results in zero non-pid matches.
         - note that this re-run will update, as it should, `e__accession_number_to_pid_dict.json` -- the dict of accession-numbers-to-pids.
     - status: IN-PROCESS 2018-June-07
