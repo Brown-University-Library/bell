@@ -311,7 +311,7 @@ def run_create_metadata_only_objects(env='dev'):
         tracker_data = f.read().decode('utf8')
         processed_accession_numbers = json.loads(tracker_data).keys()
     accession_numbers = dct['accession_numbers']
-    for i, accession_number in enumerate(accession_numbers[:2]):
+    for i, accession_number in enumerate(accession_numbers):
         print(f'{i}: {accession_number}')
         if accession_number in processed_accession_numbers:
             print(f'  {accession_number} already processed - skipping')
