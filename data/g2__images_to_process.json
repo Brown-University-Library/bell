@@ -1,10 +1,348 @@
 {
-  "count_images": 105,
-  "count_images_processed": 105,
-  "count_images_to_add": 98,
-  "count_images_to_update": 7,
-  "datetime": "2017-07-05 11:03:39.781726",
+  "count_images": 136,
+  "count_images_processed": 136,
+  "count_images_to_add": 56,
+  "count_images_to_update": 80,
+  "datetime": "2018-06-11 15:38:11.213578",
   "lst_images_to_add": [
+    {
+      "Becker PH_2018.3.1.jpg": {
+        "accession_number": "PH 2018.3.1",
+        "pid": "bdr:788477"
+      }
+    },
+    {
+      "Becker PH_2018.3.2.jpg": {
+        "accession_number": "PH 2018.3.2",
+        "pid": "bdr:788478"
+      }
+    },
+    {
+      "Bing PH_2016.9.1.a.tif": {
+        "accession_number": "PH 2016.9.1.a",
+        "pid": "bdr:734368"
+      }
+    },
+    {
+      "Bing PH_2016.9.1.b.tif": {
+        "accession_number": "2016.9.1.b",
+        "pid": "bdr:734322"
+      }
+    },
+    {
+      "Bing PH_2016.9.1.c.tif": {
+        "accession_number": "2016.9.1.c",
+        "pid": "bdr:734323"
+      }
+    },
+    {
+      "Bing PH_2016.9.1.d.tif": {
+        "accession_number": "2016.9.1.d",
+        "pid": "bdr:734324"
+      }
+    },
+    {
+      "Bontecou SC_1972.7076.tif": {
+        "accession_number": "SC 1972.7076",
+        "pid": "bdr:298500"
+      }
+    },
+    {
+      "Castellana PH_2018.2.1.jpg": {
+        "accession_number": "PH 2018.2.1",
+        "pid": "bdr:788469"
+      }
+    },
+    {
+      "Castellana PH_2018.2.2.jpg": {
+        "accession_number": "PH 2018.2.2",
+        "pid": "bdr:788470"
+      }
+    },
+    {
+      "Castellana PH_2018.2.3.jpg": {
+        "accession_number": "PH 2018.2.3",
+        "pid": "bdr:788471"
+      }
+    },
+    {
+      "Castellana PH_2018.2.4.jpg": {
+        "accession_number": "PH 2018.2.4",
+        "pid": "bdr:788472"
+      }
+    },
+    {
+      "Castellana PH_2018.2.5.jpg": {
+        "accession_number": "PH 2018.2.5",
+        "pid": "bdr:788473"
+      }
+    },
+    {
+      "Castellana PH_2018.2.6.jpg": {
+        "accession_number": "PH 2018.2.6",
+        "pid": "bdr:788474"
+      }
+    },
+    {
+      "Castellana PH_2018.2.7.jpg": {
+        "accession_number": "PH 2018.2.7",
+        "pid": "bdr:788475"
+      }
+    },
+    {
+      "Castellana PH_2018.2.8.jpg": {
+        "accession_number": "PH 2018.2.8",
+        "pid": "bdr:788476"
+      }
+    },
+    {
+      "Citret PH_2017.13.106.tif": {
+        "accession_number": "PH 2017.13.106",
+        "pid": "bdr:788287"
+      }
+    },
+    {
+      "Citret PH_2017.13.108.tif": {
+        "accession_number": "P 2017.13.108",
+        "pid": "bdr:788277"
+      }
+    },
+    {
+      "Citret PH_2017.13.109.tif": {
+        "accession_number": "PH 2017.13.109",
+        "pid": "bdr:788289"
+      }
+    },
+    {
+      "Citret PH_2017.13.110.tif": {
+        "accession_number": "PH 2017.13.110",
+        "pid": "bdr:788291"
+      }
+    },
+    {
+      "Costain PH_2017.13.43.tif": {
+        "accession_number": "PH 2017.13.43",
+        "pid": "bdr:788355"
+      }
+    },
+    {
+      "Costain PH_2017.13.45.tif": {
+        "accession_number": "PH 2017.13.45",
+        "pid": "bdr:788357"
+      }
+    },
+    {
+      "Disfarmer PH_2017.13.125.tif": {
+        "accession_number": "PH 2017.13.125",
+        "pid": "bdr:788307"
+      }
+    },
+    {
+      "Disfarmer PH_2017.13.126.tif": {
+        "accession_number": "PH 2017.13.126",
+        "pid": "bdr:788308"
+      }
+    },
+    {
+      "Drake D_2017.12.3.tif": {
+        "accession_number": "D 2017.12.3",
+        "pid": "bdr:788272"
+      }
+    },
+    {
+      "Iturbide PH_2017.6.1.tif": {
+        "accession_number": "PH 2017.6.1",
+        "pid": "bdr:734378"
+      }
+    },
+    {
+      "Iturbide PH_2017.6.2.tif": {
+        "accession_number": "PH 2017.6.2",
+        "pid": "bdr:734379"
+      }
+    },
+    {
+      "Iturbide PH_2017.6.3.tif": {
+        "accession_number": "PH 2017.6.3",
+        "pid": "bdr:734380"
+      }
+    },
+    {
+      "Jordan PH.2017.4.2.jpg": {
+        "accession_number": "PH 2017.4.2",
+        "pid": "bdr:734376"
+      }
+    },
+    {
+      "Jordan PH_2017.4.1jpg.jpg": {
+        "accession_number": "PH 2017.4.1",
+        "pid": "bdr:734375"
+      }
+    },
+    {
+      "Lipton D_2017.12.1.tif": {
+        "accession_number": "D 2017.12.1",
+        "pid": "bdr:788259"
+      }
+    },
+    {
+      "Lipton D_2017.8.tif": {
+        "accession_number": "D 2017.8",
+        "pid": "bdr:788275"
+      }
+    },
+    {
+      "Morgan PH_2017.12.2.tif": {
+        "accession_number": "PH 2017.12.2",
+        "pid": "bdr:788278"
+      }
+    },
+    {
+      "Quigley PH_2017.13.11.tif": {
+        "accession_number": "PH 2017.13.11",
+        "pid": "bdr:788290"
+      }
+    },
+    {
+      "Quigley PH_2017.13.3.tif": {
+        "accession_number": "PH 2017.13.3",
+        "pid": "bdr:788340"
+      }
+    },
+    {
+      "Quigley PH_2017.13.4.tif": {
+        "accession_number": "PH 2017.13.4",
+        "pid": "bdr:788351"
+      }
+    },
+    {
+      "Quigley PH_2017.13.5.tif": {
+        "accession_number": "PH 2017.13.5",
+        "pid": "bdr:788362"
+      }
+    },
+    {
+      "Quigley PH_2017.13.6.tif": {
+        "accession_number": "PH 2017.13.6",
+        "pid": "bdr:788373"
+      }
+    },
+    {
+      "Rothstein PH_2017.13.136.tif": {
+        "accession_number": "PH 2017.13.136",
+        "pid": "bdr:788319"
+      }
+    },
+    {
+      "Rothstein PH_2017.13.138.tif": {
+        "accession_number": "PH 2017.13.138",
+        "pid": "bdr:788321"
+      }
+    },
+    {
+      "Shahn PR_2017.1.1.tif": {
+        "accession_number": "PR 2017.1.1",
+        "pid": "bdr:734384"
+      }
+    },
+    {
+      "Shahn PR_2017.1.2.tif": {
+        "accession_number": "PR 2017.1.2.",
+        "pid": "bdr:734385"
+      }
+    },
+    {
+      "Shahn PR_2017.1.3.tif": {
+        "accession_number": "PR 2017.1.3.",
+        "pid": "bdr:734386"
+      }
+    },
+    {
+      "Shahn PR_2017.1.4.tif": {
+        "accession_number": "PR 2017.1.4",
+        "pid": "bdr:734387"
+      }
+    },
+    {
+      "Stoumen PH_2017.13.94.tif": {
+        "accession_number": "PH 2017.13.94",
+        "pid": "bdr:788411"
+      }
+    },
+    {
+      "Stoumen PH_2017.13.95.tif": {
+        "accession_number": "PH 2017.13.95",
+        "pid": "bdr:788412"
+      }
+    },
+    {
+      "Stoumen PH_2017.13.97.tif": {
+        "accession_number": "PH 2017.13.97",
+        "pid": "bdr:788414"
+      }
+    },
+    {
+      "Stoumen PH_2017.13.98.tif": {
+        "accession_number": "PH 2017.13.98",
+        "pid": "bdr:788415"
+      }
+    },
+    {
+      "Stoumen PH_2017.13.99.tif": {
+        "accession_number": "PH 2017.13.99",
+        "pid": "bdr:788416"
+      }
+    },
+    {
+      "Sugimoto PH_2016.6.1.jpg": {
+        "accession_number": "PH 2016.6.1",
+        "pid": "bdr:734365"
+      }
+    },
+    {
+      "Sugimoto PH_2016.6.2.jpg": {
+        "accession_number": "PH 2016.6.2",
+        "pid": "bdr:734366"
+      }
+    },
+    {
+      "Witt PH_2016.9.2.tif": {
+        "accession_number": "PH 2016.9.2.",
+        "pid": "bdr:734369"
+      }
+    },
+    {
+      "Witt PH_2016.9.3.tif": {
+        "accession_number": "PH 2016.9.3",
+        "pid": "bdr:734370"
+      }
+    },
+    {
+      "Witt PH_2016.9.4.tif": {
+        "accession_number": "PH 2016.9.4",
+        "pid": "bdr:734371"
+      }
+    },
+    {
+      "Witt PH_2016.9.5.tif": {
+        "accession_number": "PH 2016.9.5",
+        "pid": "bdr:734372"
+      }
+    },
+    {
+      "Witt PH_2016.9.6.tif": {
+        "accession_number": "PH 2016.9.6.",
+        "pid": "bdr:734373"
+      }
+    },
+    {
+      "Witt PH_2016.9.7.tif": {
+        "accession_number": "PH 2016.9.7.",
+        "pid": "bdr:734374"
+      }
+    }
+  ],
+  "lst_images_to_update": [
     {
       "Bing PH_2015.11.1.tif": {
         "accession_number": "PH 2015.11.1",
@@ -27,6 +365,18 @@
       "Bing PH_2015.11.5.tif": {
         "accession_number": "PH 2015.11.5",
         "pid": "bdr:650876"
+      }
+    },
+    {
+      "Bosworth PH_2007.46.1.A,B.tif": {
+        "accession_number": "PH 2007.46.1.A,B",
+        "pid": "bdr:650790"
+      }
+    },
+    {
+      "Bosworth PH_2007.46.2.A,B.tif": {
+        "accession_number": "PH 2007.46.2.A,B",
+        "pid": "bdr:650791"
       }
     },
     {
@@ -144,73 +494,67 @@
       }
     },
     {
-      "Freed PH_2015.11.8.tif": {
-        "accession_number": "PH 2015.11.8",
-        "pid": "bdr:650887"
-      }
-    },
-    {
       "Freed PH_2015.11.9.tif": {
         "accession_number": "PH 2015.11.9",
         "pid": "bdr:650888"
       }
     },
     {
-      "Leibling PH_2001.1.1.tif": {
+      "Liebling PH_2001.1.1.tif": {
         "accession_number": "PH 2001.1.1",
         "pid": "bdr:316284"
       }
     },
     {
-      "Leibling PH_2001.1.10.tif": {
+      "Liebling PH_2001.1.10.tif": {
         "accession_number": "PH 2001.1.10",
         "pid": "bdr:316285"
       }
     },
     {
-      "Leibling PH_2001.1.2.tif": {
+      "Liebling PH_2001.1.2.tif": {
         "accession_number": "PH 2001.1.2",
         "pid": "bdr:316288"
       }
     },
     {
-      "Leibling PH_2001.1.3.tif": {
+      "Liebling PH_2001.1.3.tif": {
         "accession_number": "PH 2001.1.3",
         "pid": "bdr:316289"
       }
     },
     {
-      "Leibling PH_2001.1.4.tif": {
+      "Liebling PH_2001.1.4.tif": {
         "accession_number": "PH 2001.1.4",
         "pid": "bdr:316292"
       }
     },
     {
-      "Leibling PH_2001.1.5.tif": {
+      "Liebling PH_2001.1.5.tif": {
         "accession_number": "PH 2001.1.5",
         "pid": "bdr:316293"
       }
     },
     {
-      "Leibling PH_2001.1.6.tif": {
+      "Liebling PH_2001.1.6.tif": {
         "accession_number": "PH 2001.1.6",
         "pid": "bdr:316296"
       }
     },
     {
-      "Leibling PH_2001.1.7.tif": {
+      "Liebling PH_2001.1.7.tif": {
         "accession_number": "PH 2001.1.7",
         "pid": "bdr:316297"
       }
     },
     {
-      "Leibling PH_2001.1.8.tif": {
+      "Liebling PH_2001.1.8.tif": {
         "accession_number": "PH 2001.1.8",
         "pid": "bdr:316300"
       }
     },
     {
-      "Leibling PH_2001.1.9.tif": {
+      "Liebling PH_2001.1.9.tif": {
         "accession_number": "PH 2001.1.9",
         "pid": "bdr:316301"
       }
@@ -342,12 +686,6 @@
       }
     },
     {
-      "Meiselas PH_2006.12.16.tif": {
-        "accession_number": "PH 2006.12.16",
-        "pid": "bdr:299686"
-      }
-    },
-    {
       "Meiselas PH_2006.12.17.tif": {
         "accession_number": "PH 2006.12.17",
         "pid": "bdr:299687"
@@ -474,84 +812,6 @@
       }
     },
     {
-      "Muniz PH_2016.3.jpg": {
-        "accession_number": "PH 2016.3",
-        "pid": "bdr:734363"
-      }
-    },
-    {
-      "Newman PH_2013.17.1.tif": {
-        "accession_number": "PH 2013.17.1",
-        "pid": "bdr:348255"
-      }
-    },
-    {
-      "Newman PH_2013.17.10.tif": {
-        "accession_number": "PH 2013.17.10",
-        "pid": "bdr:348256"
-      }
-    },
-    {
-      "Newman PH_2013.17.12.tif": {
-        "accession_number": "PH 2013.17.12",
-        "pid": "bdr:348258"
-      }
-    },
-    {
-      "Newman PH_2013.17.13.tif": {
-        "accession_number": "PH 2013.17.13",
-        "pid": "bdr:348259"
-      }
-    },
-    {
-      "Newman PH_2013.17.14.tif": {
-        "accession_number": "PH 2013.17.14",
-        "pid": "bdr:348260"
-      }
-    },
-    {
-      "Newman PH_2013.17.15.tif": {
-        "accession_number": "PH 2013.17.15",
-        "pid": "bdr:348261"
-      }
-    },
-    {
-      "Newman PH_2013.17.16.tif": {
-        "accession_number": "PH 2013.17.16",
-        "pid": "bdr:348262"
-      }
-    },
-    {
-      "Newman PH_2013.17.17.tif": {
-        "accession_number": "PH 2013.17.17",
-        "pid": "bdr:348263"
-      }
-    },
-    {
-      "Newman PH_2013.17.18.tif": {
-        "accession_number": "PH 2013.17.18",
-        "pid": "bdr:348264"
-      }
-    },
-    {
-      "Newman PH_2013.17.19.tif": {
-        "accession_number": "PH 2013.17.19",
-        "pid": "bdr:348265"
-      }
-    },
-    {
-      "Newman PH_2013.17.2.tif": {
-        "accession_number": "PH 2013.17.2",
-        "pid": "bdr:348266"
-      }
-    },
-    {
-      "Newman PH_2013.17.20.tif": {
-        "accession_number": "PH 2013.17.20",
-        "pid": "bdr:348267"
-      }
-    },
-    {
       "Newman PH_2013.17.3.tif": {
         "accession_number": "PH 2013.17.3",
         "pid": "bdr:348277"
@@ -561,80 +821,6 @@
       "Newman PH_2013.17.4.tif": {
         "accession_number": "PH 2013.17.4",
         "pid": "bdr:348280"
-      }
-    },
-    {
-      "Newman PH_2013.17.5.tif": {
-        "accession_number": "PH 2013.17.5",
-        "pid": "bdr:348281"
-      }
-    },
-    {
-      "Newman PH_2013.17.6.tif": {
-        "accession_number": "PH 2013.17.6",
-        "pid": "bdr:348282"
-      }
-    },
-    {
-      "Newman PH_2013.17.7.tif": {
-        "accession_number": "PH 2013.17.7",
-        "pid": "bdr:348283"
-      }
-    },
-    {
-      "Newman PH_2013.17.8.tif": {
-        "accession_number": "PH 2013.17.8",
-        "pid": "bdr:348284"
-      }
-    },
-    {
-      "Newman PH_2013.17.9.tif": {
-        "accession_number": "PH 2013.17.9",
-        "pid": "bdr:348285"
-      }
-    }
-  ],
-  "lst_images_to_update": [
-    {
-      "Bosworth PH_2007.46.1.A,B.tif": {
-        "accession_number": "PH 2007.46.1.A,B",
-        "pid": "bdr:650790"
-      }
-    },
-    {
-      "Bosworth PH_2007.46.2.A,B.tif": {
-        "accession_number": "PH 2007.46.2.A,B",
-        "pid": "bdr:650791"
-      }
-    },
-    {
-      "Luster PH_2005.3.tif": {
-        "accession_number": "PH 2005.3.",
-        "pid": "bdr:299537"
-      }
-    },
-    {
-      "Luster PH_2005.4.tif": {
-        "accession_number": "PH 2005.4.",
-        "pid": "bdr:299538"
-      }
-    },
-    {
-      "Luster PH_2005.5.tif": {
-        "accession_number": "PH 2005.5",
-        "pid": "bdr:299539"
-      }
-    },
-    {
-      "Luster PH_2005.6.tif": {
-        "accession_number": "PH 2005.6",
-        "pid": "bdr:299540"
-      }
-    },
-    {
-      "Sadeler PR_0.452.jpg": {
-        "accession_number": "PR 0.452",
-        "pid": "bdr:148052"
       }
     }
   ]
