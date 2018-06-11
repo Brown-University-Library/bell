@@ -152,8 +152,7 @@ code related to ingesting bell-gallery images into the bdr.
 
     - end result: `g1__images_filename_dct.json`
         - note that at the bottom of that file are any files that were excluded from the filename-dct.
-    - status: DONe 2018-June-11.
-
+    - status: DONE 2018-June-11.
 
 - make list of images to process
     - tasks/images.ImageLister.make_image_lists()
@@ -164,8 +163,9 @@ code related to ingesting bell-gallery images into the bdr.
             >>> images.run_make_image_lists()
 
     - produces a file containing both a list of images to add, and a list of images to update
-    - end result: `g_images_to_process.json`
-    - status: done: 2017-07-05
+    - end result: `g2__images_to_process.json`
+    - status: IN-PROCESS 2018-June-11
+        - actually file has been produced -- but there are a surprisingly high percentage of images to be updated, so we're checking a couple of them.
 
 - add new images
     - tasks/images.run_enqueue_add_image_jobs()
