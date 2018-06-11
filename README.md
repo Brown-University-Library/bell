@@ -178,9 +178,6 @@ code related to ingesting bell-gallery images into the bdr.
     - for adding individual images, if necessary: tasks/images.run_add_image( filename_dct )
     - status: done 2017-07-06
 
-- TODO: make sure jpg images get an image/jpeg mimetype in Fedora
-    - add a code step that verifies the mimetype in Fedora
-
 - add updated images
     - tasks/images.run_enqueue_update_image_jobs()
     - to run (from `bell_code` directory)...
@@ -190,6 +187,9 @@ code related to ingesting bell-gallery images into the bdr.
 
     - for adding individual images, if necessary: tasks/images.run_add_image( filename_dct )
     - status: done 2017-07-21
+
+- TODO: make sure jpg images get an image/jpeg mimetype in Fedora
+    - add a code step that verifies the mimetype in Fedora
 
 - purge caches for updated images
     - loris cache (info, source, derivatives) - DONE 8/1/2017
