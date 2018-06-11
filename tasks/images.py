@@ -30,7 +30,7 @@ class ImageDctMaker:
             } """
 
     def __init__( self ):
-        self.IMAGE_LIST_PATH = os.path.join(DATA_DIR, 'd__bell_images_listing.json')
+        self.IMAGE_LIST_PATH = os.path.join(DATA_DIR, 'd1__bell_images_listing.json')
         self.DATA_DCT_PATH = os.path.join(DATA_DIR, 'c__accession_number_to_data_dict.json')
         self.PID_DCT_PATH = os.path.join(DATA_DIR, 'e1__accession_number_to_pid_dict.json')
         self.IMAGES_FILENAME_DCT_JSON_OUTPUT_PATH = os.path.join(DATA_DIR, 'g1__images_filename_dct.json')
@@ -107,7 +107,7 @@ class ImageLister:
 
     def __init__( self ):
         self.IMAGES_FILENAME_DCT_JSON_PATH = os.path.join(DATA_DIR, 'g1__images_filename_dct.json')
-        self.IMAGES_TO_PROCESS_OUTPUT_PATH = os.path.join(DATA_DIR, 'g2__images_to_process.json'
+        self.IMAGES_TO_PROCESS_OUTPUT_PATH = os.path.join(DATA_DIR, 'g2__images_to_process.json')
         #only running against PROD, since it's read-only and wouldn't really work against dev.
         self.PROD_API_URL = os.environ['BELL_TASKS_IMGS__PROD_API_ROOT_URL']
         self.images_to_add = []
