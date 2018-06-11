@@ -4,6 +4,7 @@ import datetime, json, logging, os, pprint, subprocess, sys, time, urllib
 import shutil
 import tempfile
 import redis, requests, rq
+from tasks.bell_utils import DATA_DIR
 
 
 LOG_FILENAME = os.environ['BELL_LOG_FILENAME']
@@ -29,10 +30,10 @@ class ImageDctMaker:
             } """
 
     def __init__( self ):
-        self.IMAGE_LIST_PATH = os.environ['BELL_TASKS_IMGS__IMAGES_LIST_PATH']
-        self.DATA_DCT_PATH = os.environ['BELL_TASKS_IMGS__ACCESSION_NUMBER_TO_DATA_DICT_PATH']
-        self.PID_DCT_PATH = os.environ['BELL_TASKS_IMGS__ACCESSION_NUMBER_TO_PID_DICT_PATH']
-        self.IMAGES_FILENAME_DCT_JSON_OUTPUT_PATH = os.environ['BELL_TASKS_IMGS__IMAGES_FILENAME_DCT_JSON_OUTPUT_PATH']
+        self.IMAGE_LIST_PATH = os.path.join(DATA_DIR, 'd__bell_images_listing.json')
+        self.DATA_DCT_PATH = os.path.join(DATA_DIR, 'c__accession_number_to_data_dict.json')
+        self.PID_DCT_PATH = os.path.join(DATA_DIR, 'e1__accession_number_to_pid_dict.json')
+        self.IMAGES_FILENAME_DCT_JSON_OUTPUT_PATH = os.path.join(DATA_DIR, 'g1__images_filename_dct.json')
         self.files_excluded = []
 
     def make_json_file( self ):
@@ -105,8 +106,8 @@ class ImageLister:
     """ Lists images that need to be added, and those that need to be updated. """
 
     def __init__( self ):
-        self.IMAGES_FILENAME_DCT_JSON_PATH = os.environ['BELL_TASKS_IMGS__IMAGES_FILENAME_DCT_JSON_OUTPUT_PATH']
-        self.IMAGES_TO_PROCESS_OUTPUT_PATH = os.environ['BELL_TASKS_IMGS__IMAGES_TO_PROCESS_OUTPUT_PATH']
+        self.IMAGES_FILENAME_DCT_JSON_PATH = os.path.join(DATA_DIR, 'g1__images_filename_dct.json')
+        self.IMAGES_TO_PROCESS_OUTPUT_PATH = os.path.join(DATA_DIR, 'g2__images_to_process.json'
         #only running against PROD, since it's read-only and wouldn't really work against dev.
         self.PROD_API_URL = os.environ['BELL_TASKS_IMGS__PROD_API_ROOT_URL']
         self.images_to_add = []
