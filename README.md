@@ -164,8 +164,9 @@ code related to ingesting bell-gallery images into the bdr.
 
     - produces a file containing both a list of images to add, and a list of images to update
     - end result: `g2__images_to_process.json`
-    - status: IN-PROCESS 2018-June-11
-        - actually file has been produced -- but there are a surprisingly high percentage of images to be updated, so we're checking a couple of them.
+    - status: DONE 2018-June-11
+        - there were a surprisingly high percentage of images to be updated, so we checked a couple of them.
+        - result: as we suspected, borders were cropped in the new images, so we'll proceed.
 
 - add new images
     - tasks/images.run_enqueue_add_image_jobs()
