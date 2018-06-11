@@ -150,9 +150,9 @@ code related to ingesting bell-gallery images into the bdr.
             >>> from tasks import images
             >>> images.run_make_image_filename_dct()
 
-    - end result: `fg__images_filename_dct.json`
+    - end result: `g1__images_filename_dct.json`
         - note that at the bottom of that file are any files that were excluded from the filename-dct.
-    - status: done, 2017-07-05.
+    - status: DONe 2018-June-11.
 
 
 - make list of images to process
@@ -181,7 +181,7 @@ code related to ingesting bell-gallery images into the bdr.
     - add a code step that verifies the mimetype in Fedora
 
 - add updated images
-    - tasks/images.run_enqueue_add_image_jobs()
+    - tasks/images.run_enqueue_update_image_jobs()
     - to run (from `bell_code` directory)...
 
             >>> from tasks import images
@@ -193,7 +193,6 @@ code related to ingesting bell-gallery images into the bdr.
 - purge caches for updated images
     - loris cache (info, source, derivatives) - DONE 8/1/2017
     - thumbnail in fedora & django cache - DONE 8/1/2017
-
 
 - update the custom-solr-index
     - make solr pids list
