@@ -68,15 +68,16 @@ code related to ingesting bell-gallery images into the bdr.
         - 2018-May-17 - emailed J.C. explanation of remaining single non-match.
         - 2018-May-21 - all image-directory filenames now found.
 
-- match metadata accession-numbers to pid #1
+- match metadata accession-numbers to pid #2
     - tasks/acc_num_to_pid.py
     - end result: `e1__accession_number_to_pid_dict.json` file containing a dict of accession-numbers-to-pids.
     - accession-numbers without pids imply creation of a new metadata-only object (which may gain an associated image later)
     - accession-numbers with pids imply checking to see if fedora metadata needs to be updated
     - note, after metadata-only objects are created, this will be re-run until the `count_null` is zero.
-    - status: IN-PROCESS
+    - status: DONE
         - run 2018-May-21; shows 220 accession-numbers without pids
         - run 2018-May-23 after updating 1 bdr object's accession number; shows 219 accession-numbers without pids
+        - run 2018-June-11; shows zero accession-numbers without pids -- good!
 
 - check for, confirm, and delete old bell items from fedora
     - note: this step is being done here because:
@@ -127,11 +128,11 @@ code related to ingesting bell-gallery images into the bdr.
             https://api_search/?q=mods_id_bell_accession_number_ssim:the%20accession_number
 
     - tracker result: `f2__metadata_obj_tracker.json`
-    - after creates, confirm a re-run of `foundation/acc_num_to_pid.py` results in zero non-pid matches.
-        - note that this re-run will update, as it should, `e__accession_number_to_pid_dict.json` -- the dict of accession-numbers-to-pids.
+    - after creates, confirm a re-run of `tasks/acc_num_to_pid.py` results in zero non-pid matches.
+        - note that this re-run will update, as it should, `e1__accession_number_to_pid_dict.json` -- the dict of accession-numbers-to-pids.
     - status:
         - new-metadata-objects-created - DONE 2018-June-08.
-        - `acc_num_to_pid.py` re-run - NOT yet done.
+        - `acc_num_to_pid.py` - DONE 2018-June-11.
 
 - make image-filename to data dct
     - produces a dct and then json file like:
