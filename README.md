@@ -114,7 +114,7 @@ code related to ingesting bell-gallery images into the bdr.
 
     - end result: `f1__metadata_only_accession_numbers.json`
     - status:
-        - run 2018-Jun-07
+        - DONE 2018-Jun-07
 
 - create new metadata objects
     - note: first manually clean out the file `f2__metadata_obj_tracker.js` by replacing the old data with `{}`
@@ -166,27 +166,18 @@ code related to ingesting bell-gallery images into the bdr.
     - end result: `g2__images_to_process.json`
     - status: DONE 2018-June-11
         - there were a surprisingly high percentage of images to be updated, so we checked a couple of them.
-        - result: as we suspected, borders were cropped in the new images, so we'll proceed.
+        - result: as we suspected, white borders were removed in the new images, so we'll proceed.
 
-- add new images
-    - tasks/images.run_enqueue_add_image_jobs()
+- add images
+    - tasks/images.add_images()
+    - note: this merges the to-add list and the to-update list; they're both processed the same way.
     - to run (from `bell_code` directory)...
 
             >>> from tasks import images
-            >>> images.run_enqueue_add_image_jobs()
+            >>> images.add_images()
 
-    - for adding individual images, if necessary: tasks/images.run_add_image( filename_dct )
-    - status: done 2017-07-06
+    - status: IN-PROCESS 2018-June-12
 
-- add updated images
-    - tasks/images.run_enqueue_update_image_jobs()
-    - to run (from `bell_code` directory)...
-
-            >>> from tasks import images
-            >>> images.run_enqueue_update_image_jobs()
-
-    - for adding individual images, if necessary: tasks/images.run_add_image( filename_dct )
-    - status: done 2017-07-21
 
 - TODO: make sure jpg images get an image/jpeg mimetype in Fedora
     - add a code step that verifies the mimetype in Fedora
