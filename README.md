@@ -170,17 +170,15 @@ code related to ingesting bell-gallery images into the bdr.
 
 - add images
     - tasks/images.add_images()
-    - note: this merges the to-add list and the to-update list; they're both processed the same way.
+    - note:
+        - this merges the to-add list and the to-update list; they're both processed the same way.
+        - TODO for next run: normalize the log statements (get rid of self.logger)
     - to run (from `bell_code` directory)...
 
             >>> from tasks import images
             >>> images.add_images()
 
     - status: IN-PROCESS 2018-June-12
-
-
-- TODO: make sure jpg images get an image/jpeg mimetype in Fedora
-    - add a code step that verifies the mimetype in Fedora
 
 - purge caches for updated images
     - loris cache (info, source, derivatives) - DONE 8/1/2017
@@ -234,6 +232,7 @@ _(no indent=true available)_
 - review one_off scripts and get rid of least-necessary scripts
 - get rid of any utils/ files that we haven't used
 - low-priority: consider special-casing the object-type determination of bell-objects
+- see if a linter can list all the environmental-variables used by the code -- and remove from settings.sh those not used.
 
 ---
 
