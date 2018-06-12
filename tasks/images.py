@@ -321,7 +321,7 @@ class ImageAdder:
             Called by add_image() """
         resp_txt = resp.content.decode( 'utf-8' )
         self.logger.info( 'in tasks.images.ImageAdder.track_response(); resp_txt, `%s`; status_code, `%s`' % (resp_txt, resp.status_code) )
-        print('resp_txt, `%s`' % resp_txt)
+        print(f'{resp.status_code} - resp_txt, `{resp_txt}`')
         if not resp.status_code == 200:
             raise Exception( 'Bad http status code detected.' )
         return
@@ -358,7 +358,7 @@ def add_images(env='dev'):
     images_to_update = dct['lst_images_to_update']  # each lst entry is like: { "Agam PR_1981.1694.tif": {"accession_number": "PR 1981.1694", "pid": "bdr:300120"} }
     images_to_add.extend(images_to_update) #we handle them exactly the same way - just do them altogether
     print(f'{len(images_to_add)} images to add:')
-    for (i, filename_dct) in enumerate( images_to_add[:2] ):
+    for (i, filename_dct) in enumerate( images_to_add[14:] ):
         print(f'{i}: {filename_dct}')
         #if i+1 > 1:
         #    break
