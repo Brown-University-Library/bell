@@ -3,7 +3,8 @@
 import datetime, json, logging, os, pprint, subprocess, sys, time, urllib
 import shutil
 import tempfile
-import redis, requests, rq
+#import redis, requests, rq
+import requests
 from tasks.bell_utils import DATA_DIR
 
 
@@ -15,8 +16,8 @@ logging.basicConfig(level=logging.DEBUG,
                     filename=LOG_FILENAME)
 
 
-queue_name = os.environ.get('BELL_QUEUE_NAME')
-q = rq.Queue( queue_name, connection=redis.Redis() )
+#queue_name = os.environ.get('BELL_QUEUE_NAME')
+#q = rq.Queue( queue_name, connection=redis.Redis() )
 
 
 class ImageDctMaker:
@@ -346,49 +347,54 @@ def run_make_image_lists():
     return
 
 
-def run_enqueue_add_image_jobs(env='dev'):
+def add_images(env='dev'):
     """ Grabs list of images-to-add and enqueues jobs.
         Called manually.
         Suggestion: run on ingestion-server. """
-    IMAGES_TO_PROCESS_JSON_PATH = os.environ['BELL_TASKS_IMGS__IMAGES_TO_PROCESS_JSON_PATH']
+    IMAGES_TO_PROCESS_JSON_PATH = os.path.join(DATA_DIR, 'g2__images_to_process.json')
     with open( IMAGES_TO_PROCESS_JSON_PATH ) as f:
         dct = json.loads( f.read() )
     images_to_add = dct['lst_images_to_add']  # each lst entry is like: { "Agam PR_1981.1694.tif": {"accession_number": "PR 1981.1694", "pid": "bdr:300120"} }
-    for (i, filename_dct) in enumerate( images_to_add ):
-        print('i is, `%s`' % i)
-        if i+1 > 1:
-            break
-        q.enqueue_call(
-            func='tasks.images.run_add_image',
-            kwargs={ 'env': env, 'filename_dct': filename_dct },
-            timeout=600 )
-    print('done')
-    return
-
-def run_enqueue_update_image_jobs(env='dev'):
-    """ Grabs list of images-to-update and enqueues jobs.
-        Called manually.
-        Suggestion: run on ingestion-server. """
-    IMAGES_TO_PROCESS_JSON_PATH = os.environ['BELL_TASKS_IMGS__IMAGES_TO_PROCESS_JSON_PATH']
-    with open( IMAGES_TO_PROCESS_JSON_PATH ) as f:
-        dct = json.loads( f.read() )
-    images_to_add = dct['lst_images_to_update']  # each lst entry is like: { "Agam PR_1981.1694.tif": {"accession_number": "PR 1981.1694", "pid": "bdr:300120"} }
-    for (i, filename_dct) in enumerate( images_to_add ):
-        print('i is, `%s`' % i)
+    images_to_update = dct['lst_images_to_update']  # each lst entry is like: { "Agam PR_1981.1694.tif": {"accession_number": "PR 1981.1694", "pid": "bdr:300120"} }
+    images_to_add.extend(images_to_update) #we handle them exactly the same way - just do them altogether
+    print(f'{len(images_to_add)} images to add:')
+    for (i, filename_dct) in enumerate( images_to_add[:2] ):
+        print(f'{i}: {filename_dct}')
         #if i+1 > 1:
         #    break
-        q.enqueue_call(
-            func='tasks.images.run_add_image',
-            kwargs={ 'env': env, 'filename_dct': filename_dct },
-            timeout=600 )
+        adder = ImageAdder( logger, env )
+        adder.add_image( filename_dct )
+        #q.enqueue_call(
+        #    func='tasks.images.run_add_image',
+        #    kwargs={ 'env': env, 'filename_dct': filename_dct },
+        #    timeout=600 )
     print('done')
     return
 
-def run_add_image( filename_dct, env='dev' ):
-    """ Runner for add_image()
-        Called manually as per readme.
-        Suggestion: run on ingestion-server. """
-    adder = ImageAdder( logger, env )
-    adder.add_image( filename_dct )
-    return
+#def update_images(env='dev'):
+#    """ Grabs list of images-to-update and enqueues jobs.
+#        Called manually.
+#        Suggestion: run on ingestion-server. """
+#    IMAGES_TO_PROCESS_JSON_PATH = os.environ['BELL_TASKS_IMGS__IMAGES_TO_PROCESS_JSON_PATH']
+#    with open( IMAGES_TO_PROCESS_JSON_PATH ) as f:
+#        dct = json.loads( f.read() )
+#    images_to_add = dct['lst_images_to_update']  # each lst entry is like: { "Agam PR_1981.1694.tif": {"accession_number": "PR 1981.1694", "pid": "bdr:300120"} }
+#    for (i, filename_dct) in enumerate( images_to_add ):
+#        print('i is, `%s`' % i)
+#        #if i+1 > 1:
+#        #    break
+#        q.enqueue_call(
+#            func='tasks.images.run_add_image',
+#            kwargs={ 'env': env, 'filename_dct': filename_dct },
+#            timeout=600 )
+#    print('done')
+#    return
+
+#def run_add_image( filename_dct, env='dev' ):
+#    """ Runner for add_image()
+#        Called manually as per readme.
+#        Suggestion: run on ingestion-server. """
+#    adder = ImageAdder( logger, env )
+#    adder.add_image( filename_dct )
+#    return
 
