@@ -8,151 +8,176 @@
     {
       "Becker PH_2018.3.1.jpg": {
         "accession_number": "PH 2018.3.1",
-        "pid": "bdr:788477"
+        "pid": "bdr:788477",
+        "status": "ingested"
       }
     },
     {
       "Becker PH_2018.3.2.jpg": {
         "accession_number": "PH 2018.3.2",
-        "pid": "bdr:788478"
+        "pid": "bdr:788478",
+        "status": "ingested"
       }
     },
     {
       "Bing PH_2016.9.1.a.tif": {
         "accession_number": "PH 2016.9.1.a",
-        "pid": "bdr:734368"
+        "pid": "bdr:734368",
+        "status": "ingested"
       }
     },
     {
       "Bing PH_2016.9.1.b.tif": {
         "accession_number": "2016.9.1.b",
-        "pid": "bdr:734322"
+        "pid": "bdr:734322",
+        "status": "ingested"
       }
     },
     {
       "Bing PH_2016.9.1.c.tif": {
         "accession_number": "2016.9.1.c",
-        "pid": "bdr:734323"
+        "pid": "bdr:734323",
+        "status": "ingested"
       }
     },
     {
       "Bing PH_2016.9.1.d.tif": {
         "accession_number": "2016.9.1.d",
-        "pid": "bdr:734324"
+        "pid": "bdr:734324",
+        "status": "ingested"
       }
     },
     {
       "Bontecou SC_1972.7076.tif": {
         "accession_number": "SC 1972.7076",
-        "pid": "bdr:298500"
+        "pid": "bdr:298500",
+        "status": "ingested"
       }
     },
     {
       "Castellana PH_2018.2.1.jpg": {
         "accession_number": "PH 2018.2.1",
-        "pid": "bdr:788469"
+        "pid": "bdr:788469",
+        "status": "ingested"
       }
     },
     {
       "Castellana PH_2018.2.2.jpg": {
         "accession_number": "PH 2018.2.2",
-        "pid": "bdr:788470"
+        "pid": "bdr:788470",
+        "status": "ingested"
       }
     },
     {
       "Castellana PH_2018.2.3.jpg": {
         "accession_number": "PH 2018.2.3",
-        "pid": "bdr:788471"
+        "pid": "bdr:788471",
+        "status": "ingested"
       }
     },
     {
       "Castellana PH_2018.2.4.jpg": {
         "accession_number": "PH 2018.2.4",
-        "pid": "bdr:788472"
+        "pid": "bdr:788472",
+        "status": "ingested"
       }
     },
     {
       "Castellana PH_2018.2.5.jpg": {
         "accession_number": "PH 2018.2.5",
-        "pid": "bdr:788473"
+        "pid": "bdr:788473",
+        "status": "ingested"
       }
     },
     {
       "Castellana PH_2018.2.6.jpg": {
         "accession_number": "PH 2018.2.6",
-        "pid": "bdr:788474"
+        "pid": "bdr:788474",
+        "status": "ingested"
       }
     },
     {
       "Castellana PH_2018.2.7.jpg": {
         "accession_number": "PH 2018.2.7",
-        "pid": "bdr:788475"
+        "pid": "bdr:788475",
+        "status": "ingested"
       }
     },
     {
       "Castellana PH_2018.2.8.jpg": {
         "accession_number": "PH 2018.2.8",
-        "pid": "bdr:788476"
+        "pid": "bdr:788476",
+        "status": "ingested"
       }
     },
     {
       "Citret PH_2017.13.106.tif": {
         "accession_number": "PH 2017.13.106",
-        "pid": "bdr:788287"
+        "pid": "bdr:788287",
+        "status": "ingested"
       }
     },
     {
       "Citret PH_2017.13.108.tif": {
         "accession_number": "P 2017.13.108",
-        "pid": "bdr:788277"
+        "pid": "bdr:788277",
+        "status": "ingested"
       }
     },
     {
       "Citret PH_2017.13.109.tif": {
         "accession_number": "PH 2017.13.109",
-        "pid": "bdr:788289"
+        "pid": "bdr:788289",
+        "status": "ingested"
       }
     },
     {
       "Citret PH_2017.13.110.tif": {
         "accession_number": "PH 2017.13.110",
-        "pid": "bdr:788291"
+        "pid": "bdr:788291",
+        "status": "ingested"
       }
     },
     {
       "Costain PH_2017.13.43.tif": {
         "accession_number": "PH 2017.13.43",
-        "pid": "bdr:788355"
+        "pid": "bdr:788355",
+        "status": "ingested"
       }
     },
     {
       "Costain PH_2017.13.45.tif": {
         "accession_number": "PH 2017.13.45",
-        "pid": "bdr:788357"
+        "pid": "bdr:788357",
+        "status": "ingested"
       }
     },
     {
       "Disfarmer PH_2017.13.125.tif": {
         "accession_number": "PH 2017.13.125",
-        "pid": "bdr:788307"
+        "pid": "bdr:788307",
+        "status": "ingested"
       }
     },
     {
       "Disfarmer PH_2017.13.126.tif": {
         "accession_number": "PH 2017.13.126",
-        "pid": "bdr:788308"
+        "pid": "bdr:788308",
+        "status": "ingested"
       }
     },
     {
       "Drake D_2017.12.3.tif": {
         "accession_number": "D 2017.12.3",
-        "pid": "bdr:788272"
+        "pid": "bdr:788272",
+        "status": "ingested"
       }
     },
     {
       "Iturbide PH_2017.6.1.tif": {
         "accession_number": "PH 2017.6.1",
-        "pid": "bdr:734378"
+        "pid": "bdr:734378",
+        "status": "ingested"
       }
     },
     {
