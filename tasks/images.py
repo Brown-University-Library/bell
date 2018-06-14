@@ -15,6 +15,9 @@ logging.basicConfig(level=logging.DEBUG,
                     datefmt='%d/%b/%Y %H:%M:%S',
                     filename=LOG_FILENAME)
 
+KAKADU_PALETTE_WARNING = '''Optimizing palette ...
+    Use `-no_palette' to avoid nasty palettization effects when reconstruction
+    is anything but lossless.'''
 
 #queue_name = os.environ.get('BELL_QUEUE_NAME')
 #q = rq.Queue( queue_name, connection=redis.Redis() )
@@ -193,6 +196,7 @@ class ImageAdder:
         self.MASTER_IMAGES_DIR_PATH = os.environ['BELL_TASKS_IMGS__MASTER_IMAGES_DIR_PATH']  # no trailing slash
         self.JP2_IMAGES_DIR_PATH = os.environ['BELL_TASKS_IMGS__JP2_IMAGES_DIR_PATH']  # no trailing slash
         self.KAKADU_COMMAND_PATH = os.environ['BELL_TASKS_IMGS__KAKADU_COMMAND_PATH']
+        self.OPENJPEG_COMMAND_PATH = os.environ['BELL_TASKS_IMGS__OPENJPEG_COMMAND_PATH']
         self.CONVERT_COMMAND_PATH = os.environ['BELL_TASKS_IMGS__CONVERT_COMMAND_PATH']
         self.MASTER_IMAGES_DIR_URL = os.environ['BELL_TASKS_IMGS__MASTER_IMAGES_DIR_URL']  # no trailing slash
         self.JP2_IMAGES_DIR_URL = os.environ['BELL_TASKS_IMGS__JP2_IMAGES_DIR_URL']  # no trailing slash
@@ -252,18 +256,38 @@ class ImageAdder:
             self._create_jp2_from_jpg( source_filepath, destination_filepath )
         return
 
+    def _run_kakadu_cmd(self, cmd_as_list):
+        try:
+            completed_process = subprocess.run(cmd_as_list, check=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+        except subprocess.CalledProcessError as e:
+            stdout = e.stdout.decode('utf8')
+            if KAKADU_PALETTE_WARNING in stdout:
+                logger.warning('Kakadu palette warning found. Re-running kakadu with -no_palette option')
+                cmd_as_list.append('-no_palette')
+                completed_process = subprocess.run(cmd_as_list, check=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+            else:
+                raise
+
     def _create_jp2_from_tif( self, source_filepath, destination_filepath ):
         """ Creates jp2 directly.
             Called by create_jp2() """
         source_filepath2 = source_filepath.replace( "'", "\\'" )
-        cmd = '%s -i "%s" -o "%s" Creversible=yes -rate -,1,0.5,0.25 Clevels=8 "Stiles={1024,1024}"' % (self.KAKADU_COMMAND_PATH, source_filepath2, destination_filepath)
-        self.logger.info( 'in tasks.images.ImageAdder._create_jp2_from_tif(); cmd, %s' % cmd )
-        r = subprocess.run( cmd, shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE )
-        self.logger.info( 'in tasks.images.ImageAdder._create_jp2_from_tif(); r.stdout, %s' % r.stdout )
-        self.logger.info( 'in tasks.images.ImageAdder._create_jp2_from_tif(); r.stderr, %s' % r.stderr )
-        if len( r.stderr ) > 0:
-            raise Exception( 'Problem creating .jp2 from .tif' )
-        r.check_returncode() #this will raise a CalledProcessError if return code is non-zero
+        cmd_as_list = [self.KAKADU_COMMAND_PATH, '-i', f'"{source_filepath2}"', '-o', f'"{destination_filepath}"', 'Creversible=yes', '-rate', '-,1,0.5,0.25', 'Clevels=8', '"Stiles={1024,1024}"']
+        self.logger.info( 'in tasks.images.ImageAdder._create_jp2_from_tif(); cmd, %s' % cmd_as_list )
+        try:
+            self._run_kakadu_cmd(cmd_as_list)
+        except subprocess.CalledProcessError as e:
+            logger.warning(f'error from kakadu: {e}')
+            logger.info('using openjpeg to create JP2:')
+            #now try with openjpeg
+            cmd_as_list = [self.OPENJPEG_COMMAND_PATH, '-i', f'"{source_filepath2}"', '-o', f'"{destination_filepath}"']
+            completed_process = subprocess.run(cmd_as_list, check=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+        #r = subprocess.run( cmd, shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE )
+        #self.logger.info( 'in tasks.images.ImageAdder._create_jp2_from_tif(); r.stdout, %s' % r.stdout )
+        #self.logger.info( 'in tasks.images.ImageAdder._create_jp2_from_tif(); r.stderr, %s' % r.stderr )
+        #if len( r.stderr ) > 0:
+        #    raise Exception( 'Problem creating .jp2 from .tif' )
+        #r.check_returncode() #this will raise a CalledProcessError if return code is non-zero
         return
 
     def _create_jp2_from_jpg( self, source_filepath, destination_filepath ):
@@ -349,7 +373,7 @@ def run_make_image_lists():
 
 def process_image_list(list_of_images, env):
     for i, filename_dct in enumerate(list_of_images):
-        if i+1 > 1:
+        if i+1 > 2:
             break
         print(f'{i}: {filename_dct}')
         #{'filename': {'status': ...}}
@@ -384,6 +408,7 @@ def add_images(env='dev'):
     finally:
         with open(IMAGES_TO_PROCESS_JSON_PATH, 'wb') as f:
             f.write(json.dumps(dct, indent=2, sort_keys=True).encode('utf8'))
+            f.write('\n'.encode('utf8'))
     print('done')
     return
 

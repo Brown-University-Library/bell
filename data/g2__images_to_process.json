@@ -371,13 +371,15 @@
     {
       "Bing PH_2015.11.1.tif": {
         "accession_number": "PH 2015.11.1",
-        "pid": "bdr:650833"
+        "pid": "bdr:650833",
+        "status": "ingested_2018-06-14 14:36:58.601060"
       }
     },
     {
       "Bing PH_2015.11.2.tif": {
         "accession_number": "PH 2015.11.2",
-        "pid": "bdr:650844"
+        "pid": "bdr:650844",
+        "status": "ingested_2018-06-14 14:53:28.185681"
       }
     },
     {
