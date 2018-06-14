@@ -178,6 +178,7 @@ code related to ingesting bell-gallery images into the bdr.
             >>> from tasks import images
             >>> images.add_images()
 
+    - updates the `g2__images_to_process.json` file's `lst_images_to_add` and `lst_images_to_update` lists of image-dict-data with a `'status': ingested_(timestamp)` dict-entry.
     - status: IN-PROCESS 2018-June-12
 
 - purge caches for updated images
