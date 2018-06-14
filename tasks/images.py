@@ -347,6 +347,26 @@ def run_make_image_lists():
     return
 
 
+def process_image_list(list_of_images, env):
+    for i, filename_dct in enumerate(list_of_images):
+        if i+1 > 1:
+            break
+        print(f'{i}: {filename_dct}')
+        #{'filename': {'status': ...}}
+        image_filename = list(filename_dct.keys())[0]
+        if 'status' in filename_dct[image_filename]:
+            print(' already ingested - skipping...')
+            continue
+        adder = ImageAdder( logger, env )
+        adder.add_image( filename_dct )
+        now = str(datetime.datetime.now())
+        filename_dct[image_filename]['status'] = f'ingested_{now}'
+        #q.enqueue_call(
+        #    func='tasks.images.run_add_image',
+        #    kwargs={ 'env': env, 'filename_dct': filename_dct },
+        #    timeout=600 )
+
+
 def add_images(env='dev'):
     """ Grabs list of images-to-add and enqueues jobs.
         Called manually.
@@ -356,18 +376,14 @@ def add_images(env='dev'):
         dct = json.loads( f.read() )
     images_to_add = dct['lst_images_to_add']  # each lst entry is like: { "Agam PR_1981.1694.tif": {"accession_number": "PR 1981.1694", "pid": "bdr:300120"} }
     images_to_update = dct['lst_images_to_update']  # each lst entry is like: { "Agam PR_1981.1694.tif": {"accession_number": "PR 1981.1694", "pid": "bdr:300120"} }
-    images_to_add.extend(images_to_update) #we handle them exactly the same way - just do them altogether
+    #images_to_add.extend(images_to_update) #we handle them exactly the same way - just do them altogether
     print(f'{len(images_to_add)} images to add:')
-    for (i, filename_dct) in enumerate( images_to_add[14:] ):
-        print(f'{i}: {filename_dct}')
-        #if i+1 > 1:
-        #    break
-        adder = ImageAdder( logger, env )
-        adder.add_image( filename_dct )
-        #q.enqueue_call(
-        #    func='tasks.images.run_add_image',
-        #    kwargs={ 'env': env, 'filename_dct': filename_dct },
-        #    timeout=600 )
+    try:
+        process_image_list(images_to_add, env)
+        process_image_list(images_to_update, env)
+    finally:
+        with open(IMAGES_TO_PROCESS_JSON_PATH, 'wb') as f:
+            f.write(json.dumps(dct, indent=2, sort_keys=True).encode('utf8'))
     print('done')
     return
 
