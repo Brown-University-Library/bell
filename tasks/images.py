@@ -245,7 +245,7 @@ class ImageAdder:
         if 'tif' in source_filepath.split( '.' )[-1]:
             if ',' in source_filepath:
                 with open(source_filepath, 'rb') as original_tiff:
-                    with tempfile.NamedTemporaryFile(delete=True) as copy_of_tiff:
+                    with tempfile.NamedTemporaryFile(suffix='.tif', delete=True) as copy_of_tiff:
                         shutil.copyfileobj( original_tiff, copy_of_tiff )
                         copy_of_tiff.flush()
                         os.fsync(copy_of_tiff.fileno())
@@ -262,7 +262,9 @@ class ImageAdder:
         except subprocess.CalledProcessError as e:
             stdout = e.stdout.decode('utf8')
             if KAKADU_PALETTE_WARNING in stdout:
-                logger.warning('Kakadu palette warning found. Re-running kakadu with -no_palette option')
+                msg = 'Kakadu palette warning found. Re-running kakadu with -no_palette option'
+                print(msg)
+                logger.warning(msg)
                 cmd_as_list.append('-no_palette')
                 completed_process = subprocess.run(cmd_as_list, check=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
             else:
@@ -272,23 +274,26 @@ class ImageAdder:
         """ Creates jp2 directly.
             Called by create_jp2() """
         source_filepath2 = source_filepath.replace( "'", "\\'" )
-        cmd_as_list = [self.KAKADU_COMMAND_PATH, '-i', f'"{source_filepath2}"', '-o', f'"{destination_filepath}"', 'Creversible=yes', '-rate', '-,1,0.5,0.25', 'Clevels=8', '"Stiles={1024,1024}"']
+        cmd_as_list = [self.KAKADU_COMMAND_PATH, '-i', source_filepath2, '-o', destination_filepath, 'Creversible=yes', '-rate', '-,1,0.5,0.25', 'Clevels=8', 'Stiles={1024,1024}']
         self.logger.info( 'in tasks.images.ImageAdder._create_jp2_from_tif(); cmd, %s' % cmd_as_list )
         try:
             self._run_kakadu_cmd(cmd_as_list)
         except subprocess.CalledProcessError as e:
-            logger.warning(f'error from kakadu: {e}')
-            logger.info('using openjpeg to create JP2:')
+            err_msg = f'error from kakadu: stderr - {e.stderr.decode("utf8")}\nstdout - {e.stdout.decode("utf8")}'
+            info_msg = 'using openjpeg to create JP2:'
+            logger.warning(err_msg)
+            logger.info(info_msg)
+            print(err_msg)
+            print(info_msg)
             #now try with openjpeg
-            cmd_as_list = [self.OPENJPEG_COMMAND_PATH, '-i', f'"{source_filepath2}"', '-o', f'"{destination_filepath}"']
-            completed_process = subprocess.run(cmd_as_list, check=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
-        #r = subprocess.run( cmd, shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE )
-        #self.logger.info( 'in tasks.images.ImageAdder._create_jp2_from_tif(); r.stdout, %s' % r.stdout )
-        #self.logger.info( 'in tasks.images.ImageAdder._create_jp2_from_tif(); r.stderr, %s' % r.stderr )
-        #if len( r.stderr ) > 0:
-        #    raise Exception( 'Problem creating .jp2 from .tif' )
-        #r.check_returncode() #this will raise a CalledProcessError if return code is non-zero
-        return
+            cmd_as_list = [self.OPENJPEG_COMMAND_PATH, '-i', source_filepath2, '-o', destination_filepath]
+            try:
+                completed_process = subprocess.run(cmd_as_list, check=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+            except subprocess.CalledProcessError as e:
+                err_msg = f'error from openjpeg: stderr - {e.stderr.decode("utf8")}\nstdout - {e.stdout.decode("utf8")}'
+                logger.error(err_msg)
+                print(err_msg)
+                raise
 
     def _create_jp2_from_jpg( self, source_filepath, destination_filepath ):
         """ Creates jp2 after first converting jpg to tif (due to server limitation).
@@ -373,8 +378,8 @@ def run_make_image_lists():
 
 def process_image_list(list_of_images, env):
     for i, filename_dct in enumerate(list_of_images):
-        if i+1 > 2:
-            break
+        #if i+1 > 5:
+        #    break
         print(f'{i}: {filename_dct}')
         #{'filename': {'status': ...}}
         image_filename = list(filename_dct.keys())[0]
@@ -385,10 +390,6 @@ def process_image_list(list_of_images, env):
         adder.add_image( filename_dct )
         now = str(datetime.datetime.now())
         filename_dct[image_filename]['status'] = f'ingested_{now}'
-        #q.enqueue_call(
-        #    func='tasks.images.run_add_image',
-        #    kwargs={ 'env': env, 'filename_dct': filename_dct },
-        #    timeout=600 )
 
 
 def add_images(env='dev'):
@@ -400,7 +401,6 @@ def add_images(env='dev'):
         dct = json.loads( f.read() )
     images_to_add = dct['lst_images_to_add']  # each lst entry is like: { "Agam PR_1981.1694.tif": {"accession_number": "PR 1981.1694", "pid": "bdr:300120"} }
     images_to_update = dct['lst_images_to_update']  # each lst entry is like: { "Agam PR_1981.1694.tif": {"accession_number": "PR 1981.1694", "pid": "bdr:300120"} }
-    #images_to_add.extend(images_to_update) #we handle them exactly the same way - just do them altogether
     print(f'{len(images_to_add)} images to add:')
     try:
         process_image_list(images_to_add, env)
@@ -410,32 +410,4 @@ def add_images(env='dev'):
             f.write(json.dumps(dct, indent=2, sort_keys=True).encode('utf8'))
             f.write('\n'.encode('utf8'))
     print('done')
-    return
-
-#def update_images(env='dev'):
-#    """ Grabs list of images-to-update and enqueues jobs.
-#        Called manually.
-#        Suggestion: run on ingestion-server. """
-#    IMAGES_TO_PROCESS_JSON_PATH = os.environ['BELL_TASKS_IMGS__IMAGES_TO_PROCESS_JSON_PATH']
-#    with open( IMAGES_TO_PROCESS_JSON_PATH ) as f:
-#        dct = json.loads( f.read() )
-#    images_to_add = dct['lst_images_to_update']  # each lst entry is like: { "Agam PR_1981.1694.tif": {"accession_number": "PR 1981.1694", "pid": "bdr:300120"} }
-#    for (i, filename_dct) in enumerate( images_to_add ):
-#        print('i is, `%s`' % i)
-#        #if i+1 > 1:
-#        #    break
-#        q.enqueue_call(
-#            func='tasks.images.run_add_image',
-#            kwargs={ 'env': env, 'filename_dct': filename_dct },
-#            timeout=600 )
-#    print('done')
-#    return
-
-#def run_add_image( filename_dct, env='dev' ):
-#    """ Runner for add_image()
-#        Called manually as per readme.
-#        Suggestion: run on ingestion-server. """
-#    adder = ImageAdder( logger, env )
-#    adder.add_image( filename_dct )
-#    return
 

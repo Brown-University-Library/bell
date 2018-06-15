@@ -385,19 +385,22 @@
     {
       "Bing PH_2015.11.4.tif": {
         "accession_number": "PH 2015.11.4",
-        "pid": "bdr:650866"
+        "pid": "bdr:650866",
+        "status": "ingested_2018-06-15 11:38:38.877500"
       }
     },
     {
       "Bing PH_2015.11.5.tif": {
         "accession_number": "PH 2015.11.5",
-        "pid": "bdr:650876"
+        "pid": "bdr:650876",
+        "status": "ingested_2018-06-15 11:57:42.722147"
       }
     },
     {
       "Bosworth PH_2007.46.1.A,B.tif": {
         "accession_number": "PH 2007.46.1.A,B",
-        "pid": "bdr:650790"
+        "pid": "bdr:650790",
+        "status": "ingested_2018-06-15 12:06:43.360642"
       }
     },
     {
