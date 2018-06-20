@@ -179,7 +179,7 @@ code related to ingesting bell-gallery images into the bdr.
             >>> images.add_images()
 
     - updates the `g2__images_to_process.json` file's `lst_images_to_add` and `lst_images_to_update` lists of image-dict-data with a `'status': ingested_(timestamp)` dict-entry.
-    - status: IN-PROCESS 2018-June-12
+    - status: DONE 2018-June-12
 
 - purge caches for updated images
     - loris cache (info, source, derivatives) - DONE 2018-June-15
@@ -189,14 +189,16 @@ code related to ingesting bell-gallery images into the bdr.
     - make solr pids list
         - tasks/indexer.run_make_solr_pids_list()
         - end result: j__solr_pids_list.json
-        - status: IN-PROCESS 2018-June-20
+        - status: DONE 2018-June-20
     - create solr data file
         - tasks/indexer.run_create_solr_data()
         - end result: k__data_for_solr.json
-        - status: done 2017-08-07
+        - status: done IN-PROCESS 2018-June-20
+            - note: need to add code to insert the fedora master-datastream/metadata-datastream modification-date (whichever is most recent) (not the overall fedora object modifcation-date, because that might be affected by regenerated thumbnails)
 
 - let Bell-J.C. & CIS-J.B. know when done
-    - status: done via BJD email, 2017-Aug-11-Friday
+    - status: NOT YET DONE
+        - do not do until the fedora / django-cache thumbnails are regenerated
 
 ---
 
