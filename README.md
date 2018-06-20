@@ -194,9 +194,6 @@ code related to ingesting bell-gallery images into the bdr.
         - tasks/indexer.run_create_solr_data()
         - end result: k__data_for_solr.json
         - status: done 2017-08-07
-    - delete & post records to solr
-        - tasks/indexer.update_solr_core()
-        - status: done 2017-08-11
 
 - let Bell-J.C. & CIS-J.B. know when done
     - status: done via BJD email, 2017-Aug-11-Friday
