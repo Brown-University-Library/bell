@@ -222,7 +222,7 @@ _(no indent=true available)_
 - low-importance interesting idea -- create a script to check file-access dates to determine old-unused code.
 - switch paths in data/ to explicit relative paths, instead of settings
 - consider validating mods before sending it to api (tho api does validate it )
-- look into updating BDR metadata if Bell metadata has changed
+- next time: update BDR metadata if Bell metadata has changed
 - Normalization
     - check all images have MASTER & JP2 datastreams (not TIFF, ...)
     - check MASTER & JP2 headers: should have a filename, content type for JP2s, ... (HEAD request works for this)
