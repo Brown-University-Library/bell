@@ -2,8 +2,7 @@
     Executes custom-index changes as per readme.md """
 
 import datetime, json, logging, os, pprint, sys, time
-import redis, requests, rq
-from mysolr import Solr
+import requests
 
 LOG_FILENAME = os.environ['BELL_LOG_FILENAME']
 logger = logging.getLogger(__name__)
@@ -12,9 +11,6 @@ logging.basicConfig(level=logging.DEBUG,
                     datefmt='%d/%b/%Y %H:%M:%S',
                     filename=LOG_FILENAME)
 
-queue_name = os.environ.get('BELL_QUEUE_NAME')
-q = rq.Queue( queue_name, connection=redis.Redis() )
-
 
 class SolrPidsLister:
     """ Prepares lists of custom-solr items to be created/updated. """
@@ -22,7 +18,7 @@ class SolrPidsLister:
     def __init__( self, logger ):
         self.logger = logger
         self.SRC_ACC_NUM_TO_DATA_DCT_JSON_PATH = os.path.join('data', 'c__accession_number_to_data_dict.json')
-        self.SRC_ACC_NUM_TO_PID_DCT_JSON_PATH = os.path.join('data', 'e__accession_number_to_pid_dict.json') 
+        self.SRC_ACC_NUM_TO_PID_DCT_JSON_PATH = os.path.join('data', 'e1__accession_number_to_pid_dict.json') 
         self.OUTPUT_PATH = os.path.join('data', 'j__solr_pids_list.json')
 
     def make_solr_pids_lst( self ):
@@ -387,21 +383,6 @@ class SolrDataBuilder:
         return new_list
 
 
-def update_solr_core(env='dev'):
-    if env == 'prod':
-        SOLR_URL = os.environ['BELL_IDXR__PROD_SOLR_URL']
-    else:
-        SOLR_URL = os.environ['BELL_IDXR__DEV_SOLR_URL']
-    #delete everything in the core
-    solr = Solr(SOLR_URL)
-    solr.delete_by_query('*:*', commit=True)
-    #now post all the new records
-    with open('data/k__data_for_solr.json', 'rb') as f:
-        solr_data = f.read().decode('utf8')
-    solr_records = json.loads(solr_data)
-    solr.update(solr_records, 'xml', commit=True)
-
-
 ## runners ##
 
 
@@ -412,36 +393,9 @@ def run_make_solr_pids_list():
     solr_lstr = SolrPidsLister( logger )
     solr_lstr.make_solr_pids_lst()
     logger.debug( 'done' )
-    return
 
-def run_enqueue_index_jobs():
-    """ Enqueues update-custom-solr-index-entry jobs.
-        Called manually per readme.md """
-    logger.debug( 'in tasks.indexer.run_enqueue_index_jobs(); starting' )
-    idxr = CustomIndexUpdater( logger )
-    idxr.enqueue_index_jobs()
-    logger.debug( 'in tasks.indexer.run_enqueue_index_jobs(); done' )
-    return
 
 def run_create_solr_data():
     sdb = SolrDataBuilder( logger )
     sdb.create_solr_data()
-    return
 
-def run_update_custom_index_entry( accession_number, data_dct, pid ):
-    """ Preps and executes post for single entry.
-        Called by CustomIndexUpdater.enqueue_index_jobs() """
-    logger.debug( 'in tasks.indexer.run_update_custom_index_entry(); starting' )
-    idxr = CustomIndexUpdater( logger )
-    idxr.update_custom_index_entry( accession_number, data_dct, pid )
-    logger.debug( 'in tasks.indexer.run_update_custom_index_entry(); done' )
-    return
-
-def run_solr_deletions():
-    """ Deletes pids marked for deletion.
-        Called manually per readme.md """
-    logger.debug( 'in tasks.indexer.runs_solr_deletions(); starting' )
-    deleter = CustomIndexDeleter( logger )
-    deleter.delete_target_custom_solr_pids()
-    logger.debug( 'in tasks.indexer.runs_solr_deletions(); done' )
-    return
