@@ -182,15 +182,14 @@ code related to ingesting bell-gallery images into the bdr.
     - status: IN-PROCESS 2018-June-12
 
 - purge caches for updated images
-    - loris cache (info, source, derivatives) - DONE 8/1/2017
-    - thumbnail in fedora & django cache - DONE 8/1/2017
+    - loris cache (info, source, derivatives) - DONE 2018-June-15
+    - thumbnail in fedora & django cache - TODO as of 2018-June-15
 
 - update the custom-solr-index
     - make solr pids list
         - tasks/indexer.run_make_solr_pids_list()
         - end result: j__solr_pids_list.json
-        - note: h__x.json & i__x.json were files that are no longer needed
-        - status: done 2017-08-04
+        - status: IN-PROCESS 2018-June-20
     - create solr data file
         - tasks/indexer.run_create_solr_data()
         - end result: k__data_for_solr.json
@@ -234,6 +233,7 @@ _(no indent=true available)_
 - get rid of any utils/ files that we haven't used
 - low-priority: consider special-casing the object-type determination of bell-objects
 - see if a linter can list all the environmental-variables used by the code -- and remove from settings.sh those not used.
+- if next time this project is run (meaning after June 2018), loris and fedora and viewers cache-clearning isn't fully incorporated into the BDR-api, consider creating a programmatic api-wrapper around existing code for this step.
 
 ---
 
