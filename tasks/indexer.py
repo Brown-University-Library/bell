@@ -76,7 +76,8 @@ class SolrDataBuilder:
 
     def __init__( self, logger ):
         self.logger = logger
-        self.BDR_PUBLIC_ITEM_API_URL_ROOT = os.environ['BELL_TASKS_IMGS__PROD_API_ROOT_URL']
+        self.OUTPUT_FILEPATH = os.path.join('data', 'k__data_for_solr.json')
+        self.BDR_PRIVATE_ITEM_API_URL_ROOT = os.environ['BELL_TASKS_IMGS__PROD_PRIVATE_ITEM_API_URL']
         self.REQUIRED_KEYS = [  # used by _validate_solr_dict()
             'accession_number_original',
             'author_birth_date',
@@ -93,6 +94,7 @@ class SolrDataBuilder:
             'location_physical_location',
             'location_shelf_locator',
             'master_image_url',
+            'modified_date',
             'note_provenance',
             'object_date',
             'object_depth',
@@ -111,27 +113,38 @@ class SolrDataBuilder:
         file_path = os.path.join('data', 'j__solr_pids_list.json')
         with open( file_path, 'rt', encoding='utf8' ) as f:
             accession_number_to_data_dct_lst = json.loads( f.read() )
-        data_list = []
-        for (i, accession_number_dict) in enumerate( accession_number_to_data_dct_lst ):  # entry: { accession_number: {data_key_a: data_value_a, etc} }
-            if i + 1 > 70000:
-                break
-            ( accession_number, data_dct ) = list(accession_number_dict.items())[0]
-            print('accession_number...'); print(accession_number)
-            data_list.append(self.update_custom_index_entry( accession_number, data_dct ))
-        self.output_lst( data_list )
-        return
+        output_data = self.load_output_data()
+        output_data['modified_date'] = str(datetime.datetime.now())
+        if 'records' not in output_data:
+            output_data['records'] = []
+        data_list = output_data['records']
+        try:
+            for (i, accession_number_dict) in enumerate( accession_number_to_data_dct_lst ):  # entry: { accession_number: {data_key_a: data_value_a, etc} }
+                ( accession_number, data_dct ) = list(accession_number_dict.items())[0]
+                print(f'accession_number... {accession_number}')
+                data_list.append(self.update_custom_index_entry( accession_number, data_dct ))
+                1 / 0
+        finally:
+            self.output_lst( output_data )
+
+    def load_output_data( self ):
+        #this loads any current output data: will be empty first time, but if process fails,
+        #   there could be partial data already written out
+        with open( self.OUTPUT_FILEPATH, 'rb' ) as f:
+            data = f.read().decode('utf8')
+        return json.loads( data )
 
     def update_custom_index_entry( self, accession_number, data_dct ):
         """ Manages prep & post of update custom index entry.
             Called by runner. """
-        metadata_solr_dict = self.build_metadata_only_solr_dict( data_dct )
-        bdr_api_links_dict = self.grab_bdr_api_links_data( data_dct['pid'] )
+        bdr_api_data = self.grab_bdr_api_data( data_dct['pid'] )
+        metadata_solr_dict = self.build_metadata_only_solr_dict( data_dct, bdr_api_data )
+        bdr_api_links_dict = bdr_api_data['links']
         updated_solr_dict = self.add_image_metadata( metadata_solr_dict, bdr_api_links_dict )
-        validity = self.validate_solr_dict( updated_solr_dict )
-        if validity:
-            return updated_solr_dict
+        self.validate_solr_dict( updated_solr_dict )
+        return updated_solr_dict
 
-    def build_metadata_only_solr_dict( self, data_dct ):
+    def build_metadata_only_solr_dict( self, data_dct, api_data ):
         """ Builds dict-to-index using just basic item-dict data and pid; image-check handled in separate function.
             Called by run_update_custom_index_entry() """
         solr_dict = {}
@@ -147,19 +160,23 @@ class SolrDataBuilder:
         solr_dict = self._set_physical_extent( data_dct, solr_dict )
         solr_dict = self._set_physical_descriptions( data_dct, solr_dict )
         solr_dict = self._set_title( data_dct, solr_dict )
+        solr_dict = self._set_modified_date( api_data, solr_dict )
         self.logger.debug( 'in tasks.indexer.CustomIndexUpdater.build_metadata_only_solr_dict(); solr_dict, `%s`' % pprint.pformat(solr_dict) )
         return solr_dict
 
-    def grab_bdr_api_links_data( self, pid ):
+    def grab_bdr_api_data( self, pid ):
+        url = '%s/%s/' % ( self.BDR_PRIVATE_ITEM_API_URL_ROOT, pid )
+        r = requests.get( url )
+        if r.ok:
+            return r.json()
+        else:
+            raise Exception(f'error from API: {r.status_code} - {r.text}')
+
+    def grab_bdr_api_links_data( self, pid, bdr_api_data ):
         """ Grabs and returns link info from item-api json.
             The links dict is used by tasks.indexer to add image info to the solr-metadata if needed.
             Called by update_custom_index_entry() """
-        url = '%s/%s/' % ( self.BDR_PUBLIC_ITEM_API_URL_ROOT, pid )
-        self.logger.debug( 'url, `%s`' % url )
-        r = requests.get( url )
-        api_dict = r.json()
-        links_dict = api_dict['links']
-        self.logger.debug( 'links_dict, `%s`' % pprint.pformat(links_dict) )
+        links_dict = bdr_api_data['links']
         return links_dict
 
     def add_image_metadata( self, solr_dict, links_dict ):
@@ -190,15 +207,16 @@ class SolrDataBuilder:
             self.logger.debug( 'is valid' )
             return True
         except Exception as e:
-            self.logger.error( 'exception is: %s' % unicode(repr(e)) )
-            return False
+            msg = f'exception is: {e}'
+            print( msg )
+            logger.error( msg )
+            raise
 
     def output_lst( self, lst ):
         """ Saves json file.
             Called by make_solr_pids_list() """
         jsn = json.dumps( lst, indent=2, sort_keys=True )
-        filepath = os.path.join('data', 'k__data_for_solr.json')
-        with open( filepath, 'wb' ) as f:
+        with open( self.OUTPUT_FILEPATH, 'wb' ) as f:
             f.write( jsn.encode('utf8') )
         return
 
@@ -318,6 +336,19 @@ class SolrDataBuilder:
         solr_dict['title'] = ''
         if original_dict['object_title'] != None:
             solr_dict['title'] = original_dict['object_title']
+        return solr_dict
+
+    def _set_modified_date( self, api_data, solr_dict ):
+        datastreams = api_data['datastreams']
+        print(datastreams['MODS'])
+        metadata_modified = datastreams['MODS']['lastModified'].strptime('%Y-%m-%dT%H:%M:%SZ')
+        #set modified_date based on metadata
+        solr_dict['modified_date'] = metadata_modified.strftime('%Y-%m-%d')
+        #update modified_date if there's a MASTER datastream updated more recently than the metadata
+        if 'MASTER' in datastreams:
+            master_modified = datastreams['MASTER']['lastModified'].strptime('%Y-%m-%dT%H:%M:%SZ')
+            if master_modified > metadata_modified:
+                solr_dict['modified_date'] = master_modified.strftime('%Y-%m-%d')
         return solr_dict
 
     ## image helpers ##
