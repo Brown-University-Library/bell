@@ -191,6 +191,8 @@ code related to ingesting bell-gallery images into the bdr.
         - end result: j__solr_pids_list.json
         - status: DONE 2018-June-20
     - create solr data file
+        - NOTE: when beginning this process, manually empty the `k__data_for_solr.json` file (DON'T DELETE) to `{}`.
+            - explanation: this will allow the following code to be run with a built-in 'tracker' capability.
         - tasks/indexer.run_create_solr_data()
         - end result: k__data_for_solr.json
         - status: done IN-PROCESS 2018-June-20
