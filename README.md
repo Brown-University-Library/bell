@@ -183,7 +183,8 @@ code related to ingesting bell-gallery images into the bdr.
 
 - purge caches for updated images
     - loris cache (info, source, derivatives) - DONE 2018-June-15
-    - thumbnail in fedora & django cache - TODO as of 2018-June-15
+    - thumbnails in fedora re-created - DONE 2018-June-20
+    - django thumbnail cache - purged on 2018-June-22 (won't need to do this again, because the django cache is updating itself automatically now)
 
 - update the custom-solr-index
     - make solr pids list
