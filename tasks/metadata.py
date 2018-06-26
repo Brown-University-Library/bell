@@ -15,8 +15,11 @@ logging.basicConfig(level=logging.DEBUG,
                     filename=LOG_FILENAME)
 
 
+ACCESSION_NUMBER_TO_DATA_PATH = os.path.join(DATA_DIR, 'c__accession_number_to_data_dict.json')
 METADATA_ONLY_JSON = os.path.join(DATA_DIR, 'f1__metadata_only_accession_numbers.json')
 TRACKER_PATH = os.path.join(DATA_DIR, 'f2__metadata_obj_tracker.json')
+
+PROD_STORAGE_URL = os.environ['BELL_TASKS_META__PROD_STORAGE_URL']
 
 
 class MetadataOnlyLister:
@@ -62,12 +65,33 @@ def run_metadata_only_lister():
     return
 
 
+def grab_local_item_dct( accession_number ):
+    """ Loads data for given accession_number.
+        Called by create_metadata_only_object() """
+    logger.debug( 'in metadata.MetadataCreator.grab_item_dct(); accession_number, %s' % accession_number )
+    with open( ACCESSION_NUMBER_TO_DATA_PATH ) as f:
+        metadata_dct = json.loads( f.read() )
+    items = metadata_dct['items']
+    item_dct = items[ accession_number ]
+    logger.debug( 'in metadata.MetadataCreator.grab_item_dct(); item_dct, %s' % pprint.pformat(item_dct) )
+    return item_dct
+
+
+def grab_bdr_item_dct( pid ):
+    r = requests.get( f'{PROD_STORAGE_URL}{pid}/bell_metadata/' )
+    if r.ok:
+        data = json.loads(r.content)
+        return data
+    else:
+        raise Exception(f'{r.status_code} - {r.text}')
+
+
 class MetadataCreator( object ):
     """ Handles metadata-creation related tasks. """
 
     def __init__( self, env, logger ):
         self.logger = logger
-        self.SOURCE_FULL_JSON_METADATA_PATH = os.environ['BELL_TASKS_META__FULL_JSON_METADATA_PATH']
+        #self.SOURCE_FULL_JSON_METADATA_PATH = os.environ['BELL_TASKS_META__FULL_JSON_METADATA_PATH']
         self.MODS_SCHEMA_PATH = os.environ['BELL_TASKS_META__MODS_XSD_PATH']
         self.COLLECTION_ID = os.environ['BELL_TASKS_META__COLLECTION_ID']
         if env == 'prod':
@@ -86,7 +110,7 @@ class MetadataCreator( object ):
             Called by run_create_metadata_only_object() """
         self.logger.debug( 'starting' )
         params = self.set_basic_params()
-        item_dct = self.grab_item_dct( accession_number )
+        item_dct = grab_local_item_dct( accession_number )
         params['ir'] = self.make_ir_params( item_dct )
         params['mods'] = self.make_mods_params( item_dct )
         ( file_obj, param_string ) = self.prep_content_datastream( item_dct )
@@ -107,17 +131,6 @@ class MetadataCreator( object ):
             'content_model': 'CommonMetadataDO'
             }
         return params
-
-    def grab_item_dct( self, accession_number ):
-        """ Loads data for given accession_number.
-            Called by create_metadata_only_object() """
-        self.logger.debug( 'in metadata.MetadataCreator.grab_item_dct(); accession_number, %s' % accession_number )
-        with open( self.SOURCE_FULL_JSON_METADATA_PATH ) as f:
-            metadata_dct = json.loads( f.read() )
-        items = metadata_dct['items']
-        item_dct = items[ accession_number ]
-        self.logger.debug( 'in metadata.MetadataCreator.grab_item_dct(); item_dct, %s' % pprint.pformat(item_dct) )
-        return item_dct
 
     def make_ir_params( self, item_dct ):
         """ Returns json of ir params.
@@ -283,8 +296,7 @@ class MetadataUpdater( object ):
         logger.debug( 'api-url, ```{}```'.format(self.API_URL) )
         time.sleep( .5 )
         try:
-            r = requests.put( self.API_URL, data=params, verify=False )
-            pass
+            r = requests.put( self.API_URL, data=params )
         except Exception as e:
             self._handle_update_exception( e )
         logger.debug( 'r.status_code, `{status_code}`; r.content, ```{content}```'.format(status_code=r.status_code, content=r.content.decode('utf-8', 'replace')) )
@@ -320,6 +332,41 @@ def run_create_metadata_only_objects(env='dev'):
         m.create_metadata_only_object( accession_number )
     print('done')
     return
+
+def run_update_metadata_if_needed():
+    '''
+    open e1__accession_number_to_pid_dict.json
+    loop through all accession numbers
+        generate bell_metadata data
+        grab bell_metadata from BDR
+        compare
+        if different:
+            post bell_metadata & mods to api
+    '''
+    #TODO: see if record_modified_date can be added to FileMaker export
+    with open(os.path.join(DATA_DIR, 'e1__accession_number_to_pid_dict.json'), 'rb') as f:
+        data = f.read()
+    e1_info = json.loads(data)
+    accession_number_pid_mapping = e1_info['final_accession_pid_dict']
+    accession_numbers = set(accession_number_pid_mapping.keys())
+    with open(os.path.join(DATA_DIR, 'f1__metadata_only_accession_numbers.json'), 'rb') as f:
+        data = f.read()
+    #TODO: remove set!
+    new_object_accession_numbers = set(json.loads(data)['accession_numbers'])
+    updated_object_accession_numbers = list(accession_numbers - new_object_accession_numbers)
+    #print(len(updated_object_accession_numbers))
+    for accession_number in updated_object_accession_numbers[:650]:
+        print(accession_number)
+        data_dct = grab_local_item_dct(accession_number)
+        bdr_data_dct = grab_bdr_item_dct(accession_number_pid_mapping[accession_number])
+        if data_dct == bdr_data_dct:
+            print('.')
+        else:
+            print('not equal')
+            print(f'local item\n{data_dct}')
+            print(f'bdr item\n{bdr_data_dct}')
+
+    
 
 #def run_create_metadata_only_object( env, accession_number ):
 #    """ Runner for create_metadata_only_object()
