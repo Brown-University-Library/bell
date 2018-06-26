@@ -224,6 +224,7 @@ _(no indent=true available)_
 ### TODOs...
 
 - at some point early on when making a BDR-API call, confirm that a BDR image exists if J.C.'s metadata field `object_image_scan_filename` is not null.
+- add datestamp-key to json-file `f1__metadata_only_accesssion_numbers.json`
 - switch ```'utf-8', 'replace'``` to ```'utf-8'```
 - in `acc_num_to_pid.py`, change function names that indicate solr is being hit, to names that indicate that bdr-search-api is being hit.
 - review tests and edit or delete those not used.
