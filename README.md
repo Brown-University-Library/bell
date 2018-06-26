@@ -134,6 +134,9 @@ code related to ingesting bell-gallery images into the bdr.
         - new-metadata-objects-created - DONE 2018-June-08.
         - `acc_num_to_pid.py` - DONE 2018-June-11.
 
+- update metadata for existing objects in the BDR, if needed
+    - tasks/metadata.run_update_metadata_if_needed()
+
 - make image-filename to data dct
     - produces a dct and then json file like:
 
