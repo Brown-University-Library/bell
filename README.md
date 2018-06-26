@@ -186,7 +186,7 @@ code related to ingesting bell-gallery images into the bdr.
     - thumbnails in fedora re-created - DONE 2018-June-20
     - django thumbnail cache - purged on 2018-June-22 (won't need to do this again, because the django cache is updating itself automatically now)
 
-- update the custom-solr-index
+- create final json file for CIS
     - make solr pids list
         - tasks/indexer.run_make_solr_pids_list()
         - end result: j__solr_pids_list.json
@@ -220,6 +220,7 @@ _(no indent=true available)_
 
 ### TODOs...
 
+- at some point early on when making a BDR-API call, confirm that a BDR image exists if J.C.'s metadata field `object_image_scan_filename` is not null.
 - switch ```'utf-8', 'replace'``` to ```'utf-8'```
 - in `acc_num_to_pid.py`, change function names that indicate solr is being hit, to names that indicate that bdr-search-api is being hit.
 - review tests and edit or delete those not used.
