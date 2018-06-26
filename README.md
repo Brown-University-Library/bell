@@ -105,7 +105,6 @@ code related to ingesting bell-gallery images into the bdr.
             - status: 2018-Jun-06: DONE
 
 - make metadata-only list
-    - note: this creates metadata-only objects, some of which may be updated in a later step to also have image-datastreams.
     - tasks/metadata.run_metadata_only_lister()
     - to run (from `bell_code` directory)...
 
@@ -117,6 +116,7 @@ code related to ingesting bell-gallery images into the bdr.
         - DONE 2018-Jun-07
 
 - create new metadata objects
+    - note: this creates metadata-only objects, some of which may be updated in a later step to also have image-datastreams.
     - note: first manually clean out the file `f2__metadata_obj_tracker.js` by replacing the old data with `{}`
     - tasks/metadata.run_create_metadata_only_objects()
     - to run (from `bell_code` directory)...
@@ -224,6 +224,7 @@ _(no indent=true available)_
 ### TODOs...
 
 - at some point early on when making a BDR-API call, confirm that a BDR image exists if J.C.'s metadata field `object_image_scan_filename` is not null.
+- add datestamp-key to json-file `f1__metadata_only_accesssion_numbers.json`
 - switch ```'utf-8', 'replace'``` to ```'utf-8'```
 - in `acc_num_to_pid.py`, change function names that indicate solr is being hit, to names that indicate that bdr-search-api is being hit.
 - review tests and edit or delete those not used.
