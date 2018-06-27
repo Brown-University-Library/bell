@@ -18,8 +18,12 @@ logging.basicConfig(level=logging.DEBUG,
 ACCESSION_NUMBER_TO_DATA_PATH = os.path.join(DATA_DIR, 'c__accession_number_to_data_dict.json')
 METADATA_ONLY_JSON = os.path.join(DATA_DIR, 'f1__metadata_only_accession_numbers.json')
 TRACKER_PATH = os.path.join(DATA_DIR, 'f2__metadata_obj_tracker.json')
+MODS_SCHEMA_PATH = os.environ['BELL_TASKS_META__MODS_XSD_PATH']
 
 PROD_STORAGE_URL = os.environ['BELL_TASKS_META__PROD_STORAGE_URL']
+PROD_API_URL = os.environ['BELL_TASKS_META__PROD_AUTH_API_URL']
+PROD_API_IDENTITY = os.environ['BELL_TASKS_META__PROD_AUTH_API_IDENTITY']
+PROD_API_KEY = os.environ['BELL_TASKS_META__PROD_AUTH_API_KEY']
 
 
 class MetadataOnlyLister:
@@ -83,6 +87,9 @@ def grab_bdr_item_dct( pid ):
         data = json.loads(r.content)
         return data
     else:
+        #TODO: remove this check
+        if pid in ['bdr:299616', 'bdr:10930']:
+            return {}
         raise Exception(f'{r.status_code} - {r.text}')
 
 
@@ -92,12 +99,12 @@ class MetadataCreator( object ):
     def __init__( self, env, logger ):
         self.logger = logger
         #self.SOURCE_FULL_JSON_METADATA_PATH = os.environ['BELL_TASKS_META__FULL_JSON_METADATA_PATH']
-        self.MODS_SCHEMA_PATH = os.environ['BELL_TASKS_META__MODS_XSD_PATH']
+        self.MODS_SCHEMA_PATH = MODS_SCHEMA_PATH
         self.COLLECTION_ID = os.environ['BELL_TASKS_META__COLLECTION_ID']
         if env == 'prod':
-            self.API_URL = os.environ['BELL_TASKS_META__PROD_AUTH_API_URL']
-            self.API_IDENTITY = os.environ['BELL_TASKS_META__PROD_AUTH_API_IDENTITY']
-            self.API_KEY = os.environ['BELL_TASKS_META__PROD_AUTH_API_KEY']
+            self.API_URL = PROD_API_URL
+            self.API_IDENTITY = PROD_API_IDENTITY
+            self.API_KEY = PROD_API_KEY
             self.OWNING_COLLECTION = os.environ['BELL_TASKS_META__PROD_OWNING_COLLECTION_PID']
         else:
             self.API_URL = os.environ['BELL_TASKS_META__DEV_AUTH_API_URL']
@@ -212,7 +219,7 @@ class MetadataUpdater( object ):
         self.API_URL = os.environ['BELL_TASKS_META__AUTH_API_URL']
         self.API_IDENTITY = os.environ['BELL_TASKS_META__AUTH_API_IDENTITY']
         self.API_KEY = os.environ['BELL_TASKS_META__AUTH_API_KEY']
-        self.MODS_SCHEMA_PATH = os.environ['BELL_TASKS_META__MODS_XSD_PATH']
+        self.MODS_SCHEMA_PATH = MODS_SCHEMA_PATH
         self.OWNING_COLLECTION = os.environ['BELL_TASKS_META__OWNING_COLLECTION_PID']
 
     def update_object_metadata( self, accession_number, pid ):
@@ -333,39 +340,47 @@ def run_create_metadata_only_objects(env='dev'):
     print('done')
     return
 
+
+def post_metadata_update_to_bdr(pid, bell_metadata_dct):
+    mb = mods_builder.ModsBuilder()
+    mods_xml_dct = mb.build_mods_object( bell_metadata_dct, MODS_SCHEMA_PATH, return_type='return_string' )
+    mods_data = mods_xml_dct['data']
+    params = {
+            'identity': PROD_API_IDENTITY,
+            'authorization_code': PROD_API_KEY,
+            'pid': pid
+        }
+    params['mods'] = json.dumps({'xml_data': mods_data})
+    file_name = '%s_metadata.json' % pid.replace(':', '')
+    params['content_streams'] = json.dumps([{'dsID': 'bell_metadata', 'mimeType': 'application/json', 'file_name': file_name}])
+    params['overwrite_content'] = 'yes'
+    file_object = io.BytesIO(json.dumps(bell_metadata_dct).encode('utf8'))
+    r = requests.put(PROD_API_URL, data=params, files={file_name: file_object})
+    if not r.ok:
+        raise Exception(f'{r.status_code} - {r.text}')
+
+
 def run_update_metadata_if_needed():
-    '''
-    open e1__accession_number_to_pid_dict.json
-    loop through all accession numbers
-        generate bell_metadata data
-        grab bell_metadata from BDR
-        compare
-        if different:
-            post bell_metadata & mods to api
-    '''
     #TODO: see if record_modified_date can be added to FileMaker export
     with open(os.path.join(DATA_DIR, 'e1__accession_number_to_pid_dict.json'), 'rb') as f:
         data = f.read()
     e1_info = json.loads(data)
     accession_number_pid_mapping = e1_info['final_accession_pid_dict']
-    accession_numbers = set(accession_number_pid_mapping.keys())
+    accession_numbers = list(accession_number_pid_mapping.keys())
     with open(os.path.join(DATA_DIR, 'f1__metadata_only_accession_numbers.json'), 'rb') as f:
         data = f.read()
-    #TODO: remove set!
-    new_object_accession_numbers = set(json.loads(data)['accession_numbers'])
-    updated_object_accession_numbers = list(accession_numbers - new_object_accession_numbers)
-    #print(len(updated_object_accession_numbers))
-    for accession_number in updated_object_accession_numbers[:650]:
-        print(accession_number)
+    new_object_accession_numbers = json.loads(data)['accession_numbers']
+    for accession_number in accession_numbers:
+        if accession_number in new_object_accession_numbers:
+            continue
+        pid = accession_number_pid_mapping[accession_number]
+        print(f'{accession_number} - {pid}')
         data_dct = grab_local_item_dct(accession_number)
-        bdr_data_dct = grab_bdr_item_dct(accession_number_pid_mapping[accession_number])
+        bdr_data_dct = grab_bdr_item_dct(pid)
         if data_dct == bdr_data_dct:
             print('.')
         else:
-            print('not equal')
-            print(f'local item\n{data_dct}')
-            print(f'bdr item\n{bdr_data_dct}')
-
+            post_metadata_update_to_bdr(pid, data_dct)
     
 
 #def run_create_metadata_only_object( env, accession_number ):
