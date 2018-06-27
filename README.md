@@ -230,6 +230,7 @@ _(no indent=true available)_
 
 (at least do the two above)
 
+- combine steps where possible, eg initial data-file preparation
 - in `acc_num_to_pid.py`, change function names that indicate solr is being hit, to names that indicate that bdr-search-api is being hit.
 - review tests and edit or delete those not used.
     - consider incorporating test-run into README flow.
