@@ -114,17 +114,21 @@ class SolrDataBuilder:
         with open( file_path, 'rt', encoding='utf8' ) as f:
             accession_number_to_data_dct_lst = json.loads( f.read() )
         output_data = self.load_output_data()
-        output_data['modified_date'] = str(datetime.datetime.now())
+        output_data['modified_datetime'] = str(datetime.datetime.now())
+        output_data['modified_date'] = str(datetime.date.today())
         if 'records' not in output_data:
             output_data['records'] = []
         data_list = output_data['records']
+        already_processed_accession_numbers = [d['accession_number_original'] for d in data_list]
         try:
-            for (i, accession_number_dict) in enumerate( accession_number_to_data_dct_lst ):  # entry: { accession_number: {data_key_a: data_value_a, etc} }
+            for (i, accession_number_dict) in enumerate( accession_number_to_data_dct_lst[:12] ):  # entry: { accession_number: {data_key_a: data_value_a, etc} }
                 ( accession_number, data_dct ) = list(accession_number_dict.items())[0]
+                if accession_number in already_processed_accession_numbers:
+                    continue
                 print(f'accession_number... {accession_number}')
                 data_list.append(self.update_custom_index_entry( accession_number, data_dct ))
-                1 / 0
         finally:
+            output_data['count'] = len(output_data['records'])
             self.output_lst( output_data )
 
     def load_output_data( self ):
@@ -340,13 +344,12 @@ class SolrDataBuilder:
 
     def _set_modified_date( self, api_data, solr_dict ):
         datastreams = api_data['datastreams']
-        print(datastreams['MODS'])
-        metadata_modified = datastreams['MODS']['lastModified'].strptime('%Y-%m-%dT%H:%M:%SZ')
+        metadata_modified = datetime.datetime.strptime(datastreams['MODS']['lastModified'], '%Y-%m-%dT%H:%M:%SZ')
         #set modified_date based on metadata
         solr_dict['modified_date'] = metadata_modified.strftime('%Y-%m-%d')
         #update modified_date if there's a MASTER datastream updated more recently than the metadata
         if 'MASTER' in datastreams:
-            master_modified = datastreams['MASTER']['lastModified'].strptime('%Y-%m-%dT%H:%M:%SZ')
+            master_modified = datetime.datetime.strptime(datastreams['MASTER']['lastModified'], '%Y-%m-%dT%H:%M:%SZ')
             if master_modified > metadata_modified:
                 solr_dict['modified_date'] = master_modified.strftime('%Y-%m-%d')
         return solr_dict
