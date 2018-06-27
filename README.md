@@ -226,23 +226,21 @@ _(no indent=true available)_
 ### TODOs...
 
 - at some point early on when making a BDR-API call, confirm that a BDR image exists if J.C.'s metadata field `object_image_scan_filename` is not null.
-- add datestamp-key to json-file `f1__metadata_only_accesssion_numbers.json`
-- switch ```'utf-8', 'replace'``` to ```'utf-8'```
+- switch ```'utf-8', 'replace'``` to ```'utf8'```
+
+(at least do the two above)
+
 - in `acc_num_to_pid.py`, change function names that indicate solr is being hit, to names that indicate that bdr-search-api is being hit.
 - review tests and edit or delete those not used.
     - consider incorporating test-run into README flow.
 - low-importance interesting idea -- create a script to check file-access dates to determine old-unused code.
-- switch paths in data/ to explicit relative paths, instead of settings
-- consider validating mods before sending it to api (tho api does validate it )
-- next time: update BDR metadata if Bell metadata has changed
 - Normalization
     - check all images have MASTER & JP2 datastreams (not TIFF, ...)
-    - check MASTER & JP2 headers: should have a filename, content type for JP2s, ... (HEAD request works for this)
 - review one_off scripts and get rid of least-necessary scripts
 - get rid of any utils/ files that we haven't used
 - low-priority: consider special-casing the object-type determination of bell-objects
 - see if a linter can list all the environmental-variables used by the code -- and remove from settings.sh those not used.
-- if next time this project is run (meaning after June 2018), loris and fedora and viewers cache-clearning isn't fully incorporated into the BDR-api, consider creating a programmatic api-wrapper around existing code for this step.
+- if next time this project is run (meaning after June 2018), loris and fedora cache-clearning isn't fully incorporated into the BDR-api, consider creating a programmatic api-wrapper around existing code for this step.
 
 ---
 
