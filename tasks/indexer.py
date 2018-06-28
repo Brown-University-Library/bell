@@ -121,7 +121,7 @@ class SolrDataBuilder:
         data_list = output_data['records']
         already_processed_accession_numbers = [d['accession_number_original'] for d in data_list]
         try:
-            for (i, accession_number_dict) in enumerate( accession_number_to_data_dct_lst[:12] ):  # entry: { accession_number: {data_key_a: data_value_a, etc} }
+            for (i, accession_number_dict) in enumerate( accession_number_to_data_dct_lst ):  # entry: { accession_number: {data_key_a: data_value_a, etc} }
                 ( accession_number, data_dct ) = list(accession_number_dict.items())[0]
                 if accession_number in already_processed_accession_numbers:
                     continue
