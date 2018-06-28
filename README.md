@@ -223,12 +223,13 @@ _(no indent=true available)_
 
 ### TODOs...
 
+- combine steps where possible, eg initial data-file preparation
 - at some point early on when making a BDR-API call, confirm that a BDR image exists if J.C.'s metadata field `object_image_scan_filename` is not null.
 - switch ```'utf-8', 'replace'``` to ```'utf8'```
 
 (at least do the two above)
 
-- combine steps where possible, eg initial data-file preparation
+- add to the metadata-production code a check to ensure there's a title, if not, put in 'No Title' for the mods-datastream (bell json stream is ok).
 - in `acc_num_to_pid.py`, change function names that indicate solr is being hit, to names that indicate that bdr-search-api is being hit.
 - review tests and edit or delete those not used.
     - consider incorporating test-run into README flow.
