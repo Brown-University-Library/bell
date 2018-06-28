@@ -201,12 +201,10 @@ code related to ingesting bell-gallery images into the bdr.
             - explanation: this will allow the following code to be run with a built-in 'tracker' capability.
         - tasks/indexer.run_create_solr_data()
         - end result: k__data_for_solr.json
-        - status: done IN-PROCESS 2018-June-21
-            - note: currently adding code to insert the fedora master-datastream/metadata-datastream modification-date (whichever is most recent) (not the overall fedora object modifcation-date, because that might be affected by regenerated thumbnails)
+        - status: DONE 2018-June-28
 
 - let Bell-J.C. & CIS-J.B. know when done
-    - status: NOT YET DONE
-        - do not do until the fedora / django-cache thumbnails are regenerated
+    - status: DONE 2018-June-28
 
 ---
 
