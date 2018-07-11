@@ -229,7 +229,7 @@ _(no indent=true available)_
 
 (at least do the two above)
 
-- questions/ideas from J.R.: link from BDR site over to Bell site; should Bell metadata-only object go into the BDR, if it's not the system of record?
+- questions/ideas from J.R.: link from BDR site over to Bell site; should Bell metadata-only object go into the BDR, if it's not the system of record? Also, could have a data dictionary for the metadata fields coming from J.C. - a label and short explanation of what it means. Could also make the Bell metadata the primary metadata in the BDR, instead of creating a minimal MODS.
 - add to the metadata-production code a check to ensure there's a title, if not, put in 'No Title' for the mods-datastream (bell json stream is ok).
 - in `acc_num_to_pid.py`, change function names that indicate solr is being hit, to names that indicate that bdr-search-api is being hit.
 - review tests and edit or delete those not used.
