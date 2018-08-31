@@ -223,6 +223,7 @@ _(no indent=true available)_
 
 ### TODOs...
 
+- update BDR API calls: don't have to pass in dsID, and JP2 will automatically be generated for new image objects that don't have it.
 - combine steps where possible, eg initial data-file preparation
 - at some point early on when making a BDR-API call, confirm that a BDR image exists if J.C.'s metadata field `object_image_scan_filename` is not null.
 - switch ```'utf-8', 'replace'``` to ```'utf8'```
