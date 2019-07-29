@@ -183,7 +183,6 @@ class ImageAdder:
     def __init__( self, logger, env='dev' ):
         self.logger = logger
         self.MASTER_IMAGES_DIR_PATH = os.environ['BELL_TASKS_IMGS__MASTER_IMAGES_DIR_PATH']  # no trailing slash
-        self.MASTER_IMAGES_DIR_URL = os.environ['BELL_TASKS_IMGS__MASTER_IMAGES_DIR_URL']  # no trailing slash
         if env == 'prod':
             self.AUTH_API_URL = os.environ['BELL_TASKS_IMGS__PROD_AUTH_API_URL']
             self.AUTH_API_IDENTITY = os.environ['BELL_TASKS_IMGS__PROD_AUTH_API_IDENTITY']
@@ -198,48 +197,37 @@ class ImageAdder:
             Called by run_add_image() """
         logger.debug( 'in tasks.images.ImageAdder.add_image(); starting; filename_dct, `%s`' % pprint.pformat(filename_dct) )
         image_filename = list(filename_dct.keys())[0]
-        ( source_filepath, master_filename_encoded ) = self.create_temp_filenames( image_filename )
         pid = filename_dct[image_filename]['pid']
-        params = self.prep_params( master_filename_encoded, pid )
-        resp = self.hit_api( params )
+        params = self.prep_params( image_filename, pid )
+        with open(os.path.join(self.MASTER_IMAGES_DIR_PATH, image_filename), 'rb') as f:
+            files = {image_filename: f}
+            resp = self.hit_api( params, files )
         self.track_response( resp )
         return
 
-    def create_temp_filenames( self, master_filename_raw ):
-        """ Creates filenames.
-            Called by add_image()
-            Note, master_filename_raw likely includes spaces and may include apostrophes,
-              and self.MASTER_IMAGES_DIR_PATH may include spaces. """
-        master_filename_encoded = urllib.parse.quote( master_filename_raw )  # used for api call
-        source_filepath = '%s/%s' % ( self.MASTER_IMAGES_DIR_PATH, master_filename_raw )
-        logger.debug( 'in tasks.images.ImageAdder.create_temp_filenames(); source_filepath, `%s`' % source_filepath )
-        return ( source_filepath, master_filename_encoded )
-
-    def prep_params( self, master_filename_encoded, pid ):
+    def prep_params( self, file_name, pid ):
         """ Sets params.
             Called by add_image() """
         params = { 'pid': pid, 'identity': self.AUTH_API_IDENTITY, 'authorization_code': self.AUTH_API_KEY }
         #Note: we used to check a setting for whether or not to send this param, but seems like we can just
         #   always send it.
         params['overwrite_content'] = 'yes'
-        master_url = '%s/%s' % ( self.MASTER_IMAGES_DIR_URL, master_filename_encoded )
         params['content_streams'] = json.dumps([
-            { 'dsID': 'MASTER', 'url': master_url },
+            { 'dsID': 'MASTER', 'file_name': file_name },
             ])
         self.logger.info( 'in tasks.images.ImageAdder.prep_params(); params/content_streams, `%s`' % params['content_streams'] )
         return params
 
-    def hit_api( self, params ):
+    def hit_api( self, params, files ):
         """ Hits auth-api.
             Called by add_image() """
         try:
             self.logger.info( 'in tasks.images.ImageAdder.hit_api(); url, `%s`; identity, `%s`; pid, `%s`' % (self.AUTH_API_URL, params['identity'], params['pid']) )
-            r = requests.put( self.AUTH_API_URL, data=params )
+            r = requests.put( self.AUTH_API_URL, data=params, files=files )
             return r
         except Exception as e:
-            err = unicode(repr(e))
-            self.logger.error( 'in tasks.images.ImageAdder.hit_api(); error, `%s`' % err )
-            raise Exception( err )
+            self.logger.error( 'in tasks.images.ImageAdder.hit_api(); error, `%s`' % e )
+            raise
 
     def track_response( self, resp ):
         """ Outputs put result.
@@ -248,8 +236,7 @@ class ImageAdder:
         self.logger.info( 'in tasks.images.ImageAdder.track_response(); resp_txt, `%s`; status_code, `%s`' % (resp_txt, resp.status_code) )
         print(f'{resp.status_code} - resp_txt, `{resp_txt}`')
         if not resp.status_code == 200:
-            raise Exception( 'Bad http status code detected.' )
-        return
+            raise Exception( f'Bad http status code detected: {resp.status_code}' )
 
     # end class ImageAdder
 
