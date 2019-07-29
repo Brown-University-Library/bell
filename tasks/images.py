@@ -148,7 +148,7 @@ class ImageLister:
         """ Looks up image-filename via public api; stores whether image exists or not.
             Called by make_image_lists() """
         image_already_ingested = True
-        if 'JP2' in api_dct['links']['content_datastreams'].keys() or 'jp2' in api_dct['rel_content_models_ssim']:
+        if api_dct['object_type'] == 'image':
             pass
         else:
             image_already_ingested = False
