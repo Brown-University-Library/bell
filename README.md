@@ -184,6 +184,7 @@ code related to ingesting bell-gallery images into the bdr.
             >>> images.add_images()
 
     - updates the `g2__images_to_process.json` file's `lst_images_to_add` and `lst_images_to_update` lists of image-dict-data with a `'status': ingested_(timestamp)` dict-entry.
+    - note: verify that JP2 job was run for recreating JP2 when MASTER was updated
     - status: DONE 2018-June-12
 
 - purge caches for updated images

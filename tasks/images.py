@@ -1,9 +1,5 @@
-# -*- coding: utf-8 -*-
 """ Handles image-related tasks. """
-import datetime, json, logging, os, pprint, subprocess, sys, time, urllib
-import shutil
-import tempfile
-#import redis, requests, rq
+import datetime, json, logging, os, pprint, time, urllib
 import requests
 from tasks.bell_utils import DATA_DIR
 
@@ -14,13 +10,6 @@ logging.basicConfig(level=logging.DEBUG,
                     format='[%(asctime)s] %(levelname)s [%(module)s-%(funcName)s()::%(lineno)d] %(message)s',
                     datefmt='%d/%b/%Y %H:%M:%S',
                     filename=LOG_FILENAME)
-
-KAKADU_PALETTE_WARNING = '''Optimizing palette ...
-    Use `-no_palette' to avoid nasty palettization effects when reconstruction
-    is anything but lossless.'''
-
-#queue_name = os.environ.get('BELL_QUEUE_NAME')
-#q = rq.Queue( queue_name, connection=redis.Redis() )
 
 
 class ImageDctMaker:
@@ -194,12 +183,7 @@ class ImageAdder:
     def __init__( self, logger, env='dev' ):
         self.logger = logger
         self.MASTER_IMAGES_DIR_PATH = os.environ['BELL_TASKS_IMGS__MASTER_IMAGES_DIR_PATH']  # no trailing slash
-        self.JP2_IMAGES_DIR_PATH = os.environ['BELL_TASKS_IMGS__JP2_IMAGES_DIR_PATH']  # no trailing slash
-        self.KAKADU_COMMAND_PATH = os.environ['BELL_TASKS_IMGS__KAKADU_COMMAND_PATH']
-        self.OPENJPEG_COMMAND_PATH = os.environ['BELL_TASKS_IMGS__OPENJPEG_COMMAND_PATH']
-        self.CONVERT_COMMAND_PATH = os.environ['BELL_TASKS_IMGS__CONVERT_COMMAND_PATH']
         self.MASTER_IMAGES_DIR_URL = os.environ['BELL_TASKS_IMGS__MASTER_IMAGES_DIR_URL']  # no trailing slash
-        self.JP2_IMAGES_DIR_URL = os.environ['BELL_TASKS_IMGS__JP2_IMAGES_DIR_URL']  # no trailing slash
         if env == 'prod':
             self.AUTH_API_URL = os.environ['BELL_TASKS_IMGS__PROD_AUTH_API_URL']
             self.AUTH_API_IDENTITY = os.environ['BELL_TASKS_IMGS__PROD_AUTH_API_IDENTITY']
@@ -210,114 +194,28 @@ class ImageAdder:
             self.AUTH_API_KEY = os.environ['BELL_TASKS_IMGS__DEV_AUTH_API_KEY']
 
     def add_image( self, filename_dct ):
-        """ Manages: creates jp2, hits api, & cleans up.
+        """ Manages: hits api, & cleans up.
             Called by run_add_image() """
         logger.debug( 'in tasks.images.ImageAdder.add_image(); starting; filename_dct, `%s`' % pprint.pformat(filename_dct) )
         image_filename = list(filename_dct.keys())[0]
-        ( source_filepath, destination_filepath, master_filename_encoded, jp2_filename ) = self.create_temp_filenames( image_filename )
-        self.create_jp2( source_filepath, destination_filepath )
+        ( source_filepath, master_filename_encoded ) = self.create_temp_filenames( image_filename )
         pid = filename_dct[image_filename]['pid']
-        params = self.prep_params( master_filename_encoded, jp2_filename, pid )
+        params = self.prep_params( master_filename_encoded, pid )
         resp = self.hit_api( params )
         self.track_response( resp )
-        os.remove( destination_filepath )
         return
 
     def create_temp_filenames( self, master_filename_raw ):
-        """ Creates filenames for subsequent jp2 creation.
+        """ Creates filenames.
             Called by add_image()
             Note, master_filename_raw likely includes spaces and may include apostrophes,
               and self.MASTER_IMAGES_DIR_PATH may include spaces. """
         master_filename_encoded = urllib.parse.quote( master_filename_raw )  # used for api call
         source_filepath = '%s/%s' % ( self.MASTER_IMAGES_DIR_PATH, master_filename_raw )
-        temp_jp2_filename = master_filename_raw.replace( ' ', '_' )
-        temp_jp2_filename2 = temp_jp2_filename.replace( u"'", '_' )
-        extension_idx = temp_jp2_filename2.rfind( '.' )
-        non_extension_filename = temp_jp2_filename2[0:extension_idx]
-        jp2_filename = non_extension_filename + '.jp2'
-        destination_filepath = '%s/%s' % ( self.JP2_IMAGES_DIR_PATH, jp2_filename )
-        logger.debug( 'in tasks.images.ImageAdder.create_temp_filenames(); source_filepath, `%s`; destination_filepath, `%s`' % ( source_filepath, destination_filepath ) )
-        return ( source_filepath, destination_filepath, master_filename_encoded, jp2_filename )
+        logger.debug( 'in tasks.images.ImageAdder.create_temp_filenames(); source_filepath, `%s`' % source_filepath )
+        return ( source_filepath, master_filename_encoded )
 
-    def create_jp2( self, source_filepath, destination_filepath ):
-        """ Creates jp2.
-            Called by add_image() """
-        if 'tif' in source_filepath.split( '.' )[-1]:
-            if ',' in source_filepath:
-                with open(source_filepath, 'rb') as original_tiff:
-                    with tempfile.NamedTemporaryFile(suffix='.tif', delete=True) as copy_of_tiff:
-                        shutil.copyfileobj( original_tiff, copy_of_tiff )
-                        copy_of_tiff.flush()
-                        os.fsync(copy_of_tiff.fileno())
-                        self._create_jp2_from_tif( copy_of_tiff.name, destination_filepath )
-            else:
-                self._create_jp2_from_tif( source_filepath, destination_filepath )
-        elif 'jp' in source_filepath.split( '.' )[-1]:
-            self._create_jp2_from_jpg( source_filepath, destination_filepath )
-        return
-
-    def _run_kakadu_cmd(self, cmd_as_list):
-        try:
-            completed_process = subprocess.run(cmd_as_list, check=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
-        except subprocess.CalledProcessError as e:
-            stdout = e.stdout.decode('utf8')
-            if KAKADU_PALETTE_WARNING in stdout:
-                msg = 'Kakadu palette warning found. Re-running kakadu with -no_palette option'
-                print(msg)
-                logger.warning(msg)
-                cmd_as_list.append('-no_palette')
-                completed_process = subprocess.run(cmd_as_list, check=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
-            else:
-                raise
-
-    def _create_jp2_from_tif( self, source_filepath, destination_filepath ):
-        """ Creates jp2 directly.
-            Called by create_jp2() """
-        source_filepath2 = source_filepath.replace( "'", "\\'" )
-        cmd_as_list = [self.KAKADU_COMMAND_PATH, '-i', source_filepath2, '-o', destination_filepath, 'Creversible=yes', '-rate', '-,1,0.5,0.25', 'Clevels=8', 'Stiles={1024,1024}']
-        self.logger.info( 'in tasks.images.ImageAdder._create_jp2_from_tif(); cmd, %s' % cmd_as_list )
-        try:
-            self._run_kakadu_cmd(cmd_as_list)
-        except subprocess.CalledProcessError as e:
-            err_msg = f'error from kakadu: stderr - {e.stderr.decode("utf8")}\nstdout - {e.stdout.decode("utf8")}'
-            info_msg = 'using openjpeg to create JP2:'
-            logger.warning(err_msg)
-            logger.info(info_msg)
-            print(err_msg)
-            print(info_msg)
-            #now try with openjpeg
-            cmd_as_list = [self.OPENJPEG_COMMAND_PATH, '-i', source_filepath2, '-o', destination_filepath]
-            try:
-                completed_process = subprocess.run(cmd_as_list, check=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
-            except subprocess.CalledProcessError as e:
-                err_msg = f'error from openjpeg: stderr - {e.stderr.decode("utf8")}\nstdout - {e.stdout.decode("utf8")}'
-                logger.error(err_msg)
-                print(err_msg)
-                raise
-
-    def _create_jp2_from_jpg( self, source_filepath, destination_filepath ):
-        """ Creates jp2 after first converting jpg to tif (due to server limitation).
-            Called by create_jp2() """
-        # cleaned_source_filepath = source_filepath.replace( ' ', '\ ' )
-        cleaned_source_filepath = source_filepath  # graphicsmagic doesn't need spaces escaped
-        self.logger.debug( 'in tasks.images.ImageAdder._create_jp2_from_jpg(); cleaned_source_filepath, %s' % cleaned_source_filepath )
-        tif_destination_filepath = destination_filepath[0:-4] + '.tif'
-        self.logger.debug( 'in tasks.images.ImageAdder._create_jp2_from_jpg(); tif_destination_filepath, %s' % tif_destination_filepath )
-        cmd = '%s -compress None "%s" %s' % (
-            self.CONVERT_COMMAND_PATH, cleaned_source_filepath, tif_destination_filepath )  # source-filepath quotes needed for filename containing spaces
-        self.logger.debug( 'in tasks.images.ImageAdder._create_jp2_from_jpg(); cmd, %s' % cmd )
-        r = subprocess.run( cmd, shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE )
-        self.logger.info( 'in tasks.images.ImageAdder._create_jp2_from_jpg(); r.stdout, %s; type(r.stdout), %s' % (r.stdout, type(r.stdout)) )
-        self.logger.info( 'in tasks.images.ImageAdder._create_jp2_from_jpg(); r.stderr, %s; type(r.stderr), %s' % (r.stderr, type(r.stderr)) )
-        if len( r.stderr ) > 0:
-            raise Exception( 'Problem making intermediate .tif from .jpg' )
-        r.check_returncode() #this will raise a CalledProcessError if return code is non-zero
-        source_filepath = tif_destination_filepath
-        self._create_jp2_from_tif(source_filepath, destination_filepath)
-        os.remove( tif_destination_filepath )
-        return
-
-    def prep_params( self, master_filename_encoded, jp2_filename, pid ):
+    def prep_params( self, master_filename_encoded, pid ):
         """ Sets params.
             Called by add_image() """
         params = { 'pid': pid, 'identity': self.AUTH_API_IDENTITY, 'authorization_code': self.AUTH_API_KEY }
@@ -325,10 +223,8 @@ class ImageAdder:
         #   always send it.
         params['overwrite_content'] = 'yes'
         master_url = '%s/%s' % ( self.MASTER_IMAGES_DIR_URL, master_filename_encoded )
-        jp2_url = '%s/%s' % ( self.JP2_IMAGES_DIR_URL, jp2_filename )
         params['content_streams'] = json.dumps([
             { 'dsID': 'MASTER', 'url': master_url },
-            { 'dsID': 'JP2', 'url': jp2_url }
             ])
         self.logger.info( 'in tasks.images.ImageAdder.prep_params(); params/content_streams, `%s`' % params['content_streams'] )
         return params
