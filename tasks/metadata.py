@@ -125,7 +125,6 @@ class MetadataCreator( object ):
         self.logger.debug( 'in metadata.MetadataCreator.create_metadata_only_object(); params, %s' % pprint.pformat(params) )
         pid = self.perform_post( params, file_obj )  # perform_post() closes the file
         self.track_progress( accession_number, pid )
-        return
 
     def set_basic_params( self ):
         """ Sets forthright params.
@@ -191,7 +190,6 @@ class MetadataCreator( object ):
         self.logger.error( 'in metadata.MetadataCreator.perform_post(); exception, ```{}```'.format(repr(e)) )
         file_obj.close()
         raise Exception( 'failure on metadata.MetadataCreator.perform_post()' )
-        return
 
     def track_progress( self, accession_number, pid ):
         """ Logs progress to json file.
@@ -205,7 +203,6 @@ class MetadataCreator( object ):
         dct[accession_number] = pid
         with open( TRACKER_PATH, 'w' ) as f:
             f.write( json.dumps(dct, indent=2, sort_keys=True) )
-        return
 
     # end class MetadataCreator
 
@@ -314,7 +311,6 @@ class MetadataUpdater( object ):
     def _handle_update_exception( self, e ):
         logger.error( 'exception hitting update-api, ```{}```'.format(repr(e)) )
         raise Exception( 'failure on metadata.MetadataCreator.perform_update()' )
-        return
 
     # end class MetadataUpdater()
 
