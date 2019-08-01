@@ -34,13 +34,13 @@ code related to ingesting bell-gallery images into the bdr.
         - notes:
             - the specific mount directory changes each run, so check that our symlink is correct.
             - the share path is in a settings comment.
-        - status: DONE 2018-May-11
+        - status: DONE 2019-08-01
 
 - convert raw filemaker-pro xml to json
     - tasks/acc_num_to_data.py
     - end result: `c__accession_number_to_data_dict.json`
     - status:
-        - DONE 2018-May-12; re-done w/new data 2018-May-17; re-done w/new data 2018-May-21.
+        - DONE 2019-08-01
 
 - run script to get list of files in the images-to-ingest directory
     - tasks/make_image_list.py
