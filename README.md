@@ -45,7 +45,7 @@ code related to ingesting bell-gallery images into the bdr.
 - run script to get list of files in the images-to-ingest directory
     - tasks/make_image_list.py
     - end result: `d1__bell_images_listing.json`
-    - status: DONE 2018-May-14; re-done since i thought some filenames were changed, but not, no problem - 2018-May-17; re-done w/new metadata 2018-May-21.
+    - status: DONE 2019-08-02
 
 - compare imagefile-filenames to metadata-filenames
     - tasks/check_filenames_against_metadata.py
@@ -59,14 +59,7 @@ code related to ingesting bell-gallery images into the bdr.
 
     - end result: `data/d2__images_metadata_comparison.json` -- work through any not-matched files with J.C. before proceeding.
     - status:
-        DONE 2018-May-21
-        - 2018-May-14 - emailed J.C. list of non-matches
-        - 122 image-directory filenames _were_ found in the metadata
-        - 14 image-directory filenames were not found in the metadata.
-        - 2018-May-15 - emailed J.C. explanation of remaining non-matches.
-        - 2018-May-16 - emailed J.C. request for correct-metadata format.
-        - 2018-May-17 - emailed J.C. explanation of remaining single non-match.
-        - 2018-May-21 - all image-directory filenames now found.
+        DONE 2019-08-02 - found one image with no metadata record - emailed them.
 
 - match metadata accession-numbers to pid #2
     - tasks/acc_num_to_pid.py
