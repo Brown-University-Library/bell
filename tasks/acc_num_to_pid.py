@@ -74,7 +74,6 @@ class PidFinder:
             doc_list.extend( docs )
             if not len( docs ) > 0:
                 break
-        # logger.info( 'in _run_studio_solr_query(); doc_list, %s' % pprint.pformat(doc_list) )
         return doc_list
 
     def __query_solr( self, i, bdr_collection_pid, solr_root_url ):
@@ -90,7 +89,6 @@ class PidFinder:
         r = requests.get(solr_root_url, params=params)
         logger.info( 'in __query_solr(); r.url, %s' % r.url )
         data_dict = json.loads( r.content.decode('utf-8') )
-        # logger.info( 'in __query_solr(); data_dict, %s' % pprint.pformat(data_dict) )
         return data_dict
 
     def _make_solr_accnum_to_pid_dict( self, solr_query_docs ):
@@ -113,7 +111,6 @@ class PidFinder:
         with open( bell_dict_json_path ) as f:
             accession_dict = json.loads( f.read() )
         keys = sorted( accession_dict['items'].keys() )
-        # pprint.pprint( keys )
         if len( keys ) < 5000:
             print('- NOTE: accession_number_dict.json ONLY CONTAINS %s RECORDS' % len( keys ))
         return keys
@@ -128,7 +125,6 @@ class PidFinder:
                 final_accession_pid_dict[accession_number] = solr_accnum_to_pid_dict[accession_number]
             else:
                 final_accession_pid_dict[accession_number] = None
-        # logger.info( 'in _make_final_accession_number_dict(); final_accession_pid_dict, %s' % pprint.pformat(final_accession_pid_dict) )
         return final_accession_pid_dict
 
     def _output_json( self, final_accession_pid_dict, output_json_path ):
