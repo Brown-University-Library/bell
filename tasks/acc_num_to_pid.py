@@ -5,27 +5,29 @@ from bell_utils import DATA_DIR
 
 
 logger = logging.getLogger(__name__)
-logging.basicConfig(level=logging.DEBUG,
+logging.basicConfig(level=logging.INFO,
                     format='[%(asctime)s] %(levelname)s [%(module)s-%(funcName)s()::%(lineno)d] %(message)s',
                     datefmt='%d/%b/%Y %H:%M:%S')
 
 
 class PidFinder:
     """ Handles creation of an accession_number-to-pid-info dict, saved as a json file.
-        Purpose: This is one of the essential files that should exist before doing almost any bell processing,
+        Purpose: map accession numbers in the Bell data to the PID of a BDR object.
+
+            This is one of the essential files that should exist before doing almost any bell processing,
                  because the source bell data contains no pid info, and it is essential to know whether a bell item
                  needs to create or update bdr data.
-        if __name__... at bottom indicates how to run this script. """
+        """
 
     def __init__(self, env='dev'):
-        self.bell_dict_json_path = os.path.join(DATA_DIR, 'c__accession_number_to_data_dict.json')
+        self.bell_acc_num_data_path = os.path.join(DATA_DIR, 'c__accession_number_to_data_dict.json')
         self.output_json_path = os.path.join(DATA_DIR, 'e1__accession_number_to_pid_dict.json')
         if env == 'prod':
             self.bdr_collection_pid = os.environ['BELL_ANTP__PROD_COLLECTION_PID']
-            self.solr_root_url = os.environ['BELL_ANTP__PROD_SOLR_ROOT']
+            self.bdr_api_url = os.environ['BELL_ANTP__PROD_SOLR_ROOT']
         else:
             self.bdr_collection_pid = os.environ['BELL_ANTP__DEV_COLLECTION_PID']
-            self.solr_root_url = os.environ['BELL_ANTP__DEV_SOLR_ROOT']
+            self.bdr_api_url = os.environ['BELL_ANTP__DEV_SOLR_ROOT']
 
     def create_acc_num_to_pid_map( self ):
         """ CONTROLLER.
@@ -33,102 +35,73 @@ class PidFinder:
             - Creates an accession-number-to-pid dict from above
             - Creates an accesstion-number-to-pid dict from submitted data and saves to json file
             - Example produced data: { acc_num_1: {pid:bdr_123, title:abc}, acc_num_2: {pid:None, title:None}, etc. } """
-        #
-        #Run studio-solr query
-        #Purpose: get raw child-pids data from _solr_, along with accession-number data
-        #Example returned data: [ {pid:bdr123, identifier:[acc_num_a,other_num_b], mods_id_bell_accession_number_ssim:None_or_acc_num_a}, etc. ]
-        solr_query_docs = self._run_studio_solr_query( self.bdr_collection_pid, self.solr_root_url )
-        print('- _run_studio_solr_query() done')
-        #
-        #Parse solr-results to accession_number:pid dict
-        #Purpose: create dict for lookup by source accession-numbers
-        #Example returned data: { acc_num_123:bdr_1, acc_num_456:bdr_2 }
-        solr_accnum_to_pid_dict = self._make_solr_accnum_to_pid_dict( solr_query_docs )
-        print('- _make_solr_accnum_to_pid_dict() done')
-        #
-        #Get _bell_ accession numbers
-        #Purpose: create list of bell accession numbers from _bell_ data
-        #Example returned data: [ 'acc_num_1', 'acc_num_2', etc. ]
-        bell_source_accession_numbers = self._load_bell_accession_numbers( self.bell_dict_json_path )
-        print('- _load_bell_accession_numbers() done')
-        #
-        #Make final accession-number dict
-        #Purpose: go through bell accession-numbers, add any bdr-info, note lack of bdr-info
-        #Example returned data: { acc_num_1: {pid:bdr_123, state:active}, acc_num_2: {pid:None, state:None} }
-        final_accession_dict = self._make_final_accession_number_dict( bell_source_accession_numbers, solr_accnum_to_pid_dict )
-        print('- _make_final_accession_number_dict() done')
-        #
-        #Output json
+        bdr_bell_docs = self._fetch_all_bdr_bell_records( self.bdr_collection_pid, self.bdr_api_url )
+        bdr_accession_number_data = self._make_bdr_accession_number_data( bdr_bell_docs )
+        bell_accession_number_data = self._load_bell_accession_number_data( self.bell_acc_num_data_path )
+        final_accession_dict = self._make_final_accession_number_dict( bell_accession_number_data, bdr_accession_number_data )
         self._output_json( final_accession_dict, self.output_json_path )
-        print('- _output_json() done; all processing done')
-        return
 
-    def _run_studio_solr_query( self, bdr_collection_pid, solr_root_url ):
+    def _fetch_all_bdr_bell_records( self, bdr_collection_pid, bdr_api_url ):
         """ Returns _solr_ doc list.
-            Example solr url: 'https://solr-url/?q=rel_is_member_of_ssim:"collection:pid"&start=x&rows=y&fl=pid,mods_id_bell_accession_number_ssim,primary_title'
+            Example solr url: 'https://solr-url/?q=rel_is_member_of_ssim:"collection:pid"&start=x&rows=y&fl=pid,mods_id_bell_accession_number_ssim'
             Example result: [ {pid:bdr123, identifier:[acc_num_a,other_num_b], mods_id_bell_accession_number_ssim:None_or_acc_num_a, other:...}, etc. ] """
         doc_list = []
         for i in range( 100 ):  # would handle 50,000 records
-            data_dict = self.__query_solr( i, bdr_collection_pid, solr_root_url )
+            data_dict = self.__query_bdr( i, bdr_collection_pid, bdr_api_url )
             docs = data_dict['response']['docs']
             doc_list.extend( docs )
             if not len( docs ) > 0:
                 break
         return doc_list
 
-    def __query_solr( self, i, bdr_collection_pid, solr_root_url ):
-        """ Queries solr for iterating start-row.
-            Returns results dict.
-            Called by self._run_studio_solr_query()
-            TODO: see if accession_number_original & identifier should still be in fl param."""
+    def __query_bdr( self, i, bdr_collection_pid, bdr_api_url ):
         new_start = i * 500  # for solr start=i parameter (cool, eh?)
         params = {
             'q': 'rel_is_member_of_ssim:"%s"' % bdr_collection_pid,
-            'fl': 'pid,accession_number_original,identifier,mods_id_bell_accession_number_ssim,primary_title',
-            'rows': 500, 'start': new_start, 'wt': 'json' }
-        r = requests.get(solr_root_url, params=params)
-        logger.info( 'in __query_solr(); r.url, %s' % r.url )
+            'fl': 'pid,mods_id_bell_accession_number_ssim,mods_id_bell_object_id_ssim',
+            'rows': 500,
+            'start': new_start,
+        }
+        r = requests.get(bdr_api_url, params=params)
+        if not r.ok:
+            raise Exception(f'{r.status_code} - {r.content.decode("utf8")}')
         data_dict = json.loads( r.content.decode('utf-8') )
         return data_dict
 
-    def _make_solr_accnum_to_pid_dict( self, solr_query_docs ):
-        """ Returns accession_number:pid dict from _solr_ data. """
-        solr_accnum_pid_dict = { 'errors':[] }
-        for solr_doc in solr_query_docs:
+    def _make_bdr_accession_number_data( self, bdr_bell_docs ):
+        accnum_data = {}
+        for solr_doc in bdr_bell_docs:
             pid = solr_doc['pid']
             try:
                 accession_number = solr_doc['mods_id_bell_accession_number_ssim'][0]  # accession-numbers are in solr as a single-item list
-                solr_accnum_pid_dict[accession_number] = pid
+                accnum_data[accession_number] = solr_doc
             except KeyError:
-                solr_accnum_pid_dict['errors'].append( pid )
-                print('-- missing accession-number in expected solr `mods_id_bell_accession_number_ssim` field --'); pprint.pprint( solr_doc ); print('--')
-        logger.info( 'in _make_solr_accnum_to_pid_dict(); errors, %s' % sorted(solr_accnum_pid_dict['errors']) )
-        return solr_accnum_pid_dict
+                raise Exception(f'no accession number in BDR: {solr_doc}')
+        return accnum_data
 
-    def _load_bell_accession_numbers( self, bell_dict_json_path ):
-        """ Returns sorted accession-number keys list from bell-json-dict.
-            Example: [ 'acc_num_1', 'acc_num_2', etc. ] """
-        with open( bell_dict_json_path ) as f:
-            accession_dict = json.loads( f.read() )
-        keys = sorted( accession_dict['items'].keys() )
-        if len( keys ) < 5000:
-            print('- NOTE: accession_number_dict.json ONLY CONTAINS %s RECORDS' % len( keys ))
-        return keys
+    def _load_bell_accession_number_data( self, bell_acc_num_data_path ):
+        with open( bell_acc_num_data_path ) as f:
+            accession_number_data = json.loads( f.read() )
+        return accession_number_data['items']
 
-    def _make_final_accession_number_dict( self, bell_source_accession_numbers, solr_accnum_to_pid_dict ):
-        """ Takes source accession-number list, and solr accession-number-to-pid dict
+    def _make_final_accession_number_dict( self, bell_accession_number_data, bdr_accession_number_data ):
+        """ Takes source accession-number list, and bdr accession-number-to-pid dict
             Creates and returns an accession-number-to-pid dict from the source bell data.
             Example: { acc_num_1: bdr_123, acc_num_2: None } """
         final_accession_pid_dict = {}
-        for accession_number in bell_source_accession_numbers:
-            if accession_number in solr_accnum_to_pid_dict.keys():
-                final_accession_pid_dict[accession_number] = solr_accnum_to_pid_dict[accession_number]
+        for accession_number in sorted(bell_accession_number_data.keys()):
+            if accession_number in bdr_accession_number_data:
+                final_accession_pid_dict[accession_number] = bdr_accession_number_data[accession_number]['pid']
             else:
-                final_accession_pid_dict[accession_number] = None
+                #loop through all the BDR records, seeing if we can find a match
+                for bdr_accession_number, bdr_data in bdr_accession_number_data.items():
+                    if accession_number.replace(' ', '') == bdr_accession_number.replace(' ', ''):
+                        final_accession_pid_dict[accession_number] = bdr_data['pid']
+                if accession_number not in final_accession_pid_dict:
+                    final_accession_pid_dict[accession_number] = None
         return final_accession_pid_dict
 
     def _output_json( self, final_accession_pid_dict, output_json_path ):
-        """ Saves to disk. """
         output_dict = {
             'count': self.__run_output_counts( final_accession_pid_dict ),
             'datetime': str( datetime.datetime.now() ),
@@ -136,7 +109,6 @@ class PidFinder:
         jstring = json.dumps( output_dict, sort_keys=True, indent=2 )
         with open( output_json_path, 'w' ) as f:
             f.write( jstring )
-        return
 
     def __run_output_counts( self, final_accession_pid_dict ):
         """ Takes final dict.
@@ -155,11 +127,10 @@ class PidFinder:
     def _print_settings( self ):
         """ Prints variable values that are also sent to main controller function. """
         print('- bdr_collection_pid: %s' % self.bdr_collection_pid)
-        print('- bell_dict_json_path: %s' % self.bell_dict_json_path)
-        print('- solr_root_url: %s' % self.solr_root_url)
+        print('- bell_acc_num_data_path: %s' % self.bell_acc_num_data_path)
+        print('- bdr_api_url: %s' % self.bdr_api_url)
         print('- output_json_path: %s' % self.output_json_path)
         print('---')
-        return
 
     # end class PidFinder()
 
