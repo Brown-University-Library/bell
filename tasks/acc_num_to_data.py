@@ -24,41 +24,34 @@ class SourceDictMaker:
         #Get data
         #Purpose: gets raw filemaker-pro xml unicode-string from gist
         unicode_xml_string = self._get_data( FMPRO_XML_PATH )
-        print( '- data grabbed' )
         #
         #Docify xml string
         #Purpose: converts unicode-string to <type 'lxml.etree._Element'>
         XML_DOC = self._docify_xml( unicode_xml_string)
-        print( '- data doc-ified' )
         #
         #Make key list
         #Purpose: creates list of keys that will be used for each item-dict
         #Example returned data: [ 'object_id', 'object_title', 'object_date', etc. ]
         dict_keys = self._make_dict_keys( XML_DOC, self.NAMESPACE )
-        print( '- list of keys created' )
         #
         #Make list of doc-items
         #Purpose: creates list of xml-doc items
         xml_doc_rows = self._get_xml_doc_rows( XML_DOC, self.NAMESPACE )
-        print( '- xml_doc_rows grabbed' )
         #
         #Make initial dict-list
         #Purpose: creates initial list of dict-items. For a given key, the value-type may vary by item.
         #Example returned data: [ {'artist_alias': 'abc', 'artist_birth_country_id': '123', etc.}, {etc.}, ... ]
         result_list = self._process_rows( xml_doc_rows, self.NAMESPACE, dict_keys )
-        print( '- initial result_list generated' )
         #
         #Make key-type dict
         #Purpose: creats dict of key-name:key-type; all data examined to see which keys should have list vs unicode-string values.
         #Example returned data: [  {'ARTISTS::calc_nationality': <type 'list'>, 'ARTISTS::use_alias_flag': <type 'unicode'>, etc.} ]
         key_type_dict = self._make_key_type_dict( result_list )
-        print( '- key_type_dict created' )
         #
         #Normalize dict-values
         #Purpose: creates final list of dict-items. For a given key, the value-type will _not_ vary by item.
         #Example returned data: [ {'artist_alias': ['abc'], 'artist_birth_country_id': ['123'], etc.}, {etc.}, ... ]
         result_list = self._normalize_value_types( key_type_dict, result_list )
-        print( '- final result_list generated' )
         #
         #Dictify item-list
         #Purpose: creates accession-number to item-data-dict dictionary, adds count & datestamp
@@ -66,12 +59,9 @@ class SourceDictMaker:
                               #   items:{ accnum_1:{artist:abc, title:def}, accnum_2:{etc.}, etc. }
                               # }
         dictified_data = self._dictify_data( result_list )
-        print( '- final data dictified' )
         #
         #Output json
         self._save_json( dictified_data, JSON_OUTPUT_PATH )
-        print( '- json saved; processing done' )
-        return
 
     def _get_data( self, FMPRO_XML_PATH ):
         """ Reads and returns source filemaker pro xml. """
@@ -180,7 +170,6 @@ class SourceDictMaker:
           for (key,value) in entry_dict.items():
             if not key in key_type_dict.keys():
               key_type_dict[key] = str
-              # print 'key_type_dict now...'; pprint.pprint( key_type_dict )
             if type(value) == list and len(value) > 0:
               key_type_dict[key] = list
         return key_type_dict
@@ -202,9 +191,17 @@ class SourceDictMaker:
         accession_number_dict = {}
         for entry in source_list:
             if entry['calc_accession_id']:  # handles a null entry
-                accession_number_dict[ entry['calc_accession_id'].strip() ] = entry
+                accession_num = entry['calc_accession_id'].strip()
+                if accession_num in accession_number_dict:
+                    #print out the error, with the information about what's duplicated
+                    #don't raise an exception, because we want to find all the duplicates in one run
+                    print(f'duplicate accession number: "{accession_num}"')
+                    print(f'  object_id: {entry["object_id"]}; title: {entry["object_title"]}')
+                    print(f'  object_id: {accession_number_dict[accession_num]["object_id"]}; title: {accession_number_dict[accession_num]["object_title"]}')
+                accession_number_dict[accession_num] = entry
             else:
-                print(f'- NO ACCESSION NUMBER FOR THIS RECORD - CHECK ON IT!\n`{entry}`')
+                print(f'no accession number for record')
+                print(f'  object_id: {entry["object_id"]}; title: {entry["object_title"]}')
         final_dict = {
           'count': len( accession_number_dict.items() ),
           'datetime': str( datetime.datetime.now() ),
@@ -218,14 +215,6 @@ class SourceDictMaker:
             f.write( json_string )
         return
 
-    def _print_settings( self, FMPRO_XML_PATH, JSON_OUTPUT_PATH ):
-        """ Outputs settings derived from environmental variables for development. """
-        print('- settings...')
-        print('- FMPRO_XML_PATH: %s' % FMPRO_XML_PATH)
-        print('- JSON_OUTPUT_PATH: %s' % JSON_OUTPUT_PATH)
-        print('---')
-        return
-
   # end class SourceDictMaker()
 
 
@@ -236,8 +225,6 @@ if __name__ == '__main__':
     FMPRO_XML_PATH = os.path.join(DATA_DIR, 'b__all_data_formatted.xml')
     JSON_OUTPUT_PATH = os.path.join(DATA_DIR, 'c__accession_number_to_data_dict.json')
     maker = SourceDictMaker()
-    maker._print_settings(
-        FMPRO_XML_PATH, JSON_OUTPUT_PATH )
     maker.convert_fmproxml_to_json(
         FMPRO_XML_PATH, JSON_OUTPUT_PATH )
 
