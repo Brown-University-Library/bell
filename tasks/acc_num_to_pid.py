@@ -97,12 +97,24 @@ class PidFinder:
                 for bdr_accession_number, bdr_data in bdr_accession_number_data.items():
                     if accession_number.replace(' ', '') == bdr_accession_number.replace(' ', ''):
                         final_accession_pid_dict[accession_number] = bdr_data['pid']
+                    elif bell_accession_number_data[accession_number]['object_id'] == bdr_accession_number_data[bdr_accession_number]['mods_id_bell_object_id_ssim'][0]:
+                        final_accession_pid_dict[accession_number] = bdr_data['pid']
                 if accession_number not in final_accession_pid_dict:
                     final_accession_pid_dict[accession_number] = None
         mapped_bdr_pids = [p for p in final_accession_pid_dict.values() if p is not None]
         unique_mapped_bdr_pids = set(mapped_bdr_pids)
         if len(unique_mapped_bdr_pids) != len(mapped_bdr_pids):
-            raise Exception(f'duplicate bdr pids mapped to accession numbers')
+            print(f'***duplicate bdr pids mapped to accession numbers')
+            pid_counts = {}
+            for pid in mapped_bdr_pids:
+                #https://stackoverflow.com/a/37934666
+                try:
+                    pid_counts[pid] += 1
+                except KeyError:
+                    pid_counts[pid] = 1
+            for pid, count in pid_counts.items():
+                if count > 1:
+                    print(f'  {pid}: {count}')
         return final_accession_pid_dict
 
     def _output_json( self, final_accession_pid_dict, output_json_path ):
@@ -128,14 +140,6 @@ class PidFinder:
                 count_pids += 1
         return { 'count_items': count_items, 'count_pids': count_pids, 'count_null': count_null }
 
-    def _print_settings( self ):
-        """ Prints variable values that are also sent to main controller function. """
-        print('- bdr_collection_pid: %s' % self.bdr_collection_pid)
-        print('- bell_acc_num_data_path: %s' % self.bell_acc_num_data_path)
-        print('- bdr_api_url: %s' % self.bdr_api_url)
-        print('- output_json_path: %s' % self.output_json_path)
-        print('---')
-
     # end class PidFinder()
 
 
@@ -143,7 +147,6 @@ class PidFinder:
 
 def run_create_acc_num_to_pid_map(env='prod'):
     pid_finder = PidFinder(env)
-    pid_finder._print_settings()
     pid_finder.create_acc_num_to_pid_map()
 
 
