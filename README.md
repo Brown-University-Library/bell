@@ -21,13 +21,13 @@ code related to ingesting bell-gallery images into the bdr.
     - from having all the metadata, the code can determine what image-&-metadata additions to make, what metadata-only additions to make, and make corrections to existing bdr metadata
     - end result: `a__all_data_raw.xml`
     - status:
-        - DONE 2019-08-01, 2019-08-05
+        - DONE 2019-08-01, 2019-08-05, 2019-08-06
 
 - format metadata
     - why: makes it easy to see the source fields, and if necessary check source xml
     - tasks/format_xml_file.py
     - end result: `b__all_data_formatted.xml`
-    - status: DONE 2019-08-01, 2019-08-05
+    - status: DONE 2019-08-01, 2019-08-05, 2019-08-06
 
 - get access to image-directory
     - check dev `mount` access
@@ -40,7 +40,7 @@ code related to ingesting bell-gallery images into the bdr.
     - tasks/acc_num_to_data.py
     - end result: `c__accession_number_to_data_dict.json`
     - status:
-        - DONE 2019-08-01, 2019-08-05
+        - DONE 2019-08-01, 2019-08-05, 2019-08-06
 
 - run script to get list of files in the images-to-ingest directory
     - tasks/make_image_list.py
