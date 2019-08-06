@@ -99,6 +99,10 @@ class PidFinder:
                         final_accession_pid_dict[accession_number] = bdr_data['pid']
                 if accession_number not in final_accession_pid_dict:
                     final_accession_pid_dict[accession_number] = None
+        mapped_bdr_pids = [p for p in final_accession_pid_dict.values() if p is not None]
+        unique_mapped_bdr_pids = set(mapped_bdr_pids)
+        if len(unique_mapped_bdr_pids) != len(mapped_bdr_pids):
+            raise Exception(f'duplicate bdr pids mapped to accession numbers')
         return final_accession_pid_dict
 
     def _output_json( self, final_accession_pid_dict, output_json_path ):
