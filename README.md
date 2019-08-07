@@ -146,7 +146,7 @@ code related to ingesting bell-gallery images into the bdr.
 
     - end result: `g1__images_filename_dct.json`
         - note that at the bottom of that file are any files that were excluded from the filename-dct.
-    - status: DONE 2018-June-11.
+    - status: DONE 2019-08-07
 
 - make list of images to process
     - tasks/images.ImageLister.make_image_lists()
@@ -158,9 +158,7 @@ code related to ingesting bell-gallery images into the bdr.
 
     - produces a file containing both a list of images to add, and a list of images to update
     - end result: `g2__images_to_process.json`
-    - status: DONE 2018-June-11
-        - there were a surprisingly high percentage of images to be updated, so we checked a couple of them.
-        - result: as we suspected, white borders were removed in the new images, so we'll proceed.
+    - status: DONE 2019-08-07
 
 - add images
     - tasks/images.add_images()
@@ -174,24 +172,24 @@ code related to ingesting bell-gallery images into the bdr.
 
     - updates the `g2__images_to_process.json` file's `lst_images_to_add` and `lst_images_to_update` lists of image-dict-data with a `'status': ingested_(timestamp)` dict-entry.
     - note: verify that JP2 job was run for recreating JP2 when MASTER was updated
-    - status: DONE 2018-June-12
+    - status: DONE 2019-08-07 (& cleaned up failed JP2 jobs)
 
 - purge caches for updated images
-    - loris cache (info, source, derivatives) - DONE 2018-June-15
-    - thumbnails in fedora re-created - DONE 2018-June-20
-    - django thumbnail cache - purged on 2018-June-22 (won't need to do this again, because the django cache is updating itself automatically now)
+    - loris cache (info, source, derivatives) - DONE 2019-08-07
+    - thumbnails in fedora re-created - DONE (happened automatically when MASTER was overwritten)
+    - django thumbnail cache - DONE 2019-08-07
 
 - create final json file for CIS
     - make solr pids list
         - tasks/indexer.run_make_solr_pids_list()
         - end result: j__solr_pids_list.json
-        - status: DONE 2018-June-20
+        - status: DONE 2019-08-07
     - create solr data file
         - NOTE: when beginning this process, manually empty the `k__data_for_solr.json` file (DON'T DELETE) to `{}`.
             - explanation: this will allow the following code to be run with a built-in 'tracker' capability.
         - tasks/indexer.run_create_solr_data()
         - end result: k__data_for_solr.json
-        - status: DONE 2018-June-28
+        - status: DONE 2019-08-07
 
 - let Bell-J.C. & CIS-J.B. know when done
     - status: DONE 2018-June-28
