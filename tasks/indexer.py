@@ -3,6 +3,7 @@
 
 import datetime, json, logging, os, pprint, sys, time
 import requests
+from tasks.bell_utils import get_item_api_data
 
 LOG_FILENAME = os.environ['BELL_LOG_FILENAME']
 logger = logging.getLogger(__name__)
@@ -141,7 +142,7 @@ class SolrDataBuilder:
     def update_custom_index_entry( self, accession_number, data_dct ):
         """ Manages prep & post of update custom index entry.
             Called by runner. """
-        bdr_api_data = self.grab_bdr_api_data( data_dct['pid'] )
+        bdr_api_data = get_item_api_data(data_dct['pid'])
         metadata_solr_dict = self.build_metadata_only_solr_dict( data_dct, bdr_api_data )
         bdr_api_links_dict = bdr_api_data['links']
         updated_solr_dict = self.add_image_metadata( metadata_solr_dict, bdr_api_links_dict )
@@ -167,14 +168,6 @@ class SolrDataBuilder:
         solr_dict = self._set_modified_date( api_data, solr_dict )
         self.logger.debug( 'in tasks.indexer.CustomIndexUpdater.build_metadata_only_solr_dict(); solr_dict, `%s`' % pprint.pformat(solr_dict) )
         return solr_dict
-
-    def grab_bdr_api_data( self, pid ):
-        url = '%s/%s/' % ( self.BDR_PRIVATE_ITEM_API_URL_ROOT, pid )
-        r = requests.get( url )
-        if r.ok:
-            return r.json()
-        else:
-            raise Exception(f'error from API: {r.status_code} - {r.text}')
 
     def grab_bdr_api_links_data( self, pid, bdr_api_data ):
         """ Grabs and returns link info from item-api json.
