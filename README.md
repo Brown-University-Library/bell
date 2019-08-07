@@ -68,10 +68,7 @@ code related to ingesting bell-gallery images into the bdr.
     - accession-numbers without pids imply creation of a new metadata-only object (which may gain an associated image later)
     - accession-numbers with pids imply checking to see if fedora metadata needs to be updated
     - note, after metadata-only objects are created, this will be re-run until the `count_null` is zero.
-    - status: DONE
-        - run 2018-May-21; shows 220 accession-numbers without pids
-        - run 2018-May-23 after updating 1 bdr object's accession number; shows 219 accession-numbers without pids
-        - run 2018-June-11; shows zero accession-numbers without pids -- good!
+    - status: 2019-08-06; shows 644 accession-numbers without pids
 
 - check for, confirm, and delete old bell items from fedora
     - note: this step is being done here because:
@@ -88,15 +85,13 @@ code related to ingesting bell-gallery images into the bdr.
                 - then the old object (with the old accession number) would need to be deleted
                 - if that object to be deleted has an image, then we might lose the image, because she wouldn't send us the image if it wasn't updated.
                 - so, any items to delete with an image - check with her.
-            - status: 2018-May-22, DONE
-                - emailed J.C. re the 22 found.
-                - essential result: we updated one bdr object's accession-number to preserve bdr image history
+            - status: 2019-08-06 - 1 (metadata) pid found to delete - nothing to verify
         - manually run deletion.
             - NOTE: when beginning this process, manually cleanup the `e3__bdr_entries_deleted_tracker.json` file (DON'T DELETE) to `{}`.
                 - This is because each individual deletion updates this status-dict.
             - `from tasks import cleanup; cleanup.run_delete_single_pid_from_bdr( pid )`
             - end result: `e3__bdr_entries_deleted_tracker.json`
-            - status: 2018-Jun-06: DONE
+            - status: 2019-08-06 DONE
 
 - make metadata-only list
     - tasks/metadata.run_metadata_only_lister()
@@ -107,11 +102,11 @@ code related to ingesting bell-gallery images into the bdr.
 
     - end result: `f1__metadata_only_accession_numbers.json`
     - status:
-        - DONE 2018-Jun-07
+        - DONE 2019-08-06
 
 - create new metadata objects
     - note: this creates metadata-only objects, some of which may be updated in a later step to also have image-datastreams.
-    - note: first manually clean out the file `f2__metadata_obj_tracker.js` by replacing the old data with `{}`
+    - note: first manually clean out the file `f2__metadata_obj_tracker.json` by replacing the old data with `{}`
     - tasks/metadata.run_create_metadata_only_objects()
     - to run (from `bell_code` directory)...
 
@@ -125,8 +120,8 @@ code related to ingesting bell-gallery images into the bdr.
     - after creates, confirm a re-run of `tasks/acc_num_to_pid.py` results in zero non-pid matches.
         - note that this re-run will update, as it should, `e1__accession_number_to_pid_dict.json` -- the dict of accession-numbers-to-pids.
     - status:
-        - new-metadata-objects-created - DONE 2018-June-08.
-        - `acc_num_to_pid.py` - DONE 2018-June-11.
+        - new-metadata-objects-created - DONE 2019-08-06
+        - `acc_num_to_pid.py` - DONE 2019-08-06
 
 - update metadata for existing objects in the BDR, if needed
     - explanation: for each accession-number -- this prepares the data for the bell-json-datastream from the source data, and compares it to the item's bell-json-datastream from the bdr-item. If there is a difference, we update the bdr object's bell-json-datastream and the bdr object's mods-datastream

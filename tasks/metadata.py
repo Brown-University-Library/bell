@@ -38,7 +38,6 @@ class MetadataOnlyLister:
     def list_metadata_only_accession_numbers( self ):
         """ Saves a json list of accession_numbers.
             Called manuallly per readme. """
-        logger.debug( 'starting' )
         with open( self.PID_JSON_PATH ) as f:
             dct = json.loads( f.read() )
         dct_lst = sorted( dct['final_accession_pid_dict'].items() )
@@ -56,9 +55,6 @@ class MetadataOnlyLister:
         jsn = json.dumps( data, indent=2, sort_keys=True )
         with open( self.OUTPUT_PATH, 'w' ) as f:
             f.write( jsn )
-        return
-
-    # end class MetadataOnlyLister
 
 
 def run_metadata_only_lister():
@@ -93,12 +89,11 @@ def grab_bdr_item_dct( pid ):
         raise Exception(f'{r.status_code} - {r.text}')
 
 
-class MetadataCreator( object ):
+class MetadataCreator:
     """ Handles metadata-creation related tasks. """
 
     def __init__( self, env, logger ):
         self.logger = logger
-        #self.SOURCE_FULL_JSON_METADATA_PATH = os.environ['BELL_TASKS_META__FULL_JSON_METADATA_PATH']
         self.MODS_SCHEMA_PATH = MODS_SCHEMA_PATH
         self.COLLECTION_ID = os.environ['BELL_TASKS_META__COLLECTION_ID']
         if env == 'prod':
@@ -115,14 +110,12 @@ class MetadataCreator( object ):
     def create_metadata_only_object( self, accession_number ):
         """ Gathers source metadata, prepares call to item-api, calls it, and confirms creation.
             Called by run_create_metadata_only_object() """
-        self.logger.debug( 'starting' )
         params = self.set_basic_params()
         item_dct = grab_local_item_dct( accession_number )
         params['ir'] = self.make_ir_params( item_dct )
         params['mods'] = self.make_mods_params( item_dct )
         ( file_obj, param_string ) = self.prep_content_datastream( item_dct )
         params['content_streams'] = param_string
-        self.logger.debug( 'in metadata.MetadataCreator.create_metadata_only_object(); params, %s' % pprint.pformat(params) )
         pid = self.perform_post( params, file_obj )  # perform_post() closes the file
         self.track_progress( accession_number, pid )
 
@@ -175,26 +168,25 @@ class MetadataCreator( object ):
         """ Hits api w/post. Returns pid.
             Called by create_metadata_only_object() """
         files = { 'bell_item.json': file_obj }
-        time.sleep( .5 )
         try:
             r = requests.post( self.API_URL, data=params, files=files )
         except Exception as e:
-            self._handle_post_exception( e, file_obj )
-        file_obj.close()
-        self.logger.debug( 'in metadata.MetadataCreator.perform_post(); r.status_code, `{status_code}`; r.content, ```{content}```'.format(status_code=r.status_code, content=r.content.decode('utf-8', 'replace')) )
-        response_data = json.loads( r.content.decode('utf-8') )
-        pid = response_data['pid']
-        return pid
-
-    def _handle_post_exception( self, e, file_obj ):
-        self.logger.error( 'in metadata.MetadataCreator.perform_post(); exception, ```{}```'.format(repr(e)) )
-        file_obj.close()
-        raise Exception( 'failure on metadata.MetadataCreator.perform_post()' )
+            self.logger.exception(f'error creating metadata object')
+            raise
+        finally:
+            file_obj.close()
+        if r.ok:
+            return r.json()['pid']
+        else:
+            msg = f'error creating metadata object: {r.status_code} - {r.text}'
+            self.logger.error(msg)
+            raise Exception(msg)
 
     def track_progress( self, accession_number, pid ):
         """ Logs progress to json file.
             TODO: log progress to redis hash.
             Called by create_metadata_only_object() """
+        print(f'{accession_number} - {pid}')
         try:
             with open( TRACKER_PATH ) as f:
                 dct = json.loads( f.read() )
@@ -207,7 +199,7 @@ class MetadataCreator( object ):
     # end class MetadataCreator
 
 
-class MetadataUpdater( object ):
+class MetadataUpdater:
     """ Handles metadata-creation related tasks.
         TODO: once this is part of the regular production, refactor relevant functions with MetadataCreator(). """
 
@@ -377,12 +369,4 @@ def run_update_metadata_if_needed():
             print('.')
         else:
             post_metadata_update_to_bdr(pid, data_dct)
-    
-
-#def run_create_metadata_only_object( env, accession_number ):
-#    """ Runner for create_metadata_only_object()
-#        Called by job enqueued by run_enqueue_create_metadata_only_jobs() """
-#    m = MetadataCreator( env, logger )
-#    m.create_metadata_only_object( accession_number )
-#    return
 

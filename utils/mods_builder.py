@@ -14,8 +14,7 @@ logging.basicConfig(level=logging.DEBUG,
                     filename=LOG_FILENAME)
 
 
-class ModsBuilder( object ):
-    """ Handles mods creation. """
+class ModsBuilder:
 
     def __init__( self ):
         """ Simplifies mods-element and MODS-namespace references in multiple functions. """
@@ -66,8 +65,7 @@ class ModsBuilder( object ):
             Called by _build_mods_element() """
         title_info = etree.SubElement( self.mods, self.MODS+'titleInfo' )
         title = etree.SubElement( title_info, self.MODS+'title' )
-        title.text = data_dict[ 'object_title' ]
-        return
+        title.text = data_dict[ 'object_title' ] or 'No title'
 
     def __build_name_stuff( self, data_dict ):
         """ Adds to self.mods name, name_part, name_display_form, name_part_dates, name_role.
@@ -83,7 +81,6 @@ class ModsBuilder( object ):
             name_role = etree.SubElement( name, self.MODS+'role' )
             name_role_term = etree.SubElement( name_role, self.MODS+'roleTerm', type='text' )
             name_role_term.text = 'artist'
-        return
 
     def __build_origin_stuff( self, data_dict ):
         """ Adds to self.mods origin_info.
@@ -93,7 +90,6 @@ class ModsBuilder( object ):
         origin_info_dt_created_start.text = data_dict[ 'object_year_start' ]
         origin_info_dt_created_end = etree.SubElement( origin_info, self.MODS+'dateCreated', encoding='w3cdtf', point='end' )
         origin_info_dt_created_end.text = data_dict[ 'object_year_end' ]
-        return
 
     def __build_physical_stuff( self, data_dict ):
         """ Adds to self.mods physical_description, physical_description_form_material, physical_description_form_technique.
@@ -104,14 +100,12 @@ class ModsBuilder( object ):
         for entry in data_dict['MEDIA_SUB::sub_media_name']:
             physical_description_form_technique = etree.SubElement( physical_description, self.MODS+'form', type='technique' )
             physical_description_form_technique.text = entry
-        return
 
     def __build_note_stuff( self, data_dict ):
         """ Adds to self.mods note.
             Called by _build_mods_element() """
         note = etree.SubElement( self.mods, self.MODS+'note', type='provenance' )
         note.text = data_dict[ 'credit_line' ]
-        return
 
     def __build_location_stuff( self, data_dict ):
         """ Adds to self.mods location_physical_location, location_holdings_simple_copy_information_shelf_locator.
@@ -123,7 +117,6 @@ class ModsBuilder( object ):
         location_holdings_simple_copy_information = etree.SubElement( location_holdings_simple, self.MODS+'copyInformation' )
         location_holdings_simple_copy_information_shelf_locator = etree.SubElement( location_holdings_simple_copy_information, self.MODS+'shelfLocator' )
         location_holdings_simple_copy_information_shelf_locator.text = data_dict[ 'MEDIA::object_medium_name' ]
-        return
 
     def __build_identifier_stuff( self, data_dict ):
         """ Adds to self.mods identifiers 'bell_accession_number' and 'bell_object_id'.
@@ -134,14 +127,12 @@ class ModsBuilder( object ):
         identifier2 = etree.SubElement( self.mods, self.MODS+'identifier', type='bell_object_id' )
         identifier2.text = data_dict[ 'object_id' ]
         self.accession_number = identifier.text  # will be used by _make...
-        return
 
     def __build_type_of_resource_stuff( self ):
         """ Adds to self.mods `typeOfResource`.
             Called by _build_mods_element() """
         t_o_r = etree.SubElement( self.mods, self.MODS+'typeOfResource' )
         t_o_r.text = 'still image'
-        return
 
     def _make_mods_xml_string( self ):
         """ Returns unicode xml string to pass to validator.
