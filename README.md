@@ -120,13 +120,13 @@ code related to ingesting bell-gallery images into the bdr.
     - after creates, confirm a re-run of `tasks/acc_num_to_pid.py` results in zero non-pid matches.
         - note that this re-run will update, as it should, `e1__accession_number_to_pid_dict.json` -- the dict of accession-numbers-to-pids.
     - status:
-        - new-metadata-objects-created - DONE 2019-08-06
-        - `acc_num_to_pid.py` - DONE 2019-08-06
+        - new-metadata-objects-created - DONE 2019-08-07
+        - `acc_num_to_pid.py` - DONE 2019-08-07
 
 - update metadata for existing objects in the BDR, if needed
     - explanation: for each accession-number -- this prepares the data for the bell-json-datastream from the source data, and compares it to the item's bell-json-datastream from the bdr-item. If there is a difference, we update the bdr object's bell-json-datastream and the bdr object's mods-datastream
     - tasks/metadata.run_update_metadata_if_needed()
-    - status: DONE 2018-Jun-28
+    - status: DONE 2019-08-07
 
 - make image-filename to data dct
     - produces a dct and then json file like:

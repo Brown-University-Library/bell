@@ -83,9 +83,6 @@ def grab_bdr_item_dct( pid ):
         data = json.loads(r.content)
         return data
     else:
-        #TODO: remove this check
-        if pid in ['bdr:299616', 'bdr:10930']:
-            return {}
         raise Exception(f'{r.status_code} - {r.text}')
 
 
@@ -309,7 +306,7 @@ class MetadataUpdater:
 
 ## runners ##
 
-def run_create_metadata_only_objects(env='dev'):
+def run_create_metadata_only_objects(env='prod'):
     """ Prepares list of accession numbers and enqueues jobs.
         Called manually. """
     with open( METADATA_ONLY_JSON ) as f:
@@ -360,7 +357,7 @@ def run_update_metadata_if_needed():
     new_object_accession_numbers = json.loads(data)['accession_numbers']
     for accession_number in accession_numbers:
         if accession_number in new_object_accession_numbers:
-            continue
+            continue #don't need to check the objects we just created
         pid = accession_number_pid_mapping[accession_number]
         print(f'{accession_number} - {pid}')
         data_dct = grab_local_item_dct(accession_number)
