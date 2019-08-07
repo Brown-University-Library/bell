@@ -55,14 +55,10 @@ class BdrDeleter:
             'pid': pid,
             'identity': self.BELL_ITEM_API_IDENTITY,
             'authorization_code': self.BELL_ITEM_API_AUTHCODE }
-        print('- item_api_url, `{}`'.format( self.BELL_ITEM_API_URL ))
-        print('- identity, `{}`'.format( self.BELL_ITEM_API_IDENTITY ))
-        print('- authcode, `{}`'.format( self.BELL_ITEM_API_AUTHCODE ))
         r = requests.delete( self.BELL_ITEM_API_URL, data=payload )
         print( 'deletion pid, `{pid}`; r.status_code, `{code}`'.format(pid=pid, code=r.status_code) )
         print( 'deletion pid, `{pid}`; r.content, ```{content}```'.format(pid=pid, content=r.content.decode('utf-8')) )
         self.track_bdr_deletion( pid, r.status_code )
-        return
 
     ## helpers ##
 
@@ -124,7 +120,6 @@ class BdrDeleter:
         dct[pid].append( entry )
         with open( self.DELETED_PIDS_TRACKER_PATH, 'w' ) as f:
             f.write( json.dumps(dct, sort_keys=True, indent=2) )
-        return
 
     ## sub-helpers ##
 

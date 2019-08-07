@@ -85,13 +85,13 @@ code related to ingesting bell-gallery images into the bdr.
                 - then the old object (with the old accession number) would need to be deleted
                 - if that object to be deleted has an image, then we might lose the image, because she wouldn't send us the image if it wasn't updated.
                 - so, any items to delete with an image - check with her.
-            - status: 2019-08-06 - 1 (metadata) pid found to delete
+            - status: 2019-08-06 - 1 (metadata) pid found to delete - nothing to verify
         - manually run deletion.
             - NOTE: when beginning this process, manually cleanup the `e3__bdr_entries_deleted_tracker.json` file (DON'T DELETE) to `{}`.
                 - This is because each individual deletion updates this status-dict.
             - `from tasks import cleanup; cleanup.run_delete_single_pid_from_bdr( pid )`
             - end result: `e3__bdr_entries_deleted_tracker.json`
-            - status: 2018-Jun-06: DONE
+            - status: 2019-08-06 DONE
 
 - make metadata-only list
     - tasks/metadata.run_metadata_only_lister()
