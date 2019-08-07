@@ -1,7 +1,7 @@
 """ Handles image-related tasks. """
 import datetime, json, logging, os, pprint, time, urllib
 import requests
-from tasks.bell_utils import DATA_DIR
+from tasks.bell_utils import DATA_DIR, get_item_api_data
 
 
 LOG_FILENAME = os.environ['BELL_LOG_FILENAME']
@@ -102,24 +102,22 @@ class ImageLister:
         self.IMAGES_FILENAME_DCT_JSON_PATH = os.path.join(DATA_DIR, 'g1__images_filename_dct.json')
         self.IMAGES_TO_PROCESS_OUTPUT_PATH = os.path.join(DATA_DIR, 'g2__images_to_process.json')
         #only running against PROD, since it's read-only and wouldn't really work against dev.
-        self.PROD_API_URL = os.environ['BELL_TASKS_IMGS__PROD_API_ROOT_URL']
+        self.PROD_API_URL = os.environ['BELL_TASKS_IMGS__PROD_AUTH_API_URL']
         self.images_to_add = []
         self.images_to_update = []
 
     def make_image_lists( self ):
         """ Saves, in one json file, two lists of accession_numbers, one for images to be added, and one for images to be updated.
             Called manuallly per readme. """
-        logger.debug( 'in tasks.images.ImageLister.make_image_lists(); starting' )
         filename_to_data_dct = self.setup()
         for ( i, image_filename ) in enumerate(sorted( filename_to_data_dct.keys()) ):
             ( pid, accession_number ) = ( filename_to_data_dct[image_filename]['pid'], filename_to_data_dct[image_filename]['accession_number'] )
-            api_dct = self.get_api_data( pid )
+            api_dct = get_item_api_data(pid)
             self.check_api_data( api_dct, image_filename, pid, accession_number )
             print(i)
             if i+1 >= 1000:
                 break
         self.output_listing( self.images_to_add, self.images_to_update, filename_to_data_dct )
-        return
 
     def setup( self ):
         """ Sets initial vars.
@@ -128,21 +126,6 @@ class ImageLister:
             dct = json.loads( f.read() )
         filename_to_data_dct = dct['filename_to_data_dct']
         return filename_to_data_dct
-
-    def get_api_data( self, pid ):
-        """ Makes api call.
-            Called by make_image_lists() """
-        item_api_url = '%s/%s/' % ( self.PROD_API_URL, pid )
-        logger.debug( 'in tasks.images.ImageLister.check_image(); item_api_url, %s' % item_api_url )
-        time.sleep( .3 )
-        r = requests.get( item_api_url )
-        if r.ok:
-            api_dct = r.json()
-            return api_dct
-        else:
-            msg = '%s - %s' % (r.status_code, r.text)
-            logger.error(msg)
-            raise Exception(msg)
 
     def check_api_data( self, api_dct, image_filename, pid, accession_number ):
         """ Looks up image-filename via public api; stores whether image exists or not.
@@ -156,7 +139,6 @@ class ImageLister:
             self.images_to_update.append( {image_filename: {'pid': pid, 'accession_number': accession_number}} )
         else:
             self.images_to_add.append( {image_filename: {'pid': pid, 'accession_number': accession_number}} )
-        return
 
     def output_listing( self, images_to_add, images_to_update, filename_to_data_dct ):
         """ Saves json file.
@@ -172,7 +154,6 @@ class ImageLister:
         jsn = json.dumps( data, indent=2, sort_keys=True )
         with open( self.IMAGES_TO_PROCESS_OUTPUT_PATH, 'wt', encoding='utf8' ) as f:
             f.write( jsn )
-        return
 
     # end class ImageLister
 
@@ -256,7 +237,6 @@ def run_make_image_lists():
         Called manually as per readme. """
     lister = ImageLister()
     lister.make_image_lists()
-    return
 
 
 def process_image_list(list_of_images, env):
