@@ -15,6 +15,13 @@ code related to ingesting bell-gallery images into the bdr.
 
 - TODOs at the bottom - investigate before processing another batch.
 
+- get access to image-directory
+    - check dev `mount` access
+        - notes:
+            - the specific mount directory changes each run, so check that our symlink is correct.
+            - the share path is in a settings comment.
+        - status: DONE 2019-08-01
+
 - get metadata
     - metadata should be for _all_ the records
         - NOTE: we need the FileMaker exported format 'FMPXMLRESULT'. (Occasionally we have mistakenly received a different format.)
@@ -28,13 +35,6 @@ code related to ingesting bell-gallery images into the bdr.
     - tasks/format_xml_file.py
     - end result: `b__all_data_formatted.xml`
     - status: DONE 2019-08-01, 2019-08-05, 2019-08-06
-
-- get access to image-directory
-    - check dev `mount` access
-        - notes:
-            - the specific mount directory changes each run, so check that our symlink is correct.
-            - the share path is in a settings comment.
-        - status: DONE 2019-08-01
 
 - convert raw filemaker-pro xml to json
     - tasks/acc_num_to_data.py
