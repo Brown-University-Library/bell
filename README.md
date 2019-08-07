@@ -102,7 +102,7 @@ code related to ingesting bell-gallery images into the bdr.
 
     - end result: `f1__metadata_only_accession_numbers.json`
     - status:
-        - DONE 2018-Jun-07
+        - DONE 2019-08-06
 
 - create new metadata objects
     - note: this creates metadata-only objects, some of which may be updated in a later step to also have image-datastreams.

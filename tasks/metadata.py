@@ -38,7 +38,6 @@ class MetadataOnlyLister:
     def list_metadata_only_accession_numbers( self ):
         """ Saves a json list of accession_numbers.
             Called manuallly per readme. """
-        logger.debug( 'starting' )
         with open( self.PID_JSON_PATH ) as f:
             dct = json.loads( f.read() )
         dct_lst = sorted( dct['final_accession_pid_dict'].items() )
@@ -56,9 +55,6 @@ class MetadataOnlyLister:
         jsn = json.dumps( data, indent=2, sort_keys=True )
         with open( self.OUTPUT_PATH, 'w' ) as f:
             f.write( jsn )
-        return
-
-    # end class MetadataOnlyLister
 
 
 def run_metadata_only_lister():
