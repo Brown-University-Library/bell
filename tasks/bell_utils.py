@@ -12,7 +12,7 @@ def get_item_api_data(pid):
     item_api_url = '%s/%s/' % (PROD_ITEM_API_URL, pid)
     r = requests.get(item_api_url)
     if r.ok:
-        return = r.json()
+        return r.json()
     else:
         msg = '%s - %s' % (r.status_code, r.text)
         raise Exception(msg)
