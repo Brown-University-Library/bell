@@ -255,7 +255,7 @@ def process_image_list(list_of_images, env):
         filename_dct[image_filename]['status'] = f'ingested_{now}'
 
 
-def add_images(env='dev'):
+def add_images(env='prod'):
     """ Grabs list of images-to-add and enqueues jobs.
         Called manually.
         Suggestion: run on ingestion-server. """
