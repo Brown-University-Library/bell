@@ -192,7 +192,7 @@ code related to ingesting bell-gallery images into the bdr.
         - status: DONE 2019-08-07
 
 - let Bell-J.C. & CIS-J.B. know when done
-    - status: DONE 2018-June-28
+    - status: DONE 2019-08-07
 
 ---
 
@@ -219,6 +219,7 @@ _(no indent=true available)_
 (at least do the two above)
 
 - questions/ideas from J.R.: link from BDR site over to Bell site; should Bell metadata-only object go into the BDR, if it's not the system of record? Also, could have a data dictionary for the metadata fields coming from J.C. - a label and short explanation of what it means. Could also make the Bell metadata the primary metadata in the BDR, instead of creating a minimal MODS.
+    - *note from J.C. - all the metadata does need to be on the website, which means it needs to be in the k__ file we create. We could still decide not to create all the objects in the BDR if we want.
 - add to the metadata-production code a check to ensure there's a title, if not, put in 'No Title' for the mods-datastream (bell json stream is ok).
 - in `acc_num_to_pid.py`, change function names that indicate solr is being hit, to names that indicate that bdr-search-api is being hit.
 - review tests and edit or delete those not used.
