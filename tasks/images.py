@@ -1,5 +1,6 @@
 """ Handles image-related tasks. """
 import datetime, json, logging, os, pprint, time, urllib
+import pathlib
 import requests
 from tasks.bell_utils import DATA_DIR, get_item_api_data
 
@@ -10,6 +11,22 @@ logging.basicConfig(level=logging.DEBUG,
                     format='[%(asctime)s] %(levelname)s [%(module)s-%(funcName)s()::%(lineno)d] %(message)s',
                     datefmt='%d/%b/%Y %H:%M:%S',
                     filename=LOG_FILENAME)
+MASTER_IMAGES_DIR_PATH = os.environ['BELL_TASKS_IMGS__MASTER_IMAGES_DIR_PATH']  # no trailing slash
+IMAGES_TO_PROCESS_JSON_PATH = os.path.join(DATA_DIR, 'g2__images_to_process.json')
+SETTINGS = {
+        'prod': {
+            'AUTH_API_URL': os.environ['BELL_TASKS_IMGS__PROD_AUTH_API_URL'],
+            'AUTH_API_IDENTITY': os.environ['BELL_TASKS_IMGS__PROD_AUTH_API_IDENTITY'],
+            'AUTH_API_KEY': os.environ['BELL_TASKS_IMGS__PROD_AUTH_API_KEY'],
+        },
+        'dev': {
+            'AUTH_API_URL': os.environ['BELL_TASKS_IMGS__DEV_AUTH_API_URL'],
+            'AUTH_API_IDENTITY': os.environ['BELL_TASKS_IMGS__DEV_AUTH_API_IDENTITY'],
+            'AUTH_API_KEY': os.environ['BELL_TASKS_IMGS__DEV_AUTH_API_KEY'],
+        },
+    }
+
+
 
 
 class ImageDctMaker:
@@ -101,8 +118,6 @@ class ImageLister:
     def __init__( self ):
         self.IMAGES_FILENAME_DCT_JSON_PATH = os.path.join(DATA_DIR, 'g1__images_filename_dct.json')
         self.IMAGES_TO_PROCESS_OUTPUT_PATH = os.path.join(DATA_DIR, 'g2__images_to_process.json')
-        #only running against PROD, since it's read-only and wouldn't really work against dev.
-        self.PROD_API_URL = os.environ['BELL_TASKS_IMGS__PROD_AUTH_API_URL']
         self.images_to_add = []
         self.images_to_update = []
 
@@ -158,20 +173,29 @@ class ImageLister:
     # end class ImageLister
 
 
+def post_image_to_object(pid, file_name, env='prod'):
+    params = {'pid': pid}
+    params['identity'] = SETTINGS[env]['AUTH_API_IDENTITY']
+    params['authorization_code'] = SETTINGS[env]['AUTH_API_KEY']
+    params['overwrite_content'] = 'yes'
+    params['content_streams'] = json.dumps([
+        { 'dsID': 'MASTER', 'file_name': file_name },
+        ])
+    with open(os.path.join(MASTER_IMAGES_DIR_PATH, file_name), 'rb') as f:
+        files = {file_name: f}
+        r = requests.put(SETTINGS[env]['AUTH_API_URL'], data=params, files=files )
+    if r.ok:
+        return r.json()
+    else:
+        raise Exception(f'{r.status_code} - {r.text}')
+
+
 class ImageAdder:
     """ Adds image to object. """
 
     def __init__( self, logger, env='dev' ):
         self.logger = logger
-        self.MASTER_IMAGES_DIR_PATH = os.environ['BELL_TASKS_IMGS__MASTER_IMAGES_DIR_PATH']  # no trailing slash
-        if env == 'prod':
-            self.AUTH_API_URL = os.environ['BELL_TASKS_IMGS__PROD_AUTH_API_URL']
-            self.AUTH_API_IDENTITY = os.environ['BELL_TASKS_IMGS__PROD_AUTH_API_IDENTITY']
-            self.AUTH_API_KEY = os.environ['BELL_TASKS_IMGS__PROD_AUTH_API_KEY']
-        else:
-            self.AUTH_API_URL = os.environ['BELL_TASKS_IMGS__DEV_AUTH_API_URL']
-            self.AUTH_API_IDENTITY = os.environ['BELL_TASKS_IMGS__DEV_AUTH_API_IDENTITY']
-            self.AUTH_API_KEY = os.environ['BELL_TASKS_IMGS__DEV_AUTH_API_KEY']
+        self.env = env
 
     def add_image( self, filename_dct ):
         """ Manages: hits api, & cleans up.
@@ -179,47 +203,11 @@ class ImageAdder:
         logger.debug( 'in tasks.images.ImageAdder.add_image(); starting; filename_dct, `%s`' % pprint.pformat(filename_dct) )
         image_filename = list(filename_dct.keys())[0]
         pid = filename_dct[image_filename]['pid']
-        params = self.prep_params( image_filename, pid )
-        with open(os.path.join(self.MASTER_IMAGES_DIR_PATH, image_filename), 'rb') as f:
-            files = {image_filename: f}
-            resp = self.hit_api( params, files )
-        self.track_response( resp )
-        return
-
-    def prep_params( self, file_name, pid ):
-        """ Sets params.
-            Called by add_image() """
-        params = { 'pid': pid, 'identity': self.AUTH_API_IDENTITY, 'authorization_code': self.AUTH_API_KEY }
-        #Note: we used to check a setting for whether or not to send this param, but seems like we can just
-        #   always send it.
-        params['overwrite_content'] = 'yes'
-        params['content_streams'] = json.dumps([
-            { 'dsID': 'MASTER', 'file_name': file_name },
-            ])
-        self.logger.info( 'in tasks.images.ImageAdder.prep_params(); params/content_streams, `%s`' % params['content_streams'] )
-        return params
-
-    def hit_api( self, params, files ):
-        """ Hits auth-api.
-            Called by add_image() """
         try:
-            self.logger.info( 'in tasks.images.ImageAdder.hit_api(); url, `%s`; identity, `%s`; pid, `%s`' % (self.AUTH_API_URL, params['identity'], params['pid']) )
-            r = requests.put( self.AUTH_API_URL, data=params, files=files )
-            return r
+            post_image_to_object(pid, image_filename, self.env)
         except Exception as e:
-            self.logger.error( 'in tasks.images.ImageAdder.hit_api(); error, `%s`' % e )
+            self.logger.info('error posting image: {e}')
             raise
-
-    def track_response( self, resp ):
-        """ Outputs put result.
-            Called by add_image() """
-        resp_txt = resp.content.decode( 'utf-8' )
-        self.logger.info( 'in tasks.images.ImageAdder.track_response(); resp_txt, `%s`; status_code, `%s`' % (resp_txt, resp.status_code) )
-        print(f'{resp.status_code} - resp_txt, `{resp_txt}`')
-        if not resp.status_code == 200:
-            raise Exception( f'Bad http status code detected: {resp.status_code}' )
-
-    # end class ImageAdder
 
 
 ## runners
@@ -256,11 +244,10 @@ def process_image_list(list_of_images, env):
 
 
 def add_images(env='prod'):
-    """ Grabs list of images-to-add and enqueues jobs.
+    """ Grabs list of images-to-add.
         Called manually.
         Suggestion: run on ingestion-server. """
-    IMAGES_TO_PROCESS_JSON_PATH = os.path.join(DATA_DIR, 'g2__images_to_process.json')
-    with open( IMAGES_TO_PROCESS_JSON_PATH ) as f:
+    with open(IMAGES_TO_PROCESS_JSON_PATH) as f:
         dct = json.loads( f.read() )
     images_to_add = dct['lst_images_to_add']  # each lst entry is like: { "Agam PR_1981.1694.tif": {"accession_number": "PR 1981.1694", "pid": "bdr:300120"} }
     images_to_update = dct['lst_images_to_update']  # each lst entry is like: { "Agam PR_1981.1694.tif": {"accession_number": "PR 1981.1694", "pid": "bdr:300120"} }
@@ -273,4 +260,27 @@ def add_images(env='prod'):
             f.write(json.dumps(dct, indent=2, sort_keys=True).encode('utf8'))
             f.write('\n'.encode('utf8'))
     print('done')
+
+
+def process_updated_images(env='prod'):
+    '''handles case where subset of images had to be updated, and new versions are in the image directory,
+        and the new versions need to be posted to their objects'''
+    images_path = pathlib.Path(MASTER_IMAGES_DIR_PATH)
+    with open(IMAGES_TO_PROCESS_JSON_PATH, 'rb') as f:
+        images_to_process_json = json.loads(f.read().decode('utf8'))
+    for image_path in images_path.iterdir():
+        print(image_path)
+        #find file & get pid
+        pid = None
+        image_info_list = images_to_process_json['lst_images_to_add']
+        image_info_list.extend(images_to_process_json['lst_images_to_update'])
+        for image_to_add in image_info_list:
+            if image_path.name in image_to_add:
+                pid = image_to_add[image_path.name]['pid']
+        if pid:
+            print(f'  {pid}')
+        else:
+            raise Exception(f'found no pid for {image_path}')
+        result = post_image_to_object(pid, str(image_path), env='prod')
+        print(f'  {result}')
 

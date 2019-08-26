@@ -194,6 +194,8 @@ code related to ingesting bell-gallery images into the bdr.
 - let Bell-J.C. & CIS-J.B. know when done
     - status: DONE 2019-08-07
 
+- 8/26/2019 - repost some updated images
+
 ---
 
 ### Some bdr-api url calls for reference...
