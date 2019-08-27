@@ -1,12 +1,4050 @@
 {
-  "count": 1,
-  "datetime": "2019-08-06 16:14:23.351094",
+  "count": 674,
+  "datetime": "2019-08-27 10:22:52.554114",
   "pids_to_delete": {
-    "bdr:788258": {
-      "accession number": "D 2017.10",
+    "bdr:316381": {
+      "accession number": "PR 41.1.1997",
       "object_type": "undetermined",
-      "title": "Portrait of Linda Tanner",
-      "url": "https://repository.library.brown.edu/studio/item/bdr:788258/"
+      "title": "Joint Will of People - Peace",
+      "url": "https://repository.library.brown.edu/studio/item/bdr:316381/"
+    },
+    "bdr:316383": {
+      "accession number": "PR 41.10.1997",
+      "object_type": "undetermined",
+      "title": "All People on Big Planet",
+      "url": "https://repository.library.brown.edu/studio/item/bdr:316383/"
+    },
+    "bdr:316385": {
+      "accession number": "PR 41.100.1997",
+      "object_type": "undetermined",
+      "title": "Time to Fly.  Cinema Poster",
+      "url": "https://repository.library.brown.edu/studio/item/bdr:316385/"
+    },
+    "bdr:316387": {
+      "accession number": "PR 41.101.1997",
+      "object_type": "undetermined",
+      "title": "Soviet Russia Exhibition",
+      "url": "https://repository.library.brown.edu/studio/item/bdr:316387/"
+    },
+    "bdr:316389": {
+      "accession number": "PR 41.102.1997",
+      "object_type": "undetermined",
+      "title": "Danila - Duke of Galich.  Cinema Poster",
+      "url": "https://repository.library.brown.edu/studio/item/bdr:316389/"
+    },
+    "bdr:316391": {
+      "accession number": "PR 41.103.1.1997",
+      "object_type": "undetermined",
+      "title": "Vneshtechnika poster",
+      "url": "https://repository.library.brown.edu/studio/item/bdr:316391/"
+    },
+    "bdr:316393": {
+      "accession number": "PR 41.103.2.1997",
+      "object_type": "undetermined",
+      "title": "Vneshtechnika poster",
+      "url": "https://repository.library.brown.edu/studio/item/bdr:316393/"
+    },
+    "bdr:316395": {
+      "accession number": "PR 41.103.3.1997",
+      "object_type": "undetermined",
+      "title": "Vneshtechnika (one of three)",
+      "url": "https://repository.library.brown.edu/studio/item/bdr:316395/"
+    },
+    "bdr:316397": {
+      "accession number": "PR 41.104.1997",
+      "object_type": "undetermined",
+      "title": "D. Patrick.  Dear Pamela.  Theatre Poster",
+      "url": "https://repository.library.brown.edu/studio/item/bdr:316397/"
+    },
+    "bdr:316399": {
+      "accession number": "PR 41.105.1997",
+      "object_type": "undetermined",
+      "title": "Youth Festival",
+      "url": "https://repository.library.brown.edu/studio/item/bdr:316399/"
+    },
+    "bdr:316401": {
+      "accession number": "PR 41.106.1997",
+      "object_type": "undetermined",
+      "title": "Days of Culture '82",
+      "url": "https://repository.library.brown.edu/studio/item/bdr:316401/"
+    },
+    "bdr:316403": {
+      "accession number": "PR 41.107.1997",
+      "object_type": "undetermined",
+      "title": "Taking the Course of Acceleration",
+      "url": "https://repository.library.brown.edu/studio/item/bdr:316403/"
+    },
+    "bdr:316405": {
+      "accession number": "PR 41.108.1997",
+      "object_type": "undetermined",
+      "title": "Paizbello.  The Barber of Seville",
+      "url": "https://repository.library.brown.edu/studio/item/bdr:316405/"
+    },
+    "bdr:316407": {
+      "accession number": "PR 41.109.1997",
+      "object_type": "undetermined",
+      "title": "N. Kanard.  Seance",
+      "url": "https://repository.library.brown.edu/studio/item/bdr:316407/"
+    },
+    "bdr:316409": {
+      "accession number": "PR 41.11.1997",
+      "object_type": "undetermined",
+      "title": "For the Great Deed a Large Step is Made",
+      "url": "https://repository.library.brown.edu/studio/item/bdr:316409/"
+    },
+    "bdr:316411": {
+      "accession number": "PR 41.110.1997",
+      "object_type": "undetermined",
+      "title": "Red Horse",
+      "url": "https://repository.library.brown.edu/studio/item/bdr:316411/"
+    },
+    "bdr:316413": {
+      "accession number": "PR 41.111.1997",
+      "object_type": "undetermined",
+      "title": "Poster on Emancipation",
+      "url": "https://repository.library.brown.edu/studio/item/bdr:316413/"
+    },
+    "bdr:316415": {
+      "accession number": "PR 41.112.1997",
+      "object_type": "undetermined",
+      "title": "Visiting the Dolls",
+      "url": "https://repository.library.brown.edu/studio/item/bdr:316415/"
+    },
+    "bdr:316417": {
+      "accession number": "PR 41.113.1997",
+      "object_type": "undetermined",
+      "title": "Pirtshelava Singing For Our Fathers",
+      "url": "https://repository.library.brown.edu/studio/item/bdr:316417/"
+    },
+    "bdr:316419": {
+      "accession number": "PR 41.114.1997",
+      "object_type": "undetermined",
+      "title": "Studio - 33.  Music Youth Festival",
+      "url": "https://repository.library.brown.edu/studio/item/bdr:316419/"
+    },
+    "bdr:316421": {
+      "accession number": "PR 41.115.1.1997",
+      "object_type": "undetermined",
+      "title": "XII World Youth Festival 1985",
+      "url": "https://repository.library.brown.edu/studio/item/bdr:316421/"
+    },
+    "bdr:316423": {
+      "accession number": "PR 41.115.2.1997",
+      "object_type": "undetermined",
+      "title": "Holiday of International Folklore",
+      "url": "https://repository.library.brown.edu/studio/item/bdr:316423/"
+    },
+    "bdr:316425": {
+      "accession number": "PR 41.115.3.1997",
+      "object_type": "undetermined",
+      "title": "XII World Student Festival",
+      "url": "https://repository.library.brown.edu/studio/item/bdr:316425/"
+    },
+    "bdr:316427": {
+      "accession number": "PR 41.115.4.1997",
+      "object_type": "undetermined",
+      "title": "XII World Youth Festival",
+      "url": "https://repository.library.brown.edu/studio/item/bdr:316427/"
+    },
+    "bdr:316429": {
+      "accession number": "PR 41.115.5.1997",
+      "object_type": "undetermined",
+      "title": "XII World Youth Festival",
+      "url": "https://repository.library.brown.edu/studio/item/bdr:316429/"
+    },
+    "bdr:316431": {
+      "accession number": "PR 41.116.1997",
+      "object_type": "undetermined",
+      "title": "Circus.  Igor Prostetsov",
+      "url": "https://repository.library.brown.edu/studio/item/bdr:316431/"
+    },
+    "bdr:316433": {
+      "accession number": "PR 41.117.1997",
+      "object_type": "undetermined",
+      "title": "Amateur Painting Exhibition from the Baltic Republics",
+      "url": "https://repository.library.brown.edu/studio/item/bdr:316433/"
+    },
+    "bdr:316435": {
+      "accession number": "PR 41.118.1997",
+      "object_type": "undetermined",
+      "title": "Peace to Our Children",
+      "url": "https://repository.library.brown.edu/studio/item/bdr:316435/"
+    },
+    "bdr:316437": {
+      "accession number": "PR 41.119.1997",
+      "object_type": "undetermined",
+      "title": "S. Gashek.  Iosif Shveik",
+      "url": "https://repository.library.brown.edu/studio/item/bdr:316437/"
+    },
+    "bdr:316439": {
+      "accession number": "PR 41.12.1997",
+      "object_type": "undetermined",
+      "title": "Peace in Space - Peace on Earth",
+      "url": "https://repository.library.brown.edu/studio/item/bdr:316439/"
+    },
+    "bdr:316441": {
+      "accession number": "PR 41.120.1997",
+      "object_type": "undetermined",
+      "title": "Peace to You, the Future of Planet Earth",
+      "url": "https://repository.library.brown.edu/studio/item/bdr:316441/"
+    },
+    "bdr:316443": {
+      "accession number": "PR 41.121.1997",
+      "object_type": "undetermined",
+      "title": "Krishian Baron 1835-1923",
+      "url": "https://repository.library.brown.edu/studio/item/bdr:316443/"
+    },
+    "bdr:316445": {
+      "accession number": "PR 41.122.1997",
+      "object_type": "undetermined",
+      "title": "W. Shakespeare.  Hamlet",
+      "url": "https://repository.library.brown.edu/studio/item/bdr:316445/"
+    },
+    "bdr:316447": {
+      "accession number": "PR 41.123.1997",
+      "object_type": "undetermined",
+      "title": "Rock Band \"Autograph\"",
+      "url": "https://repository.library.brown.edu/studio/item/bdr:316447/"
+    },
+    "bdr:316449": {
+      "accession number": "PR 41.124.1997",
+      "object_type": "undetermined",
+      "title": "\"I Would Rip Out Bureaucracy's Guts...\"",
+      "url": "https://repository.library.brown.edu/studio/item/bdr:316449/"
+    },
+    "bdr:316451": {
+      "accession number": "PR 41.125.1997",
+      "object_type": "undetermined",
+      "title": "P. Tchaikovsky.  Swan Lake",
+      "url": "https://repository.library.brown.edu/studio/item/bdr:316451/"
+    },
+    "bdr:316453": {
+      "accession number": "PR 41.126.1997",
+      "object_type": "undetermined",
+      "title": "N. Gogol.  The Overcoat",
+      "url": "https://repository.library.brown.edu/studio/item/bdr:316453/"
+    },
+    "bdr:316455": {
+      "accession number": "PR 41.127.1997",
+      "object_type": "undetermined",
+      "title": "Ivory Coast National Ballet",
+      "url": "https://repository.library.brown.edu/studio/item/bdr:316455/"
+    },
+    "bdr:316457": {
+      "accession number": "PR 41.128.1997",
+      "object_type": "undetermined",
+      "title": "Arbuzov.  An Unexpected Visitor",
+      "url": "https://repository.library.brown.edu/studio/item/bdr:316457/"
+    },
+    "bdr:316459": {
+      "accession number": "PR 41.129.1997",
+      "object_type": "undetermined",
+      "title": "Books From Soviet Latvia",
+      "url": "https://repository.library.brown.edu/studio/item/bdr:316459/"
+    },
+    "bdr:316461": {
+      "accession number": "PR 41.13.1997",
+      "object_type": "undetermined",
+      "title": "Great Railway is Being Built",
+      "url": "https://repository.library.brown.edu/studio/item/bdr:316461/"
+    },
+    "bdr:316463": {
+      "accession number": "PR 41.130.1997",
+      "object_type": "undetermined",
+      "title": "Trainer Margarita Breda",
+      "url": "https://repository.library.brown.edu/studio/item/bdr:316463/"
+    },
+    "bdr:316465": {
+      "accession number": "PR 41.131.1997",
+      "object_type": "undetermined",
+      "title": "VDNCh Exhibition.  Flower Section",
+      "url": "https://repository.library.brown.edu/studio/item/bdr:316465/"
+    },
+    "bdr:316467": {
+      "accession number": "PR 41.132.1997",
+      "object_type": "undetermined",
+      "title": "All-Union Graphic Exhibition",
+      "url": "https://repository.library.brown.edu/studio/item/bdr:316467/"
+    },
+    "bdr:316469": {
+      "accession number": "PR 41.133.1997",
+      "object_type": "undetermined",
+      "title": "Day of Rainis' Poetry (in Latvian)",
+      "url": "https://repository.library.brown.edu/studio/item/bdr:316469/"
+    },
+    "bdr:316471": {
+      "accession number": "PR 41.134.1997",
+      "object_type": "undetermined",
+      "title": "An Only Child (in Latvian)",
+      "url": "https://repository.library.brown.edu/studio/item/bdr:316471/"
+    },
+    "bdr:316473": {
+      "accession number": "PR 41.135.1997",
+      "object_type": "undetermined",
+      "title": "Republican Festival of Amateur Puppet Shows",
+      "url": "https://repository.library.brown.edu/studio/item/bdr:316473/"
+    },
+    "bdr:316475": {
+      "accession number": "PR 41.136.1997",
+      "object_type": "undetermined",
+      "title": "Children's Art Exhibition Poster",
+      "url": "https://repository.library.brown.edu/studio/item/bdr:316475/"
+    },
+    "bdr:316477": {
+      "accession number": "PR 41.137.1997",
+      "object_type": "undetermined",
+      "title": "Trip to Balzubar.  Cinema Poster (in Lithuanian)",
+      "url": "https://repository.library.brown.edu/studio/item/bdr:316477/"
+    },
+    "bdr:316479": {
+      "accession number": "PR 41.138.1997",
+      "object_type": "undetermined",
+      "title": "1st Exhibition of Printings by Leningrad Graphic Artists",
+      "url": "https://repository.library.brown.edu/studio/item/bdr:316479/"
+    },
+    "bdr:316481": {
+      "accession number": "PR 41.139.1997",
+      "object_type": "undetermined",
+      "title": "Nature Protection is Everybody's Business",
+      "url": "https://repository.library.brown.edu/studio/item/bdr:316481/"
+    },
+    "bdr:316483": {
+      "accession number": "PR 41.14.1997",
+      "object_type": "undetermined",
+      "title": "Simple as Truth",
+      "url": "https://repository.library.brown.edu/studio/item/bdr:316483/"
+    },
+    "bdr:316485": {
+      "accession number": "PR 41.140.1997",
+      "object_type": "undetermined",
+      "title": "Vyacheslav Kurbanov.  Ikariysk Games",
+      "url": "https://repository.library.brown.edu/studio/item/bdr:316485/"
+    },
+    "bdr:316487": {
+      "accession number": "PR 41.141.1997",
+      "object_type": "undetermined",
+      "title": "Glasnost (Openness)",
+      "url": "https://repository.library.brown.edu/studio/item/bdr:316487/"
+    },
+    "bdr:316489": {
+      "accession number": "PR 41.142.1997",
+      "object_type": "undetermined",
+      "title": "Quality of Work - Mirror of Your Conscience",
+      "url": "https://repository.library.brown.edu/studio/item/bdr:316489/"
+    },
+    "bdr:316491": {
+      "accession number": "PR 41.143.1997",
+      "object_type": "undetermined",
+      "title": "A. Tarkovsy.  Sacrifice.  Cinema Poster",
+      "url": "https://repository.library.brown.edu/studio/item/bdr:316491/"
+    },
+    "bdr:316493": {
+      "accession number": "PR 41.144.1997",
+      "object_type": "undetermined",
+      "title": "A. Pushkin.  Eugeny Onegin.  Play-Concert",
+      "url": "https://repository.library.brown.edu/studio/item/bdr:316493/"
+    },
+    "bdr:316495": {
+      "accession number": "PR 41.145.1997",
+      "object_type": "undetermined",
+      "title": "Circus",
+      "url": "https://repository.library.brown.edu/studio/item/bdr:316495/"
+    },
+    "bdr:316497": {
+      "accession number": "PR 41.146.1997",
+      "object_type": "undetermined",
+      "title": "Performing Hamadryads.  Tamara Shatrova - Circus",
+      "url": "https://repository.library.brown.edu/studio/item/bdr:316497/"
+    },
+    "bdr:316500": {
+      "accession number": "PR 41.147.1997",
+      "object_type": "undetermined",
+      "title": "8th Republican Poster Exhibition",
+      "url": "https://repository.library.brown.edu/studio/item/bdr:316500/"
+    },
+    "bdr:316501": {
+      "accession number": "PR 41.148.1997",
+      "object_type": "undetermined",
+      "title": "Jazz Band Irakere.  Jazz Rhythms Festival",
+      "url": "https://repository.library.brown.edu/studio/item/bdr:316501/"
+    },
+    "bdr:316503": {
+      "accession number": "PR 41.149.1997",
+      "object_type": "undetermined",
+      "title": "Kreitserova Sonata (movie poster)",
+      "url": "https://repository.library.brown.edu/studio/item/bdr:316503/"
+    },
+    "bdr:316505": {
+      "accession number": "PR 41.15.1997",
+      "object_type": "undetermined",
+      "title": "8th of March",
+      "url": "https://repository.library.brown.edu/studio/item/bdr:316505/"
+    },
+    "bdr:316508": {
+      "accession number": "PR 41.150.1997",
+      "object_type": "undetermined",
+      "title": "Is This Your Working Place? (in Latvian)",
+      "url": "https://repository.library.brown.edu/studio/item/bdr:316508/"
+    },
+    "bdr:316509": {
+      "accession number": "PR 41.151.1997",
+      "object_type": "undetermined",
+      "title": "Night of Wonders (movie poster)",
+      "url": "https://repository.library.brown.edu/studio/item/bdr:316509/"
+    },
+    "bdr:316512": {
+      "accession number": "PR 41.152.1997",
+      "object_type": "undetermined",
+      "title": "Drug Addiction is Death",
+      "url": "https://repository.library.brown.edu/studio/item/bdr:316512/"
+    },
+    "bdr:316513": {
+      "accession number": "PR 41.153.1997",
+      "object_type": "undetermined",
+      "title": "Circus.  Liubov and Alexandr Sudershikov.  Illusion",
+      "url": "https://repository.library.brown.edu/studio/item/bdr:316513/"
+    },
+    "bdr:316516": {
+      "accession number": "PR 41.154.1997",
+      "object_type": "undetermined",
+      "title": "Duerrenmatt.  Old Lady's Visit",
+      "url": "https://repository.library.brown.edu/studio/item/bdr:316516/"
+    },
+    "bdr:316517": {
+      "accession number": "PR 41.155.1997",
+      "object_type": "undetermined",
+      "title": "Mussorgsky.  Khovanschina.  Musical Drama",
+      "url": "https://repository.library.brown.edu/studio/item/bdr:316517/"
+    },
+    "bdr:316520": {
+      "accession number": "PR 41.156.1997",
+      "object_type": "undetermined",
+      "title": "To the New Way of Thinking and Action",
+      "url": "https://repository.library.brown.edu/studio/item/bdr:316520/"
+    },
+    "bdr:316521": {
+      "accession number": "PR 41.157.1997",
+      "object_type": "undetermined",
+      "title": "No to Space Militerisation",
+      "url": "https://repository.library.brown.edu/studio/item/bdr:316521/"
+    },
+    "bdr:316524": {
+      "accession number": "PR 41.159.1997",
+      "object_type": "undetermined",
+      "title": "Our Course - Acceleration (XXVII CPC)",
+      "url": "https://repository.library.brown.edu/studio/item/bdr:316524/"
+    },
+    "bdr:316525": {
+      "accession number": "PR 41.158.1997",
+      "object_type": "undetermined",
+      "title": "The First of May",
+      "url": "https://repository.library.brown.edu/studio/item/bdr:316525/"
+    },
+    "bdr:316528": {
+      "accession number": "PR 41.16.1997",
+      "object_type": "undetermined",
+      "title": "Good Builders Build Well Easily",
+      "url": "https://repository.library.brown.edu/studio/item/bdr:316528/"
+    },
+    "bdr:316529": {
+      "accession number": "PR 41.160.1997",
+      "object_type": "undetermined",
+      "title": "Make US Aggressors Answer",
+      "url": "https://repository.library.brown.edu/studio/item/bdr:316529/"
+    },
+    "bdr:316532": {
+      "accession number": "PR 41.161.1997",
+      "object_type": "undetermined",
+      "title": "D. Scarnaci.  R. Tarabuza.  Profession - society senior 1984",
+      "url": "https://repository.library.brown.edu/studio/item/bdr:316532/"
+    },
+    "bdr:316533": {
+      "accession number": "PR 41.162.1997",
+      "object_type": "undetermined",
+      "title": "Staraya Russa.  Memorial House of Dostoevsky",
+      "url": "https://repository.library.brown.edu/studio/item/bdr:316533/"
+    },
+    "bdr:316536": {
+      "accession number": "PR 41.163.1997",
+      "object_type": "undetermined",
+      "title": "Lenin, Lenin, Lenin",
+      "url": "https://repository.library.brown.edu/studio/item/bdr:316536/"
+    },
+    "bdr:316537": {
+      "accession number": "PR 41.164.1997",
+      "object_type": "undetermined",
+      "title": "Save the Parks, Save the Forests",
+      "url": "https://repository.library.brown.edu/studio/item/bdr:316537/"
+    },
+    "bdr:316540": {
+      "accession number": "PR 41.165.1997",
+      "object_type": "undetermined",
+      "title": "Graphic Exhibition \"Peace to Planet Earth\"",
+      "url": "https://repository.library.brown.edu/studio/item/bdr:316540/"
+    },
+    "bdr:316541": {
+      "accession number": "PR 41.166.1997",
+      "object_type": "undetermined",
+      "title": "M. Roscshin Hasten to Do Good.  Drama in 2 parts.",
+      "url": "https://repository.library.brown.edu/studio/item/bdr:316541/"
+    },
+    "bdr:316544": {
+      "accession number": "PR 41.167.1997",
+      "object_type": "undetermined",
+      "title": "A. Galin.  Retro",
+      "url": "https://repository.library.brown.edu/studio/item/bdr:316544/"
+    },
+    "bdr:316545": {
+      "accession number": "PR 41.168.1997",
+      "object_type": "undetermined",
+      "title": "With Bread Starts Work, Celebration and Life",
+      "url": "https://repository.library.brown.edu/studio/item/bdr:316545/"
+    },
+    "bdr:316548": {
+      "accession number": "PR 41.169.1997",
+      "object_type": "undetermined",
+      "title": "Days of Rainis' Poetry",
+      "url": "https://repository.library.brown.edu/studio/item/bdr:316548/"
+    },
+    "bdr:316549": {
+      "accession number": "PR 41.17.1997",
+      "object_type": "undetermined",
+      "title": "Baptism of Pagan Russia",
+      "url": "https://repository.library.brown.edu/studio/item/bdr:316549/"
+    },
+    "bdr:316552": {
+      "accession number": "PR 41.170.1997",
+      "object_type": "undetermined",
+      "title": "Leopards Let Loose.  Valery Filatov",
+      "url": "https://repository.library.brown.edu/studio/item/bdr:316552/"
+    },
+    "bdr:316553": {
+      "accession number": "PR 41.171.1997",
+      "object_type": "undetermined",
+      "title": "Exhibition of Leningrad Posters",
+      "url": "https://repository.library.brown.edu/studio/item/bdr:316553/"
+    },
+    "bdr:316556": {
+      "accession number": "PR 41.173.1997",
+      "object_type": "undetermined",
+      "title": "The City of Three Revolutions",
+      "url": "https://repository.library.brown.edu/studio/item/bdr:316556/"
+    },
+    "bdr:316557": {
+      "accession number": "PR 41.172.1997",
+      "object_type": "undetermined",
+      "title": "Exhibition \"Pages from the work for total abstinence\"",
+      "url": "https://repository.library.brown.edu/studio/item/bdr:316557/"
+    },
+    "bdr:316560": {
+      "accession number": "PR 41.175.1997",
+      "object_type": "undetermined",
+      "title": "Glory to the People Winning the Victory",
+      "url": "https://repository.library.brown.edu/studio/item/bdr:316560/"
+    },
+    "bdr:316561": {
+      "accession number": "PR 41.176.1997",
+      "object_type": "undetermined",
+      "title": "Glorify the Country by Your Labor",
+      "url": "https://repository.library.brown.edu/studio/item/bdr:316561/"
+    },
+    "bdr:316564": {
+      "accession number": "PR 41.177.1.1997",
+      "object_type": "undetermined",
+      "title": "Revolution of 1905.  (triptych)",
+      "url": "https://repository.library.brown.edu/studio/item/bdr:316564/"
+    },
+    "bdr:316565": {
+      "accession number": "PR 41.177.2.1997",
+      "object_type": "undetermined",
+      "title": "Revolution of 1905.  (triptych)",
+      "url": "https://repository.library.brown.edu/studio/item/bdr:316565/"
+    },
+    "bdr:316568": {
+      "accession number": "PR 41.177.3.1997",
+      "object_type": "undetermined",
+      "title": "Revolution of 1905.  (triptych) \"Dedicated to the 80th anniversary of the first Russian Revolution\"",
+      "url": "https://repository.library.brown.edu/studio/item/bdr:316568/"
+    },
+    "bdr:316569": {
+      "accession number": "PR 41.178.1997",
+      "object_type": "undetermined",
+      "title": "I. Turgenev.  Mumu.",
+      "url": "https://repository.library.brown.edu/studio/item/bdr:316569/"
+    },
+    "bdr:316572": {
+      "accession number": "PR 41.179.1997",
+      "object_type": "undetermined",
+      "title": "W. Shakespeare.  Hamlet",
+      "url": "https://repository.library.brown.edu/studio/item/bdr:316572/"
+    },
+    "bdr:316573": {
+      "accession number": "PR 41.18.1997",
+      "object_type": "undetermined",
+      "title": "XII - Moscow - 1985",
+      "url": "https://repository.library.brown.edu/studio/item/bdr:316573/"
+    },
+    "bdr:316576": {
+      "accession number": "PR 41.180.1997",
+      "object_type": "undetermined",
+      "title": "B. Brecht.  This Soldier or That.",
+      "url": "https://repository.library.brown.edu/studio/item/bdr:316576/"
+    },
+    "bdr:316577": {
+      "accession number": "PR 41.181.1997",
+      "object_type": "undetermined",
+      "title": "Circus. Illusion",
+      "url": "https://repository.library.brown.edu/studio/item/bdr:316577/"
+    },
+    "bdr:316580": {
+      "accession number": "PR 41.183.1997",
+      "object_type": "undetermined",
+      "title": "All-Union Festival of String Quartets",
+      "url": "https://repository.library.brown.edu/studio/item/bdr:316580/"
+    },
+    "bdr:316581": {
+      "accession number": "PR 41.182.1997",
+      "object_type": "undetermined",
+      "title": "N. Ostrovsky.  Profitable Place",
+      "url": "https://repository.library.brown.edu/studio/item/bdr:316581/"
+    },
+    "bdr:316584": {
+      "accession number": "PR 41.185.1997",
+      "object_type": "undetermined",
+      "title": "Participation, Development, Peace",
+      "url": "https://repository.library.brown.edu/studio/item/bdr:316584/"
+    },
+    "bdr:316585": {
+      "accession number": "PR 41.184.1997",
+      "object_type": "undetermined",
+      "title": "Great and Immortal Feat",
+      "url": "https://repository.library.brown.edu/studio/item/bdr:316585/"
+    },
+    "bdr:316588": {
+      "accession number": "PR 41.186.1997",
+      "object_type": "undetermined",
+      "title": "Alcohol is Poison (in Lithuanian)",
+      "url": "https://repository.library.brown.edu/studio/item/bdr:316588/"
+    },
+    "bdr:316589": {
+      "accession number": "PR 41.187.1997",
+      "object_type": "undetermined",
+      "title": "Leonid Mozgovoi.  Monologue about Okudzhava",
+      "url": "https://repository.library.brown.edu/studio/item/bdr:316589/"
+    },
+    "bdr:316592": {
+      "accession number": "PR 41.188.1997",
+      "object_type": "undetermined",
+      "title": "September 1st.  Learners' Day (in Latvian)",
+      "url": "https://repository.library.brown.edu/studio/item/bdr:316592/"
+    },
+    "bdr:316593": {
+      "accession number": "PR 41.189.1997",
+      "object_type": "undetermined",
+      "title": "Grow Up to Be Great (in Ukranian)",
+      "url": "https://repository.library.brown.edu/studio/item/bdr:316593/"
+    },
+    "bdr:316596": {
+      "accession number": "PR 41.19.1997",
+      "object_type": "undetermined",
+      "title": "When Boys Leave for the Army",
+      "url": "https://repository.library.brown.edu/studio/item/bdr:316596/"
+    },
+    "bdr:316597": {
+      "accession number": "PR 41.190.1997",
+      "object_type": "undetermined",
+      "title": "Peace",
+      "url": "https://repository.library.brown.edu/studio/item/bdr:316597/"
+    },
+    "bdr:316600": {
+      "accession number": "PR 41.191.1997",
+      "object_type": "undetermined",
+      "title": "L. Delibes.  Coppelia",
+      "url": "https://repository.library.brown.edu/studio/item/bdr:316600/"
+    },
+    "bdr:316601": {
+      "accession number": "PR 41.192.1997",
+      "object_type": "undetermined",
+      "title": "Eugeny Sedov.  Circus.  Acrobats on Rollerblades",
+      "url": "https://repository.library.brown.edu/studio/item/bdr:316601/"
+    },
+    "bdr:316604": {
+      "accession number": "PR 41.193.1997",
+      "object_type": "undetermined",
+      "title": "Sergei Beliatsky",
+      "url": "https://repository.library.brown.edu/studio/item/bdr:316604/"
+    },
+    "bdr:316605": {
+      "accession number": "PR 41.194.1997",
+      "object_type": "undetermined",
+      "title": "Autograph",
+      "url": "https://repository.library.brown.edu/studio/item/bdr:316605/"
+    },
+    "bdr:316608": {
+      "accession number": "PR 41.195.1997",
+      "object_type": "undetermined",
+      "title": "Leningrad Art Exhibition",
+      "url": "https://repository.library.brown.edu/studio/item/bdr:316608/"
+    },
+    "bdr:316609": {
+      "accession number": "PR 41.196.1997",
+      "object_type": "undetermined",
+      "title": "Peace.  XII Youth Festival",
+      "url": "https://repository.library.brown.edu/studio/item/bdr:316609/"
+    },
+    "bdr:316612": {
+      "accession number": "PR 41.197.1997",
+      "object_type": "undetermined",
+      "title": "Ensemble \"Skomorokhi\" (The Jesters)",
+      "url": "https://repository.library.brown.edu/studio/item/bdr:316612/"
+    },
+    "bdr:316613": {
+      "accession number": "PR 41.198.1997",
+      "object_type": "undetermined",
+      "title": "S. Prokofiev.  Story about Real Man",
+      "url": "https://repository.library.brown.edu/studio/item/bdr:316613/"
+    },
+    "bdr:316616": {
+      "accession number": "PR 41.199.1997",
+      "object_type": "undetermined",
+      "title": "Something Bad Happened",
+      "url": "https://repository.library.brown.edu/studio/item/bdr:316616/"
+    },
+    "bdr:316617": {
+      "accession number": "PR 41.20.1997",
+      "object_type": "undetermined",
+      "title": "Family, Let Happiness Be in It",
+      "url": "https://repository.library.brown.edu/studio/item/bdr:316617/"
+    },
+    "bdr:316620": {
+      "accession number": "PR 41.200.1997",
+      "object_type": "undetermined",
+      "title": "Rimond Panis.  Work and Thought",
+      "url": "https://repository.library.brown.edu/studio/item/bdr:316620/"
+    },
+    "bdr:316621": {
+      "accession number": "PR 41.201.1997",
+      "object_type": "undetermined",
+      "title": "Circus.  Valery Brillinatov",
+      "url": "https://repository.library.brown.edu/studio/item/bdr:316621/"
+    },
+    "bdr:316624": {
+      "accession number": "PR 41.202.1997",
+      "object_type": "undetermined",
+      "title": "Textile Exhibition (in Latvian)",
+      "url": "https://repository.library.brown.edu/studio/item/bdr:316624/"
+    },
+    "bdr:316625": {
+      "accession number": "PR 41.203.1.1997",
+      "object_type": "undetermined",
+      "title": "1945-1985 (40th Anniversary of the Great Victory)",
+      "url": "https://repository.library.brown.edu/studio/item/bdr:316625/"
+    },
+    "bdr:316628": {
+      "accession number": "PR 41.203.2.1997",
+      "object_type": "undetermined",
+      "title": "1945-1985 (40th Anniversary of the Great Victory)",
+      "url": "https://repository.library.brown.edu/studio/item/bdr:316628/"
+    },
+    "bdr:316629": {
+      "accession number": "PR 41.203.3.1997",
+      "object_type": "undetermined",
+      "title": "1945-1985 (40th Anniversary of the Great Victory)",
+      "url": "https://repository.library.brown.edu/studio/item/bdr:316629/"
+    },
+    "bdr:316632": {
+      "accession number": "PR 41.204.1997",
+      "object_type": "undetermined",
+      "title": "Circus.  Novosibirsk",
+      "url": "https://repository.library.brown.edu/studio/item/bdr:316632/"
+    },
+    "bdr:316633": {
+      "accession number": "PR 41.205.1997",
+      "object_type": "undetermined",
+      "title": "The International Year of Peace",
+      "url": "https://repository.library.brown.edu/studio/item/bdr:316633/"
+    },
+    "bdr:316636": {
+      "accession number": "PR 41.206.1997",
+      "object_type": "undetermined",
+      "title": "T. WIlliams.  Cat on a Hot Tin Roof",
+      "url": "https://repository.library.brown.edu/studio/item/bdr:316636/"
+    },
+    "bdr:316637": {
+      "accession number": "PR 41.207.1997",
+      "object_type": "undetermined",
+      "title": "To Dispose of Everywhere",
+      "url": "https://repository.library.brown.edu/studio/item/bdr:316637/"
+    },
+    "bdr:316640": {
+      "accession number": "PR 41.208.1997",
+      "object_type": "undetermined",
+      "title": "Circus. Novosibirsk",
+      "url": "https://repository.library.brown.edu/studio/item/bdr:316640/"
+    },
+    "bdr:316641": {
+      "accession number": "PR 41.209.1997",
+      "object_type": "undetermined",
+      "title": "Alexander Andreev.  Pantomine",
+      "url": "https://repository.library.brown.edu/studio/item/bdr:316641/"
+    },
+    "bdr:316644": {
+      "accession number": "PR 41.21.1997",
+      "object_type": "undetermined",
+      "title": "Save and Preserve Culture of Our Native Land for the Progeny",
+      "url": "https://repository.library.brown.edu/studio/item/bdr:316644/"
+    },
+    "bdr:316645": {
+      "accession number": "PR 41.210.1997",
+      "object_type": "undetermined",
+      "title": "E. Schwartz.  Dragon  (in Latvian)",
+      "url": "https://repository.library.brown.edu/studio/item/bdr:316645/"
+    },
+    "bdr:316648": {
+      "accession number": "PR 41.211.1997",
+      "object_type": "undetermined",
+      "title": "Hiroshima - Euroshima?",
+      "url": "https://repository.library.brown.edu/studio/item/bdr:316648/"
+    },
+    "bdr:316649": {
+      "accession number": "PR 41.212.1997",
+      "object_type": "undetermined",
+      "title": "M. Sholokhov and the Don Region Exhibition",
+      "url": "https://repository.library.brown.edu/studio/item/bdr:316649/"
+    },
+    "bdr:316652": {
+      "accession number": "PR 41.213.1997",
+      "object_type": "undetermined",
+      "title": "To Hear with Your Eyes is the Highest Mind of Love",
+      "url": "https://repository.library.brown.edu/studio/item/bdr:316652/"
+    },
+    "bdr:316653": {
+      "accession number": "PR 41.214.1997",
+      "object_type": "undetermined",
+      "title": "Circus. Novosibirsk",
+      "url": "https://repository.library.brown.edu/studio/item/bdr:316653/"
+    },
+    "bdr:316656": {
+      "accession number": "PR 41.215.1997",
+      "object_type": "undetermined",
+      "title": "Igor Teplov.  Juggling on the Horse",
+      "url": "https://repository.library.brown.edu/studio/item/bdr:316656/"
+    },
+    "bdr:316657": {
+      "accession number": "PR 41.216.1997",
+      "object_type": "undetermined",
+      "title": "Exposition.  N. Rerich in Isvar",
+      "url": "https://repository.library.brown.edu/studio/item/bdr:316657/"
+    },
+    "bdr:316660": {
+      "accession number": "PR 41.217.1997",
+      "object_type": "undetermined",
+      "title": "Exhibition \"Fall-81\"  (in Latvian)",
+      "url": "https://repository.library.brown.edu/studio/item/bdr:316660/"
+    },
+    "bdr:316661": {
+      "accession number": "PR 41.218.1997",
+      "object_type": "undetermined",
+      "title": "I. Jamiak.  Mr. Amilkar Pays",
+      "url": "https://repository.library.brown.edu/studio/item/bdr:316661/"
+    },
+    "bdr:316664": {
+      "accession number": "PR 41.219.1997",
+      "object_type": "undetermined",
+      "title": "Wroclaw Theater of Pantomime",
+      "url": "https://repository.library.brown.edu/studio/item/bdr:316664/"
+    },
+    "bdr:316665": {
+      "accession number": "PR 41.22.1997",
+      "object_type": "undetermined",
+      "title": "1st of May",
+      "url": "https://repository.library.brown.edu/studio/item/bdr:316665/"
+    },
+    "bdr:316668": {
+      "accession number": "PR 41.220.1997",
+      "object_type": "undetermined",
+      "title": "Novgorod.  Architectural Landmarks",
+      "url": "https://repository.library.brown.edu/studio/item/bdr:316668/"
+    },
+    "bdr:316669": {
+      "accession number": "PR 41.221.1997",
+      "object_type": "undetermined",
+      "title": "Lope de Vega.  La vinda de Valencia",
+      "url": "https://repository.library.brown.edu/studio/item/bdr:316669/"
+    },
+    "bdr:316672": {
+      "accession number": "PR 41.222.1997",
+      "object_type": "undetermined",
+      "title": "Republican Festival of Folk Art  (in Lithuanian)",
+      "url": "https://repository.library.brown.edu/studio/item/bdr:316672/"
+    },
+    "bdr:316673": {
+      "accession number": "PR 41.223.1997",
+      "object_type": "undetermined",
+      "title": "8th of March  (in Latvian)",
+      "url": "https://repository.library.brown.edu/studio/item/bdr:316673/"
+    },
+    "bdr:316676": {
+      "accession number": "PR 41.224.1997",
+      "object_type": "undetermined",
+      "title": "Leningrad Jazz Band",
+      "url": "https://repository.library.brown.edu/studio/item/bdr:316676/"
+    },
+    "bdr:316677": {
+      "accession number": "PR 41.225.1997",
+      "object_type": "undetermined",
+      "title": "Republican Exhibition of Young Artists  (in Lithuanian)",
+      "url": "https://repository.library.brown.edu/studio/item/bdr:316677/"
+    },
+    "bdr:316680": {
+      "accession number": "PR 41.226.1997",
+      "object_type": "undetermined",
+      "title": "Leningrad Rhythm Ballet",
+      "url": "https://repository.library.brown.edu/studio/item/bdr:316680/"
+    },
+    "bdr:316681": {
+      "accession number": "PR 41.227.1.1997",
+      "object_type": "undetermined",
+      "title": "A Millenium of Russian Culture",
+      "url": "https://repository.library.brown.edu/studio/item/bdr:316681/"
+    },
+    "bdr:316684": {
+      "accession number": "PR 41.227.2.1997",
+      "object_type": "undetermined",
+      "title": "A Millenium of Russian Culture",
+      "url": "https://repository.library.brown.edu/studio/item/bdr:316684/"
+    },
+    "bdr:316685": {
+      "accession number": "PR 41.227.3.1997",
+      "object_type": "undetermined",
+      "title": "A Millenium of Russian Culture",
+      "url": "https://repository.library.brown.edu/studio/item/bdr:316685/"
+    },
+    "bdr:316688": {
+      "accession number": "PR 41.228.1997",
+      "object_type": "undetermined",
+      "title": "Strawberry Glade",
+      "url": "https://repository.library.brown.edu/studio/item/bdr:316688/"
+    },
+    "bdr:316689": {
+      "accession number": "PR 41.229.1997",
+      "object_type": "undetermined",
+      "title": "Parade of Smiles.  Lidia Abdulaeva",
+      "url": "https://repository.library.brown.edu/studio/item/bdr:316689/"
+    },
+    "bdr:316692": {
+      "accession number": "PR 41.23.1997",
+      "object_type": "undetermined",
+      "title": "You've Found Immortality, Stalingrad",
+      "url": "https://repository.library.brown.edu/studio/item/bdr:316692/"
+    },
+    "bdr:316693": {
+      "accession number": "PR 41.230.1997",
+      "object_type": "undetermined",
+      "title": "Exhibition: Artist and Time",
+      "url": "https://repository.library.brown.edu/studio/item/bdr:316693/"
+    },
+    "bdr:316696": {
+      "accession number": "PR 41.231.1997",
+      "object_type": "undetermined",
+      "title": "Republican Festival of Young Performers",
+      "url": "https://repository.library.brown.edu/studio/item/bdr:316696/"
+    },
+    "bdr:316697": {
+      "accession number": "PR 41.232.1997",
+      "object_type": "undetermined",
+      "title": "Brilliance of the Golden Fleece.  Moscow Ensemble of Plastic Drama.",
+      "url": "https://repository.library.brown.edu/studio/item/bdr:316697/"
+    },
+    "bdr:316700": {
+      "accession number": "PR 41.233.1997",
+      "object_type": "undetermined",
+      "title": "Reminiscence about Krishna.  Moscow Ensemble of Plastic Drama",
+      "url": "https://repository.library.brown.edu/studio/item/bdr:316700/"
+    },
+    "bdr:316701": {
+      "accession number": "PR 41.234.1997",
+      "object_type": "undetermined",
+      "title": "Overcoming.  Moscow Ensemble of Plastic Drama",
+      "url": "https://repository.library.brown.edu/studio/item/bdr:316701/"
+    },
+    "bdr:316704": {
+      "accession number": "PR 41.235.1997",
+      "object_type": "undetermined",
+      "title": "Cold Summer of 1953",
+      "url": "https://repository.library.brown.edu/studio/item/bdr:316704/"
+    },
+    "bdr:316705": {
+      "accession number": "PR 41.236.1997",
+      "object_type": "undetermined",
+      "title": "Mart Kitaev.  Exhibition: Artist and Theater",
+      "url": "https://repository.library.brown.edu/studio/item/bdr:316705/"
+    },
+    "bdr:316708": {
+      "accession number": "PR 41.237.1997",
+      "object_type": "undetermined",
+      "title": "Save Electricity  (in Lithuanian)",
+      "url": "https://repository.library.brown.edu/studio/item/bdr:316708/"
+    },
+    "bdr:316709": {
+      "accession number": "PR 41.238.1997",
+      "object_type": "undetermined",
+      "title": "V. Shukshin.  Profile and Full Face",
+      "url": "https://repository.library.brown.edu/studio/item/bdr:316709/"
+    },
+    "bdr:316712": {
+      "accession number": "PR 41.239.1.1997",
+      "object_type": "undetermined",
+      "title": "The Story of Asya Kliachkina Who Loved but Never Married",
+      "url": "https://repository.library.brown.edu/studio/item/bdr:316712/"
+    },
+    "bdr:316713": {
+      "accession number": "PR 41.239.2.1997",
+      "object_type": "undetermined",
+      "title": "The Story of Asya Kliachkina Who Loved but Never Married",
+      "url": "https://repository.library.brown.edu/studio/item/bdr:316713/"
+    },
+    "bdr:316716": {
+      "accession number": "PR 41.24.1997",
+      "object_type": "undetermined",
+      "title": "Down With Racism",
+      "url": "https://repository.library.brown.edu/studio/item/bdr:316716/"
+    },
+    "bdr:316717": {
+      "accession number": "PR 41.240.1997",
+      "object_type": "undetermined",
+      "title": "Taras Sherchenko 1814-1861",
+      "url": "https://repository.library.brown.edu/studio/item/bdr:316717/"
+    },
+    "bdr:316720": {
+      "accession number": "PR 41.241.1997",
+      "object_type": "undetermined",
+      "title": "Districts near Moscow.  Second Zonal Art Show",
+      "url": "https://repository.library.brown.edu/studio/item/bdr:316720/"
+    },
+    "bdr:316721": {
+      "accession number": "PR 41.242.1997",
+      "object_type": "undetermined",
+      "title": "Peace to the Children of All the World!  (in Lithuanian)",
+      "url": "https://repository.library.brown.edu/studio/item/bdr:316721/"
+    },
+    "bdr:316724": {
+      "accession number": "PR 41.243.1997",
+      "object_type": "undetermined",
+      "title": "Valmiers Theater",
+      "url": "https://repository.library.brown.edu/studio/item/bdr:316724/"
+    },
+    "bdr:316725": {
+      "accession number": "PR 41.244.1997",
+      "object_type": "undetermined",
+      "title": "Janis Jaunsudrabinsh",
+      "url": "https://repository.library.brown.edu/studio/item/bdr:316725/"
+    },
+    "bdr:316728": {
+      "accession number": "PR 41.245.1997",
+      "object_type": "undetermined",
+      "title": "Modern Dance School Welcomes",
+      "url": "https://repository.library.brown.edu/studio/item/bdr:316728/"
+    },
+    "bdr:316729": {
+      "accession number": "PR 41.246.1997",
+      "object_type": "undetermined",
+      "title": "Romeo and Juliet.  W. Shakespeare",
+      "url": "https://repository.library.brown.edu/studio/item/bdr:316729/"
+    },
+    "bdr:316732": {
+      "accession number": "PR 41.247.1997",
+      "object_type": "undetermined",
+      "title": "Salvador",
+      "url": "https://repository.library.brown.edu/studio/item/bdr:316732/"
+    },
+    "bdr:316733": {
+      "accession number": "PR 41.248.1997",
+      "object_type": "undetermined",
+      "title": "V. Lipatov.  Love at Old Korotkino",
+      "url": "https://repository.library.brown.edu/studio/item/bdr:316733/"
+    },
+    "bdr:316735": {
+      "accession number": "PR 41.249.1997",
+      "object_type": "undetermined",
+      "title": "Edith Piaf",
+      "url": "https://repository.library.brown.edu/studio/item/bdr:316735/"
+    },
+    "bdr:316737": {
+      "accession number": "PR 41.25.1997",
+      "object_type": "undetermined",
+      "title": "The Party and the People are One Whole (inscription)",
+      "url": "https://repository.library.brown.edu/studio/item/bdr:316737/"
+    },
+    "bdr:316739": {
+      "accession number": "PR 41.250.1997",
+      "object_type": "undetermined",
+      "title": "Don't Destroy!",
+      "url": "https://repository.library.brown.edu/studio/item/bdr:316739/"
+    },
+    "bdr:316741": {
+      "accession number": "PR 41.251.1997",
+      "object_type": "undetermined",
+      "title": "Spring Exhibition",
+      "url": "https://repository.library.brown.edu/studio/item/bdr:316741/"
+    },
+    "bdr:316743": {
+      "accession number": "PR 41.252.1997",
+      "object_type": "undetermined",
+      "title": "Nature Conservation - Man Conservation (in Lithuanian)",
+      "url": "https://repository.library.brown.edu/studio/item/bdr:316743/"
+    },
+    "bdr:316745": {
+      "accession number": "PR 41.253.1997",
+      "object_type": "undetermined",
+      "title": "The Bolshoi Theater",
+      "url": "https://repository.library.brown.edu/studio/item/bdr:316745/"
+    },
+    "bdr:316747": {
+      "accession number": "PR 41.254.1997",
+      "object_type": "undetermined",
+      "title": "5th Federal Piano Contest Named After M. I. Chiurlionis",
+      "url": "https://repository.library.brown.edu/studio/item/bdr:316747/"
+    },
+    "bdr:316749": {
+      "accession number": "PR 41.255.1997",
+      "object_type": "undetermined",
+      "title": "Nature Protection - People Protection",
+      "url": "https://repository.library.brown.edu/studio/item/bdr:316749/"
+    },
+    "bdr:316751": {
+      "accession number": "PR 41.256.1997",
+      "object_type": "undetermined",
+      "title": "Grigory Feigin",
+      "url": "https://repository.library.brown.edu/studio/item/bdr:316751/"
+    },
+    "bdr:316753": {
+      "accession number": "PR 41.257.1997",
+      "object_type": "undetermined",
+      "title": "L. Petrushevskaya.  Music Lessons.",
+      "url": "https://repository.library.brown.edu/studio/item/bdr:316753/"
+    },
+    "bdr:316755": {
+      "accession number": "PR 41.258.1997",
+      "object_type": "undetermined",
+      "title": "Circus.  Galina Zavodskaya",
+      "url": "https://repository.library.brown.edu/studio/item/bdr:316755/"
+    },
+    "bdr:316757": {
+      "accession number": "PR 41.259.1997",
+      "object_type": "undetermined",
+      "title": "- // -  [anti-military poster]",
+      "url": "https://repository.library.brown.edu/studio/item/bdr:316757/"
+    },
+    "bdr:316759": {
+      "accession number": "PR 41.26.1997",
+      "object_type": "undetermined",
+      "title": "Deaf and Dumb to All Questions",
+      "url": "https://repository.library.brown.edu/studio/item/bdr:316759/"
+    },
+    "bdr:316761": {
+      "accession number": "PR 41.260.1997",
+      "object_type": "undetermined",
+      "title": "Health and Environment are Undivided",
+      "url": "https://repository.library.brown.edu/studio/item/bdr:316761/"
+    },
+    "bdr:316763": {
+      "accession number": "PR 41.261.1997",
+      "object_type": "undetermined",
+      "title": "Nuclear Energy to the Service of Peace and Progress",
+      "url": "https://repository.library.brown.edu/studio/item/bdr:316763/"
+    },
+    "bdr:316765": {
+      "accession number": "PR 41.262.1.1997",
+      "object_type": "undetermined",
+      "title": "3rd All Union Festival of Folk Arts",
+      "url": "https://repository.library.brown.edu/studio/item/bdr:316765/"
+    },
+    "bdr:316767": {
+      "accession number": "PR 41.262.2.1997",
+      "object_type": "undetermined",
+      "title": "3rd All Union Festival of Folk Arts",
+      "url": "https://repository.library.brown.edu/studio/item/bdr:316767/"
+    },
+    "bdr:316769": {
+      "accession number": "PR 41.263.1997",
+      "object_type": "undetermined",
+      "title": "Do Not Align Yourself Before Chiefs",
+      "url": "https://repository.library.brown.edu/studio/item/bdr:316769/"
+    },
+    "bdr:316771": {
+      "accession number": "PR 41.264.1997",
+      "object_type": "undetermined",
+      "title": "Save Forest for Progeny",
+      "url": "https://repository.library.brown.edu/studio/item/bdr:316771/"
+    },
+    "bdr:316773": {
+      "accession number": "PR 41.265.1997",
+      "object_type": "undetermined",
+      "title": "Drug Addiction - Self-destruction",
+      "url": "https://repository.library.brown.edu/studio/item/bdr:316773/"
+    },
+    "bdr:316775": {
+      "accession number": "PR 41.266.1997",
+      "object_type": "undetermined",
+      "title": "Drug Addiction",
+      "url": "https://repository.library.brown.edu/studio/item/bdr:316775/"
+    },
+    "bdr:316777": {
+      "accession number": "PR 41.268.1997",
+      "object_type": "undetermined",
+      "title": "Raev.  Grigory Ivanovich.  Pyatigorst Regional Museum.",
+      "url": "https://repository.library.brown.edu/studio/item/bdr:316777/"
+    },
+    "bdr:316780": {
+      "accession number": "PR 41.267.1997",
+      "object_type": "undetermined",
+      "title": "The Song Also Charged Aligned with Bravery",
+      "url": "https://repository.library.brown.edu/studio/item/bdr:316780/"
+    },
+    "bdr:316781": {
+      "accession number": "PR 41.269.1997",
+      "object_type": "undetermined",
+      "title": "Fresh Water!",
+      "url": "https://repository.library.brown.edu/studio/item/bdr:316781/"
+    },
+    "bdr:316784": {
+      "accession number": "PR 41.27.1997",
+      "object_type": "undetermined",
+      "title": "Let's Protect Peace and Happiness of Childhood",
+      "url": "https://repository.library.brown.edu/studio/item/bdr:316784/"
+    },
+    "bdr:316785": {
+      "accession number": "PR 41.270.1997",
+      "object_type": "undetermined",
+      "title": "Change Your Mind!",
+      "url": "https://repository.library.brown.edu/studio/item/bdr:316785/"
+    },
+    "bdr:316788": {
+      "accession number": "PR 41.271.1997",
+      "object_type": "undetermined",
+      "title": "Everybody to Fight the Snow!",
+      "url": "https://repository.library.brown.edu/studio/item/bdr:316788/"
+    },
+    "bdr:316789": {
+      "accession number": "PR 41.272.1997",
+      "object_type": "undetermined",
+      "title": "Perestroika",
+      "url": "https://repository.library.brown.edu/studio/item/bdr:316789/"
+    },
+    "bdr:316792": {
+      "accession number": "PR 41.273.1997",
+      "object_type": "undetermined",
+      "title": "Do Not Destroy!",
+      "url": "https://repository.library.brown.edu/studio/item/bdr:316792/"
+    },
+    "bdr:316793": {
+      "accession number": "PR 41.274.1997",
+      "object_type": "undetermined",
+      "title": "Peaceful Space to Future Generations",
+      "url": "https://repository.library.brown.edu/studio/item/bdr:316793/"
+    },
+    "bdr:316796": {
+      "accession number": "PR 41.275.1997",
+      "object_type": "undetermined",
+      "title": "Man to Man is a Wolf",
+      "url": "https://repository.library.brown.edu/studio/item/bdr:316796/"
+    },
+    "bdr:316797": {
+      "accession number": "PR 41.276.1997",
+      "object_type": "undetermined",
+      "title": "How Much Longer Can We Stand It?",
+      "url": "https://repository.library.brown.edu/studio/item/bdr:316797/"
+    },
+    "bdr:316800": {
+      "accession number": "PR 41.277.1997",
+      "object_type": "undetermined",
+      "title": "Save Life on Earth",
+      "url": "https://repository.library.brown.edu/studio/item/bdr:316800/"
+    },
+    "bdr:316801": {
+      "accession number": "PR 41.278.1997",
+      "object_type": "undetermined",
+      "title": "Cherish Peace as the Apple of Your Eye",
+      "url": "https://repository.library.brown.edu/studio/item/bdr:316801/"
+    },
+    "bdr:316804": {
+      "accession number": "PR 41.28.1997",
+      "object_type": "undetermined",
+      "title": "Time Does Not Wait",
+      "url": "https://repository.library.brown.edu/studio/item/bdr:316804/"
+    },
+    "bdr:316805": {
+      "accession number": "PR 41.29.1997",
+      "object_type": "undetermined",
+      "title": "Subbotnik",
+      "url": "https://repository.library.brown.edu/studio/item/bdr:316805/"
+    },
+    "bdr:316808": {
+      "accession number": "PR 41.3.1.1997",
+      "object_type": "undetermined",
+      "title": "Soviet People feat is immortal / 1",
+      "url": "https://repository.library.brown.edu/studio/item/bdr:316808/"
+    },
+    "bdr:316809": {
+      "accession number": "PR 41.3.2.1997",
+      "object_type": "undetermined",
+      "title": "Soviet People feat is immortal / 2",
+      "url": "https://repository.library.brown.edu/studio/item/bdr:316809/"
+    },
+    "bdr:316812": {
+      "accession number": "PR 41.3.3.1997",
+      "object_type": "undetermined",
+      "title": "Soviet People feat is immortal / 3",
+      "url": "https://repository.library.brown.edu/studio/item/bdr:316812/"
+    },
+    "bdr:316813": {
+      "accession number": "PR 41.30.1997",
+      "object_type": "undetermined",
+      "title": "The Number of Disastrous Missiles",
+      "url": "https://repository.library.brown.edu/studio/item/bdr:316813/"
+    },
+    "bdr:316816": {
+      "accession number": "PR 41.31.1997",
+      "object_type": "undetermined",
+      "title": "I Am Not Afraid of Work",
+      "url": "https://repository.library.brown.edu/studio/item/bdr:316816/"
+    },
+    "bdr:316817": {
+      "accession number": "PR 41.32.1997",
+      "object_type": "undetermined",
+      "title": "Discussing urgently today",
+      "url": "https://repository.library.brown.edu/studio/item/bdr:316817/"
+    },
+    "bdr:316820": {
+      "accession number": "PR 41.34.1997",
+      "object_type": "undetermined",
+      "title": "October Victory - The Greatest Turnover",
+      "url": "https://repository.library.brown.edu/studio/item/bdr:316820/"
+    },
+    "bdr:316821": {
+      "accession number": "PR 41.33.1997",
+      "object_type": "undetermined",
+      "title": "May 9 - Victory Day",
+      "url": "https://repository.library.brown.edu/studio/item/bdr:316821/"
+    },
+    "bdr:316824": {
+      "accession number": "PR 41.35.1997",
+      "object_type": "undetermined",
+      "title": "Bread is a Noun",
+      "url": "https://repository.library.brown.edu/studio/item/bdr:316824/"
+    },
+    "bdr:316825": {
+      "accession number": "PR 41.36.1.1997",
+      "object_type": "undetermined",
+      "title": "Taking the 27 CPSU Congress Course - the Course of New Achievements",
+      "url": "https://repository.library.brown.edu/studio/item/bdr:316825/"
+    },
+    "bdr:316828": {
+      "accession number": "PR 41.36.2.1997",
+      "object_type": "undetermined",
+      "title": "Taking the 27 CPSU Congress Course - the Course of New Achievements",
+      "url": "https://repository.library.brown.edu/studio/item/bdr:316828/"
+    },
+    "bdr:316829": {
+      "accession number": "PR 41.36.3.1997",
+      "object_type": "undetermined",
+      "title": "Taking the 27 CPSU Congress Course -  The Course of the New Achievements",
+      "url": "https://repository.library.brown.edu/studio/item/bdr:316829/"
+    },
+    "bdr:316832": {
+      "accession number": "PR 41.37.1997",
+      "object_type": "undetermined",
+      "title": "In the Name of Peace.  In the Name of Happiness for the People.",
+      "url": "https://repository.library.brown.edu/studio/item/bdr:316832/"
+    },
+    "bdr:316833": {
+      "accession number": "PR 41.38.1.1997",
+      "object_type": "undetermined",
+      "title": "International",
+      "url": "https://repository.library.brown.edu/studio/item/bdr:316833/"
+    },
+    "bdr:316835": {
+      "accession number": "PR 41.38.2.1997",
+      "object_type": "undetermined",
+      "title": "International",
+      "url": "https://repository.library.brown.edu/studio/item/bdr:316835/"
+    },
+    "bdr:316837": {
+      "accession number": "PR 41.38.3.1997",
+      "object_type": "undetermined",
+      "title": "International",
+      "url": "https://repository.library.brown.edu/studio/item/bdr:316837/"
+    },
+    "bdr:316839": {
+      "accession number": "PR 41.39.1.1997",
+      "object_type": "undetermined",
+      "title": "October 1917",
+      "url": "https://repository.library.brown.edu/studio/item/bdr:316839/"
+    },
+    "bdr:316842": {
+      "accession number": "PR 41.39.3.1997",
+      "object_type": "undetermined",
+      "title": "October 1917",
+      "url": "https://repository.library.brown.edu/studio/item/bdr:316842/"
+    },
+    "bdr:316843": {
+      "accession number": "PR 41.39.2.1997",
+      "object_type": "undetermined",
+      "title": "October 1917",
+      "url": "https://repository.library.brown.edu/studio/item/bdr:316843/"
+    },
+    "bdr:316846": {
+      "accession number": "PR 41.4.1997",
+      "object_type": "undetermined",
+      "title": "Children's fund",
+      "url": "https://repository.library.brown.edu/studio/item/bdr:316846/"
+    },
+    "bdr:316847": {
+      "accession number": "PR 41.40.1997",
+      "object_type": "undetermined",
+      "title": "Star Wars",
+      "url": "https://repository.library.brown.edu/studio/item/bdr:316847/"
+    },
+    "bdr:316850": {
+      "accession number": "PR 41.41.1997",
+      "object_type": "undetermined",
+      "title": "September the First. Learner's Day",
+      "url": "https://repository.library.brown.edu/studio/item/bdr:316850/"
+    },
+    "bdr:316851": {
+      "accession number": "PR 41.42.1.1997",
+      "object_type": "undetermined",
+      "title": "Peace - May",
+      "url": "https://repository.library.brown.edu/studio/item/bdr:316851/"
+    },
+    "bdr:316854": {
+      "accession number": "PR 41.42.2.1997",
+      "object_type": "undetermined",
+      "title": "Peace - May",
+      "url": "https://repository.library.brown.edu/studio/item/bdr:316854/"
+    },
+    "bdr:316855": {
+      "accession number": "PR 41.42.3.1997",
+      "object_type": "undetermined",
+      "title": "Peace - May",
+      "url": "https://repository.library.brown.edu/studio/item/bdr:316855/"
+    },
+    "bdr:316858": {
+      "accession number": "PR 41.43.1.1997",
+      "object_type": "undetermined",
+      "title": "Millions - At the Start",
+      "url": "https://repository.library.brown.edu/studio/item/bdr:316858/"
+    },
+    "bdr:316859": {
+      "accession number": "PR 41.43.2.1997",
+      "object_type": "undetermined",
+      "title": "Millions - At the Start",
+      "url": "https://repository.library.brown.edu/studio/item/bdr:316859/"
+    },
+    "bdr:316862": {
+      "accession number": "PR 41.43.3.1997",
+      "object_type": "undetermined",
+      "title": "Millions - At the Start",
+      "url": "https://repository.library.brown.edu/studio/item/bdr:316862/"
+    },
+    "bdr:316863": {
+      "accession number": "PR 41.44.1997",
+      "object_type": "undetermined",
+      "title": "Space Only for Peaceful Purposes",
+      "url": "https://repository.library.brown.edu/studio/item/bdr:316863/"
+    },
+    "bdr:316866": {
+      "accession number": "PR 41.45.1997",
+      "object_type": "undetermined",
+      "title": "Dog Show",
+      "url": "https://repository.library.brown.edu/studio/item/bdr:316866/"
+    },
+    "bdr:316867": {
+      "accession number": "PR 41.46.1997",
+      "object_type": "undetermined",
+      "title": "STOP IT!",
+      "url": "https://repository.library.brown.edu/studio/item/bdr:316867/"
+    },
+    "bdr:316869": {
+      "accession number": "PR 41.47.1997",
+      "object_type": "undetermined",
+      "title": "April 12, 1961",
+      "url": "https://repository.library.brown.edu/studio/item/bdr:316869/"
+    },
+    "bdr:316871": {
+      "accession number": "PR 41.48.1997",
+      "object_type": "undetermined",
+      "title": "We Propose",
+      "url": "https://repository.library.brown.edu/studio/item/bdr:316871/"
+    },
+    "bdr:316873": {
+      "accession number": "PR 41.49.1.1997",
+      "object_type": "undetermined",
+      "title": "April 12, 1962",
+      "url": "https://repository.library.brown.edu/studio/item/bdr:316873/"
+    },
+    "bdr:316875": {
+      "accession number": "PR 41.49.2.1997",
+      "object_type": "undetermined",
+      "title": "April 12, 1962",
+      "url": "https://repository.library.brown.edu/studio/item/bdr:316875/"
+    },
+    "bdr:316877": {
+      "accession number": "PR 41.49.3.1997",
+      "object_type": "undetermined",
+      "title": "Space Poster",
+      "url": "https://repository.library.brown.edu/studio/item/bdr:316877/"
+    },
+    "bdr:316879": {
+      "accession number": "PR 41.5.1997",
+      "object_type": "undetermined",
+      "title": "\"1917\"",
+      "url": "https://repository.library.brown.edu/studio/item/bdr:316879/"
+    },
+    "bdr:316881": {
+      "accession number": "PR 41.50.1997",
+      "object_type": "undetermined",
+      "title": "Graphic Posters",
+      "url": "https://repository.library.brown.edu/studio/item/bdr:316881/"
+    },
+    "bdr:316884": {
+      "accession number": "PR 41.51.1997",
+      "object_type": "undetermined",
+      "title": "We did everything possible to welcome this day",
+      "url": "https://repository.library.brown.edu/studio/item/bdr:316884/"
+    },
+    "bdr:316885": {
+      "accession number": "PR 41.52.1.1997",
+      "object_type": "undetermined",
+      "title": "Peace to the Planet",
+      "url": "https://repository.library.brown.edu/studio/item/bdr:316885/"
+    },
+    "bdr:316888": {
+      "accession number": "PR 41.52.2.1997",
+      "object_type": "undetermined",
+      "title": "Peace to the Planet",
+      "url": "https://repository.library.brown.edu/studio/item/bdr:316888/"
+    },
+    "bdr:316889": {
+      "accession number": "PR 41.52.3.1997",
+      "object_type": "undetermined",
+      "title": "Peace to the Planet",
+      "url": "https://repository.library.brown.edu/studio/item/bdr:316889/"
+    },
+    "bdr:316892": {
+      "accession number": "PR 41.53.1997",
+      "object_type": "undetermined",
+      "title": "Everlasting Memory",
+      "url": "https://repository.library.brown.edu/studio/item/bdr:316892/"
+    },
+    "bdr:316893": {
+      "accession number": "PR 41.54.1997",
+      "object_type": "undetermined",
+      "title": "Adan. Gizelle. Ballet",
+      "url": "https://repository.library.brown.edu/studio/item/bdr:316893/"
+    },
+    "bdr:316896": {
+      "accession number": "PR 41.55.1997",
+      "object_type": "undetermined",
+      "title": "E. Lazarev.  Leniniana",
+      "url": "https://repository.library.brown.edu/studio/item/bdr:316896/"
+    },
+    "bdr:316897": {
+      "accession number": "PR 41.56.1997",
+      "object_type": "undetermined",
+      "title": "Natan Altman Exhibition",
+      "url": "https://repository.library.brown.edu/studio/item/bdr:316897/"
+    },
+    "bdr:316900": {
+      "accession number": "PR 41.57.1997",
+      "object_type": "undetermined",
+      "title": "Artists from the Central Areas of Russia",
+      "url": "https://repository.library.brown.edu/studio/item/bdr:316900/"
+    },
+    "bdr:316901": {
+      "accession number": "PR 41.58.1997",
+      "object_type": "undetermined",
+      "title": "V. Bukov Sotnikov",
+      "url": "https://repository.library.brown.edu/studio/item/bdr:316901/"
+    },
+    "bdr:316904": {
+      "accession number": "PR 41.59.1997",
+      "object_type": "undetermined",
+      "title": "Tear It Out with the Roots!",
+      "url": "https://repository.library.brown.edu/studio/item/bdr:316904/"
+    },
+    "bdr:316905": {
+      "accession number": "PR 41.6.1997",
+      "object_type": "undetermined",
+      "title": "Our Motherland Sons",
+      "url": "https://repository.library.brown.edu/studio/item/bdr:316905/"
+    },
+    "bdr:316908": {
+      "accession number": "PR 41.60.1997",
+      "object_type": "undetermined",
+      "title": "Poster on Protection of Nature",
+      "url": "https://repository.library.brown.edu/studio/item/bdr:316908/"
+    },
+    "bdr:316909": {
+      "accession number": "PR 41.62.1997",
+      "object_type": "undetermined",
+      "title": "Circus, Novasibirsk",
+      "url": "https://repository.library.brown.edu/studio/item/bdr:316909/"
+    },
+    "bdr:316912": {
+      "accession number": "PR 41.63.1997",
+      "object_type": "undetermined",
+      "title": "Mysterious Power of Harmony",
+      "url": "https://repository.library.brown.edu/studio/item/bdr:316912/"
+    },
+    "bdr:316913": {
+      "accession number": "PR 41.64.1997",
+      "object_type": "undetermined",
+      "title": "Unanimously",
+      "url": "https://repository.library.brown.edu/studio/item/bdr:316913/"
+    },
+    "bdr:316916": {
+      "accession number": "PR 41.65.1997",
+      "object_type": "undetermined",
+      "title": "Circus",
+      "url": "https://repository.library.brown.edu/studio/item/bdr:316916/"
+    },
+    "bdr:316917": {
+      "accession number": "PR 41.66.1997",
+      "object_type": "undetermined",
+      "title": "Organ Music Festival in Nida",
+      "url": "https://repository.library.brown.edu/studio/item/bdr:316917/"
+    },
+    "bdr:316920": {
+      "accession number": "PR 41.67.1997",
+      "object_type": "undetermined",
+      "title": "International Music Festival",
+      "url": "https://repository.library.brown.edu/studio/item/bdr:316920/"
+    },
+    "bdr:316921": {
+      "accession number": "PR 41.68.1997",
+      "object_type": "undetermined",
+      "title": "Birshitonas. '88. Jazz Festival",
+      "url": "https://repository.library.brown.edu/studio/item/bdr:316921/"
+    },
+    "bdr:316924": {
+      "accession number": "PR 41.69.1997",
+      "object_type": "undetermined",
+      "title": "Mad Day. Rossini",
+      "url": "https://repository.library.brown.edu/studio/item/bdr:316924/"
+    },
+    "bdr:316925": {
+      "accession number": "PR 41.7.1997",
+      "object_type": "undetermined",
+      "title": "Our Soldier Defended Peace",
+      "url": "https://repository.library.brown.edu/studio/item/bdr:316925/"
+    },
+    "bdr:316928": {
+      "accession number": "PR 41.70.1997",
+      "object_type": "undetermined",
+      "title": "Days of Art '85",
+      "url": "https://repository.library.brown.edu/studio/item/bdr:316928/"
+    },
+    "bdr:316929": {
+      "accession number": "PR 41.71.1997",
+      "object_type": "undetermined",
+      "title": "One Millenium of Russian Culture",
+      "url": "https://repository.library.brown.edu/studio/item/bdr:316929/"
+    },
+    "bdr:316932": {
+      "accession number": "PR 41.72.1997",
+      "object_type": "undetermined",
+      "title": "Experimental Theater",
+      "url": "https://repository.library.brown.edu/studio/item/bdr:316932/"
+    },
+    "bdr:316933": {
+      "accession number": "PR 41.73.1997",
+      "object_type": "undetermined",
+      "title": "B. Vasilyev. Don't Shoot the White Swans",
+      "url": "https://repository.library.brown.edu/studio/item/bdr:316933/"
+    },
+    "bdr:316936": {
+      "accession number": "PR 41.74.1.1997",
+      "object_type": "undetermined",
+      "title": "Boris Eifman Ballet Theatre",
+      "url": "https://repository.library.brown.edu/studio/item/bdr:316936/"
+    },
+    "bdr:316937": {
+      "accession number": "PR 41.74.2.1997",
+      "object_type": "undetermined",
+      "title": "Boris Eifman Ballet Theatre",
+      "url": "https://repository.library.brown.edu/studio/item/bdr:316937/"
+    },
+    "bdr:316940": {
+      "accession number": "PR 41.74.4.1997",
+      "object_type": "undetermined",
+      "title": "Theater of Contemporary Ballet",
+      "url": "https://repository.library.brown.edu/studio/item/bdr:316940/"
+    },
+    "bdr:316941": {
+      "accession number": "PR 41.74.3.1997",
+      "object_type": "undetermined",
+      "title": "Theater of Contemporary Ballet.  Boris Eifman",
+      "url": "https://repository.library.brown.edu/studio/item/bdr:316941/"
+    },
+    "bdr:316944": {
+      "accession number": "PR 41.75.1997",
+      "object_type": "undetermined",
+      "title": "Atis Cravalds",
+      "url": "https://repository.library.brown.edu/studio/item/bdr:316944/"
+    },
+    "bdr:316945": {
+      "accession number": "PR 41.76.1997",
+      "object_type": "undetermined",
+      "title": "Leningrad Poster - 4th Exhibition",
+      "url": "https://repository.library.brown.edu/studio/item/bdr:316945/"
+    },
+    "bdr:316948": {
+      "accession number": "PR 41.77.1997",
+      "object_type": "undetermined",
+      "title": "A. Pushkin   Queen of Spades",
+      "url": "https://repository.library.brown.edu/studio/item/bdr:316948/"
+    },
+    "bdr:316949": {
+      "accession number": "PR 41.78.1997",
+      "object_type": "undetermined",
+      "title": "Keep in Step with Revolution",
+      "url": "https://repository.library.brown.edu/studio/item/bdr:316949/"
+    },
+    "bdr:316952": {
+      "accession number": "PR 41.8.1997",
+      "object_type": "undetermined",
+      "title": "Delirium, vision, illusion of happiness",
+      "url": "https://repository.library.brown.edu/studio/item/bdr:316952/"
+    },
+    "bdr:316953": {
+      "accession number": "PR 41.79.1997",
+      "object_type": "undetermined",
+      "title": "F. Dzerzhinsky",
+      "url": "https://repository.library.brown.edu/studio/item/bdr:316953/"
+    },
+    "bdr:316956": {
+      "accession number": "PR 41.80.1997",
+      "object_type": "undetermined",
+      "title": "Save Relics of the Past",
+      "url": "https://repository.library.brown.edu/studio/item/bdr:316956/"
+    },
+    "bdr:316957": {
+      "accession number": "PR 41.81.1997",
+      "object_type": "undetermined",
+      "title": "Days of Architecture '87",
+      "url": "https://repository.library.brown.edu/studio/item/bdr:316957/"
+    },
+    "bdr:316960": {
+      "accession number": "PR 41.82.1997",
+      "object_type": "undetermined",
+      "title": "Perestroika Needs Professionalism",
+      "url": "https://repository.library.brown.edu/studio/item/bdr:316960/"
+    },
+    "bdr:316961": {
+      "accession number": "PR 41.83.1997",
+      "object_type": "undetermined",
+      "title": "Simplify the Organizational Structure of Economic Management",
+      "url": "https://repository.library.brown.edu/studio/item/bdr:316961/"
+    },
+    "bdr:316964": {
+      "accession number": "PR 41.84.1997",
+      "object_type": "undetermined",
+      "title": "Let Me Introduce - Cranes.  Emma Kozlova",
+      "url": "https://repository.library.brown.edu/studio/item/bdr:316964/"
+    },
+    "bdr:316965": {
+      "accession number": "PR 41.85.1997",
+      "object_type": "undetermined",
+      "title": "Kazimieras Sapiega",
+      "url": "https://repository.library.brown.edu/studio/item/bdr:316965/"
+    },
+    "bdr:316968": {
+      "accession number": "PR 41.86.1997",
+      "object_type": "undetermined",
+      "title": "XI Congress of the Union of Architects of USSR",
+      "url": "https://repository.library.brown.edu/studio/item/bdr:316968/"
+    },
+    "bdr:316969": {
+      "accession number": "PR 41.87.1997",
+      "object_type": "undetermined",
+      "title": "P. Tchaikovsky.  Nutcracker",
+      "url": "https://repository.library.brown.edu/studio/item/bdr:316969/"
+    },
+    "bdr:316972": {
+      "accession number": "PR 41.88.1997",
+      "object_type": "undetermined",
+      "title": "V. Kandretiev. Sashka",
+      "url": "https://repository.library.brown.edu/studio/item/bdr:316972/"
+    },
+    "bdr:316973": {
+      "accession number": "PR 41.89.1997",
+      "object_type": "undetermined",
+      "title": "Not For War",
+      "url": "https://repository.library.brown.edu/studio/item/bdr:316973/"
+    },
+    "bdr:316976": {
+      "accession number": "PR 41.9.1997",
+      "object_type": "undetermined",
+      "title": "State Inspection Guarantees Control",
+      "url": "https://repository.library.brown.edu/studio/item/bdr:316976/"
+    },
+    "bdr:316977": {
+      "accession number": "PR 41.90.1997",
+      "object_type": "undetermined",
+      "title": "Regional Exhibition of Leningrad Painters",
+      "url": "https://repository.library.brown.edu/studio/item/bdr:316977/"
+    },
+    "bdr:316980": {
+      "accession number": "PR 41.91.1997",
+      "object_type": "undetermined",
+      "title": "Pavel Shitov.  Icarus' games [circus poster]",
+      "url": "https://repository.library.brown.edu/studio/item/bdr:316980/"
+    },
+    "bdr:316981": {
+      "accession number": "PR 41.92.1997",
+      "object_type": "undetermined",
+      "title": "A. Tolstoy.  Death of Ivan the Terrible",
+      "url": "https://repository.library.brown.edu/studio/item/bdr:316981/"
+    },
+    "bdr:316984": {
+      "accession number": "PR 41.93.1997",
+      "object_type": "undetermined",
+      "title": "Geta. Pereslavetz. Rukavishnikov. Sculptural Graphics.",
+      "url": "https://repository.library.brown.edu/studio/item/bdr:316984/"
+    },
+    "bdr:316985": {
+      "accession number": "PR 41.94.1997",
+      "object_type": "undetermined",
+      "title": "1941-1981. Glory to the Protectors of Moscow",
+      "url": "https://repository.library.brown.edu/studio/item/bdr:316985/"
+    },
+    "bdr:316988": {
+      "accession number": "PR 41.95.1997",
+      "object_type": "undetermined",
+      "title": "T. Suvorova.  V. Karpov.  Young Ballet of Lenkonzert",
+      "url": "https://repository.library.brown.edu/studio/item/bdr:316988/"
+    },
+    "bdr:316989": {
+      "accession number": "PR 41.96.1997",
+      "object_type": "undetermined",
+      "title": "Artists to the People.  USSR Union of Artists",
+      "url": "https://repository.library.brown.edu/studio/item/bdr:316989/"
+    },
+    "bdr:316992": {
+      "accession number": "PR 41.97.1997",
+      "object_type": "undetermined",
+      "title": "9th Exhibition of Leningrad Book Illustration",
+      "url": "https://repository.library.brown.edu/studio/item/bdr:316992/"
+    },
+    "bdr:316993": {
+      "accession number": "PR 41.98.1997",
+      "object_type": "undetermined",
+      "title": "N. Zalite.  Judgment.  Theatre Poster",
+      "url": "https://repository.library.brown.edu/studio/item/bdr:316993/"
+    },
+    "bdr:316996": {
+      "accession number": "PR 41.99.1997",
+      "object_type": "undetermined",
+      "title": "A. Rybnikov.  Junona and Avos.  Rock-Opera",
+      "url": "https://repository.library.brown.edu/studio/item/bdr:316996/"
+    },
+    "bdr:317013": {
+      "accession number": "SC 2012.10",
+      "object_type": "undetermined",
+      "title": "Circle Dance",
+      "url": "https://repository.library.brown.edu/studio/item/bdr:317013/"
+    },
+    "bdr:317015": {
+      "accession number": "SC 2012.8.a-b",
+      "object_type": "undetermined",
+      "title": "2 x 5 (brothers)",
+      "url": "https://repository.library.brown.edu/studio/item/bdr:317015/"
+    },
+    "bdr:650941": {
+      "accession number": "SC 2015.5",
+      "object_type": "undetermined",
+      "title": "Under the Laurentide",
+      "url": "https://repository.library.brown.edu/studio/item/bdr:650941/"
+    },
+    "bdr:734392": {
+      "accession number": "SC 2013 .24.a",
+      "object_type": "undetermined",
+      "title": "Indomitable",
+      "url": "https://repository.library.brown.edu/studio/item/bdr:734392/"
+    },
+    "bdr:734393": {
+      "accession number": "SC 2013.24.b",
+      "object_type": "undetermined",
+      "title": "model for Indomitable",
+      "url": "https://repository.library.brown.edu/studio/item/bdr:734393/"
+    },
+    "bdr:788276": {
+      "accession number": "PUB 2016.6.a,b",
+      "object_type": "undetermined",
+      "title": "Untitled (custom tables)",
+      "url": "https://repository.library.brown.edu/studio/item/bdr:788276/"
+    },
+    "bdr:788484": {
+      "accession number": "PUB  2011.8",
+      "object_type": "undetermined",
+      "title": "P-131317",
+      "url": "https://repository.library.brown.edu/studio/item/bdr:788484/"
+    },
+    "bdr:788485": {
+      "accession number": "PUB 2006.13",
+      "object_type": "undetermined",
+      "title": "Lines of Sight",
+      "url": "https://repository.library.brown.edu/studio/item/bdr:788485/"
+    },
+    "bdr:788486": {
+      "accession number": "PUB 2010.8",
+      "object_type": "undetermined",
+      "title": "ground",
+      "url": "https://repository.library.brown.edu/studio/item/bdr:788486/"
+    },
+    "bdr:788487": {
+      "accession number": "PUB 2010.9",
+      "object_type": "undetermined",
+      "title": "Advice from a Former Student",
+      "url": "https://repository.library.brown.edu/studio/item/bdr:788487/"
+    },
+    "bdr:788488": {
+      "accession number": "PUB 2011.9",
+      "object_type": "undetermined",
+      "title": "Intertwine",
+      "url": "https://repository.library.brown.edu/studio/item/bdr:788488/"
+    },
+    "bdr:947141": {
+      "accession number": ".",
+      "object_type": "undetermined",
+      "title": "List Art Building plans",
+      "url": "https://repository.library.brown.edu/studio/item/bdr:947141/"
+    },
+    "bdr:947148": {
+      "accession number": "D 5.11.2012",
+      "object_type": "undetermined",
+      "title": "Untitled",
+      "url": "https://repository.library.brown.edu/studio/item/bdr:947148/"
+    },
+    "bdr:947149": {
+      "accession number": "D 5.16.2012",
+      "object_type": "undetermined",
+      "title": "Study for \"Five Neon Lines on White Painted Canvas\"",
+      "url": "https://repository.library.brown.edu/studio/item/bdr:947149/"
+    },
+    "bdr:947150": {
+      "accession number": "P 10.1.2018",
+      "object_type": "undetermined",
+      "title": "Beige",
+      "url": "https://repository.library.brown.edu/studio/item/bdr:947150/"
+    },
+    "bdr:947151": {
+      "accession number": "P 10.12.2018",
+      "object_type": "undetermined",
+      "title": "Untitled",
+      "url": "https://repository.library.brown.edu/studio/item/bdr:947151/"
+    },
+    "bdr:947152": {
+      "accession number": "P 10.14.2018",
+      "object_type": "undetermined",
+      "title": "Untitled (Abstract Landscape)",
+      "url": "https://repository.library.brown.edu/studio/item/bdr:947152/"
+    },
+    "bdr:947153": {
+      "accession number": "P 10.16.2018",
+      "object_type": "undetermined",
+      "title": "Untitled",
+      "url": "https://repository.library.brown.edu/studio/item/bdr:947153/"
+    },
+    "bdr:947154": {
+      "accession number": "P 10.17.2018",
+      "object_type": "undetermined",
+      "title": "Untitled",
+      "url": "https://repository.library.brown.edu/studio/item/bdr:947154/"
+    },
+    "bdr:947155": {
+      "accession number": "P 10.18.2018",
+      "object_type": "undetermined",
+      "title": "Untitled",
+      "url": "https://repository.library.brown.edu/studio/item/bdr:947155/"
+    },
+    "bdr:947156": {
+      "accession number": "P 10.4.2018",
+      "object_type": "undetermined",
+      "title": "Fan",
+      "url": "https://repository.library.brown.edu/studio/item/bdr:947156/"
+    },
+    "bdr:947157": {
+      "accession number": "P 2.2015",
+      "object_type": "undetermined",
+      "title": "Untitled",
+      "url": "https://repository.library.brown.edu/studio/item/bdr:947157/"
+    },
+    "bdr:947162": {
+      "accession number": "P 5.15.2012",
+      "object_type": "undetermined",
+      "title": "Five Neon Lines on White Painted Canvas",
+      "url": "https://repository.library.brown.edu/studio/item/bdr:947162/"
+    },
+    "bdr:947163": {
+      "accession number": "P 5.9.2012",
+      "object_type": "undetermined",
+      "title": "Exchequer",
+      "url": "https://repository.library.brown.edu/studio/item/bdr:947163/"
+    },
+    "bdr:947164": {
+      "accession number": "PH 1.1.2015",
+      "object_type": "undetermined",
+      "title": "Walden, MA, August 2011 (women with turban)",
+      "url": "https://repository.library.brown.edu/studio/item/bdr:947164/"
+    },
+    "bdr:947165": {
+      "accession number": "PH 1.1.2018",
+      "object_type": "undetermined",
+      "title": "Electrical Transmission Towers, Thurmond Dam, Clarks Hills, South Carolina (diptych)",
+      "url": "https://repository.library.brown.edu/studio/item/bdr:947165/"
+    },
+    "bdr:947166": {
+      "accession number": "PH 1.2.2015",
+      "object_type": "undetermined",
+      "title": "Walden, MA, October 2011 (landfill with astroturf)",
+      "url": "https://repository.library.brown.edu/studio/item/bdr:947166/"
+    },
+    "bdr:947167": {
+      "accession number": "PH 1.2.2018",
+      "object_type": "undetermined",
+      "title": "Electrical Transmission Towers, Thurmond Dam, Clarks Hill, South Carolina (diptych)",
+      "url": "https://repository.library.brown.edu/studio/item/bdr:947167/"
+    },
+    "bdr:947168": {
+      "accession number": "PH 1.3.2015",
+      "object_type": "undetermined",
+      "title": "Walden, MA, September 2011 (women on path near Thoreau house site)",
+      "url": "https://repository.library.brown.edu/studio/item/bdr:947168/"
+    },
+    "bdr:947169": {
+      "accession number": "PH 1.4.2015",
+      "object_type": "undetermined",
+      "title": "Walden, MA, July 2010 (Walden Patrol)",
+      "url": "https://repository.library.brown.edu/studio/item/bdr:947169/"
+    },
+    "bdr:947170": {
+      "accession number": "PH 1.5.2015",
+      "object_type": "undetermined",
+      "title": "Walden, MA, March 2011 (Target bag on frozen pond)",
+      "url": "https://repository.library.brown.edu/studio/item/bdr:947170/"
+    },
+    "bdr:947171": {
+      "accession number": "PH 1.6.2015",
+      "object_type": "undetermined",
+      "title": "Walden, MA, July 2011 (birdwatcher sitting on rock wall)",
+      "url": "https://repository.library.brown.edu/studio/item/bdr:947171/"
+    },
+    "bdr:947172": {
+      "accession number": "PH 1.a.2017",
+      "object_type": "undetermined",
+      "title": "Untitled #1",
+      "url": "https://repository.library.brown.edu/studio/item/bdr:947172/"
+    },
+    "bdr:947173": {
+      "accession number": "PH 1.b.2017",
+      "object_type": "undetermined",
+      "title": "Promise",
+      "url": "https://repository.library.brown.edu/studio/item/bdr:947173/"
+    },
+    "bdr:947174": {
+      "accession number": "PH 1.c.2017",
+      "object_type": "undetermined",
+      "title": "Dolmen",
+      "url": "https://repository.library.brown.edu/studio/item/bdr:947174/"
+    },
+    "bdr:947175": {
+      "accession number": "PH 1.d.2017",
+      "object_type": "undetermined",
+      "title": "Passing",
+      "url": "https://repository.library.brown.edu/studio/item/bdr:947175/"
+    },
+    "bdr:947176": {
+      "accession number": "PH 1.e.2017",
+      "object_type": "undetermined",
+      "title": "Unveiled",
+      "url": "https://repository.library.brown.edu/studio/item/bdr:947176/"
+    },
+    "bdr:947177": {
+      "accession number": "PH 1.f.2017",
+      "object_type": "undetermined",
+      "title": "Dying Embers",
+      "url": "https://repository.library.brown.edu/studio/item/bdr:947177/"
+    },
+    "bdr:947178": {
+      "accession number": "PH 2.1.2017",
+      "object_type": "undetermined",
+      "title": "Mouth of the Jacobshavn Ice Fjord",
+      "url": "https://repository.library.brown.edu/studio/item/bdr:947178/"
+    },
+    "bdr:947179": {
+      "accession number": "PH 2.2.2017",
+      "object_type": "undetermined",
+      "title": "West Arm, Saglek Fjord",
+      "url": "https://repository.library.brown.edu/studio/item/bdr:947179/"
+    },
+    "bdr:947180": {
+      "accession number": "PH 2.2014",
+      "object_type": "undetermined",
+      "title": "Blow Up: Untitled 5",
+      "url": "https://repository.library.brown.edu/studio/item/bdr:947180/"
+    },
+    "bdr:947181": {
+      "accession number": "PH 2.3.2017",
+      "object_type": "undetermined",
+      "title": "Bull Hill, near Acadia National Park",
+      "url": "https://repository.library.brown.edu/studio/item/bdr:947181/"
+    },
+    "bdr:947182": {
+      "accession number": "PH 2.4.2017",
+      "object_type": "undetermined",
+      "title": "Seaside Heights, New Jersey",
+      "url": "https://repository.library.brown.edu/studio/item/bdr:947182/"
+    },
+    "bdr:947183": {
+      "accession number": "PH 2.5.2017",
+      "object_type": "undetermined",
+      "title": "Delaware River, Salem Nuclear Power Plant",
+      "url": "https://repository.library.brown.edu/studio/item/bdr:947183/"
+    },
+    "bdr:947184": {
+      "accession number": "PH 2.6.2017",
+      "object_type": "undetermined",
+      "title": "Potomac River, Maryland and Virginia",
+      "url": "https://repository.library.brown.edu/studio/item/bdr:947184/"
+    },
+    "bdr:947185": {
+      "accession number": "PH 2.7.2017",
+      "object_type": "undetermined",
+      "title": "Charles W. Cullen Bridge, Indian River Inlet",
+      "url": "https://repository.library.brown.edu/studio/item/bdr:947185/"
+    },
+    "bdr:947186": {
+      "accession number": "PH 2.8.2017",
+      "object_type": "undetermined",
+      "title": "Chololoskee Bay, Everglades National Park",
+      "url": "https://repository.library.brown.edu/studio/item/bdr:947186/"
+    },
+    "bdr:947430": {
+      "accession number": "PH 3.1.2017",
+      "object_type": "undetermined",
+      "title": "Liberty Street",
+      "url": "https://repository.library.brown.edu/studio/item/bdr:947430/"
+    },
+    "bdr:947431": {
+      "accession number": "PH 3.2.2017",
+      "object_type": "undetermined",
+      "title": "Shenandoah",
+      "url": "https://repository.library.brown.edu/studio/item/bdr:947431/"
+    },
+    "bdr:947432": {
+      "accession number": "PH 3.2018",
+      "object_type": "undetermined",
+      "title": "Butler Creek, Augusta, Georgia",
+      "url": "https://repository.library.brown.edu/studio/item/bdr:947432/"
+    },
+    "bdr:947433": {
+      "accession number": "PH 3.3.2017",
+      "object_type": "undetermined",
+      "title": "North Greenbush Road",
+      "url": "https://repository.library.brown.edu/studio/item/bdr:947433/"
+    },
+    "bdr:947434": {
+      "accession number": "PH 3.4.2017",
+      "object_type": "undetermined",
+      "title": "Coal Street",
+      "url": "https://repository.library.brown.edu/studio/item/bdr:947434/"
+    },
+    "bdr:947435": {
+      "accession number": "PH 3.5.2017",
+      "object_type": "undetermined",
+      "title": "Liberty Hill Road",
+      "url": "https://repository.library.brown.edu/studio/item/bdr:947435/"
+    },
+    "bdr:947436": {
+      "accession number": "PH 3.6.2017",
+      "object_type": "undetermined",
+      "title": "Mount Vernon Street",
+      "url": "https://repository.library.brown.edu/studio/item/bdr:947436/"
+    },
+    "bdr:947437": {
+      "accession number": "PH 3.7.2017",
+      "object_type": "undetermined",
+      "title": "Federal and Washington Street",
+      "url": "https://repository.library.brown.edu/studio/item/bdr:947437/"
+    },
+    "bdr:947438": {
+      "accession number": "PH 3.8.2017",
+      "object_type": "undetermined",
+      "title": "East Mill Street",
+      "url": "https://repository.library.brown.edu/studio/item/bdr:947438/"
+    },
+    "bdr:947439": {
+      "accession number": "PH 4.2018",
+      "object_type": "undetermined",
+      "title": "USA Today, Moai, Las Vegas",
+      "url": "https://repository.library.brown.edu/studio/item/bdr:947439/"
+    },
+    "bdr:947440": {
+      "accession number": "PH 4.3.2017",
+      "object_type": "undetermined",
+      "title": "Untitled III",
+      "url": "https://repository.library.brown.edu/studio/item/bdr:947440/"
+    },
+    "bdr:947441": {
+      "accession number": "PH 5.1.11.2017",
+      "object_type": "undetermined",
+      "title": "Road to Yazoo City, Mississippi",
+      "url": "https://repository.library.brown.edu/studio/item/bdr:947441/"
+    },
+    "bdr:947442": {
+      "accession number": "PH 5.1.14.2017",
+      "object_type": "undetermined",
+      "title": "West Street at Beach, new York",
+      "url": "https://repository.library.brown.edu/studio/item/bdr:947442/"
+    },
+    "bdr:947443": {
+      "accession number": "PH 5.1.18.2017",
+      "object_type": "undetermined",
+      "title": "Steelworker, Beekman Street, New York",
+      "url": "https://repository.library.brown.edu/studio/item/bdr:947443/"
+    },
+    "bdr:947444": {
+      "accession number": "PH 5.1.20.2017",
+      "object_type": "undetermined",
+      "title": "55 Fulton Street, New York",
+      "url": "https://repository.library.brown.edu/studio/item/bdr:947444/"
+    },
+    "bdr:947445": {
+      "accession number": "PH 5.1.22.2017",
+      "object_type": "undetermined",
+      "title": "Susquehanna Hotel, self portrait in a third-floor room with grass",
+      "url": "https://repository.library.brown.edu/studio/item/bdr:947445/"
+    },
+    "bdr:947446": {
+      "accession number": "PH 5.1.23.2017",
+      "object_type": "undetermined",
+      "title": "Exploring 187 West Street",
+      "url": "https://repository.library.brown.edu/studio/item/bdr:947446/"
+    },
+    "bdr:947447": {
+      "accession number": "PH 5.1.25.2017",
+      "object_type": "undetermined",
+      "title": "Radiator, the St. George Building, New York",
+      "url": "https://repository.library.brown.edu/studio/item/bdr:947447/"
+    },
+    "bdr:947448": {
+      "accession number": "PH 5.1.26.2017",
+      "object_type": "undetermined",
+      "title": "Dominick and a payloader inside 82 Beekman Street",
+      "url": "https://repository.library.brown.edu/studio/item/bdr:947448/"
+    },
+    "bdr:947449": {
+      "accession number": "PH 5.1.29.2017",
+      "object_type": "undetermined",
+      "title": "NUMBER NOT ASSIGNED",
+      "url": "https://repository.library.brown.edu/studio/item/bdr:947449/"
+    },
+    "bdr:947450": {
+      "accession number": "PH 5.1.30.2017",
+      "object_type": "undetermined",
+      "title": "Wall of the St. George Building, New York",
+      "url": "https://repository.library.brown.edu/studio/item/bdr:947450/"
+    },
+    "bdr:947451": {
+      "accession number": "PH 5.1.31.2017",
+      "object_type": "undetermined",
+      "title": "View through the rear wall, 89 Beekman Street, New York",
+      "url": "https://repository.library.brown.edu/studio/item/bdr:947451/"
+    },
+    "bdr:947452": {
+      "accession number": "PH 5.1.34.2017",
+      "object_type": "undetermined",
+      "title": "Worker in front of window",
+      "url": "https://repository.library.brown.edu/studio/item/bdr:947452/"
+    },
+    "bdr:947453": {
+      "accession number": "PH 5.1.35.2017",
+      "object_type": "undetermined",
+      "title": "Subbasement, with Tunnels Leading to the East River, New York",
+      "url": "https://repository.library.brown.edu/studio/item/bdr:947453/"
+    },
+    "bdr:947454": {
+      "accession number": "PH 5.1.7.2017",
+      "object_type": "undetermined",
+      "title": "Billy McCune, Wynne Unit, Texas",
+      "url": "https://repository.library.brown.edu/studio/item/bdr:947454/"
+    },
+    "bdr:947455": {
+      "accession number": "PH 5.1.8.2017",
+      "object_type": "undetermined",
+      "title": "Day Room, Ramsey Two",
+      "url": "https://repository.library.brown.edu/studio/item/bdr:947455/"
+    },
+    "bdr:947456": {
+      "accession number": "PH 5.10.7.2017",
+      "object_type": "undetermined",
+      "title": "Blind man with begging sign hanging from his neck, New York City",
+      "url": "https://repository.library.brown.edu/studio/item/bdr:947456/"
+    },
+    "bdr:947457": {
+      "accession number": "PH 5.11.1.2017",
+      "object_type": "undetermined",
+      "title": "Lesley's Grandfather at Home, Charles County, MD",
+      "url": "https://repository.library.brown.edu/studio/item/bdr:947457/"
+    },
+    "bdr:947458": {
+      "accession number": "PH 5.11.12.2017",
+      "object_type": "undetermined",
+      "title": "Making Time, Lincoln Park, Westport, MA",
+      "url": "https://repository.library.brown.edu/studio/item/bdr:947458/"
+    },
+    "bdr:947459": {
+      "accession number": "PH 5.11.14.2017",
+      "object_type": "undetermined",
+      "title": "Fans, Waylon Jennings Show, Indian Ranch, Webster, MA",
+      "url": "https://repository.library.brown.edu/studio/item/bdr:947459/"
+    },
+    "bdr:947460": {
+      "accession number": "PH 5.11.16.2017",
+      "object_type": "undetermined",
+      "title": "Curley Ray Kline, At Home, Rock House, KY",
+      "url": "https://repository.library.brown.edu/studio/item/bdr:947460/"
+    },
+    "bdr:947461": {
+      "accession number": "PH 5.11.17.2017",
+      "object_type": "undetermined",
+      "title": "Tex Ritter, Hillbilly Ranch, Boston, MA",
+      "url": "https://repository.library.brown.edu/studio/item/bdr:947461/"
+    },
+    "bdr:947462": {
+      "accession number": "PH 5.11.21.2017",
+      "object_type": "undetermined",
+      "title": "Untitled, Boston, MA",
+      "url": "https://repository.library.brown.edu/studio/item/bdr:947462/"
+    },
+    "bdr:947463": {
+      "accession number": "PH 5.11.22.2017",
+      "object_type": "undetermined",
+      "title": "Mom, Chammie, and Dad, Barckyard, Newton, MA",
+      "url": "https://repository.library.brown.edu/studio/item/bdr:947463/"
+    },
+    "bdr:947464": {
+      "accession number": "PH 5.11.23.2017",
+      "object_type": "undetermined",
+      "title": "Fixing a Tire, Thompson Speedway, Thompson, CT",
+      "url": "https://repository.library.brown.edu/studio/item/bdr:947464/"
+    },
+    "bdr:947465": {
+      "accession number": "PH 5.11.26.2017",
+      "object_type": "undetermined",
+      "title": "Striptease, New York Burlesque Festival, New York, NY",
+      "url": "https://repository.library.brown.edu/studio/item/bdr:947465/"
+    },
+    "bdr:947466": {
+      "accession number": "PH 5.11.27.2017",
+      "object_type": "undetermined",
+      "title": "Mechanic in Trunk, Thompson Speedway, Thompson, CT",
+      "url": "https://repository.library.brown.edu/studio/item/bdr:947466/"
+    },
+    "bdr:947467": {
+      "accession number": "PH 5.11.29.2017",
+      "object_type": "undetermined",
+      "title": "Couple Dancing, Indian Ranch, Webster, MA",
+      "url": "https://repository.library.brown.edu/studio/item/bdr:947467/"
+    },
+    "bdr:947468": {
+      "accession number": "PH 5.11.3.2017",
+      "object_type": "undetermined",
+      "title": "Bottlenose dolphin - Tursiops truncates",
+      "url": "https://repository.library.brown.edu/studio/item/bdr:947468/"
+    },
+    "bdr:947469": {
+      "accession number": "PH 5.11.32.2017",
+      "object_type": "undetermined",
+      "title": "Jockeys Waiting, Fair Grounds, New Orleans, LO",
+      "url": "https://repository.library.brown.edu/studio/item/bdr:947469/"
+    },
+    "bdr:947470": {
+      "accession number": "PH 5.11.33.2017",
+      "object_type": "undetermined",
+      "title": "Stretch Drive, Santa Anita Park",
+      "url": "https://repository.library.brown.edu/studio/item/bdr:947470/"
+    },
+    "bdr:947471": {
+      "accession number": "PH 5.11.34.2017",
+      "object_type": "undetermined",
+      "title": "Pregnant Lady, Baptist Church, Woonsocket, RI",
+      "url": "https://repository.library.brown.edu/studio/item/bdr:947471/"
+    },
+    "bdr:947472": {
+      "accession number": "PH 5.11.36.2017",
+      "object_type": "undetermined",
+      "title": "Guests, My Parents' 35th Anniversary Party, Dartmouth, MA",
+      "url": "https://repository.library.brown.edu/studio/item/bdr:947472/"
+    },
+    "bdr:947473": {
+      "accession number": "PH 5.11.38.2017",
+      "object_type": "undetermined",
+      "title": "Margaret and Fred, Hancock, NH",
+      "url": "https://repository.library.brown.edu/studio/item/bdr:947473/"
+    },
+    "bdr:947474": {
+      "accession number": "PH 5.11.39.2017",
+      "object_type": "undetermined",
+      "title": "Francis, Jamaica Plains, MA",
+      "url": "https://repository.library.brown.edu/studio/item/bdr:947474/"
+    },
+    "bdr:947475": {
+      "accession number": "PH 5.11.4.2017",
+      "object_type": "undetermined",
+      "title": "Young Boxer, Connolly's Gym, Dorchester, MA",
+      "url": "https://repository.library.brown.edu/studio/item/bdr:947475/"
+    },
+    "bdr:947476": {
+      "accession number": "PH 5.11.41.2017",
+      "object_type": "undetermined",
+      "title": "Friends of Barbara's, Kitchen, New Bedford, MA",
+      "url": "https://repository.library.brown.edu/studio/item/bdr:947476/"
+    },
+    "bdr:947477": {
+      "accession number": "PH 5.11.42.2017",
+      "object_type": "undetermined",
+      "title": "Women Congregant, Baptist Church, Newport, RI",
+      "url": "https://repository.library.brown.edu/studio/item/bdr:947477/"
+    },
+    "bdr:947478": {
+      "accession number": "PH 5.11.44.2017",
+      "object_type": "undetermined",
+      "title": "Untitled, Boston, MA",
+      "url": "https://repository.library.brown.edu/studio/item/bdr:947478/"
+    },
+    "bdr:947479": {
+      "accession number": "PH 5.11.46.2017",
+      "object_type": "undetermined",
+      "title": "Portrait of Aunt Loney, Waldorf, Maryland",
+      "url": "https://repository.library.brown.edu/studio/item/bdr:947479/"
+    },
+    "bdr:947480": {
+      "accession number": "PH 5.11.47.2017",
+      "object_type": "undetermined",
+      "title": "Uncle Emmett, La Plata, Maryland",
+      "url": "https://repository.library.brown.edu/studio/item/bdr:947480/"
+    },
+    "bdr:947481": {
+      "accession number": "PH 5.11.49.2017",
+      "object_type": "undetermined",
+      "title": "Untitled, Boston, MA",
+      "url": "https://repository.library.brown.edu/studio/item/bdr:947481/"
+    },
+    "bdr:947482": {
+      "accession number": "PH 5.11.51.2017",
+      "object_type": "undetermined",
+      "title": "Cooling Off, Saratoga Race Course",
+      "url": "https://repository.library.brown.edu/studio/item/bdr:947482/"
+    },
+    "bdr:947483": {
+      "accession number": "PH 5.11.52.2017",
+      "object_type": "undetermined",
+      "title": "Alex Solis, Santa Anita Park",
+      "url": "https://repository.library.brown.edu/studio/item/bdr:947483/"
+    },
+    "bdr:947484": {
+      "accession number": "PH 5.11.54.2017",
+      "object_type": "undetermined",
+      "title": "Between Races, Saratoga Race Course",
+      "url": "https://repository.library.brown.edu/studio/item/bdr:947484/"
+    },
+    "bdr:947485": {
+      "accession number": "PH 5.11.55.2017",
+      "object_type": "undetermined",
+      "title": "Jockey, Great Barrington Fairgrounds, Great Barrington, MA",
+      "url": "https://repository.library.brown.edu/studio/item/bdr:947485/"
+    },
+    "bdr:947486": {
+      "accession number": "PH 5.11.58.2017",
+      "object_type": "undetermined",
+      "title": "Groom with Dutch Masters, Great Barrington Fair, Great Barrington, MA",
+      "url": "https://repository.library.brown.edu/studio/item/bdr:947486/"
+    },
+    "bdr:947487": {
+      "accession number": "PH 5.11.59.2017",
+      "object_type": "undetermined",
+      "title": "Jean Cruguent Signing Autographs, Saratoga Race Course, Saratoga Springs, New York",
+      "url": "https://repository.library.brown.edu/studio/item/bdr:947487/"
+    },
+    "bdr:947488": {
+      "accession number": "PH 5.11.6.2017",
+      "object_type": "undetermined",
+      "title": "Playground, Lone Star Ranch, Reeds Ferry, NH",
+      "url": "https://repository.library.brown.edu/studio/item/bdr:947488/"
+    },
+    "bdr:947489": {
+      "accession number": "PH 5.11.60.2017",
+      "object_type": "undetermined",
+      "title": "Steam Room, Fair Grounds",
+      "url": "https://repository.library.brown.edu/studio/item/bdr:947489/"
+    },
+    "bdr:947490": {
+      "accession number": "PH 5.11.61.2017",
+      "object_type": "undetermined",
+      "title": "Valet, Jockeys, Trainers, Keeneland, Lexington, KY",
+      "url": "https://repository.library.brown.edu/studio/item/bdr:947490/"
+    },
+    "bdr:947491": {
+      "accession number": "PH 5.11.62.2017",
+      "object_type": "undetermined",
+      "title": "Blacksmith, Monmouth Park, Oceanport, NJ",
+      "url": "https://repository.library.brown.edu/studio/item/bdr:947491/"
+    },
+    "bdr:947492": {
+      "accession number": "PH 5.11.63.2017",
+      "object_type": "undetermined",
+      "title": "Steve Sousonis, Monmouth Park, Oceanport, NJ",
+      "url": "https://repository.library.brown.edu/studio/item/bdr:947492/"
+    },
+    "bdr:947493": {
+      "accession number": "PH 5.11.64.2017",
+      "object_type": "undetermined",
+      "title": "Top of the Stretch, Suffolk Downs",
+      "url": "https://repository.library.brown.edu/studio/item/bdr:947493/"
+    },
+    "bdr:947494": {
+      "accession number": "PH 5.11.65.2017",
+      "object_type": "undetermined",
+      "title": "Urine Collector, Fair Grounds",
+      "url": "https://repository.library.brown.edu/studio/item/bdr:947494/"
+    },
+    "bdr:947495": {
+      "accession number": "PH 5.11.66.2017",
+      "object_type": "undetermined",
+      "title": "Shoeshine Stand, Saratoga Race Course, Saratoga Springs, New York",
+      "url": "https://repository.library.brown.edu/studio/item/bdr:947495/"
+    },
+    "bdr:947496": {
+      "accession number": "PH 5.11.69.2017",
+      "object_type": "undetermined",
+      "title": "Family with Horse, Lincoln Park, Westport, MA",
+      "url": "https://repository.library.brown.edu/studio/item/bdr:947496/"
+    },
+    "bdr:947497": {
+      "accession number": "PH 5.11.7.2017",
+      "object_type": "undetermined",
+      "title": "Steam Engineer 1, Connecticut",
+      "url": "https://repository.library.brown.edu/studio/item/bdr:947497/"
+    },
+    "bdr:947498": {
+      "accession number": "PH 5.11.70.2017",
+      "object_type": "undetermined",
+      "title": "Mini Golfers, Lincoln Park, Westport, MA",
+      "url": "https://repository.library.brown.edu/studio/item/bdr:947498/"
+    },
+    "bdr:947499": {
+      "accession number": "PH 5.11.72.2017",
+      "object_type": "undetermined",
+      "title": "Mini Golfers, Lincoln Park, Westport, MA",
+      "url": "https://repository.library.brown.edu/studio/item/bdr:947499/"
+    },
+    "bdr:947500": {
+      "accession number": "PH 5.11.74.2017",
+      "object_type": "undetermined",
+      "title": "Fool the Professor, Lincoln Park, Westport, MA",
+      "url": "https://repository.library.brown.edu/studio/item/bdr:947500/"
+    },
+    "bdr:947501": {
+      "accession number": "PH 5.11.75.2017",
+      "object_type": "undetermined",
+      "title": "Couple Lounging, Jazz Festival, New Orleans, LO",
+      "url": "https://repository.library.brown.edu/studio/item/bdr:947501/"
+    },
+    "bdr:947502": {
+      "accession number": "PH 5.11.76.2017",
+      "object_type": "undetermined",
+      "title": "Drag King, New York Burlesque Festival, New York",
+      "url": "https://repository.library.brown.edu/studio/item/bdr:947502/"
+    },
+    "bdr:947503": {
+      "accession number": "PH 5.11.77.2017",
+      "object_type": "undetermined",
+      "title": "Morning Breakdown, Monmouth Park, Oceanport, NJ",
+      "url": "https://repository.library.brown.edu/studio/item/bdr:947503/"
+    },
+    "bdr:947504": {
+      "accession number": "PH 5.11.78.2017",
+      "object_type": "undetermined",
+      "title": "Weighing In, Churchill Downs, Louisville, KY",
+      "url": "https://repository.library.brown.edu/studio/item/bdr:947504/"
+    },
+    "bdr:947505": {
+      "accession number": "PH 5.11.79.2017",
+      "object_type": "undetermined",
+      "title": "Finish Line, Oaklawn Park",
+      "url": "https://repository.library.brown.edu/studio/item/bdr:947505/"
+    },
+    "bdr:947506": {
+      "accession number": "PH 5.11.80.2017",
+      "object_type": "undetermined",
+      "title": "After the Finish, Keeneland, Lexington, KY",
+      "url": "https://repository.library.brown.edu/studio/item/bdr:947506/"
+    },
+    "bdr:947507": {
+      "accession number": "PH 5.11.81.2017",
+      "object_type": "undetermined",
+      "title": "End of the Race, Laurel Race Courses",
+      "url": "https://repository.library.brown.edu/studio/item/bdr:947507/"
+    },
+    "bdr:947508": {
+      "accession number": "PH 5.11.9.2017",
+      "object_type": "undetermined",
+      "title": "Steam Engineer 4, Connecticut",
+      "url": "https://repository.library.brown.edu/studio/item/bdr:947508/"
+    },
+    "bdr:947509": {
+      "accession number": "PH 5.12.10.2017",
+      "object_type": "undetermined",
+      "title": "3rd Ave. El, NY (Novelties sign on left)",
+      "url": "https://repository.library.brown.edu/studio/item/bdr:947509/"
+    },
+    "bdr:947510": {
+      "accession number": "PH 5.12.13.2017",
+      "object_type": "undetermined",
+      "title": "Wall St. at Broad St. (men talking on st.)",
+      "url": "https://repository.library.brown.edu/studio/item/bdr:947510/"
+    },
+    "bdr:947511": {
+      "accession number": "PH 5.12.14.2017",
+      "object_type": "undetermined",
+      "title": "Sevilla, Spain (thatched shade behind bars)",
+      "url": "https://repository.library.brown.edu/studio/item/bdr:947511/"
+    },
+    "bdr:947512": {
+      "accession number": "PH 5.12.17.2017",
+      "object_type": "undetermined",
+      "title": "Ceiling of my House, Detroit, 1942",
+      "url": "https://repository.library.brown.edu/studio/item/bdr:947512/"
+    },
+    "bdr:947513": {
+      "accession number": "PH 5.12.18.2017",
+      "object_type": "undetermined",
+      "title": "Left Bank Laundry, Paris",
+      "url": "https://repository.library.brown.edu/studio/item/bdr:947513/"
+    },
+    "bdr:947514": {
+      "accession number": "PH 5.12.2.2017",
+      "object_type": "undetermined",
+      "title": "Marshall Ney House, Rue Mouffetand, Paris",
+      "url": "https://repository.library.brown.edu/studio/item/bdr:947514/"
+    },
+    "bdr:947515": {
+      "accession number": "PH 5.12.20.2017",
+      "object_type": "undetermined",
+      "title": "Worthington, Sussex, England",
+      "url": "https://repository.library.brown.edu/studio/item/bdr:947515/"
+    },
+    "bdr:947516": {
+      "accession number": "PH 5.12.22.2017",
+      "object_type": "undetermined",
+      "title": "Paris",
+      "url": "https://repository.library.brown.edu/studio/item/bdr:947516/"
+    },
+    "bdr:947517": {
+      "accession number": "PH 5.12.23.2017",
+      "object_type": "undetermined",
+      "title": "Rue Des Patriarches, Paris",
+      "url": "https://repository.library.brown.edu/studio/item/bdr:947517/"
+    },
+    "bdr:947518": {
+      "accession number": "PH 5.12.25.2017",
+      "object_type": "undetermined",
+      "title": "Bedford St., Greenwich Village, NY",
+      "url": "https://repository.library.brown.edu/studio/item/bdr:947518/"
+    },
+    "bdr:947519": {
+      "accession number": "PH 5.12.3.2017",
+      "object_type": "undetermined",
+      "title": "Gentleman's Facility, Paris",
+      "url": "https://repository.library.brown.edu/studio/item/bdr:947519/"
+    },
+    "bdr:947520": {
+      "accession number": "PH 5.12.5.2017",
+      "object_type": "undetermined",
+      "title": "Wolcot St., Bath, England",
+      "url": "https://repository.library.brown.edu/studio/item/bdr:947520/"
+    },
+    "bdr:947521": {
+      "accession number": "PH 5.12.8.2017",
+      "object_type": "undetermined",
+      "title": "Providence, RI (window from inside barn)",
+      "url": "https://repository.library.brown.edu/studio/item/bdr:947521/"
+    },
+    "bdr:947522": {
+      "accession number": "PH 5.13.1.2017",
+      "object_type": "undetermined",
+      "title": "La Maison de la Belle Jardiniere department store reconstruction site, Ile de la Cite, Paris",
+      "url": "https://repository.library.brown.edu/studio/item/bdr:947522/"
+    },
+    "bdr:947523": {
+      "accession number": "PH 5.14.1.2017",
+      "object_type": "undetermined",
+      "title": "Untitled",
+      "url": "https://repository.library.brown.edu/studio/item/bdr:947523/"
+    },
+    "bdr:947524": {
+      "accession number": "PH 5.14.2.2017",
+      "object_type": "undetermined",
+      "title": "Untitled",
+      "url": "https://repository.library.brown.edu/studio/item/bdr:947524/"
+    },
+    "bdr:947525": {
+      "accession number": "PH 5.14.5.2017",
+      "object_type": "undetermined",
+      "title": "Untitled",
+      "url": "https://repository.library.brown.edu/studio/item/bdr:947525/"
+    },
+    "bdr:947526": {
+      "accession number": "PH 5.15.11.2017",
+      "object_type": "undetermined",
+      "title": "Blacksmith, Tri-Valley Area, Northern California",
+      "url": "https://repository.library.brown.edu/studio/item/bdr:947526/"
+    },
+    "bdr:947527": {
+      "accession number": "PH 5.15.14.2017",
+      "object_type": "undetermined",
+      "title": "Flower shop, Livermore, California",
+      "url": "https://repository.library.brown.edu/studio/item/bdr:947527/"
+    },
+    "bdr:947528": {
+      "accession number": "PH 5.15.15.2017",
+      "object_type": "undetermined",
+      "title": "Military Exercise Tertremo Training Circular Requirements Meeting, Tri-Valley Area, Northern California",
+      "url": "https://repository.library.brown.edu/studio/item/bdr:947528/"
+    },
+    "bdr:947529": {
+      "accession number": "PH 5.15.16.2017",
+      "object_type": "undetermined",
+      "title": "Rubble, Tri-Valley Area, Northern California",
+      "url": "https://repository.library.brown.edu/studio/item/bdr:947529/"
+    },
+    "bdr:947530": {
+      "accession number": "PH 5.15.18.2017",
+      "object_type": "undetermined",
+      "title": "Happy 30th Keith at California Farmer office, Tri-Valley Area, Northern California",
+      "url": "https://repository.library.brown.edu/studio/item/bdr:947530/"
+    },
+    "bdr:947531": {
+      "accession number": "PH 5.15.2.2017",
+      "object_type": "undetermined",
+      "title": "Book Club (Self-portrait), Livermore, California",
+      "url": "https://repository.library.brown.edu/studio/item/bdr:947531/"
+    },
+    "bdr:947532": {
+      "accession number": "PH 5.15.21.2017",
+      "object_type": "undetermined",
+      "title": "Oven assembly worker, Tri-Valley Area, Northern California",
+      "url": "https://repository.library.brown.edu/studio/item/bdr:947532/"
+    },
+    "bdr:947533": {
+      "accession number": "PH 5.15.22.2017",
+      "object_type": "undetermined",
+      "title": "1079 Club, Tri-Valley Area, Northern California",
+      "url": "https://repository.library.brown.edu/studio/item/bdr:947533/"
+    },
+    "bdr:947534": {
+      "accession number": "PH 5.15.24.2017",
+      "object_type": "undetermined",
+      "title": "Girl Scout Troop 832 Ceremony, Tri-Valley Area, Northern California",
+      "url": "https://repository.library.brown.edu/studio/item/bdr:947534/"
+    },
+    "bdr:947535": {
+      "accession number": "PH 5.15.26.2017",
+      "object_type": "undetermined",
+      "title": "Forty years ago I left the farm in Minnesota because it was hard work.  I'm now an aircraft mechanic.  When you have to work -- well this is it.  Tri-Valley Area, Northern California",
+      "url": "https://repository.library.brown.edu/studio/item/bdr:947535/"
+    },
+    "bdr:947536": {
+      "accession number": "PH 5.15.29.2017",
+      "object_type": "undetermined",
+      "title": "Industrial burger maker, Tri-Valley Area, Northern California",
+      "url": "https://repository.library.brown.edu/studio/item/bdr:947536/"
+    },
+    "bdr:947537": {
+      "accession number": "PH 5.15.3.2017",
+      "object_type": "undetermined",
+      "title": "Bank Christmas Party, Tri-Valley Area, Northern California",
+      "url": "https://repository.library.brown.edu/studio/item/bdr:947537/"
+    },
+    "bdr:947538": {
+      "accession number": "PH 5.15.30.2017",
+      "object_type": "undetermined",
+      "title": "Refinery, Tri-Valley Area, Northern California",
+      "url": "https://repository.library.brown.edu/studio/item/bdr:947538/"
+    },
+    "bdr:947539": {
+      "accession number": "PH 5.15.33.2017",
+      "object_type": "undetermined",
+      "title": "Hospital Auxiliary crafts, Christmas, Tri-Valley Area, Northern California",
+      "url": "https://repository.library.brown.edu/studio/item/bdr:947539/"
+    },
+    "bdr:947540": {
+      "accession number": "PH 5.15.34.2017",
+      "object_type": "undetermined",
+      "title": "Donkey,  Tri-Valley Area, Northern California",
+      "url": "https://repository.library.brown.edu/studio/item/bdr:947540/"
+    },
+    "bdr:947541": {
+      "accession number": "PH 5.15.37.2017",
+      "object_type": "undetermined",
+      "title": "Lobster Claw, Tri-Valley Area, Northern California",
+      "url": "https://repository.library.brown.edu/studio/item/bdr:947541/"
+    },
+    "bdr:947542": {
+      "accession number": "PH 5.15.38.2017",
+      "object_type": "undetermined",
+      "title": "Our interdisciplinary engineering group has been working on the heart - assistance pump for seven years. I'd rather be working on the fuel- injection for cars and trucks which operates on the same principle.  Tri-Valley Area, Northern California",
+      "url": "https://repository.library.brown.edu/studio/item/bdr:947542/"
+    },
+    "bdr:947543": {
+      "accession number": "PH 5.15.41.2017",
+      "object_type": "undetermined",
+      "title": "Firemen, Pleasanton, California",
+      "url": "https://repository.library.brown.edu/studio/item/bdr:947543/"
+    },
+    "bdr:947544": {
+      "accession number": "PH 5.15.42.2017",
+      "object_type": "undetermined",
+      "title": "Couple in their living room, Tri-Valley Area, Northern California (Grandfather clock)",
+      "url": "https://repository.library.brown.edu/studio/item/bdr:947544/"
+    },
+    "bdr:947545": {
+      "accession number": "PH 5.15.6.2017",
+      "object_type": "undetermined",
+      "title": "Women with TV trays, Tri-Valley Area, Northern California",
+      "url": "https://repository.library.brown.edu/studio/item/bdr:947545/"
+    },
+    "bdr:947546": {
+      "accession number": "PH 5.15.7.2017",
+      "object_type": "undetermined",
+      "title": "Monthly Birthday Party, Senior Californians, Tri-Valley Area, Northern California",
+      "url": "https://repository.library.brown.edu/studio/item/bdr:947546/"
+    },
+    "bdr:947547": {
+      "accession number": "PH 5.15.8.2017",
+      "object_type": "undetermined",
+      "title": "The Valley Artisans is a textile crafts group.  We are weavers, spinners, stitchers, knitters, quilters, rug makers, crocheters, and off-loom weavers.  Our dues are $1.00 per year and open to anyone interested in textile art. Tri-Valley Area, Northern California",
+      "url": "https://repository.library.brown.edu/studio/item/bdr:947547/"
+    },
+    "bdr:947548": {
+      "accession number": "PH 5.16.4.2017",
+      "object_type": "undetermined",
+      "title": "Young men at Devereux schools operating in printing press",
+      "url": "https://repository.library.brown.edu/studio/item/bdr:947548/"
+    },
+    "bdr:947549": {
+      "accession number": "PH 5.17.1.2017",
+      "object_type": "undetermined",
+      "title": "Senior Legislative Assembly members, Khartoum",
+      "url": "https://repository.library.brown.edu/studio/item/bdr:947549/"
+    },
+    "bdr:947550": {
+      "accession number": "PH 5.17.10.2017",
+      "object_type": "undetermined",
+      "title": "Pondo children, Transkei, South Africa",
+      "url": "https://repository.library.brown.edu/studio/item/bdr:947550/"
+    },
+    "bdr:947551": {
+      "accession number": "PH 5.17.2.2017",
+      "object_type": "undetermined",
+      "title": "Bachimbiri girls dance in the high rain forest of Kigezi, Uganda",
+      "url": "https://repository.library.brown.edu/studio/item/bdr:947551/"
+    },
+    "bdr:947552": {
+      "accession number": "PH 5.17.4.2017",
+      "object_type": "undetermined",
+      "title": "The tribesmen in a mimetic dance at Kotido, Karamoja",
+      "url": "https://repository.library.brown.edu/studio/item/bdr:947552/"
+    },
+    "bdr:947553": {
+      "accession number": "PH 5.17.5.2017",
+      "object_type": "undetermined",
+      "title": "Tuareg herder, Algerian Sahara",
+      "url": "https://repository.library.brown.edu/studio/item/bdr:947553/"
+    },
+    "bdr:947554": {
+      "accession number": "PH 5.17.8.2017",
+      "object_type": "undetermined",
+      "title": "Kordofan: life of the people- one pf the belles of the Mesakin Tiwal",
+      "url": "https://repository.library.brown.edu/studio/item/bdr:947554/"
+    },
+    "bdr:947555": {
+      "accession number": "PH 5.17.9.2017",
+      "object_type": "undetermined",
+      "title": "Dr. Albert Schweitzer in his jungle office in Lambarene, Gabon",
+      "url": "https://repository.library.brown.edu/studio/item/bdr:947555/"
+    },
+    "bdr:947556": {
+      "accession number": "PH 5.18.1.2017",
+      "object_type": "undetermined",
+      "title": "Mr. and Mrs. Andy Bahain on their farm near Kersey Colorado",
+      "url": "https://repository.library.brown.edu/studio/item/bdr:947556/"
+    },
+    "bdr:947557": {
+      "accession number": "PH 5.18.12.2017",
+      "object_type": "undetermined",
+      "title": "Blacksmith, Lowell, Vermont",
+      "url": "https://repository.library.brown.edu/studio/item/bdr:947557/"
+    },
+    "bdr:947558": {
+      "accession number": "PH 5.18.13.2017",
+      "object_type": "undetermined",
+      "title": "Vernon Evans, Migrant to Oregon from South Dakota",
+      "url": "https://repository.library.brown.edu/studio/item/bdr:947558/"
+    },
+    "bdr:947559": {
+      "accession number": "PH 5.18.15.2017",
+      "object_type": "undetermined",
+      "title": "4-H Club member with prize black angus calf, Oklahoma",
+      "url": "https://repository.library.brown.edu/studio/item/bdr:947559/"
+    },
+    "bdr:947560": {
+      "accession number": "PH 5.18.16.2017",
+      "object_type": "undetermined",
+      "title": "School children watch the kettle drum being tuned, Detroit Symphony",
+      "url": "https://repository.library.brown.edu/studio/item/bdr:947560/"
+    },
+    "bdr:947561": {
+      "accession number": "PH 5.18.3.2017",
+      "object_type": "undetermined",
+      "title": "Hotel de Paris, Georgetown, Colorado",
+      "url": "https://repository.library.brown.edu/studio/item/bdr:947561/"
+    },
+    "bdr:947562": {
+      "accession number": "PH 5.18.4.2017",
+      "object_type": "undetermined",
+      "title": "Oklahoma migrants",
+      "url": "https://repository.library.brown.edu/studio/item/bdr:947562/"
+    },
+    "bdr:947563": {
+      "accession number": "PH 5.18.5.2017",
+      "object_type": "undetermined",
+      "title": "Dust storm, Cimarron County, Oklahoma",
+      "url": "https://repository.library.brown.edu/studio/item/bdr:947563/"
+    },
+    "bdr:947564": {
+      "accession number": "PH 5.18.9.2017",
+      "object_type": "undetermined",
+      "title": "Roundup, Three Circle Ranch, Powder River Montana",
+      "url": "https://repository.library.brown.edu/studio/item/bdr:947564/"
+    },
+    "bdr:947565": {
+      "accession number": "PH 5.19.10.2017",
+      "object_type": "undetermined",
+      "title": "Aaron Siskind",
+      "url": "https://repository.library.brown.edu/studio/item/bdr:947565/"
+    },
+    "bdr:947566": {
+      "accession number": "PH 5.19.11.2017",
+      "object_type": "undetermined",
+      "title": "Cry Freedom",
+      "url": "https://repository.library.brown.edu/studio/item/bdr:947566/"
+    },
+    "bdr:947567": {
+      "accession number": "PH 5.19.14.2017",
+      "object_type": "undetermined",
+      "title": "Study of three children looking out window, New York City",
+      "url": "https://repository.library.brown.edu/studio/item/bdr:947567/"
+    },
+    "bdr:947568": {
+      "accession number": "PH 5.19.15.2017",
+      "object_type": "undetermined",
+      "title": "A Love Story? (Duke and Duchess of Windsor)",
+      "url": "https://repository.library.brown.edu/studio/item/bdr:947568/"
+    },
+    "bdr:947569": {
+      "accession number": "PH 5.19.17.2017",
+      "object_type": "undetermined",
+      "title": "Bookseller, Paris",
+      "url": "https://repository.library.brown.edu/studio/item/bdr:947569/"
+    },
+    "bdr:947570": {
+      "accession number": "PH 5.19.2.2017",
+      "object_type": "undetermined",
+      "title": "Bette Davis",
+      "url": "https://repository.library.brown.edu/studio/item/bdr:947570/"
+    },
+    "bdr:947571": {
+      "accession number": "PH 5.19.4.2017",
+      "object_type": "undetermined",
+      "title": "Lucien in the Light, Paris",
+      "url": "https://repository.library.brown.edu/studio/item/bdr:947571/"
+    },
+    "bdr:947572": {
+      "accession number": "PH 5.19.5.2017",
+      "object_type": "undetermined",
+      "title": "Reflections, Bern, Switzerland",
+      "url": "https://repository.library.brown.edu/studio/item/bdr:947572/"
+    },
+    "bdr:947573": {
+      "accession number": "PH 5.19.8.2017",
+      "object_type": "undetermined",
+      "title": "Study of Boston subway construction",
+      "url": "https://repository.library.brown.edu/studio/item/bdr:947573/"
+    },
+    "bdr:947574": {
+      "accession number": "PH 5.19.9.2017",
+      "object_type": "undetermined",
+      "title": "Study of Boston subway construction",
+      "url": "https://repository.library.brown.edu/studio/item/bdr:947574/"
+    },
+    "bdr:947575": {
+      "accession number": "PH 5.2.4.2017",
+      "object_type": "undetermined",
+      "title": "Students at work",
+      "url": "https://repository.library.brown.edu/studio/item/bdr:947575/"
+    },
+    "bdr:947576": {
+      "accession number": "PH 5.2.8.2017",
+      "object_type": "undetermined",
+      "title": "Khrushchev and Bulganin, India, 1955",
+      "url": "https://repository.library.brown.edu/studio/item/bdr:947576/"
+    },
+    "bdr:947577": {
+      "accession number": "PH 5.20.11.2017",
+      "object_type": "undetermined",
+      "title": "Tightrope, Barnum & Bailey's Circus, New York City, 1940s",
+      "url": "https://repository.library.brown.edu/studio/item/bdr:947577/"
+    },
+    "bdr:947578": {
+      "accession number": "PH 5.20.12.2017",
+      "object_type": "undetermined",
+      "title": "Brothers, Harlem, 1970s",
+      "url": "https://repository.library.brown.edu/studio/item/bdr:947578/"
+    },
+    "bdr:947579": {
+      "accession number": "PH 5.20.14.2017",
+      "object_type": "undetermined",
+      "title": "Resting, Guadelajara, Mexico",
+      "url": "https://repository.library.brown.edu/studio/item/bdr:947579/"
+    },
+    "bdr:947580": {
+      "accession number": "PH 5.20.2.2017",
+      "object_type": "undetermined",
+      "title": "Marilyn Monroe at the Barnum & Bailey Circus, New York City",
+      "url": "https://repository.library.brown.edu/studio/item/bdr:947580/"
+    },
+    "bdr:947581": {
+      "accession number": "PH 5.20.3.2017",
+      "object_type": "undetermined",
+      "title": "Marlene Dietrich & Rita Gam at the Barnum & Bailey Circus, New York City",
+      "url": "https://repository.library.brown.edu/studio/item/bdr:947581/"
+    },
+    "bdr:947582": {
+      "accession number": "PH 5.20.4.2017",
+      "object_type": "undetermined",
+      "title": "Old Couple, Pyrenees, France",
+      "url": "https://repository.library.brown.edu/studio/item/bdr:947582/"
+    },
+    "bdr:947583": {
+      "accession number": "PH 5.20.6.2017",
+      "object_type": "undetermined",
+      "title": "Coney Island, 1980s",
+      "url": "https://repository.library.brown.edu/studio/item/bdr:947583/"
+    },
+    "bdr:947584": {
+      "accession number": "PH 5.20.7.2017",
+      "object_type": "undetermined",
+      "title": "Smoke Break, New York City, 1980s",
+      "url": "https://repository.library.brown.edu/studio/item/bdr:947584/"
+    },
+    "bdr:947585": {
+      "accession number": "PH 5.20.9.2017",
+      "object_type": "undetermined",
+      "title": "Italian Festival, Mulberry Street, New York City, 1980s",
+      "url": "https://repository.library.brown.edu/studio/item/bdr:947585/"
+    },
+    "bdr:947586": {
+      "accession number": "PH 5.2018",
+      "object_type": "undetermined",
+      "title": "Joe Conforte, Owner, Mustang Ranch, Reno",
+      "url": "https://repository.library.brown.edu/studio/item/bdr:947586/"
+    },
+    "bdr:947587": {
+      "accession number": "PH 5.21.3.2017",
+      "object_type": "undetermined",
+      "title": "Yawning, Times Square",
+      "url": "https://repository.library.brown.edu/studio/item/bdr:947587/"
+    },
+    "bdr:947588": {
+      "accession number": "PH 5.21.7.2017",
+      "object_type": "undetermined",
+      "title": "Girl on Pier, Saylor\u2019s Lake, Saylorsburg, Pensylvania",
+      "url": "https://repository.library.brown.edu/studio/item/bdr:947588/"
+    },
+    "bdr:947589": {
+      "accession number": "PH 5.21.8.2017",
+      "object_type": "undetermined",
+      "title": "Young Lemon Tree, Los Angeles",
+      "url": "https://repository.library.brown.edu/studio/item/bdr:947589/"
+    },
+    "bdr:947590": {
+      "accession number": "PH 5.21.9.2017",
+      "object_type": "undetermined",
+      "title": "Rancho de Taos, New Mexico",
+      "url": "https://repository.library.brown.edu/studio/item/bdr:947590/"
+    },
+    "bdr:947591": {
+      "accession number": "PH 5.3.12.2017",
+      "object_type": "undetermined",
+      "title": "Ironing Board, Richmond District",
+      "url": "https://repository.library.brown.edu/studio/item/bdr:947591/"
+    },
+    "bdr:947592": {
+      "accession number": "PH 5.3.13.2017",
+      "object_type": "undetermined",
+      "title": "Gate Hinges, Sunset District",
+      "url": "https://repository.library.brown.edu/studio/item/bdr:947592/"
+    },
+    "bdr:947593": {
+      "accession number": "PH 5.3.15.2017",
+      "object_type": "undetermined",
+      "title": "Doorstep, Hugo Street",
+      "url": "https://repository.library.brown.edu/studio/item/bdr:947593/"
+    },
+    "bdr:947594": {
+      "accession number": "PH 5.3.18.2017",
+      "object_type": "undetermined",
+      "title": "Second Floor Window, Sugar Mill, Clarksburg",
+      "url": "https://repository.library.brown.edu/studio/item/bdr:947594/"
+    },
+    "bdr:947595": {
+      "accession number": "PH 5.3.19.2017",
+      "object_type": "undetermined",
+      "title": "Boulder Near LeConte Lodge",
+      "url": "https://repository.library.brown.edu/studio/item/bdr:947595/"
+    },
+    "bdr:947596": {
+      "accession number": "PH 5.3.2.2017",
+      "object_type": "undetermined",
+      "title": "Ivy, Berkeley",
+      "url": "https://repository.library.brown.edu/studio/item/bdr:947596/"
+    },
+    "bdr:947597": {
+      "accession number": "PH 5.3.21.2017",
+      "object_type": "undetermined",
+      "title": "Rocks, Alabama Hills",
+      "url": "https://repository.library.brown.edu/studio/item/bdr:947597/"
+    },
+    "bdr:947598": {
+      "accession number": "PH 5.3.23.2017",
+      "object_type": "undetermined",
+      "title": "Cliff Path",
+      "url": "https://repository.library.brown.edu/studio/item/bdr:947598/"
+    },
+    "bdr:947599": {
+      "accession number": "PH 5.3.25.2017",
+      "object_type": "undetermined",
+      "title": "Closed Calla Lily, Golden Gate Park",
+      "url": "https://repository.library.brown.edu/studio/item/bdr:947599/"
+    },
+    "bdr:947600": {
+      "accession number": "PH 5.3.26.2017",
+      "object_type": "undetermined",
+      "title": "Steel Poles, Ely, Nevada",
+      "url": "https://repository.library.brown.edu/studio/item/bdr:947600/"
+    },
+    "bdr:947601": {
+      "accession number": "PH 5.3.29.2017",
+      "object_type": "undetermined",
+      "title": "Drinking Fountains, San Francisco City Hall",
+      "url": "https://repository.library.brown.edu/studio/item/bdr:947601/"
+    },
+    "bdr:947602": {
+      "accession number": "PH 5.3.3.2017",
+      "object_type": "undetermined",
+      "title": "Chained Roll of Paper, Fallon Nevada",
+      "url": "https://repository.library.brown.edu/studio/item/bdr:947602/"
+    },
+    "bdr:947603": {
+      "accession number": "PH 5.3.31.2017",
+      "object_type": "undetermined",
+      "title": "Drinking Fountain, Wawona Hotel",
+      "url": "https://repository.library.brown.edu/studio/item/bdr:947603/"
+    },
+    "bdr:947604": {
+      "accession number": "PH 5.3.32.2017",
+      "object_type": "undetermined",
+      "title": "Sentinel Rock from Ansel Adams\u2019 Garden",
+      "url": "https://repository.library.brown.edu/studio/item/bdr:947604/"
+    },
+    "bdr:947605": {
+      "accession number": "PH 5.3.35.2017",
+      "object_type": "undetermined",
+      "title": "Pine in Snow, Fox Creek, Idaho",
+      "url": "https://repository.library.brown.edu/studio/item/bdr:947605/"
+    },
+    "bdr:947606": {
+      "accession number": "PH 5.3.36.2017",
+      "object_type": "undetermined",
+      "title": "Buttonwillow",
+      "url": "https://repository.library.brown.edu/studio/item/bdr:947606/"
+    },
+    "bdr:947607": {
+      "accession number": "PH 5.3.39.2017",
+      "object_type": "undetermined",
+      "title": "Campo dei Fiori #2, Varese, Italy",
+      "url": "https://repository.library.brown.edu/studio/item/bdr:947607/"
+    },
+    "bdr:947608": {
+      "accession number": "PH 5.3.40.2017",
+      "object_type": "undetermined",
+      "title": "Old Plywood in Full Sunlight",
+      "url": "https://repository.library.brown.edu/studio/item/bdr:947608/"
+    },
+    "bdr:947609": {
+      "accession number": "PH 5.3.6.2017",
+      "object_type": "undetermined",
+      "title": "Cloud Over Dunes, Death Valley (Dunes #71)",
+      "url": "https://repository.library.brown.edu/studio/item/bdr:947609/"
+    },
+    "bdr:947610": {
+      "accession number": "PH 5.3.7.2017",
+      "object_type": "undetermined",
+      "title": "Four Trees, Sutra Forest",
+      "url": "https://repository.library.brown.edu/studio/item/bdr:947610/"
+    },
+    "bdr:947611": {
+      "accession number": "PH 5.3.9.2017",
+      "object_type": "undetermined",
+      "title": "Faded Cross, Prague",
+      "url": "https://repository.library.brown.edu/studio/item/bdr:947611/"
+    },
+    "bdr:947612": {
+      "accession number": "PH 5.5.11.2017",
+      "object_type": "undetermined",
+      "title": "Three women working in mannequin factory",
+      "url": "https://repository.library.brown.edu/studio/item/bdr:947612/"
+    },
+    "bdr:947613": {
+      "accession number": "PH 5.5.13.2017",
+      "object_type": "undetermined",
+      "title": "Skyline with \u201cwall rope\u201d sign",
+      "url": "https://repository.library.brown.edu/studio/item/bdr:947613/"
+    },
+    "bdr:947614": {
+      "accession number": "PH 5.5.14.2017",
+      "object_type": "undetermined",
+      "title": "The Southern Clipper, one of three amphibious aircraft built for Pan American Airways, Miami",
+      "url": "https://repository.library.brown.edu/studio/item/bdr:947614/"
+    },
+    "bdr:947615": {
+      "accession number": "PH 5.5.17.2017",
+      "object_type": "undetermined",
+      "title": "Study of automobile dashboard radio",
+      "url": "https://repository.library.brown.edu/studio/item/bdr:947615/"
+    },
+    "bdr:947616": {
+      "accession number": "PH 5.5.18.2017",
+      "object_type": "undetermined",
+      "title": "Powers model posed with Packard",
+      "url": "https://repository.library.brown.edu/studio/item/bdr:947616/"
+    },
+    "bdr:947617": {
+      "accession number": "PH 5.5.3.2017",
+      "object_type": "undetermined",
+      "title": "Interior of salt mine with men on ladders, Avery Island, Louisiana",
+      "url": "https://repository.library.brown.edu/studio/item/bdr:947617/"
+    },
+    "bdr:947618": {
+      "accession number": "PH 5.5.4.2017",
+      "object_type": "undetermined",
+      "title": "Interior of salt mine with men working near ladder, Avery Island, Louisiana",
+      "url": "https://repository.library.brown.edu/studio/item/bdr:947618/"
+    },
+    "bdr:947619": {
+      "accession number": "PH 5.5.7.2017",
+      "object_type": "undetermined",
+      "title": "Study of Super Deluxe Ford grill",
+      "url": "https://repository.library.brown.edu/studio/item/bdr:947619/"
+    },
+    "bdr:947620": {
+      "accession number": "PH 5.5.8.2017",
+      "object_type": "undetermined",
+      "title": "Model standing in front of car",
+      "url": "https://repository.library.brown.edu/studio/item/bdr:947620/"
+    },
+    "bdr:947621": {
+      "accession number": "PH 5.6.11.2017",
+      "object_type": "undetermined",
+      "title": "Seated man flanked by two standing women, scallop design background",
+      "url": "https://repository.library.brown.edu/studio/item/bdr:947621/"
+    },
+    "bdr:947622": {
+      "accession number": "PH 5.6.2.2017",
+      "object_type": "undetermined",
+      "title": "Standing girl and woman",
+      "url": "https://repository.library.brown.edu/studio/item/bdr:947622/"
+    },
+    "bdr:947623": {
+      "accession number": "PH 5.6.4.2017",
+      "object_type": "undetermined",
+      "title": "Girl standing on table, striped background",
+      "url": "https://repository.library.brown.edu/studio/item/bdr:947623/"
+    },
+    "bdr:947624": {
+      "accession number": "PH 5.6.5.2017",
+      "object_type": "undetermined",
+      "title": "Smiling woman in slacks seated on table, striped background",
+      "url": "https://repository.library.brown.edu/studio/item/bdr:947624/"
+    },
+    "bdr:947625": {
+      "accession number": "PH 5.6.7.2017",
+      "object_type": "undetermined",
+      "title": "Two standing sisters, striped background",
+      "url": "https://repository.library.brown.edu/studio/item/bdr:947625/"
+    },
+    "bdr:947626": {
+      "accession number": "PH 5.6.8.2017",
+      "object_type": "undetermined",
+      "title": "Standing boy in cowboy clothing, striped background",
+      "url": "https://repository.library.brown.edu/studio/item/bdr:947626/"
+    },
+    "bdr:947627": {
+      "accession number": "PH 5.6.9.2017",
+      "object_type": "undetermined",
+      "title": "Family of twelve, striped background",
+      "url": "https://repository.library.brown.edu/studio/item/bdr:947627/"
+    },
+    "bdr:947628": {
+      "accession number": "PH 5.7.1.2017",
+      "object_type": "undetermined",
+      "title": "Farewell to the troops: Abyssinian soldiers lined up without shoes, second Italo-Abyssinian War",
+      "url": "https://repository.library.brown.edu/studio/item/bdr:947628/"
+    },
+    "bdr:947629": {
+      "accession number": "PH 5.7.3.2017",
+      "object_type": "undetermined",
+      "title": "City of women: a women\u2019s fashionable hairstyle, second Italo-Abyssinian War, Ethiopia",
+      "url": "https://repository.library.brown.edu/studio/item/bdr:947629/"
+    },
+    "bdr:947630": {
+      "accession number": "PH 5.7.6.2017",
+      "object_type": "undetermined",
+      "title": "Abyssinian troops marching through forest with donkey, second Italo-Abyssinian War, Ethiopia",
+      "url": "https://repository.library.brown.edu/studio/item/bdr:947630/"
+    },
+    "bdr:947631": {
+      "accession number": "PH 5.7.7.2017",
+      "object_type": "undetermined",
+      "title": "Peasant wedding in Bulgarian village:  the bride and groom with the family of the groom",
+      "url": "https://repository.library.brown.edu/studio/item/bdr:947631/"
+    },
+    "bdr:947632": {
+      "accession number": "PH 5.8.1.2017",
+      "object_type": "undetermined",
+      "title": "Chanting and saluting, the supporters of Blas Pinar jammed a Bilbao cinema ...",
+      "url": "https://repository.library.brown.edu/studio/item/bdr:947632/"
+    },
+    "bdr:947633": {
+      "accession number": "PH 5.8.11.2017",
+      "object_type": "undetermined",
+      "title": "A mass meeting of the Communist Party in a Madrid park ...",
+      "url": "https://repository.library.brown.edu/studio/item/bdr:947633/"
+    },
+    "bdr:947634": {
+      "accession number": "PH 5.8.13.2017",
+      "object_type": "undetermined",
+      "title": "Felipe Gonzalez (age 34), leader of the Spanish Workers Socialist Party and friend of the Prime Minister, touring the country in his private plane",
+      "url": "https://repository.library.brown.edu/studio/item/bdr:947634/"
+    },
+    "bdr:947635": {
+      "accession number": "PH 5.8.15.2017",
+      "object_type": "undetermined",
+      "title": "Crowd with their fists in the air at a rally for Felipe Gonzalez ...",
+      "url": "https://repository.library.brown.edu/studio/item/bdr:947635/"
+    },
+    "bdr:947636": {
+      "accession number": "PH 5.8.16.2017",
+      "object_type": "undetermined",
+      "title": "Marching through the streets of Bilbao, members of the neo-fascist group Fuerza Nueva sing and march their party hymn \u201cBlas Pinar will save Spain.\u201d ...",
+      "url": "https://repository.library.brown.edu/studio/item/bdr:947636/"
+    },
+    "bdr:947637": {
+      "accession number": "PH 5.8.18.2017",
+      "object_type": "undetermined",
+      "title": "Two Spanish nuns voting ...",
+      "url": "https://repository.library.brown.edu/studio/item/bdr:947637/"
+    },
+    "bdr:947638": {
+      "accession number": "PH 5.8.20.2017",
+      "object_type": "undetermined",
+      "title": "Man in beret reading voter list",
+      "url": "https://repository.library.brown.edu/studio/item/bdr:947638/"
+    },
+    "bdr:947639": {
+      "accession number": "PH 5.8.22.2017",
+      "object_type": "undetermined",
+      "title": "Girls playing ring-around-the-rosie on the Guernica City Hall square ...",
+      "url": "https://repository.library.brown.edu/studio/item/bdr:947639/"
+    },
+    "bdr:947640": {
+      "accession number": "PH 5.8.23.2017",
+      "object_type": "undetermined",
+      "title": "The Basque nationalist flag and thousands of supporters reunited in front of a reproduction of Picasso's mural, Guernica ...",
+      "url": "https://repository.library.brown.edu/studio/item/bdr:947640/"
+    },
+    "bdr:947641": {
+      "accession number": "PH 5.8.26.2017",
+      "object_type": "undetermined",
+      "title": "A demonstrator with the flag of the Communist Union seated in a car going to the demonstration held at Vallecas, the workers area near Madrid ...",
+      "url": "https://repository.library.brown.edu/studio/item/bdr:947641/"
+    },
+    "bdr:947642": {
+      "accession number": "PH 5.8.29.2017",
+      "object_type": "undetermined",
+      "title": "Demonstrator with the flag of Communist Union running up the street while police fire smoke bombs in the background ...",
+      "url": "https://repository.library.brown.edu/studio/item/bdr:947642/"
+    },
+    "bdr:947643": {
+      "accession number": "PH 5.8.31.2017",
+      "object_type": "undetermined",
+      "title": "Demonstrators clapping during a Communist Party mass meeting in a bullring, Conference of Socialist Parties of Southern Europe, Madrid, Spain, May 7 - 8, 1977",
+      "url": "https://repository.library.brown.edu/studio/item/bdr:947643/"
+    },
+    "bdr:947644": {
+      "accession number": "PH 5.8.32.2017",
+      "object_type": "undetermined",
+      "title": "Men cheering during Communist Party mass meeting in a bullring, Madrid, Spain, 1977",
+      "url": "https://repository.library.brown.edu/studio/item/bdr:947644/"
+    },
+    "bdr:947645": {
+      "accession number": "PH 5.8.34.2017",
+      "object_type": "undetermined",
+      "title": "Posters of Dolores Ibarruri, \u201cLa Passionaria\u201d, in the streets announcing the communist meeting in Bilbao where \u201cLa Passionaria's\u201d first public appearance since her 38 years in exile will take place, Spain, 1977",
+      "url": "https://repository.library.brown.edu/studio/item/bdr:947645/"
+    },
+    "bdr:947646": {
+      "accession number": "PH 5.8.35.2017",
+      "object_type": "undetermined",
+      "title": "Communist party meeting in bullring. Posters of Dolores Ibarruri, \u201cLa Passionaria\u201d (she was expected to come but did not attend). Santiago Carrillo, general secretary of Spanish Communist party, speaking, Oviedo, Spain, May 15, 1977",
+      "url": "https://repository.library.brown.edu/studio/item/bdr:947646/"
+    },
+    "bdr:947647": {
+      "accession number": "PH 5.8.36.2017",
+      "object_type": "undetermined",
+      "title": "Formerly it was Victory Day during the regime of General Franco, the officers and generals found little change in the ceremonies for Juan Carlos' Armed Forces Day parade, Spain, 1977",
+      "url": "https://repository.library.brown.edu/studio/item/bdr:947647/"
+    },
+    "bdr:947648": {
+      "accession number": "PH 5.8.38.2017",
+      "object_type": "undetermined",
+      "title": "An umbrella repairman hammering and repairing a handle in the Basque town of Eibar, behind him are amnesty slogans and communist insignia, Spain, 1977",
+      "url": "https://repository.library.brown.edu/studio/item/bdr:947648/"
+    },
+    "bdr:947649": {
+      "accession number": "PH 5.8.39.2017",
+      "object_type": "undetermined",
+      "title": "Spanish Socialist Party posters covering the walls of the Basque Town of Eibar ...",
+      "url": "https://repository.library.brown.edu/studio/item/bdr:947649/"
+    },
+    "bdr:947650": {
+      "accession number": "PH 5.8.4.2017",
+      "object_type": "undetermined",
+      "title": "Crowd saluting at Pinar Rally ...",
+      "url": "https://repository.library.brown.edu/studio/item/bdr:947650/"
+    },
+    "bdr:947651": {
+      "accession number": "PH 5.8.6.2017",
+      "object_type": "undetermined",
+      "title": "Hundreds of Communist Party supporters cheered their leader Santiago Carillo ...",
+      "url": "https://repository.library.brown.edu/studio/item/bdr:947651/"
+    },
+    "bdr:947652": {
+      "accession number": "PH 5.8.7.2017",
+      "object_type": "undetermined",
+      "title": "A communist party rally in a football stadium in Madrid ...",
+      "url": "https://repository.library.brown.edu/studio/item/bdr:947652/"
+    },
+    "bdr:947653": {
+      "accession number": "PH 5.8.9.2017",
+      "object_type": "undetermined",
+      "title": "A Communist Party meeting in Oviedo, northern Spain ...",
+      "url": "https://repository.library.brown.edu/studio/item/bdr:947653/"
+    },
+    "bdr:947654": {
+      "accession number": "PH 5.9.1.2017",
+      "object_type": "undetermined",
+      "title": "Vanguard Launching\u2014 row of cameras with large lenses, Cape Canaveral, Florida",
+      "url": "https://repository.library.brown.edu/studio/item/bdr:947654/"
+    },
+    "bdr:947655": {
+      "accession number": "PH 5.9.10.2017",
+      "object_type": "undetermined",
+      "title": "Sammy Davis Jr. \u2014 seated in robe, USA",
+      "url": "https://repository.library.brown.edu/studio/item/bdr:947655/"
+    },
+    "bdr:947656": {
+      "accession number": "PH 5.9.11.2017",
+      "object_type": "undetermined",
+      "title": "Liza Minnelli on the docks of Kona Marina during the opening of a scene for \"Tell Me That You Love Me, Junie Moon\u201d, San Diego",
+      "url": "https://repository.library.brown.edu/studio/item/bdr:947656/"
+    },
+    "bdr:947657": {
+      "accession number": "PH 5.9.14.2017",
+      "object_type": "undetermined",
+      "title": "Hungarian born sculptor Amerigo Tot in the window of his artist studio on the Via Margutta, Rome",
+      "url": "https://repository.library.brown.edu/studio/item/bdr:947657/"
+    },
+    "bdr:947658": {
+      "accession number": "PH 5.9.15.2017",
+      "object_type": "undetermined",
+      "title": "Ball of Debut for Lindy Guinness\u2014 Duchess of Rutland dances, Belvoir Castle, England",
+      "url": "https://repository.library.brown.edu/studio/item/bdr:947658/"
+    },
+    "bdr:947659": {
+      "accession number": "PH 5.9.16.2017",
+      "object_type": "undetermined",
+      "title": "Buddhist monks praying, Japan",
+      "url": "https://repository.library.brown.edu/studio/item/bdr:947659/"
+    },
+    "bdr:947660": {
+      "accession number": "PH 5.9.18.2017",
+      "object_type": "undetermined",
+      "title": "Woman among cherry trees, Japan",
+      "url": "https://repository.library.brown.edu/studio/item/bdr:947660/"
+    },
+    "bdr:947661": {
+      "accession number": "PH 5.9.19.2017",
+      "object_type": "undetermined",
+      "title": "Sumo wrestling, Tokyo",
+      "url": "https://repository.library.brown.edu/studio/item/bdr:947661/"
+    },
+    "bdr:947662": {
+      "accession number": "PH 5.9.3.2017",
+      "object_type": "undetermined",
+      "title": "Israel Hiking\u2014 boy swinging band",
+      "url": "https://repository.library.brown.edu/studio/item/bdr:947662/"
+    },
+    "bdr:947663": {
+      "accession number": "PH 5.9.4.2017",
+      "object_type": "undetermined",
+      "title": "NATO troops on maneuvers in West Germany. American tank corps",
+      "url": "https://repository.library.brown.edu/studio/item/bdr:947663/"
+    },
+    "bdr:947664": {
+      "accession number": "PH 5.9.6.2017",
+      "object_type": "undetermined",
+      "title": "Meat Boycott\u2014 Oscar Mayer workers playing cards, USA",
+      "url": "https://repository.library.brown.edu/studio/item/bdr:947664/"
+    },
+    "bdr:947665": {
+      "accession number": "PH 5.9.7.2017",
+      "object_type": "undetermined",
+      "title": "Eton\u2014 another parent's day has come to an end, parents returning to their cars, England",
+      "url": "https://repository.library.brown.edu/studio/item/bdr:947665/"
+    },
+    "bdr:947666": {
+      "accession number": "PH 5.9.9.2017",
+      "object_type": "undetermined",
+      "title": "North Sea Winds can be chill so German beauties beaching at Sylt tuck themselves away out of sight in these odd-shaped wicker baskets. The Deutsch have a word for this: \u201cKlasse\u201d, Germany",
+      "url": "https://repository.library.brown.edu/studio/item/bdr:947666/"
+    },
+    "bdr:947667": {
+      "accession number": "PH 6.2018",
+      "object_type": "undetermined",
+      "title": "Man with Boombox, Atlantic City",
+      "url": "https://repository.library.brown.edu/studio/item/bdr:947667/"
+    },
+    "bdr:947668": {
+      "accession number": "PH 7.2018",
+      "object_type": "undetermined",
+      "title": "Desert, Man, Red Couch, Las Vegas",
+      "url": "https://repository.library.brown.edu/studio/item/bdr:947668/"
+    },
+    "bdr:947669": {
+      "accession number": "PH 8.2018",
+      "object_type": "undetermined",
+      "title": "Motel, Hill, Henderson",
+      "url": "https://repository.library.brown.edu/studio/item/bdr:947669/"
+    },
+    "bdr:947670": {
+      "accession number": "PH 9.2018",
+      "object_type": "undetermined",
+      "title": "Ninety-Four-Year-Old Lawyer, Reno",
+      "url": "https://repository.library.brown.edu/studio/item/bdr:947670/"
+    },
+    "bdr:947672": {
+      "accession number": "PR 1.1.2014",
+      "object_type": "undetermined",
+      "title": "Abstract",
+      "url": "https://repository.library.brown.edu/studio/item/bdr:947672/"
+    },
+    "bdr:947673": {
+      "accession number": "PR 1.10.2014",
+      "object_type": "undetermined",
+      "title": "Violins",
+      "url": "https://repository.library.brown.edu/studio/item/bdr:947673/"
+    },
+    "bdr:947674": {
+      "accession number": "PR 1.11.2014",
+      "object_type": "undetermined",
+      "title": "Music Stand",
+      "url": "https://repository.library.brown.edu/studio/item/bdr:947674/"
+    },
+    "bdr:947675": {
+      "accession number": "PR 1.12.2014",
+      "object_type": "undetermined",
+      "title": "Native Woman",
+      "url": "https://repository.library.brown.edu/studio/item/bdr:947675/"
+    },
+    "bdr:947676": {
+      "accession number": "PR 1.13.2014",
+      "object_type": "undetermined",
+      "title": "Jungle",
+      "url": "https://repository.library.brown.edu/studio/item/bdr:947676/"
+    },
+    "bdr:947677": {
+      "accession number": "PR 1.14.2014",
+      "object_type": "undetermined",
+      "title": "Landscape",
+      "url": "https://repository.library.brown.edu/studio/item/bdr:947677/"
+    },
+    "bdr:947678": {
+      "accession number": "PR 1.15.2014",
+      "object_type": "undetermined",
+      "title": "Two Horseman",
+      "url": "https://repository.library.brown.edu/studio/item/bdr:947678/"
+    },
+    "bdr:947679": {
+      "accession number": "PR 1.16.2014",
+      "object_type": "undetermined",
+      "title": "Still Life in Landscape",
+      "url": "https://repository.library.brown.edu/studio/item/bdr:947679/"
+    },
+    "bdr:947680": {
+      "accession number": "PR 1.17.2014",
+      "object_type": "undetermined",
+      "title": "Reclining Nude",
+      "url": "https://repository.library.brown.edu/studio/item/bdr:947680/"
+    },
+    "bdr:947681": {
+      "accession number": "PR 1.18.2014",
+      "object_type": "undetermined",
+      "title": "Native Woman",
+      "url": "https://repository.library.brown.edu/studio/item/bdr:947681/"
+    },
+    "bdr:947682": {
+      "accession number": "PR 1.19.2014",
+      "object_type": "undetermined",
+      "title": "Child",
+      "url": "https://repository.library.brown.edu/studio/item/bdr:947682/"
+    },
+    "bdr:947683": {
+      "accession number": "PR 1.2.2014",
+      "object_type": "undetermined",
+      "title": "Leaves",
+      "url": "https://repository.library.brown.edu/studio/item/bdr:947683/"
+    },
+    "bdr:947684": {
+      "accession number": "PR 1.20.2014",
+      "object_type": "undetermined",
+      "title": "Child",
+      "url": "https://repository.library.brown.edu/studio/item/bdr:947684/"
+    },
+    "bdr:947685": {
+      "accession number": "PR 1.21.2014",
+      "object_type": "undetermined",
+      "title": "Trees",
+      "url": "https://repository.library.brown.edu/studio/item/bdr:947685/"
+    },
+    "bdr:947686": {
+      "accession number": "PR 1.22.2014",
+      "object_type": "undetermined",
+      "title": "Interior",
+      "url": "https://repository.library.brown.edu/studio/item/bdr:947686/"
+    },
+    "bdr:947687": {
+      "accession number": "PR 1.23.2014",
+      "object_type": "undetermined",
+      "title": "Landscape",
+      "url": "https://repository.library.brown.edu/studio/item/bdr:947687/"
+    },
+    "bdr:947688": {
+      "accession number": "PR 1.24.2014",
+      "object_type": "undetermined",
+      "title": "Two Figures",
+      "url": "https://repository.library.brown.edu/studio/item/bdr:947688/"
+    },
+    "bdr:947689": {
+      "accession number": "PR 1.25.2014",
+      "object_type": "undetermined",
+      "title": "Kneeling Child",
+      "url": "https://repository.library.brown.edu/studio/item/bdr:947689/"
+    },
+    "bdr:947690": {
+      "accession number": "PR 1.26.2014",
+      "object_type": "undetermined",
+      "title": "Dark Trees",
+      "url": "https://repository.library.brown.edu/studio/item/bdr:947690/"
+    },
+    "bdr:947691": {
+      "accession number": "PR 1.27.2014",
+      "object_type": "undetermined",
+      "title": "Figures",
+      "url": "https://repository.library.brown.edu/studio/item/bdr:947691/"
+    },
+    "bdr:947692": {
+      "accession number": "PR 1.28.2014",
+      "object_type": "undetermined",
+      "title": "Cello",
+      "url": "https://repository.library.brown.edu/studio/item/bdr:947692/"
+    },
+    "bdr:947693": {
+      "accession number": "PR 1.29.2014",
+      "object_type": "undetermined",
+      "title": "Central Cello",
+      "url": "https://repository.library.brown.edu/studio/item/bdr:947693/"
+    },
+    "bdr:947694": {
+      "accession number": "PR 1.3.2014",
+      "object_type": "undetermined",
+      "title": "Abstract",
+      "url": "https://repository.library.brown.edu/studio/item/bdr:947694/"
+    },
+    "bdr:947695": {
+      "accession number": "PR 1.30.2014",
+      "object_type": "undetermined",
+      "title": "Cello",
+      "url": "https://repository.library.brown.edu/studio/item/bdr:947695/"
+    },
+    "bdr:947696": {
+      "accession number": "PR 1.31.2014",
+      "object_type": "undetermined",
+      "title": "Seated Figure",
+      "url": "https://repository.library.brown.edu/studio/item/bdr:947696/"
+    },
+    "bdr:947697": {
+      "accession number": "PR 1.32.2014",
+      "object_type": "undetermined",
+      "title": "Nude",
+      "url": "https://repository.library.brown.edu/studio/item/bdr:947697/"
+    },
+    "bdr:947698": {
+      "accession number": "PR 1.33.2014",
+      "object_type": "undetermined",
+      "title": "Figure in Interior",
+      "url": "https://repository.library.brown.edu/studio/item/bdr:947698/"
+    },
+    "bdr:947699": {
+      "accession number": "PR 1.34.2014",
+      "object_type": "undetermined",
+      "title": "Nude",
+      "url": "https://repository.library.brown.edu/studio/item/bdr:947699/"
+    },
+    "bdr:947700": {
+      "accession number": "PR 1.35.2014",
+      "object_type": "undetermined",
+      "title": "Landscape",
+      "url": "https://repository.library.brown.edu/studio/item/bdr:947700/"
+    },
+    "bdr:947701": {
+      "accession number": "PR 1.36.2014",
+      "object_type": "undetermined",
+      "title": "Boy Scout",
+      "url": "https://repository.library.brown.edu/studio/item/bdr:947701/"
+    },
+    "bdr:947702": {
+      "accession number": "PR 1.37.2014",
+      "object_type": "undetermined",
+      "title": "Abstract",
+      "url": "https://repository.library.brown.edu/studio/item/bdr:947702/"
+    },
+    "bdr:947703": {
+      "accession number": "PR 1.38.2014",
+      "object_type": "undetermined",
+      "title": "Self Portrait",
+      "url": "https://repository.library.brown.edu/studio/item/bdr:947703/"
+    },
+    "bdr:947704": {
+      "accession number": "PR 1.39.2014",
+      "object_type": "undetermined",
+      "title": "0",
+      "url": "https://repository.library.brown.edu/studio/item/bdr:947704/"
+    },
+    "bdr:947705": {
+      "accession number": "PR 1.4.2014",
+      "object_type": "undetermined",
+      "title": "Portrait",
+      "url": "https://repository.library.brown.edu/studio/item/bdr:947705/"
+    },
+    "bdr:947706": {
+      "accession number": "PR 1.40.2014",
+      "object_type": "undetermined",
+      "title": "Portrait with Hands",
+      "url": "https://repository.library.brown.edu/studio/item/bdr:947706/"
+    },
+    "bdr:947707": {
+      "accession number": "PR 1.41.2014",
+      "object_type": "undetermined",
+      "title": "Owl",
+      "url": "https://repository.library.brown.edu/studio/item/bdr:947707/"
+    },
+    "bdr:947708": {
+      "accession number": "PR 1.42.2014",
+      "object_type": "undetermined",
+      "title": "Seamstress",
+      "url": "https://repository.library.brown.edu/studio/item/bdr:947708/"
+    },
+    "bdr:947709": {
+      "accession number": "PR 1.43.2014",
+      "object_type": "undetermined",
+      "title": "Interior with Paintings",
+      "url": "https://repository.library.brown.edu/studio/item/bdr:947709/"
+    },
+    "bdr:947710": {
+      "accession number": "PR 1.44.2014",
+      "object_type": "undetermined",
+      "title": "The Painter",
+      "url": "https://repository.library.brown.edu/studio/item/bdr:947710/"
+    },
+    "bdr:947711": {
+      "accession number": "PR 1.45.2014",
+      "object_type": "undetermined",
+      "title": "Green Jungle",
+      "url": "https://repository.library.brown.edu/studio/item/bdr:947711/"
+    },
+    "bdr:947712": {
+      "accession number": "PR 1.46.2014",
+      "object_type": "undetermined",
+      "title": "Two Trees",
+      "url": "https://repository.library.brown.edu/studio/item/bdr:947712/"
+    },
+    "bdr:947713": {
+      "accession number": "PR 1.47.2014",
+      "object_type": "undetermined",
+      "title": "Marche, Rue de Seine",
+      "url": "https://repository.library.brown.edu/studio/item/bdr:947713/"
+    },
+    "bdr:947714": {
+      "accession number": "PR 1.48.2014",
+      "object_type": "undetermined",
+      "title": "Fishermen",
+      "url": "https://repository.library.brown.edu/studio/item/bdr:947714/"
+    },
+    "bdr:947715": {
+      "accession number": "PR 1.49.2014",
+      "object_type": "undetermined",
+      "title": "Prayer",
+      "url": "https://repository.library.brown.edu/studio/item/bdr:947715/"
+    },
+    "bdr:947716": {
+      "accession number": "PR 1.5.2014",
+      "object_type": "undetermined",
+      "title": "Figure in Studio",
+      "url": "https://repository.library.brown.edu/studio/item/bdr:947716/"
+    },
+    "bdr:947717": {
+      "accession number": "PR 1.50.2014",
+      "object_type": "undetermined",
+      "title": "Toledo",
+      "url": "https://repository.library.brown.edu/studio/item/bdr:947717/"
+    },
+    "bdr:947718": {
+      "accession number": "PR 1.51.2014",
+      "object_type": "undetermined",
+      "title": "Puppet Show",
+      "url": "https://repository.library.brown.edu/studio/item/bdr:947718/"
+    },
+    "bdr:947719": {
+      "accession number": "PR 1.52.2014",
+      "object_type": "undetermined",
+      "title": "Sagaponack",
+      "url": "https://repository.library.brown.edu/studio/item/bdr:947719/"
+    },
+    "bdr:947720": {
+      "accession number": "PR 1.53.2014",
+      "object_type": "undetermined",
+      "title": "Old Lady on Beach",
+      "url": "https://repository.library.brown.edu/studio/item/bdr:947720/"
+    },
+    "bdr:947721": {
+      "accession number": "PR 1.54.2014",
+      "object_type": "undetermined",
+      "title": "Surf",
+      "url": "https://repository.library.brown.edu/studio/item/bdr:947721/"
+    },
+    "bdr:947722": {
+      "accession number": "PR 1.55.2014",
+      "object_type": "undetermined",
+      "title": "Monheggan Shoreline",
+      "url": "https://repository.library.brown.edu/studio/item/bdr:947722/"
+    },
+    "bdr:947723": {
+      "accession number": "PR 1.56.2014",
+      "object_type": "undetermined",
+      "title": "Abstract",
+      "url": "https://repository.library.brown.edu/studio/item/bdr:947723/"
+    },
+    "bdr:947724": {
+      "accession number": "PR 1.57.2014",
+      "object_type": "undetermined",
+      "title": "Landscape",
+      "url": "https://repository.library.brown.edu/studio/item/bdr:947724/"
+    },
+    "bdr:947725": {
+      "accession number": "PR 1.58.2014",
+      "object_type": "undetermined",
+      "title": "Landscape",
+      "url": "https://repository.library.brown.edu/studio/item/bdr:947725/"
+    },
+    "bdr:947726": {
+      "accession number": "PR 1.59.2014",
+      "object_type": "undetermined",
+      "title": "Landscape",
+      "url": "https://repository.library.brown.edu/studio/item/bdr:947726/"
+    },
+    "bdr:947727": {
+      "accession number": "PR 1.6.2014",
+      "object_type": "undetermined",
+      "title": "Self Portrait",
+      "url": "https://repository.library.brown.edu/studio/item/bdr:947727/"
+    },
+    "bdr:947728": {
+      "accession number": "PR 1.60.2014",
+      "object_type": "undetermined",
+      "title": "Rockscape",
+      "url": "https://repository.library.brown.edu/studio/item/bdr:947728/"
+    },
+    "bdr:947729": {
+      "accession number": "PR 1.61.2014",
+      "object_type": "undetermined",
+      "title": "Self Portrait",
+      "url": "https://repository.library.brown.edu/studio/item/bdr:947729/"
+    },
+    "bdr:947730": {
+      "accession number": "PR 1.62.2014",
+      "object_type": "undetermined",
+      "title": "Leaves",
+      "url": "https://repository.library.brown.edu/studio/item/bdr:947730/"
+    },
+    "bdr:947731": {
+      "accession number": "PR 1.63.2014",
+      "object_type": "undetermined",
+      "title": "Woman & Child",
+      "url": "https://repository.library.brown.edu/studio/item/bdr:947731/"
+    },
+    "bdr:947732": {
+      "accession number": "PR 1.64.2014",
+      "object_type": "undetermined",
+      "title": "Prospect Park",
+      "url": "https://repository.library.brown.edu/studio/item/bdr:947732/"
+    },
+    "bdr:947733": {
+      "accession number": "PR 1.7.2014",
+      "object_type": "undetermined",
+      "title": "Figure Study",
+      "url": "https://repository.library.brown.edu/studio/item/bdr:947733/"
+    },
+    "bdr:947734": {
+      "accession number": "PR 1.8.2014",
+      "object_type": "undetermined",
+      "title": "Reclining Nude",
+      "url": "https://repository.library.brown.edu/studio/item/bdr:947734/"
+    },
+    "bdr:947735": {
+      "accession number": "PR 1.9.2014",
+      "object_type": "undetermined",
+      "title": "Cats",
+      "url": "https://repository.library.brown.edu/studio/item/bdr:947735/"
+    },
+    "bdr:947736": {
+      "accession number": "PR 10.11.2018",
+      "object_type": "undetermined",
+      "title": "Scissors Jack Series",
+      "url": "https://repository.library.brown.edu/studio/item/bdr:947736/"
+    },
+    "bdr:947737": {
+      "accession number": "PR 10.5.2018",
+      "object_type": "undetermined",
+      "title": "Untitled (diptych)",
+      "url": "https://repository.library.brown.edu/studio/item/bdr:947737/"
+    },
+    "bdr:947738": {
+      "accession number": "PR 10.6.2018",
+      "object_type": "undetermined",
+      "title": "Untitled (diptych)",
+      "url": "https://repository.library.brown.edu/studio/item/bdr:947738/"
+    },
+    "bdr:947739": {
+      "accession number": "PR 10.8.2018",
+      "object_type": "undetermined",
+      "title": "Nature Table Red",
+      "url": "https://repository.library.brown.edu/studio/item/bdr:947739/"
+    },
+    "bdr:947740": {
+      "accession number": "PR 10.9.2018",
+      "object_type": "undetermined",
+      "title": "Nature Table Grey",
+      "url": "https://repository.library.brown.edu/studio/item/bdr:947740/"
+    },
+    "bdr:947741": {
+      "accession number": "PR 17.2018",
+      "object_type": "undetermined",
+      "title": "New No's",
+      "url": "https://repository.library.brown.edu/studio/item/bdr:947741/"
+    },
+    "bdr:947774": {
+      "accession number": "PUB 2018.7",
+      "object_type": "undetermined",
+      "title": "Untitled",
+      "url": "https://repository.library.brown.edu/studio/item/bdr:947774/"
+    },
+    "bdr:947775": {
+      "accession number": "PUB 2018.8.a,b",
+      "object_type": "undetermined",
+      "title": "Theme Time-President's Day",
+      "url": "https://repository.library.brown.edu/studio/item/bdr:947775/"
+    },
+    "bdr:947776": {
+      "accession number": "PUB 2019.1",
+      "object_type": "undetermined",
+      "title": "Toy Soldier",
+      "url": "https://repository.library.brown.edu/studio/item/bdr:947776/"
+    },
+    "bdr:947777": {
+      "accession number": "SC 1.2012",
+      "object_type": "undetermined",
+      "title": "The Wanderer",
+      "url": "https://repository.library.brown.edu/studio/item/bdr:947777/"
+    },
+    "bdr:947778": {
+      "accession number": "SC 1.2016",
+      "object_type": "undetermined",
+      "title": "Idee di pietra (Ideas of Stone)",
+      "url": "https://repository.library.brown.edu/studio/item/bdr:947778/"
+    },
+    "bdr:947779": {
+      "accession number": "SC 10.10.2018",
+      "object_type": "undetermined",
+      "title": "SSN 409-52-2002",
+      "url": "https://repository.library.brown.edu/studio/item/bdr:947779/"
+    },
+    "bdr:947780": {
+      "accession number": "SC 10.3.2018",
+      "object_type": "undetermined",
+      "title": "Girl on a Chair",
+      "url": "https://repository.library.brown.edu/studio/item/bdr:947780/"
+    },
+    "bdr:947781": {
+      "accession number": "SC 2.2016",
+      "object_type": "undetermined",
+      "title": "Untitled (Lamp/Bear)",
+      "url": "https://repository.library.brown.edu/studio/item/bdr:947781/"
     }
   }
 }

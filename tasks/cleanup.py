@@ -33,19 +33,15 @@ class BdrDeleter:
     def make_pids_to_delete( self ):
         """ Saves list of pids to delete from the BDR.
             Called manuall per README. """
-        logger.debug( 'starting make_pids_to_delete()' )
         # get source and bdr pids
         source_pids = self.prepare_source_pids() #simple list
         existing_bdr_pids = self.prepare_bdr_pids() #dict of information for all Bell pids in the BDR
         # intersect lists
         ( source_pids_not_in_bdr, bdr_pids_not_in_source ) = self.intersect_pids( source_pids, list(existing_bdr_pids.keys()) )
-        logger.debug( 'ready to save output' )
         delete_pids_info = {}
         for pid in bdr_pids_not_in_source:
             delete_pids_info[pid] = existing_bdr_pids[pid]
-        # save pids to be deleted
         self.output_pids_to_delete_list( delete_pids_info )
-        return
 
     def delete_pid_via_bdr_item_api( self, pid ):
         """ Hits item-api to delete item from bdr.
@@ -57,7 +53,6 @@ class BdrDeleter:
             'authorization_code': self.BELL_ITEM_API_AUTHCODE }
         r = requests.delete( self.BELL_ITEM_API_URL, data=payload )
         print( 'deletion pid, `{pid}`; r.status_code, `{code}`'.format(pid=pid, code=r.status_code) )
-        print( 'deletion pid, `{pid}`; r.content, ```{content}```'.format(pid=pid, content=r.content.decode('utf-8')) )
         self.track_bdr_deletion( pid, r.status_code )
 
     ## helpers ##
@@ -107,7 +102,21 @@ class BdrDeleter:
         jsn = json.dumps( data, indent=2, sort_keys=True )
         with open( os.path.join('data', 'e2__bdr_pids_to_delete.json'), 'wt' ) as f:
             f.write( jsn )
-        return
+
+    def _read_pids_to_delete_from_file(self):
+        with open(os.path.join('data', 'e2__bdr_pids_to_delete.json'), 'rb') as f:
+            data = f.read()
+        pids_info = json.loads(data.decode('utf8'))
+        expected_num_pids = int(pids_info['count'])
+        pids = [p for p in pids_info['pids_to_delete'].keys()]
+        if expected_num_pids != len(pids):
+            raise Exception(f'got wrong number of pids to delete: {expected_num_pids} != {len(pids)}')
+        return pids
+
+    def delete_pids(self):
+        pids = self._read_pids_to_delete_from_file()
+        for p in pids:
+            self.delete_pid_via_bdr_item_api(p)
 
     def track_bdr_deletion( self, pid, status ):
         """ Tracks bdr deletions.
@@ -168,16 +177,15 @@ class BdrDeleter:
     # end class BdrDeleter()
 
 
-## convenience runners ##
-
-
 def run_make_bdr_pids_to_delete():
     deleter = BdrDeleter()
     deleter.make_pids_to_delete()
+
+def delete_pids():
+    deleter = BdrDeleter()
+    deleter.delete_pids()
 
 def run_delete_single_pid_from_bdr( pid ):
     deleter = BdrDeleter()
     deleter.delete_pid_via_bdr_item_api( pid )
 
-
-## EOF
