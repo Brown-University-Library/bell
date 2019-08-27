@@ -124,13 +124,13 @@ code related to ingesting bell-gallery images into the bdr.
     - after creates, confirm a re-run of `tasks/acc_num_to_pid.py` results in zero non-pid matches.
         - note that this re-run will update, as it should, `e1__accession_number_to_pid_dict.json` -- the dict of accession-numbers-to-pids.
     - status:
-        - new-metadata-objects-created - DONE 2019-08-07
-        - `acc_num_to_pid.py` - DONE 2019-08-07
+        - new-metadata-objects-created - DONE 2019-08-07, 2019-08-27
+        - `acc_num_to_pid.py` - DONE 2019-08-07, 2019-08-27
 
 - update metadata for existing objects in the BDR, if needed
     - explanation: for each accession-number -- this prepares the data for the bell-json-datastream from the source data, and compares it to the item's bell-json-datastream from the bdr-item. If there is a difference, we update the bdr object's bell-json-datastream and the bdr object's mods-datastream
     - tasks/metadata.run_update_metadata_if_needed()
-    - status: DONE 2019-08-07
+    - status: DONE 2019-08-07, 2019-08-27
 
 - make image-filename to data dct
     - produces a dct and then json file like:
@@ -150,7 +150,7 @@ code related to ingesting bell-gallery images into the bdr.
 
     - end result: `g1__images_filename_dct.json`
         - note that at the bottom of that file are any files that were excluded from the filename-dct.
-    - status: DONE 2019-08-07
+    - status: DONE 2019-08-07, 2019-08-27
 
 - make list of images to process
     - tasks/images.ImageLister.make_image_lists()
@@ -162,7 +162,7 @@ code related to ingesting bell-gallery images into the bdr.
 
     - produces a file containing both a list of images to add, and a list of images to update
     - end result: `g2__images_to_process.json`
-    - status: DONE 2019-08-07
+    - status: DONE 2019-08-07, 2019-08-27
 
 - add images
     - tasks/images.add_images()
@@ -176,12 +176,13 @@ code related to ingesting bell-gallery images into the bdr.
 
     - updates the `g2__images_to_process.json` file's `lst_images_to_add` and `lst_images_to_update` lists of image-dict-data with a `'status': ingested_(timestamp)` dict-entry.
     - note: verify that JP2 job was run for recreating JP2 when MASTER was updated
-    - status: DONE 2019-08-07 (& cleaned up failed JP2 jobs)
+    - status: DONE 2019-08-07 (& cleaned up failed JP2 jobs), 2019-08-27 (no images)
 
 - purge caches for updated images
     - loris cache (info, source, derivatives) - DONE 2019-08-07
     - thumbnails in fedora re-created - DONE (happened automatically when MASTER was overwritten)
-    - django thumbnail cache - DONE 2019-08-07
+    - django thumbnail cache - DONE 2019-08-07 
+    - N/A for 2019-08-27
 
 - create final json file for CIS
     - make solr pids list
