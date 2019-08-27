@@ -45,7 +45,7 @@ code related to ingesting bell-gallery images into the bdr.
 - run script to get list of files in the images-to-ingest directory
     - tasks/make_image_list.py
     - end result: `d1__bell_images_listing.json`
-    - status: DONE 2019-08-02
+    - status: DONE 2019-08-02, 2019-08-27 (no images to process)
 
 - compare imagefile-filenames to metadata-filenames
     - tasks/check_filenames_against_metadata.py
@@ -61,6 +61,7 @@ code related to ingesting bell-gallery images into the bdr.
     - status:
         DONE 2019-08-02 - found one image with no metadata record - emailed them.
         DONE 2019-08-05 - all images found in metadata.
+        DONE 2019-08-27 (no images to process)
 
 - match metadata accession-numbers to pid #2
     - tasks/acc_num_to_pid.py
