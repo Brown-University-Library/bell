@@ -18,9 +18,9 @@ code related to ingesting bell-gallery images into the bdr.
 - get access to image-directory
     - check dev `mount` access
         - notes:
-            - the specific mount directory changes each run, so check that our symlink is correct.
+            - the specific mount directory changes each run, so check that our symlink is correct (need to use the TIFF directory - there could be another JPG directory, but just ignore it)
             - the share path is in a settings comment.
-        - status: DONE 2019-08-01
+        - status: DONE 2020-10-19
 
 - get metadata
     - metadata should be for _all_ the records
@@ -45,7 +45,7 @@ code related to ingesting bell-gallery images into the bdr.
 - run script to get list of files in the images-to-ingest directory
     - tasks/make_image_list.py
     - end result: `d1__bell_images_listing.json`
-    - status: DONE 2019-08-02, 2019-08-27 (no images to process)
+    - status: DONE 2020-10-19
 
 - compare imagefile-filenames to metadata-filenames
     - tasks/check_filenames_against_metadata.py
@@ -59,9 +59,7 @@ code related to ingesting bell-gallery images into the bdr.
 
     - end result: `data/d2__images_metadata_comparison.json` -- work through any not-matched files with J.C. before proceeding.
     - status:
-        DONE 2019-08-02 - found one image with no metadata record - emailed them.
-        DONE 2019-08-05 - all images found in metadata.
-        DONE 2019-08-27 (no images to process)
+        DONE 2020-10-19
 
 - match metadata accession-numbers to pid #2
     - tasks/acc_num_to_pid.py
