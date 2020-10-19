@@ -1,11 +1,10 @@
 import os
 import sys
 from lxml import etree
-import bell_utils
 
 
-RAW_DATA_PATH = os.path.join(bell_utils.DATA_DIR, 'a__all_data_raw.xml')
-FORMATTED_DATA_PATH = os.path.join(bell_utils.DATA_DIR, 'b__all_data_formatted.xml')
+RAW_DATA_PATH = os.path.join('data', 'a__all_data_raw.xml')
+FORMATTED_DATA_PATH = os.path.join('data', 'b__all_data_formatted.xml')
 
 
 def create_formatted_xml_file():
