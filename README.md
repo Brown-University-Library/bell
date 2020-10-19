@@ -67,8 +67,7 @@ code related to ingesting bell-gallery images into the bdr.
     - accession-numbers without pids imply creation of a new metadata-only object (which may gain an associated image later)
     - accession-numbers with pids imply checking to see if fedora metadata needs to be updated
     - note, after metadata-only objects are created, this will be re-run until the `count_null` is zero.
-    - status: 2019-08-06; shows 644 accession-numbers without pids
-    - status: 2019-08-27 - 1 record without a pid
+    - status: 2020-10-19; shows 289 accession-numbers without pids
 
 - check for, confirm, and delete old bell items from fedora
     - note: this step is being done here because:
