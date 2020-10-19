@@ -1,7 +1,6 @@
 import datetime, json, os, pprint
 import lxml
 from lxml import etree
-from bell_utils import DATA_DIR
 
 
 class SourceDictMaker:
@@ -189,6 +188,7 @@ class SourceDictMaker:
     def _dictify_data( self, source_list ):
         """ Takes raw bell list of dict_data, returns accession-number dict. """
         accession_number_dict = {}
+        num_duplicates = 0
         for entry in source_list:
             if entry['calc_accession_id']:  # handles a null entry
                 accession_num = entry['calc_accession_id'].strip()
@@ -198,6 +198,7 @@ class SourceDictMaker:
                     print(f'duplicate accession number: "{accession_num}"')
                     print(f'  object_id: {entry["object_id"]}; title: {entry["object_title"]}')
                     print(f'  object_id: {accession_number_dict[accession_num]["object_id"]}; title: {accession_number_dict[accession_num]["object_title"]}')
+                    num_duplicates += 1
                 accession_number_dict[accession_num] = entry
             else:
                 print(f'no accession number for record')
@@ -206,6 +207,9 @@ class SourceDictMaker:
           'count': len( accession_number_dict.items() ),
           'datetime': str( datetime.datetime.now() ),
           'items': accession_number_dict }
+        print(f'Total records in DB: {len(source_list)}')
+        print(f'Valid items: {final_dict["count"]}')
+        print(f'number of duplicates: {num_duplicates}')
         return final_dict
 
     def _save_json( self, result_list, JSON_OUTPUT_PATH ):
@@ -222,8 +226,8 @@ class SourceDictMaker:
 
 if __name__ == '__main__':
     """ Assumes env is activated. """
-    FMPRO_XML_PATH = os.path.join(DATA_DIR, 'b__all_data_formatted.xml')
-    JSON_OUTPUT_PATH = os.path.join(DATA_DIR, 'c__accession_number_to_data_dict.json')
+    FMPRO_XML_PATH = os.path.join('data', 'b__all_data_formatted.xml')
+    JSON_OUTPUT_PATH = os.path.join('data', 'c__accession_number_to_data_dict.json')
     maker = SourceDictMaker()
     maker.convert_fmproxml_to_json(
         FMPRO_XML_PATH, JSON_OUTPUT_PATH )
