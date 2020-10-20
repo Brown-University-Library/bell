@@ -45,7 +45,7 @@ code related to ingesting bell-gallery images into the bdr.
 - run script to get list of files in the images-to-ingest directory
     - tasks/make_image_list.py
     - end result: `d1__bell_images_listing.json`
-    - status: DONE 2020-10-19
+    - status: DONE 2020-10-19, 2020-10-20
 
 - compare imagefile-filenames to metadata-filenames
     - tasks/check_filenames_against_metadata.py
@@ -59,7 +59,7 @@ code related to ingesting bell-gallery images into the bdr.
 
     - end result: `data/d2__images_metadata_comparison.json` -- work through any not-matched files with J.C. before proceeding.
     - status:
-        DONE 2020-10-19
+        DONE 2020-10-19, 2020-10-20
 
 - match metadata accession-numbers to pid #2
     - tasks/acc_num_to_pid.py
@@ -68,6 +68,7 @@ code related to ingesting bell-gallery images into the bdr.
     - accession-numbers with pids imply checking to see if fedora metadata needs to be updated
     - note, after metadata-only objects are created, this will be re-run until the `count_null` is zero.
     - status: 2020-10-19; shows 289 accession-numbers without pids
+    -         2020-10-20; shows 288 accession-numbers without pids
 
 - check for, confirm, and delete old bell items from fedora
     - note: this step is being done here because:
@@ -84,15 +85,13 @@ code related to ingesting bell-gallery images into the bdr.
                 - then the old object (with the old accession number) would need to be deleted
                 - if that object to be deleted has an image, then we might lose the image, because she wouldn't send us the image if it wasn't updated.
                 - so, any items to delete with an image - check with her.
-            - status: 2019-08-06 - 1 (metadata) pid found to delete - nothing to verify
-            - status: 2019-08-27 - many metadata pids found to delete - nothing to verify
+            - status: 2020-10-20 - 1 (metadata) pid found to delete - nothing to verify
         - manually run deletion.
             - NOTE: when beginning this process, manually cleanup the `e3__bdr_entries_deleted_tracker.json` file (DON'T DELETE) to `{}`.
                 - This is because each individual deletion updates this status-dict.
             - `from tasks import cleanup; cleanup.run_delete_single_pid_from_bdr( pid )`
             - end result: `e3__bdr_entries_deleted_tracker.json`
-            - status: 2019-08-06 DONE
-            - status: 2019-08-27 DONE
+            - status: 2020-10-20 done - 1 item deleted
 
 - make metadata-only list
     - tasks/metadata.run_metadata_only_lister()
