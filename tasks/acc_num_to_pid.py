@@ -1,7 +1,6 @@
-import datetime, json, os, pprint, sys, time
+import datetime, json, os
 import logging
 import requests
-from bell_utils import DATA_DIR
 
 
 logger = logging.getLogger(__name__)
@@ -20,8 +19,8 @@ class PidFinder:
         """
 
     def __init__(self, env='dev'):
-        self.bell_acc_num_data_path = os.path.join(DATA_DIR, 'c__accession_number_to_data_dict.json')
-        self.output_json_path = os.path.join(DATA_DIR, 'e1__accession_number_to_pid_dict.json')
+        self.bell_acc_num_data_path = os.path.join('data', 'c__accession_number_to_data_dict.json')
+        self.output_json_path = os.path.join('data', 'e1__accession_number_to_pid_dict.json')
         if env == 'prod':
             self.bdr_collection_pid = os.environ['BELL_ANTP__PROD_COLLECTION_PID']
             self.bdr_api_url = os.environ['BELL_ANTP__PROD_SOLR_ROOT']
@@ -89,16 +88,29 @@ class PidFinder:
             Creates and returns an accession-number-to-pid dict from the source bell data.
             Example: { acc_num_1: bdr_123, acc_num_2: None } """
         final_accession_pid_dict = {}
+        tmp_used_bdr_pids = set() #for tracking whether we've used a pid as we loop through the data
         for accession_number in sorted(bell_accession_number_data.keys()):
             if accession_number in bdr_accession_number_data:
-                final_accession_pid_dict[accession_number] = bdr_accession_number_data[accession_number]['pid']
+                if bdr_accession_number_data[accession_number]['pid'] not in tmp_used_bdr_pids:
+                    final_accession_pid_dict[accession_number] = bdr_accession_number_data[accession_number]['pid']
+                    tmp_used_bdr_pids.add(bdr_accession_number_data[accession_number]['pid'])
+                else:
+                    print(f"bdr_accession_number[accession]['pid'] already used")
             else:
                 #loop through all the BDR records, seeing if we can find a match
                 for bdr_accession_number, bdr_data in bdr_accession_number_data.items():
                     if accession_number.replace(' ', '') == bdr_accession_number.replace(' ', ''):
-                        final_accession_pid_dict[accession_number] = bdr_data['pid']
+                        if bdr_data['pid'] not in tmp_used_bdr_pids:
+                            final_accession_pid_dict[accession_number] = bdr_data['pid']
+                            tmp_used_bdr_pids.add(bdr_data['pid'])
+                        else:
+                            print(f"{bdr_data['pid']} has bell accession number {accession_number}, but it's already been used")
                     elif bell_accession_number_data[accession_number]['object_id'] == bdr_accession_number_data[bdr_accession_number]['mods_id_bell_object_id_ssim'][0]:
-                        final_accession_pid_dict[accession_number] = bdr_data['pid']
+                        if bdr_data['pid'] not in tmp_used_bdr_pids:
+                            final_accession_pid_dict[accession_number] = bdr_data['pid']
+                            tmp_used_bdr_pids.add(bdr_data['pid'])
+                        else:
+                            print(f"{bdr_data['pid']} has bell object id {bell_accession_number_data[accession_number]['object_id']}, but it's already been used")
                 if accession_number not in final_accession_pid_dict:
                     final_accession_pid_dict[accession_number] = None
         mapped_bdr_pids = [p for p in final_accession_pid_dict.values() if p is not None]
