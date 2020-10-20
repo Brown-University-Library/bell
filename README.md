@@ -97,12 +97,11 @@ code related to ingesting bell-gallery images into the bdr.
     - tasks/metadata.run_metadata_only_lister()
     - to run (from `bell_code` directory)...
 
-            >>> from tasks import metadata
-            >>> metadata.run_metadata_only_lister()
+            >>> from tasks import metadata; metadata.run_metadata_only_lister()
 
     - end result: `f1__metadata_only_accession_numbers.json`
     - status:
-        - DONE 2019-08-06, 2019-08-27
+        - DONE 2020-10-20
 
 - create new metadata objects
     - note: this creates metadata-only objects, some of which may be updated in a later step to also have image-datastreams.
@@ -110,8 +109,7 @@ code related to ingesting bell-gallery images into the bdr.
     - tasks/metadata.run_create_metadata_only_objects()
     - to run (from `bell_code` directory)...
 
-            >>> from tasks import metadata
-            >>> metadata.run_create_metadata_only_objects()
+            >>> from tasks import metadata; metadata.run_create_metadata_only_objects()
 
     - to confirm that object is in fedora:
             https://api_search/?q=mods_id_bell_accession_number_ssim:the%20accession_number
@@ -120,8 +118,8 @@ code related to ingesting bell-gallery images into the bdr.
     - after creates, confirm a re-run of `tasks/acc_num_to_pid.py` results in zero non-pid matches.
         - note that this re-run will update, as it should, `e1__accession_number_to_pid_dict.json` -- the dict of accession-numbers-to-pids.
     - status:
-        - new-metadata-objects-created - DONE 2019-08-07, 2019-08-27
-        - `acc_num_to_pid.py` - DONE 2019-08-07, 2019-08-27
+        - new-metadata-objects-created - DONE 2020-10-20
+        - `acc_num_to_pid.py` - DONE 2020-10-20
 
 - update metadata for existing objects in the BDR, if needed
     - explanation: for each accession-number -- this prepares the data for the bell-json-datastream from the source data, and compares it to the item's bell-json-datastream from the bdr-item. If there is a difference, we update the bdr object's bell-json-datastream and the bdr object's mods-datastream
