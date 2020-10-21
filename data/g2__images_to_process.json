@@ -1,9 +1,1305 @@
 {
-  "count_images": 0,
-  "count_images_processed": 0,
-  "count_images_to_add": 0,
+  "count_images": 185,
+  "count_images_processed": 185,
+  "count_images_to_add": 185,
   "count_images_to_update": 0,
-  "datetime": "2019-08-27 12:05:28.268828",
-  "lst_images_to_add": [],
+  "datetime": "2020-10-20 14:50:05.635287",
+  "lst_images_to_add": [
+    {
+      "Baltermants PH_2019.7.1.tif": {
+        "accession_number": "PH 2019.7.1",
+        "pid": "bdr:1148153",
+        "status": "ingested_2020-10-20 14:55:42.567692"
+      }
+    },
+    {
+      "Baltermants PH_2019.7.2.tif": {
+        "accession_number": "PH 2019.7.2",
+        "pid": "bdr:1148264",
+        "status": "ingested_2020-10-20 14:55:57.777258"
+      }
+    },
+    {
+      "Citret PH_2019.7.10.tif": {
+        "accession_number": "PH 2019.7.10",
+        "pid": "bdr:1148154",
+        "status": "ingested_2020-10-20 14:56:06.960249"
+      }
+    },
+    {
+      "Citret PH_2019.7.11.tif": {
+        "accession_number": "PH 2019.7.11",
+        "pid": "bdr:1148165",
+        "status": "ingested_2020-10-20 14:56:16.784153"
+      }
+    },
+    {
+      "Citret PH_2019.7.12.tif": {
+        "accession_number": "PH 2019.7.12",
+        "pid": "bdr:1148176",
+        "status": "ingested_2020-10-20 14:56:28.939877"
+      }
+    },
+    {
+      "Citret PH_2019.7.13.tif": {
+        "accession_number": "PH 2019.7.13",
+        "pid": "bdr:1148187",
+        "status": "ingested_2020-10-20 14:56:36.882572"
+      }
+    },
+    {
+      "Citret PH_2019.7.14.tif": {
+        "accession_number": "PH 2019.7.14",
+        "pid": "bdr:1148198",
+        "status": "ingested_2020-10-20 14:56:45.516670"
+      }
+    },
+    {
+      "Citret PH_2019.7.15.tif": {
+        "accession_number": "PH 2019.7.15",
+        "pid": "bdr:1148209",
+        "status": "ingested_2020-10-20 14:56:54.255679"
+      }
+    },
+    {
+      "Citret PH_2019.7.16.tif": {
+        "accession_number": "PH 2019.7.16",
+        "pid": "bdr:1148220",
+        "status": "ingested_2020-10-20 14:57:09.454528"
+      }
+    },
+    {
+      "Citret PH_2019.7.17.tif": {
+        "accession_number": "PH 2019.7.17",
+        "pid": "bdr:1148231",
+        "status": "ingested_2020-10-20 14:57:20.740264"
+      }
+    },
+    {
+      "Citret PH_2019.7.18.tif": {
+        "accession_number": "PH 2019.7.18",
+        "pid": "bdr:1148242",
+        "status": "ingested_2020-10-20 14:57:30.247944"
+      }
+    },
+    {
+      "Citret PH_2019.7.19.tif": {
+        "accession_number": "PH 2019.7.19",
+        "pid": "bdr:1148253",
+        "status": "ingested_2020-10-20 14:57:40.668812"
+      }
+    },
+    {
+      "Citret PH_2019.7.20.tif": {
+        "accession_number": "PH 2019.7.20",
+        "pid": "bdr:1148265",
+        "status": "ingested_2020-10-20 14:57:51.715212"
+      }
+    },
+    {
+      "Citret PH_2019.7.21.tif": {
+        "accession_number": "PH 2019.7.21",
+        "pid": "bdr:1148276",
+        "status": "ingested_2020-10-20 14:57:59.385963"
+      }
+    },
+    {
+      "Citret PH_2019.7.22.tif": {
+        "accession_number": "PH 2019.7.22",
+        "pid": "bdr:1148280",
+        "status": "ingested_2020-10-20 14:58:05.710608"
+      }
+    },
+    {
+      "Citret PH_2019.7.23.tif": {
+        "accession_number": "PH 2019.7.23",
+        "pid": "bdr:1148281",
+        "status": "ingested_2020-10-20 14:58:10.849308"
+      }
+    },
+    {
+      "Citret PH_2019.7.3.tif": {
+        "accession_number": "PH 2019.7.3",
+        "pid": "bdr:1148288",
+        "status": "ingested_2020-10-20 14:58:23.049068"
+      }
+    },
+    {
+      "Citret PH_2019.7.4.tif": {
+        "accession_number": "PH 2019.7.4",
+        "pid": "bdr:1148299",
+        "status": "ingested_2020-10-20 14:58:30.511235"
+      }
+    },
+    {
+      "Citret PH_2019.7.5.tif": {
+        "accession_number": "PH 2019.7.5",
+        "pid": "bdr:1148310",
+        "status": "ingested_2020-10-20 14:58:44.544209"
+      }
+    },
+    {
+      "Citret PH_2019.7.6.tif": {
+        "accession_number": "PH 2019.7.6",
+        "pid": "bdr:1148321",
+        "status": "ingested_2020-10-20 14:58:52.163247"
+      }
+    },
+    {
+      "Citret PH_2019.7.7.tif": {
+        "accession_number": "PH 2019.7.7",
+        "pid": "bdr:1148332",
+        "status": "ingested_2020-10-20 14:59:03.764488"
+      }
+    },
+    {
+      "Citret PH_2019.7.8.tif": {
+        "accession_number": "PH 2019.7.8",
+        "pid": "bdr:1148343",
+        "status": "ingested_2020-10-20 14:59:12.394114"
+      }
+    },
+    {
+      "Citret PH_2019.7.9.tif": {
+        "accession_number": "PH 2019.7.9",
+        "pid": "bdr:1148354",
+        "status": "ingested_2020-10-20 14:59:20.824890"
+      }
+    },
+    {
+      "Clemente B_1999.6.1.jpg": {
+        "accession_number": "B 1999.6.1",
+        "pid": "bdr:10987",
+        "status": "ingested_2020-10-20 14:59:23.226740"
+      }
+    },
+    {
+      "Costain PH_2019.7.24.tif": {
+        "accession_number": "PH 2019.7.24",
+        "pid": "bdr:1148282",
+        "status": "ingested_2020-10-20 14:59:34.642774"
+      }
+    },
+    {
+      "Costain PH_2019.7.25.tif": {
+        "accession_number": "PH 2019.7.25",
+        "pid": "bdr:1148283",
+        "status": "ingested_2020-10-20 14:59:40.157118"
+      }
+    },
+    {
+      "Costain PH_2019.7.26.tif": {
+        "accession_number": "PH 2019.7.26",
+        "pid": "bdr:1148284",
+        "status": "ingested_2020-10-20 14:59:54.238469"
+      }
+    },
+    {
+      "Costain PH_2019.7.27.tif": {
+        "accession_number": "PH 2019.7.27",
+        "pid": "bdr:1148285",
+        "status": "ingested_2020-10-20 15:00:13.003133"
+      }
+    },
+    {
+      "Costain PH_2019.7.28.tif": {
+        "accession_number": "PH 2019.7.28",
+        "pid": "bdr:1148286",
+        "status": "ingested_2020-10-20 15:00:31.886649"
+      }
+    },
+    {
+      "Costain PH_2019.7.29.tif": {
+        "accession_number": "PH 2019.7.29",
+        "pid": "bdr:1148287",
+        "status": "ingested_2020-10-20 15:00:47.109569"
+      }
+    },
+    {
+      "Costain PH_2019.7.30.tif": {
+        "accession_number": "PH 2019.7.30",
+        "pid": "bdr:1148289",
+        "status": "ingested_2020-10-20 15:01:06.678827"
+      }
+    },
+    {
+      "Costain PH_2019.7.31.tif": {
+        "accession_number": "PH 2019.7.31",
+        "pid": "bdr:1148290",
+        "status": "ingested_2020-10-20 15:01:20.817882"
+      }
+    },
+    {
+      "Costain PH_2019.7.32.tif": {
+        "accession_number": "PH 2019.7.32",
+        "pid": "bdr:1148291",
+        "status": "ingested_2020-10-20 15:01:35.617173"
+      }
+    },
+    {
+      "Disfarmer PH_2019.7.33.tif": {
+        "accession_number": "PH 2019.7.33",
+        "pid": "bdr:1148292",
+        "status": "ingested_2020-10-20 15:01:39.962203"
+      }
+    },
+    {
+      "Disfarmer PH_2019.7.34.tif": {
+        "accession_number": "PH 2019.7.34",
+        "pid": "bdr:1148293",
+        "status": "ingested_2020-10-20 15:01:43.250091"
+      }
+    },
+    {
+      "Disfarmer PH_2019.7.35.tif": {
+        "accession_number": "PH 2019.7.35",
+        "pid": "bdr:1148294",
+        "status": "ingested_2020-10-20 15:01:46.855505"
+      }
+    },
+    {
+      "Disfarmer PH_2019.7.36.tif": {
+        "accession_number": "PH 2019.7.36",
+        "pid": "bdr:1148295",
+        "status": "ingested_2020-10-20 15:01:49.523656"
+      }
+    },
+    {
+      "Disfarmer PH_2019.7.37.tif": {
+        "accession_number": "PH 2019.7.37",
+        "pid": "bdr:1148296",
+        "status": "ingested_2020-10-20 15:01:53.306382"
+      }
+    },
+    {
+      "Disfarmer PH_2019.7.38.tif": {
+        "accession_number": "PH 2019.7.38",
+        "pid": "bdr:1148297",
+        "status": "ingested_2020-10-20 15:01:57.007146"
+      }
+    },
+    {
+      "Disfarmer PH_2019.7.39.tif": {
+        "accession_number": "PH 2019.7.39",
+        "pid": "bdr:1148298",
+        "status": "ingested_2020-10-20 15:02:01.261892"
+      }
+    },
+    {
+      "Eisenstaedt PH_2019.7.40.tif": {
+        "accession_number": "PH 2019.7.40",
+        "pid": "bdr:1148300",
+        "status": "ingested_2020-10-20 15:02:12.892323"
+      }
+    },
+    {
+      "Eisenstaedt PH_2019.7.41.tif": {
+        "accession_number": "PH 2019.7.41",
+        "pid": "bdr:1148301",
+        "status": "ingested_2020-10-20 15:02:24.601955"
+      }
+    },
+    {
+      "Eisenstaedt PH_2019.7.42.tif": {
+        "accession_number": "PH 2019.7.42",
+        "pid": "bdr:1148302",
+        "status": "ingested_2020-10-20 15:02:32.931765"
+      }
+    },
+    {
+      "Eisenstaedt PH_2019.7.43.tif": {
+        "accession_number": "PH 2019.7.43",
+        "pid": "bdr:1148303",
+        "status": "ingested_2020-10-20 15:02:41.507380"
+      }
+    },
+    {
+      "Freed PH_2019.7.44.tif": {
+        "accession_number": "PH 2019.7.44",
+        "pid": "bdr:1148304",
+        "status": "ingested_2020-10-20 15:02:50.917154"
+      }
+    },
+    {
+      "Freed PH_2019.7.45.tif": {
+        "accession_number": "PH 2019.7.45",
+        "pid": "bdr:1148305",
+        "status": "ingested_2020-10-20 15:03:02.415295"
+      }
+    },
+    {
+      "Freed PH_2019.7.46.tif": {
+        "accession_number": "PH 2019.7.46",
+        "pid": "bdr:1148306",
+        "status": "ingested_2020-10-20 15:03:15.469139"
+      }
+    },
+    {
+      "Freed PH_2019.7.47.tif": {
+        "accession_number": "PH 2019.7.47",
+        "pid": "bdr:1148307",
+        "status": "ingested_2020-10-20 15:03:27.778616"
+      }
+    },
+    {
+      "Freed PH_2019.7.48.tif": {
+        "accession_number": "PH 2019.7.48",
+        "pid": "bdr:1148308",
+        "status": "ingested_2020-10-20 15:03:41.018053"
+      }
+    },
+    {
+      "Freed PH_2019.7.49.tif": {
+        "accession_number": "PH 2019.7.49",
+        "pid": "bdr:1148309",
+        "status": "ingested_2020-10-20 15:03:57.233414"
+      }
+    },
+    {
+      "Freed PH_2019.7.50.tif": {
+        "accession_number": "PH 2019.7.50",
+        "pid": "bdr:1148311",
+        "status": "ingested_2020-10-20 15:04:10.684383"
+      }
+    },
+    {
+      "Freed PH_2019.7.51.tif": {
+        "accession_number": "PH 2019.7.51",
+        "pid": "bdr:1148312",
+        "status": "ingested_2020-10-20 15:04:24.258747"
+      }
+    },
+    {
+      "Freed PH_2019.7.52.tif": {
+        "accession_number": "PH 2019.7.52",
+        "pid": "bdr:1148313",
+        "status": "ingested_2020-10-20 15:04:33.288154"
+      }
+    },
+    {
+      "Freed PH_2019.7.53.tif": {
+        "accession_number": "PH 2019.7.53",
+        "pid": "bdr:1148314",
+        "status": "ingested_2020-10-20 15:04:41.458438"
+      }
+    },
+    {
+      "Freed PH_2019.7.54.tif": {
+        "accession_number": "PH 2019.7.54",
+        "pid": "bdr:1148315",
+        "status": "ingested_2020-10-20 15:04:49.289020"
+      }
+    },
+    {
+      "Freed PH_2019.7.55.tif": {
+        "accession_number": "PH 2019.7.55",
+        "pid": "bdr:1148316",
+        "status": "ingested_2020-10-20 15:04:57.897389"
+      }
+    },
+    {
+      "Freed PH_2019.7.56.tif": {
+        "accession_number": "PH 2019.7.56",
+        "pid": "bdr:1148317",
+        "status": "ingested_2020-10-20 15:05:06.802951"
+      }
+    },
+    {
+      "Freed PH_2019.7.57.tif": {
+        "accession_number": "PH 2019.7.57",
+        "pid": "bdr:1148318",
+        "status": "ingested_2020-10-20 15:05:18.321815"
+      }
+    },
+    {
+      "Freed PH_2019.7.58.tif": {
+        "accession_number": "PH 2019.7.58",
+        "pid": "bdr:1148319",
+        "status": "ingested_2020-10-20 15:05:28.337138"
+      }
+    },
+    {
+      "Freed PH_2019.7.59.tif": {
+        "accession_number": "PH 2019.7.59",
+        "pid": "bdr:1148320",
+        "status": "ingested_2020-10-20 15:05:39.161447"
+      }
+    },
+    {
+      "Freed PH_2019.7.60.tif": {
+        "accession_number": "PH 2019.7.60",
+        "pid": "bdr:1148322",
+        "status": "ingested_2020-10-20 15:05:51.500230"
+      }
+    },
+    {
+      "Freed PH_2019.7.61.tif": {
+        "accession_number": "PH 2019.7.61",
+        "pid": "bdr:1148323",
+        "status": "ingested_2020-10-20 15:06:01.068530"
+      }
+    },
+    {
+      "Freed PH_2019.7.62.tif": {
+        "accession_number": "PH 2019.7.62",
+        "pid": "bdr:1148324",
+        "status": "ingested_2020-10-20 15:06:11.033746"
+      }
+    },
+    {
+      "Freed PH_2019.7.63.tif": {
+        "accession_number": "PH 2019.7.63",
+        "pid": "bdr:1148325",
+        "status": "ingested_2020-10-20 15:06:21.986256"
+      }
+    },
+    {
+      "Freed PH_2019.7.64.tif": {
+        "accession_number": "PH 2019.7.64",
+        "pid": "bdr:1148326",
+        "status": "ingested_2020-10-20 15:06:33.054087"
+      }
+    },
+    {
+      "Freed PH_2019.7.65.tif": {
+        "accession_number": "PH 2019.7.65",
+        "pid": "bdr:1148327",
+        "status": "ingested_2020-10-20 15:06:41.996952"
+      }
+    },
+    {
+      "Glinn PH_2019.7.66.tif": {
+        "accession_number": "PH 2019.7.66",
+        "pid": "bdr:1148328",
+        "status": "ingested_2020-10-20 15:07:04.181103"
+      }
+    },
+    {
+      "Glinn PH_2019.7.67.tif": {
+        "accession_number": "PH 2019.7.67",
+        "pid": "bdr:1148329",
+        "status": "ingested_2020-10-20 15:07:13.655052"
+      }
+    },
+    {
+      "Glinn PH_2019.7.68.tif": {
+        "accession_number": "PH 2019.7.68",
+        "pid": "bdr:1148330",
+        "status": "ingested_2020-10-20 15:07:24.100167"
+      }
+    },
+    {
+      "Glinn PH_2019.7.69.tif": {
+        "accession_number": "PH 2019.7.69",
+        "pid": "bdr:1148331",
+        "status": "ingested_2020-10-20 15:07:32.132128"
+      }
+    },
+    {
+      "Glinn PH_2019.7.70.tif": {
+        "accession_number": "PH 2019.7.70",
+        "pid": "bdr:1148333",
+        "status": "ingested_2020-10-20 15:07:45.044080"
+      }
+    },
+    {
+      "Glinn PH_2019.7.71.tif": {
+        "accession_number": "PH 2019.7.71",
+        "pid": "bdr:1148334",
+        "status": "ingested_2020-10-20 15:07:53.624032"
+      }
+    },
+    {
+      "Glinn PH_2019.7.72.tif": {
+        "accession_number": "PH 2019.7.72",
+        "pid": "bdr:1148335",
+        "status": "ingested_2020-10-20 15:08:01.556903"
+      }
+    },
+    {
+      "Glinn PH_2019.7.73.tif": {
+        "accession_number": "PH 2019.7.73",
+        "pid": "bdr:1148336",
+        "status": "ingested_2020-10-20 15:08:11.430257"
+      }
+    },
+    {
+      "Glinn PH_2019.7.74.tif": {
+        "accession_number": "PH 2019.7.74",
+        "pid": "bdr:1148337",
+        "status": "ingested_2020-10-20 15:08:29.978122"
+      }
+    },
+    {
+      "Glinn PH_2019.7.75.tif": {
+        "accession_number": "PH 2019.7.75",
+        "pid": "bdr:1148338",
+        "status": "ingested_2020-10-20 15:08:57.741483"
+      }
+    },
+    {
+      "Glinn PH_2019.7.76.tif": {
+        "accession_number": "PH 2019.7.76",
+        "pid": "bdr:1148339",
+        "status": "ingested_2020-10-20 15:09:15.017210"
+      }
+    },
+    {
+      "Glinn PH_2019.7.77.tif": {
+        "accession_number": "PH 2019.7.77",
+        "pid": "bdr:1148340",
+        "status": "ingested_2020-10-20 15:09:41.801988"
+      }
+    },
+    {
+      "Glinn PH_2019.7.78.tif": {
+        "accession_number": "PH 2019.7.78",
+        "pid": "bdr:1148341",
+        "status": "ingested_2020-10-20 15:09:50.687863"
+      }
+    },
+    {
+      "Heyman PH_2019.7.79.tif": {
+        "accession_number": "PH 2019.7.79",
+        "pid": "bdr:1148342",
+        "status": "ingested_2020-10-20 15:10:03.165119"
+      }
+    },
+    {
+      "Horenstein PH_2019.7.101.tif": {
+        "accession_number": "PH 2019.7.101",
+        "pid": "bdr:1148156",
+        "status": "ingested_2020-10-20 15:10:21.345433"
+      }
+    },
+    {
+      "Horenstein PH_2019.7.102.tif": {
+        "accession_number": "PH 2019.7.102",
+        "pid": "bdr:1148157",
+        "status": "ingested_2020-10-20 15:10:38.107585"
+      }
+    },
+    {
+      "Horenstein PH_2019.7.103.tif": {
+        "accession_number": "PH 2019.7.103",
+        "pid": "bdr:1148158",
+        "status": "ingested_2020-10-20 15:10:54.056412"
+      }
+    },
+    {
+      "Horenstein PH_2019.7.104.tif": {
+        "accession_number": "PH 2019.7.104",
+        "pid": "bdr:1148159",
+        "status": "ingested_2020-10-20 15:11:09.157349"
+      }
+    },
+    {
+      "Horenstein PH_2019.7.105.tif": {
+        "accession_number": "PH 2019.7.105",
+        "pid": "bdr:1148160",
+        "status": "ingested_2020-10-20 15:11:26.669787"
+      }
+    },
+    {
+      "Horenstein PH_2019.7.106.tif": {
+        "accession_number": "PH 2019.7.106",
+        "pid": "bdr:1148161",
+        "status": "ingested_2020-10-20 15:11:38.819896"
+      }
+    },
+    {
+      "Horenstein PH_2019.7.113.tif": {
+        "accession_number": "PH 2019.7.113",
+        "pid": "bdr:1148169",
+        "status": "ingested_2020-10-20 15:11:51.679628"
+      }
+    },
+    {
+      "Horenstein PH_2019.7.114.tif": {
+        "accession_number": "PH 2019.7.114",
+        "pid": "bdr:1148170",
+        "status": "ingested_2020-10-20 15:12:07.710145"
+      }
+    },
+    {
+      "Horenstein PH_2019.7.115.tif": {
+        "accession_number": "PH 2019.7.115",
+        "pid": "bdr:1148171",
+        "status": "ingested_2020-10-20 15:12:19.578838"
+      }
+    },
+    {
+      "Horenstein PH_2019.7.116.tif": {
+        "accession_number": "PH 2019.7.116",
+        "pid": "bdr:1148172",
+        "status": "ingested_2020-10-20 15:12:32.989758"
+      }
+    },
+    {
+      "Horenstein PH_2019.7.117.tif": {
+        "accession_number": "PH 2019.7.117",
+        "pid": "bdr:1148173",
+        "status": "ingested_2020-10-20 15:12:48.847000"
+      }
+    },
+    {
+      "Horenstein PH_2019.7.118.tif": {
+        "accession_number": "PH 2019.7.118",
+        "pid": "bdr:1148174",
+        "status": "ingested_2020-10-20 15:13:01.167418"
+      }
+    },
+    {
+      "Horenstein PH_2019.7.82.tif": {
+        "accession_number": "PH 2019.7.82",
+        "pid": "bdr:1148346",
+        "status": "ingested_2020-10-20 15:13:14.525626"
+      }
+    },
+    {
+      "Horenstein PH_2019.7.83.tif": {
+        "accession_number": "PH 2019.7.83",
+        "pid": "bdr:1148347",
+        "status": "ingested_2020-10-20 15:13:28.172812"
+      }
+    },
+    {
+      "Horenstein PH_2019.7.84.tif": {
+        "accession_number": "PH 2019.7.84",
+        "pid": "bdr:1148348",
+        "status": "ingested_2020-10-20 15:13:41.034526"
+      }
+    },
+    {
+      "Horenstein PH_2019.7.85.tif": {
+        "accession_number": "PH 2019.7.85",
+        "pid": "bdr:1148349",
+        "status": "ingested_2020-10-20 15:13:57.111337"
+      }
+    },
+    {
+      "Horenstein PH_2019.7.86.tif": {
+        "accession_number": "PH 2019.7.86",
+        "pid": "bdr:1148350",
+        "status": "ingested_2020-10-20 15:14:15.156319"
+      }
+    },
+    {
+      "Horenstein PH_2019.7.87.tif": {
+        "accession_number": "PH 2019.7.87",
+        "pid": "bdr:1148351",
+        "status": "ingested_2020-10-20 15:14:33.337077"
+      }
+    },
+    {
+      "Horenstein PH_2019.7.91.tif": {
+        "accession_number": "PH 2019.7.91",
+        "pid": "bdr:1148356",
+        "status": "ingested_2020-10-20 15:14:52.312269"
+      }
+    },
+    {
+      "Horenstein PH_2019.7.94.tif": {
+        "accession_number": "PH 2019.7.94",
+        "pid": "bdr:1148359",
+        "status": "ingested_2020-10-20 15:15:13.529349"
+      }
+    },
+    {
+      "Horenstein PH_2019.7.95.tif": {
+        "accession_number": "PH 2019.7.95",
+        "pid": "bdr:1148360",
+        "status": "ingested_2020-10-20 15:15:33.674518"
+      }
+    },
+    {
+      "Horenstein PH_2019.7.96.tif": {
+        "accession_number": "PH 2019.7.96",
+        "pid": "bdr:1148361",
+        "status": "ingested_2020-10-20 15:15:50.301526"
+      }
+    },
+    {
+      "Horenstein PH_2019.7.97.tif": {
+        "accession_number": "PH 2019.7.97",
+        "pid": "bdr:1148362",
+        "status": "ingested_2020-10-20 15:16:05.781172"
+      }
+    },
+    {
+      "Lyon PH_2019.7.119.tif": {
+        "accession_number": "PH 2019.7.119",
+        "pid": "bdr:1148175",
+        "status": "ingested_2020-10-20 15:16:25.230565"
+      }
+    },
+    {
+      "Lyon PH_2019.7.120.tif": {
+        "accession_number": "PH 2019.7.120",
+        "pid": "bdr:1148177",
+        "status": "ingested_2020-10-20 15:16:43.046548"
+      }
+    },
+    {
+      "Lyon PH_2019.7.121.tif": {
+        "accession_number": "PH 2019.7.121",
+        "pid": "bdr:1148178",
+        "status": "ingested_2020-10-20 15:17:04.073501"
+      }
+    },
+    {
+      "Mortenson PH_2019.7.134.tif": {
+        "accession_number": "PH 2019.7.134",
+        "pid": "bdr:1148192",
+        "status": "ingested_2020-10-20 15:17:12.657041"
+      }
+    },
+    {
+      "Mortenson PH_2019.7.135.tif": {
+        "accession_number": "PH 2019.7.135",
+        "pid": "bdr:1148193",
+        "status": "ingested_2020-10-20 15:17:23.346979"
+      }
+    },
+    {
+      "Mortenson PH_2019.7.136.tif": {
+        "accession_number": "PH 2019.7.136",
+        "pid": "bdr:1148194",
+        "status": "ingested_2020-10-20 15:17:32.225166"
+      }
+    },
+    {
+      "Owens PH_2019.7.137.tif": {
+        "accession_number": "PH 2019.7.137",
+        "pid": "bdr:1148195",
+        "status": "ingested_2020-10-20 15:17:42.340443"
+      }
+    },
+    {
+      "Owens PH_2019.7.138.tif": {
+        "accession_number": "PH 2019.7.138",
+        "pid": "bdr:1148196",
+        "status": "ingested_2020-10-20 15:17:53.007283"
+      }
+    },
+    {
+      "Owens PH_2019.7.139.tif": {
+        "accession_number": "PH 2019.7.139",
+        "pid": "bdr:1148197",
+        "status": "ingested_2020-10-20 15:18:09.392739"
+      }
+    },
+    {
+      "Owens PH_2019.7.140.tif": {
+        "accession_number": "PH 2019.7.140",
+        "pid": "bdr:1148199",
+        "status": "ingested_2020-10-20 15:18:19.587675"
+      }
+    },
+    {
+      "Owens PH_2019.7.141.tif": {
+        "accession_number": "PH 2019.7.141",
+        "pid": "bdr:1148200",
+        "status": "ingested_2020-10-20 15:18:32.792929"
+      }
+    },
+    {
+      "Owens PH_2019.7.142.tif": {
+        "accession_number": "PH 2019.7.142",
+        "pid": "bdr:1148201",
+        "status": "ingested_2020-10-20 15:18:40.940096"
+      }
+    },
+    {
+      "Owens PH_2019.7.143.tif": {
+        "accession_number": "PH 2019.7.143",
+        "pid": "bdr:1148202",
+        "status": "ingested_2020-10-20 15:18:50.227777"
+      }
+    },
+    {
+      "Owens PH_2019.7.144.tif": {
+        "accession_number": "PH 2019.7.144",
+        "pid": "bdr:1148203",
+        "status": "ingested_2020-10-20 15:18:59.197332"
+      }
+    },
+    {
+      "Owens PH_2019.7.145.tif": {
+        "accession_number": "PH 2019.7.145",
+        "pid": "bdr:1148204",
+        "status": "ingested_2020-10-20 15:19:06.169196"
+      }
+    },
+    {
+      "Owens PH_2019.7.146.tif": {
+        "accession_number": "PH 2019.7.146",
+        "pid": "bdr:1148205",
+        "status": "ingested_2020-10-20 15:19:13.984564"
+      }
+    },
+    {
+      "Owens PH_2019.7.147.tif": {
+        "accession_number": "PH 2019.7.147",
+        "pid": "bdr:1148206",
+        "status": "ingested_2020-10-20 15:19:25.644755"
+      }
+    },
+    {
+      "Owens PH_2019.7.148.tif": {
+        "accession_number": "PH 2019.7.148",
+        "pid": "bdr:1148207",
+        "status": "ingested_2020-10-20 15:19:34.684321"
+      }
+    },
+    {
+      "Owens PH_2019.7.149.tif": {
+        "accession_number": "PH 2019.7.149",
+        "pid": "bdr:1148208",
+        "status": "ingested_2020-10-20 15:19:43.640156"
+      }
+    },
+    {
+      "Owens PH_2019.7.150.tif": {
+        "accession_number": "PH 2019.7.150",
+        "pid": "bdr:1148210",
+        "status": "ingested_2020-10-20 15:19:55.523092"
+      }
+    },
+    {
+      "Owens PH_2019.7.151.tif": {
+        "accession_number": "PH 2019.7.151",
+        "pid": "bdr:1148211",
+        "status": "ingested_2020-10-20 15:20:05.778418"
+      }
+    },
+    {
+      "Owens PH_2019.7.152.tif": {
+        "accession_number": "PH 2019.7.152",
+        "pid": "bdr:1148212",
+        "status": "ingested_2020-10-20 15:20:14.764781"
+      }
+    },
+    {
+      "Owens PH_2019.7.153.tif": {
+        "accession_number": "PH 2019.7.153",
+        "pid": "bdr:1148213",
+        "status": "ingested_2020-10-20 15:20:26.022933"
+      }
+    },
+    {
+      "Owens PH_2019.7.154.tif": {
+        "accession_number": "PH 2019.7.154",
+        "pid": "bdr:1148214",
+        "status": "ingested_2020-10-20 15:20:35.889196"
+      }
+    },
+    {
+      "Owens PH_2019.7.155.tif": {
+        "accession_number": "PH 2019.7.155",
+        "pid": "bdr:1148215",
+        "status": "ingested_2020-10-20 15:20:43.256468"
+      }
+    },
+    {
+      "Owens PH_2019.7.156.tif": {
+        "accession_number": "PH 2019.7.156",
+        "pid": "bdr:1148216",
+        "status": "ingested_2020-10-20 15:20:53.318417"
+      }
+    },
+    {
+      "Owens PH_2019.7.157.tif": {
+        "accession_number": "PH 2019.7.157",
+        "pid": "bdr:1148217",
+        "status": "ingested_2020-10-20 15:21:05.418127"
+      }
+    },
+    {
+      "Owens PH_2019.7.158.tif": {
+        "accession_number": "PH 2019.7.158",
+        "pid": "bdr:1148218",
+        "status": "ingested_2020-10-20 15:21:11.479627"
+      }
+    },
+    {
+      "Quigley PH_2019.7.159.tif": {
+        "accession_number": "PH 2019.7.159",
+        "pid": "bdr:1148219",
+        "status": "ingested_2020-10-20 15:21:16.599200"
+      }
+    },
+    {
+      "Quigley PH_2019.7.160.tif": {
+        "accession_number": "PH 2019.7.160",
+        "pid": "bdr:1148221",
+        "status": "ingested_2020-10-20 15:21:19.599072"
+      }
+    },
+    {
+      "Rodger PH_2019.7.161.tif": {
+        "accession_number": "PH 2019.7.161",
+        "pid": "bdr:1148222",
+        "status": "ingested_2020-10-20 15:21:32.635695"
+      }
+    },
+    {
+      "Rodger PH_2019.7.162.tif": {
+        "accession_number": "PH 2019.7.162",
+        "pid": "bdr:1148223",
+        "status": "ingested_2020-10-20 15:21:42.453502"
+      }
+    },
+    {
+      "Rodger PH_2019.7.163.tif": {
+        "accession_number": "PH 2019.7.163",
+        "pid": "bdr:1148224",
+        "status": "ingested_2020-10-20 15:21:54.807329"
+      }
+    },
+    {
+      "Rodger PH_2019.7.164.tif": {
+        "accession_number": "PH 2019.7.164",
+        "pid": "bdr:1148225",
+        "status": "ingested_2020-10-20 15:22:04.863548"
+      }
+    },
+    {
+      "Rodger PH_2019.7.165.tif": {
+        "accession_number": "PH 2019.7.165",
+        "pid": "bdr:1148226",
+        "status": "ingested_2020-10-20 15:22:14.665951"
+      }
+    },
+    {
+      "Rodger PH_2019.7.166.tif": {
+        "accession_number": "PH 2019.7.166",
+        "pid": "bdr:1148227",
+        "status": "ingested_2020-10-20 15:22:25.104105"
+      }
+    },
+    {
+      "Rodger PH_2019.7.167.tif": {
+        "accession_number": "PH 2019.7.167",
+        "pid": "bdr:1148228",
+        "status": "ingested_2020-10-20 15:22:36.096041"
+      }
+    },
+    {
+      "Rothstein PH_2019.7.168.tif": {
+        "accession_number": "PH 2019.7.168",
+        "pid": "bdr:1148229",
+        "status": "ingested_2020-10-20 15:22:59.223599"
+      }
+    },
+    {
+      "Rothstein PH_2019.7.169.tif": {
+        "accession_number": "PH 2019.7.169",
+        "pid": "bdr:1148230",
+        "status": "ingested_2020-10-20 15:23:15.567322"
+      }
+    },
+    {
+      "Rothstein PH_2019.7.170.tif": {
+        "accession_number": "PH 2019.7.170",
+        "pid": "bdr:1148232",
+        "status": "ingested_2020-10-20 15:23:31.091319"
+      }
+    },
+    {
+      "Rothstein PH_2019.7.171.tif": {
+        "accession_number": "PH 2019.7.171",
+        "pid": "bdr:1148233",
+        "status": "ingested_2020-10-20 15:23:44.408164"
+      }
+    },
+    {
+      "Rothstein PH_2019.7.172.tif": {
+        "accession_number": "PH 2019.7.172",
+        "pid": "bdr:1148234",
+        "status": "ingested_2020-10-20 15:24:04.345439"
+      }
+    },
+    {
+      "Rothstein PH_2019.7.173.tif": {
+        "accession_number": "PH 2019.7.173",
+        "pid": "bdr:1148235",
+        "status": "ingested_2020-10-20 15:24:13.169443"
+      }
+    },
+    {
+      "Rothstein PH_2019.7.174.tif": {
+        "accession_number": "PH 2019.7.174",
+        "pid": "bdr:1148236",
+        "status": "ingested_2020-10-20 15:24:23.265314"
+      }
+    },
+    {
+      "Rothstein PH_2019.7.175.tif": {
+        "accession_number": "PH 2019.7.175",
+        "pid": "bdr:1148237",
+        "status": "ingested_2020-10-20 15:24:32.077599"
+      }
+    },
+    {
+      "Rothstein PH_2019.7.176.tif": {
+        "accession_number": "PH 2019.7.176",
+        "pid": "bdr:1148238",
+        "status": "ingested_2020-10-20 15:24:41.257959"
+      }
+    },
+    {
+      "Snitzer PH_2019.7.177.tif": {
+        "accession_number": "PH 2019.7.177",
+        "pid": "bdr:1148239",
+        "status": "ingested_2020-10-20 15:25:10.709042"
+      }
+    },
+    {
+      "Snitzer PH_2019.7.178.tif": {
+        "accession_number": "PH 2019.7.178",
+        "pid": "bdr:1148240",
+        "status": "ingested_2020-10-20 15:25:32.772584"
+      }
+    },
+    {
+      "Snitzer PH_2019.7.179.tif": {
+        "accession_number": "PH 2019.7.179",
+        "pid": "bdr:1148241",
+        "status": "ingested_2020-10-20 15:25:53.791038"
+      }
+    },
+    {
+      "Snitzer PH_2019.7.180.tif": {
+        "accession_number": "PH 2019.7.180",
+        "pid": "bdr:1148243",
+        "status": "ingested_2020-10-20 15:26:13.405801"
+      }
+    },
+    {
+      "Snitzer PH_2019.7.181.tif": {
+        "accession_number": "PH 2019.7.181",
+        "pid": "bdr:1148244",
+        "status": "ingested_2020-10-20 15:26:30.916496"
+      }
+    },
+    {
+      "Snitzer PH_2019.7.182.tif": {
+        "accession_number": "PH 2019.7.182",
+        "pid": "bdr:1148245",
+        "status": "ingested_2020-10-20 15:26:55.171397"
+      }
+    },
+    {
+      "Snitzer PH_2019.7.183.tif": {
+        "accession_number": "PH 2019.7.183",
+        "pid": "bdr:1148246",
+        "status": "ingested_2020-10-20 15:27:20.031752"
+      }
+    },
+    {
+      "Snitzer PH_2019.7.184.tif": {
+        "accession_number": "PH 2019.7.184",
+        "pid": "bdr:1148247",
+        "status": "ingested_2020-10-20 15:27:43.808137"
+      }
+    },
+    {
+      "Snitzer PH_2019.7.185.tif": {
+        "accession_number": "PH 2019.7.185",
+        "pid": "bdr:1148248",
+        "status": "ingested_2020-10-20 15:27:57.755097"
+      }
+    },
+    {
+      "Snitzer PH_2019.7.186.tif": {
+        "accession_number": "PH 2019.7.186",
+        "pid": "bdr:1148249",
+        "status": "ingested_2020-10-20 15:29:16.806498"
+      }
+    },
+    {
+      "Stone PH_2019.7.187.tif": {
+        "accession_number": "PH 2019.7.187",
+        "pid": "bdr:1148250",
+        "status": "ingested_2020-10-20 15:29:41.263511"
+      }
+    },
+    {
+      "Stone PH_2019.7.188.tif": {
+        "accession_number": "PH 2019.7.188",
+        "pid": "bdr:1148251",
+        "status": "ingested_2020-10-20 15:29:52.647065"
+      }
+    },
+    {
+      "Stone PH_2019.7.189.tif": {
+        "accession_number": "PH 2019.7.189",
+        "pid": "bdr:1148252",
+        "status": "ingested_2020-10-20 15:30:11.832069"
+      }
+    },
+    {
+      "Stone PH_2019.7.190.tif": {
+        "accession_number": "PH 2019.7.190",
+        "pid": "bdr:1148254",
+        "status": "ingested_2020-10-20 15:30:21.421258"
+      }
+    },
+    {
+      "Stone PH_2019.7.191.tif": {
+        "accession_number": "PH 2019.7.191",
+        "pid": "bdr:1148255",
+        "status": "ingested_2020-10-20 15:30:32.866603"
+      }
+    },
+    {
+      "Stone PH_2019.7.192.tif": {
+        "accession_number": "PH 2019.7.192",
+        "pid": "bdr:1148256",
+        "status": "ingested_2020-10-20 15:30:44.331348"
+      }
+    },
+    {
+      "Stone PH_2019.7.193.tif": {
+        "accession_number": "PH 2019.7.193",
+        "pid": "bdr:1148257",
+        "status": "ingested_2020-10-20 15:30:52.158842"
+      }
+    },
+    {
+      "Stone PH_2019.7.194.tif": {
+        "accession_number": "PH 2019.7.194",
+        "pid": "bdr:1148258",
+        "status": "ingested_2020-10-20 15:31:02.273525"
+      }
+    },
+    {
+      "Stone PH_2019.7.195.tif": {
+        "accession_number": "PH 2019.7.195",
+        "pid": "bdr:1148259",
+        "status": "ingested_2020-10-20 15:31:16.745470"
+      }
+    },
+    {
+      "Stoumen PH_2019.7.196.tif": {
+        "accession_number": "PH 2019.7.196",
+        "pid": "bdr:1148260",
+        "status": "ingested_2020-10-20 15:31:25.584682"
+      }
+    },
+    {
+      "Stoumen PH_2019.7.197.tif": {
+        "accession_number": "PH 2019.7.197",
+        "pid": "bdr:1148261",
+        "status": "ingested_2020-10-20 15:31:32.171771"
+      }
+    },
+    {
+      "Stoumen PH_2019.7.198.tif": {
+        "accession_number": "PH 2019.7.198",
+        "pid": "bdr:1148262",
+        "status": "ingested_2020-10-20 15:31:50.662185"
+      }
+    },
+    {
+      "Stoumen PH_2019.7.199.tif": {
+        "accession_number": "PH 2019.7.199",
+        "pid": "bdr:1148263",
+        "status": "ingested_2020-10-20 15:32:01.628813"
+      }
+    },
+    {
+      "Webb PH_2019.7.200.tif": {
+        "accession_number": "PH 2019.7.200",
+        "pid": "bdr:1148266",
+        "status": "ingested_2020-10-20 15:32:11.960540"
+      }
+    },
+    {
+      "Webb PH_2019.7.201.tif": {
+        "accession_number": "PH 2019.7.201",
+        "pid": "bdr:1148267",
+        "status": "ingested_2020-10-20 15:32:24.507161"
+      }
+    },
+    {
+      "Webb PH_2019.7.202.tif": {
+        "accession_number": "PH 2019.7.202",
+        "pid": "bdr:1148268",
+        "status": "ingested_2020-10-20 15:32:45.906585"
+      }
+    },
+    {
+      "Webb PH_2019.7.203.tif": {
+        "accession_number": "PH 2019.7.203",
+        "pid": "bdr:1148269",
+        "status": "ingested_2020-10-20 15:32:59.717906"
+      }
+    },
+    {
+      "Webb PH_2019.7.204.tif": {
+        "accession_number": "PH 2019.7.204",
+        "pid": "bdr:1148270",
+        "status": "ingested_2020-10-20 15:33:14.780832"
+      }
+    },
+    {
+      "Webb PH_2019.7.205.tif": {
+        "accession_number": "PH 2019.7.205",
+        "pid": "bdr:1148271",
+        "status": "ingested_2020-10-20 15:33:27.612464"
+      }
+    },
+    {
+      "Webb PH_2019.7.206.tif": {
+        "accession_number": "PH 2019.7.206",
+        "pid": "bdr:1148272",
+        "status": "ingested_2020-10-20 15:33:41.009651"
+      }
+    },
+    {
+      "Webb PH_2019.7.207.tif": {
+        "accession_number": "PH 2019.7.207",
+        "pid": "bdr:1148273",
+        "status": "ingested_2020-10-20 15:33:54.549506"
+      }
+    },
+    {
+      "Webb PH_2019.7.208.tif": {
+        "accession_number": "PH 2019.7.208",
+        "pid": "bdr:1148274",
+        "status": "ingested_2020-10-20 15:34:22.083298"
+      }
+    },
+    {
+      "Webb PH_2019.7.209.tif": {
+        "accession_number": "PH 2019.7.209",
+        "pid": "bdr:1148275",
+        "status": "ingested_2020-10-20 15:34:45.808582"
+      }
+    },
+    {
+      "Webb PH_2019.7.210.tif": {
+        "accession_number": "PH 2019.7.210",
+        "pid": "bdr:1148277",
+        "status": "ingested_2020-10-20 15:35:04.436328"
+      }
+    },
+    {
+      "Webb PH_2019.7.211.tif": {
+        "accession_number": "PH 2019.7.211",
+        "pid": "bdr:1148278",
+        "status": "ingested_2020-10-20 15:35:18.062355"
+      }
+    },
+    {
+      "Webb PH_2019.7.212.tif": {
+        "accession_number": "PH 2019.7.212",
+        "pid": "bdr:1148279",
+        "status": "ingested_2020-10-20 15:35:35.580111"
+      }
+    }
+  ],
   "lst_images_to_update": []
 }
