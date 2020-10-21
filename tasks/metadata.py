@@ -339,6 +339,7 @@ def post_metadata_update_to_bdr(pid, bell_metadata_dct):
     file_name = '%s_metadata.json' % pid.replace(':', '')
     params['content_streams'] = json.dumps([{'dsID': 'bell_metadata', 'mimeType': 'application/json', 'file_name': file_name}])
     params['overwrite_content'] = 'yes'
+    params['generate_derivatives'] = 'no'
     file_object = io.BytesIO(json.dumps(bell_metadata_dct).encode('utf8'))
     r = requests.put(PROD_API_URL, data=params, files={file_name: file_object})
     if not r.ok:

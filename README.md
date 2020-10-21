@@ -28,24 +28,24 @@ code related to ingesting bell-gallery images into the bdr.
     - from having all the metadata, the code can determine what image-&-metadata additions to make, what metadata-only additions to make, and make corrections to existing bdr metadata
     - end result: `a__all_data_raw.xml`
     - status:
-        - DONE 2020-10-19
+        - DONE 2020-10-19, 2020-10-20
 
 - format metadata
     - why: makes it easy to see the source fields, and if necessary check source xml
     - tasks/format_xml_file.py
     - end result: `b__all_data_formatted.xml`
-    - status: DONE 2020-10-19
+    - status: DONE 2020-10-19, 2020-10-20
 
 - convert raw filemaker-pro xml to json
     - tasks/acc_num_to_data.py
     - end result: `c__accession_number_to_data_dict.json`
     - status:
-        - DONE 2020-10-19
+        - DONE 2020-10-19, 2020-10-20
 
 - run script to get list of files in the images-to-ingest directory
     - tasks/make_image_list.py
     - end result: `d1__bell_images_listing.json`
-    - status: DONE 2020-10-19
+    - status: DONE 2020-10-19, 2020-10-20
 
 - compare imagefile-filenames to metadata-filenames
     - tasks/check_filenames_against_metadata.py
@@ -59,7 +59,7 @@ code related to ingesting bell-gallery images into the bdr.
 
     - end result: `data/d2__images_metadata_comparison.json` -- work through any not-matched files with J.C. before proceeding.
     - status:
-        DONE 2020-10-19
+        DONE 2020-10-19, 2020-10-20
 
 - match metadata accession-numbers to pid #2
     - tasks/acc_num_to_pid.py
@@ -68,6 +68,7 @@ code related to ingesting bell-gallery images into the bdr.
     - accession-numbers with pids imply checking to see if fedora metadata needs to be updated
     - note, after metadata-only objects are created, this will be re-run until the `count_null` is zero.
     - status: 2020-10-19; shows 289 accession-numbers without pids
+    -         2020-10-20; shows 288 accession-numbers without pids
 
 - check for, confirm, and delete old bell items from fedora
     - note: this step is being done here because:
@@ -84,26 +85,23 @@ code related to ingesting bell-gallery images into the bdr.
                 - then the old object (with the old accession number) would need to be deleted
                 - if that object to be deleted has an image, then we might lose the image, because she wouldn't send us the image if it wasn't updated.
                 - so, any items to delete with an image - check with her.
-            - status: 2019-08-06 - 1 (metadata) pid found to delete - nothing to verify
-            - status: 2019-08-27 - many metadata pids found to delete - nothing to verify
+            - status: 2020-10-20 - 1 (metadata) pid found to delete - nothing to verify
         - manually run deletion.
             - NOTE: when beginning this process, manually cleanup the `e3__bdr_entries_deleted_tracker.json` file (DON'T DELETE) to `{}`.
                 - This is because each individual deletion updates this status-dict.
             - `from tasks import cleanup; cleanup.run_delete_single_pid_from_bdr( pid )`
             - end result: `e3__bdr_entries_deleted_tracker.json`
-            - status: 2019-08-06 DONE
-            - status: 2019-08-27 DONE
+            - status: 2020-10-20 done - 1 item deleted
 
 - make metadata-only list
     - tasks/metadata.run_metadata_only_lister()
     - to run (from `bell_code` directory)...
 
-            >>> from tasks import metadata
-            >>> metadata.run_metadata_only_lister()
+            >>> from tasks import metadata; metadata.run_metadata_only_lister()
 
     - end result: `f1__metadata_only_accession_numbers.json`
     - status:
-        - DONE 2019-08-06, 2019-08-27
+        - DONE 2020-10-20
 
 - create new metadata objects
     - note: this creates metadata-only objects, some of which may be updated in a later step to also have image-datastreams.
@@ -111,8 +109,7 @@ code related to ingesting bell-gallery images into the bdr.
     - tasks/metadata.run_create_metadata_only_objects()
     - to run (from `bell_code` directory)...
 
-            >>> from tasks import metadata
-            >>> metadata.run_create_metadata_only_objects()
+            >>> from tasks import metadata; metadata.run_create_metadata_only_objects()
 
     - to confirm that object is in fedora:
             https://api_search/?q=mods_id_bell_accession_number_ssim:the%20accession_number
@@ -121,13 +118,13 @@ code related to ingesting bell-gallery images into the bdr.
     - after creates, confirm a re-run of `tasks/acc_num_to_pid.py` results in zero non-pid matches.
         - note that this re-run will update, as it should, `e1__accession_number_to_pid_dict.json` -- the dict of accession-numbers-to-pids.
     - status:
-        - new-metadata-objects-created - DONE 2019-08-07, 2019-08-27
-        - `acc_num_to_pid.py` - DONE 2019-08-07, 2019-08-27
+        - new-metadata-objects-created - DONE 2020-10-20
+        - `acc_num_to_pid.py` - DONE 2020-10-20
 
 - update metadata for existing objects in the BDR, if needed
     - explanation: for each accession-number -- this prepares the data for the bell-json-datastream from the source data, and compares it to the item's bell-json-datastream from the bdr-item. If there is a difference, we update the bdr object's bell-json-datastream and the bdr object's mods-datastream
-    - tasks/metadata.run_update_metadata_if_needed()
-    - status: DONE 2019-08-07, 2019-08-27
+    - from tasks import metadata; metadata.run_update_metadata_if_needed()
+    - status: DONE 2020-10-20
 
 - make image-filename to data dct
     - produces a dct and then json file like:
@@ -142,24 +139,22 @@ code related to ingesting bell-gallery images into the bdr.
     - script: tasks/images.run_make_image_filename_dct()
     - to run (from `bell_code` directory)...
 
-            >>> from tasks import images
-            >>> images.run_make_image_filename_dct()
+            >>> from tasks import images; images.run_make_image_filename_dct()
 
     - end result: `g1__images_filename_dct.json`
         - note that at the bottom of that file are any files that were excluded from the filename-dct.
-    - status: DONE 2019-08-07, 2019-08-27
+    - status: DONE 2020-10-20
 
 - make list of images to process
     - tasks/images.ImageLister.make_image_lists()
 
     - to run (from `bell_code` directory)...
 
-            >>> from tasks import images
-            >>> images.run_make_image_lists()
+            >>> from tasks import images; images.run_make_image_lists()
 
     - produces a file containing both a list of images to add, and a list of images to update
     - end result: `g2__images_to_process.json`
-    - status: DONE 2019-08-07, 2019-08-27
+    - status: DONE 2020-10-20
 
 - add images
     - tasks/images.add_images()
@@ -168,30 +163,28 @@ code related to ingesting bell-gallery images into the bdr.
         - TODO for next run: normalize the log statements (get rid of self.logger)
     - to run (from `bell_code` directory)...
 
-            >>> from tasks import images
-            >>> images.add_images()
+            >>> from tasks import images; images.add_images()
 
     - updates the `g2__images_to_process.json` file's `lst_images_to_add` and `lst_images_to_update` lists of image-dict-data with a `'status': ingested_(timestamp)` dict-entry.
     - note: verify that JP2 job was run for recreating JP2 when MASTER was updated
-    - status: DONE 2019-08-07 (& cleaned up failed JP2 jobs), 2019-08-27 (no images)
+    - status: 2020-10-20 process finished, no errors in the jobs
 
 - purge caches for updated images
-    - loris cache (info, source, derivatives) - DONE 2019-08-07
-    - thumbnails in fedora re-created - DONE (happened automatically when MASTER was overwritten)
-    - django thumbnail cache - DONE 2019-08-07 
-    - N/A for 2019-08-27
+    - loris cache (info, source, derivatives) - DONE 2020-10-21
+    - thumbnails in fedora re-created - DONE (spot-checked 4 items)
+    - django thumbnail cache - DONE 2020-10-21
 
 - create final json file for CIS
     - make solr pids list
-        - tasks/indexer.run_make_solr_pids_list()
+        - from tasks import indexer; indexer.run_make_solr_pids_list()
         - end result: j__solr_pids_list.json
-        - status: DONE 2019-08-07, 2019-08-27
+        - status: DONE 2020-10-21
     - create solr data file
         - NOTE: when beginning this process, manually empty the `k__data_for_solr.json` file (DON'T DELETE) to `{}`.
             - explanation: this will allow the following code to be run with a built-in 'tracker' capability.
-        - tasks/indexer.run_create_solr_data()
+        - from tasks import indexer; indexer.run_create_solr_data()
         - end result: k__data_for_solr.json
-        - status: DONE 2019-08-07, 2019-08-27
+        - status: DONE 2020-10-21
 
 - let Bell-J.C. & CIS know when done
     - status: DONE 2019-08-07, 2019-08-27

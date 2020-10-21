@@ -179,7 +179,7 @@ def post_image_to_object(pid, file_name, env='prod'):
     params['authorization_code'] = SETTINGS[env]['AUTH_API_KEY']
     params['overwrite_content'] = 'yes'
     params['content_streams'] = json.dumps([
-        { 'dsID': 'MASTER', 'file_name': file_name },
+        {'file_name': file_name },
         ])
     with open(os.path.join(MASTER_IMAGES_DIR_PATH, file_name), 'rb') as f:
         files = {file_name: f}
