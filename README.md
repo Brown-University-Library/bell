@@ -170,22 +170,21 @@ code related to ingesting bell-gallery images into the bdr.
     - status: 2020-10-20 process finished, no errors in the jobs
 
 - purge caches for updated images
-    - loris cache (info, source, derivatives) - DONE 2019-08-07
-    - thumbnails in fedora re-created - DONE (happened automatically when MASTER was overwritten)
-    - django thumbnail cache - DONE 2019-08-07 
-    - N/A for 2019-08-27
+    - loris cache (info, source, derivatives) - DONE 2020-10-21
+    - thumbnails in fedora re-created - DONE (spot-checked 4 items)
+    - django thumbnail cache - DONE 2020-10-21
 
 - create final json file for CIS
     - make solr pids list
-        - tasks/indexer.run_make_solr_pids_list()
+        - from tasks import indexer; indexer.run_make_solr_pids_list()
         - end result: j__solr_pids_list.json
-        - status: DONE 2019-08-07, 2019-08-27
+        - status: DONE 2020-10-21
     - create solr data file
         - NOTE: when beginning this process, manually empty the `k__data_for_solr.json` file (DON'T DELETE) to `{}`.
             - explanation: this will allow the following code to be run with a built-in 'tracker' capability.
-        - tasks/indexer.run_create_solr_data()
+        - from tasks import indexer; indexer.run_create_solr_data()
         - end result: k__data_for_solr.json
-        - status: DONE 2019-08-07, 2019-08-27
+        - status: DONE 2020-10-21
 
 - let Bell-J.C. & CIS know when done
     - status: DONE 2019-08-07, 2019-08-27
