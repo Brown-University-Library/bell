@@ -92,7 +92,6 @@ class MetadataCreator:
     def __init__( self, env, logger ):
         self.logger = logger
         self.MODS_SCHEMA_PATH = MODS_SCHEMA_PATH
-        self.COLLECTION_ID = os.environ['BELL_TASKS_META__COLLECTION_ID']
         if env == 'prod':
             self.API_URL = PROD_API_URL
             self.API_IDENTITY = PROD_API_IDENTITY
@@ -123,7 +122,7 @@ class MetadataCreator:
             'identity': self.API_IDENTITY,
             'authorization_code': self.API_KEY,
             'rights': json.dumps({'parameters': {'additional_rights': 'BDR_PUBLIC#discover,display+Bell Gallery#discover,display,modify,delete'}}),
-            'rels': json.dumps( {'owning_collection': self.OWNING_COLLECTION} ),
+            'rels': json.dumps( {'isMemberOfCollection': self.OWNING_COLLECTION} ),
             'content_model': 'CommonMetadataDO'
             }
         return params
@@ -131,7 +130,7 @@ class MetadataCreator:
     def make_ir_params( self, item_dct ):
         """ Returns json of ir params.
             Called by create_metadata_only_object() NOTE: ir-collection-id in rels -- NOTE: go xml route."""
-        ir_param = { 'parameters': {'depositor_name': 'Bell Gallery', 'ir_collection_id': self.COLLECTION_ID} }
+        ir_param = { 'parameters': {'depositor_name': 'Bell Gallery'} }
         self.logger.debug( 'in metadata.MetadataCreator.make_ir_params(); ir_param, %s' % pprint.pformat(ir_param) )
         jsn = json.dumps( ir_param )
         return jsn
@@ -214,7 +213,6 @@ class MetadataUpdater:
         logger.debug( 'starting updater' )
         params = self.set_basic_params( pid )
         item_dct = self.grab_item_dct( accession_number )
-        params['ir'] = self.make_ir_params( item_dct )
         params['mods'] = self.make_mods_params( item_dct )
         # ( file_obj, param_string ) = self.prep_content_datastream( item_dct )
         # params['content_streams'] = param_string
@@ -247,14 +245,6 @@ class MetadataUpdater:
         item_dct = items[ accession_number ]
         logger.debug( 'item_dct, ```{}```'.format(pprint.pformat(item_dct)) )
         return item_dct
-
-    def make_ir_params( self, item_dct ):
-        """ Returns json of ir params.
-            Called by update_object_metadata() NOTE: ir-collection-id in rels -- NOTE: go xml route."""
-        ir_param = { 'parameters': {'depositor_name': 'Bell Gallery'} }
-        logger.debug( 'ir_param, ```{}```'.format(pprint.pformat(ir_param)) )
-        jsn = json.dumps( ir_param )
-        return jsn
 
     def make_mods_params( self, item_dct ):
         """ Returns json if mods params.
